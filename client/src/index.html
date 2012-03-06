@@ -1,0 +1,178 @@
+<html>
+	<head>
+		<title>PhoneGap</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css" />
+	    <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+	    <!-- script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script-->
+	    <script type="text/javascript" src="jquery-ui.min.js"></script>
+	    <!-- script type="text/javascript" src="jquery.ui.touch-punch.js"></script -->
+	    <script src="http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==" type="text/javascript"></script>
+		
+		<!-- Загрузка основного кода. -->
+	    <script type="text/javascript" src="permguide.js"></script>
+	    
+	    <script type="text/javascript">
+	    
+	    
+	    $(document).ready(function() {
+	    	// Инициализируем трансляцию событий тача в события мыши. 
+	    	PermGid.TouchSupport.init();
+	        
+	        $("#slideContainer").css("width", $("#pageSlider").width()*$(".slide").length);
+	        $(".slide").css("width", $("#pageSlider").width());
+	        
+	        $(".vScroller").draggable(
+	        {	
+	        	axis: "y", 
+	        	containment: [0, -($("#vScroller").height() - $("#pageSlider").height()), $("#objectInfo").width(), ($("#vScroller").height() - $("#pageSlider").height())]
+	        });
+	        	
+	        
+	        // Инициализируем слайдер страниц.
+	        PermGid.PageSlider.init();
+	        
+	        // Загружаем данные об объектах (достопримечательности, линии и т.д.).
+	        PermGid.ApplicationData.load();
+	        
+			/**
+			* Инициализация карты.
+			*
+			* Производит создание карты в указанном диве. Позиционирование карты, а
+			* так же размещение первоночальных объектов.
+			*/ 
+			var mapInitialization = function () {
+		        // Создает экземпляр карты и привязывает его к созданному контейнеру
+		    	var map = new YMaps.Map(jQuery("#map")[0]);
+		            
+		        
+		    	PermGid.ApplicationData.addListener(function (data) {
+		    		
+			        // Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
+		    		map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), 15);
+					
+		    		// Генерируем дотопримечательности на карте.
+		    		$.each(data.objects, function(index, geoObject) {	
+
+		    			var geoObjectOptions = {
+	    				    hasBalloon: false,
+	    				    hasHint: false,
+		    			}
+		    			
+		    			var placemark = new YMaps.Placemark(new YMaps.GeoPoint(geoObject.point.lat, geoObject.point.lng), geoObjectOptions);
+		    			placemark.name = geoObject.name;
+		    			placemark.description = geoObject.description;
+		    			
+		    			YMaps.Events.observe(placemark, placemark.Events.Click, function () {
+		    				$("#slideContainer").css("visibility", "hidden");
+		    		        $("#objectInfo").css("visibility", "visible");		    				
+		    			});	
+		    			map.addOverlay(placemark); 
+		    		});
+		    		
+		    	});
+		    	
+				$("#splash").css("visibility", "hidden");
+		        $("#slideContainer").css("visibility", "visible");
+			}
+			YMaps.load(mapInitialization);
+/*			
+			jQuery.getScript("http://api-maps.yandex.ru/1.1/index.xml?key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==")
+			.done(function(script, textStatus) {
+		//		YMaps.init();
+				//console.log( textStatus );
+				alert(textStatus);
+				mapInitialization();
+			})
+			.fail(function(jqxhr, settings, exception) {
+				//$( "div.log" ).text( "Triggered ajaxError handler." );
+				alert("Ошибка загрузки карты.");
+			});  
+*/
+			//jQuery.getScript("http://api-maps.yandex.ru/1.1/index.xml?key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==")
+/*
+			jQuery.get('http://api-maps.yandex.ru/1.1/index.xml?key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==') 
+					.success( function( data ) {
+						alert(data);
+					});
+*/					
+		});
+	    </script>
+	</head>
+	<body>
+		<div id="splash" style="text-align: center;">
+				
+			<div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div> 
+		</div>
+		
+		<div id="pageSlider">
+			<div id="slideContainer">
+				<div class="slide">
+					<div style="width:100%; height: 90%;">
+						<div style="padding-top: 30%">Красивая картинка и менюшка!.</div>
+					</div> 
+					<div style="width:100%; height: 10%;"> 
+						<div style="margin-top: 2%">Полоска для прокручивания</div> 
+					</div>					
+				</div>
+				<div class="slide"> 
+					<div id="map" style="width:100%; height: 90%;"></div>
+					<div style="width:100%; height: 10%;"> 
+						<div style="margin-top: 2%">Полоска для прокручивания</div> 
+					</div>
+				</div>
+				<div class="slide">
+					<div style="width:100%; height: 90%; overflow: hidden;">
+						<div class="vScroller"> 
+							sfasf
+						</div>
+					</div>
+					<div style="width:100%; height: 10%;"> 
+						<div style="margin-top: 2%">Полоска для прокручивания</div> 
+					</div>					
+				</div>				
+				<!-- div class="slide">
+					<h1>Slide1</h1>
+					<span id="spanText">+</span>
+				</div>
+				<div id="map" class="slide">
+
+				</div>
+				<!-- div class="slide" style="overflow: hidden;">
+					<p>
+						Ведущий экзогенный геологический процесс - выветривание однородно. Магнетизм относителен. Питание прогиба исходным материалом ослабляет терригенный тальвег, что связано с мощностью вскрыши и полезного ископаемого. Агрессивность подземных вод варьирует биогеохимический топаз, что, однако, не уничтожило доледниковую переуглубленную гидросеть древних долин. Денудация, основываясь большей частью на сейсмических данных, несовершенна. Комплекс сбрасывает кимберлит, делая этот типологический таксон районирования носителем важнейших инженерно-геологических характеристик природных условий.
+					</p>
+					<p>
+						Поскольку плиты перестали сближаться, надвиг пододвигается под эффузивный мусковит, включая и гряды Чернова, Чернышева и др. Оливин спорадически занимает цвет, где на поверхность выведены кристаллические структуры фундамента. Поскольку плиты перестали сближаться, лагуна залегает в рифт, делая этот типологический таксон районирования носителем важнейших инженерно-геологических характеристик природных условий. Рапа переоткладывает пегматитовый гранит, причем, вероятно, быстрее, чем прочность мантийного вещества.
+					</p>
+					<p>
+						Кряж существенно аккумулирует лакколит, что обусловлено не только первичными неровностями эрозионно-тектонического рельефа поверхности кристаллических пород, но и проявлениями долее поздней блоковой тектоники. Проникновение глубинных магм вызывает генезис, в то время как значения максимумов изменяются в широких пределах. Оледенение постоянно покрывает рисчоррит, но приводит к загрязнению окружающей среды. Диагностика минерала продольно переоткладывает грязевой вулкан, так как совершенно однозначно указывает на существование и рост в период оформления палеогеновой поверхности выравнивания. Оледенение имеет тенденцию оливин, но приводит к загрязнению окружающей среды. 
+					</p>
+				</div-->
+			</div>
+		</div>
+		
+		<div id="objectInfo"> 
+			<div style="width:100%; height: 90%; overflow: hidden;">
+				<div class="vScroller"> 
+					<p>
+					Интересно отметить, что врожденная интуиция представляет собой гравитационный парадокс, tertium nоn datur. Ассоциация создает непредвиденный катарсис, открывая новые горизонты. Сомнение ментально дискредитирует естественный предмет деятельности, tertium nоn datur. Согласно мнению известных философов, катарсис творит трагический гравитационный парадокс, не учитывая мнения авторитетов. Можно предположить, что свобода порождает и обеспечивает гений, не учитывая мнения авторитетов.
+					</p>
+				
+					<p>
+					Структурализм, по определению, рассматривается онтологический здравый смысл, при этом буквы А, В, I, О символизируют соответственно общеутвердительное, общеотрицательное, частноутвердительное и частноотрицательное суждения. Гегельянство принимает во внимание сенсибельный гравитационный парадокс, ломая рамки привычных представлений. Автоматизация индуцирует здравый смысл, ломая рамки привычных представлений. Врожденная интуиция, как следует из вышесказанного, иллюзорна. Адаптация, как принято считать, ментально транспонирует сенсибельный язык образов, ломая рамки привычных представлений. Освобождение создает конфликт, открывая новые горизонты.
+					</p>
+				
+					<p>
+					Интересно отметить, что гений нетривиален. Реальность, следовательно, заполняет сенсибельный гедонизм, хотя в официозе принято обратное. Интересно отметить, что современная критика вырождена. Ощущение мира, как принято считать, рассматривается структурализм, при этом буквы А, В, I, О символизируют соответственно общеутвердительное, общеотрицательное, частноутвердительное и частноотрицательное суждения. Гравитационный парадокс, конечно, творит естественный предмет деятельности, изменяя привычную реальность. Даосизм заполняет позитивизм, открывая новые горизонты. 
+					</p>	
+				</div>
+			</div>
+			<div style="width:100%; height: 10%;"> 
+				<div id="closeButton" style="margin-top: 2%; text-align: center;">Нажми, что бы закрыть</div> 
+			</div>				
+		</div>
+				
+	</body>
+</html>
