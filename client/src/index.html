@@ -4,38 +4,38 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 		<link rel="stylesheet" type="text/css" href="style.css" />
-	    <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-	    <!-- script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script-->
-	    <script type="text/javascript" src="jquery-ui.min.js"></script>
-	    <!-- script type="text/javascript" src="jquery.ui.touch-punch.js"></script -->
-	    <script src="http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==" type="text/javascript"></script>
-		
+		<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+		<!-- script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script-->
+		<script type="text/javascript" src="jquery-ui.min.js"></script>
+		<!-- script type="text/javascript" src="jquery.ui.touch-punch.js"></script -->
+		<script src="http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==" type="text/javascript"></script>
+
 		<!-- Загрузка основного кода. -->
-	    <script type="text/javascript" src="permguide.js"></script>
-	    
-	    <script type="text/javascript">
-	    
-	    
-	    $(document).ready(function() {
-	    	// Инициализируем трансляцию событий тача в события мыши. 
-	    	PermGid.TouchSupport.init();
-	        
-	        $("#slideContainer").css("width", $("#pageSlider").width()*$(".slide").length);
-	        $(".slide").css("width", $("#pageSlider").width());
-	        
-	        $(".vScroller").draggable(
-	        {	
-	        	axis: "y", 
-	        	containment: [0, -($("#vScroller").height() - $("#pageSlider").height()), $("#objectInfo").width(), ($("#vScroller").height() - $("#pageSlider").height())]
-	        });
-	        	
-	        
-	        // Инициализируем слайдер страниц.
-	        PermGid.PageSlider.init();
-	        
-	        // Загружаем данные об объектах (достопримечательности, линии и т.д.).
-	        PermGid.ApplicationData.load();
-	        
+		<script type="text/javascript" src="permguide.js"></script>
+
+		<script type="text/javascript">
+
+
+		$(document).ready(function() {
+			// Инициализируем трансляцию событий тача в события мыши. 
+			PermGuide.TouchSupport.init();
+
+			$("#slideContainer").css("width", $("#pageSlider").width()*$(".slide").length);
+			$(".slide").css("width", $("#pageSlider").width());
+
+			$(".vScroller").draggable(
+			{
+				axis: "y", 
+				containment: [0, -($("#vScroller").height() - $("#pageSlider").height()), $("#objectInfo").width(), ($("#vScroller").height() - $("#pageSlider").height())]
+			});
+
+
+			// Инициализируем слайдер страниц.
+			PermGuide.PageSlider.init();
+
+			// Загружаем данные об объектах (достопримечательности, линии и т.д.).
+			PermGuide.ApplicationData.load();
+
 			/**
 			* Инициализация карты.
 			*
@@ -43,41 +43,40 @@
 			* так же размещение первоночальных объектов.
 			*/ 
 			var mapInitialization = function () {
-		        // Создает экземпляр карты и привязывает его к созданному контейнеру
-		    	var map = new YMaps.Map(jQuery("#map")[0]);
-		            
-		        
-		    	PermGid.ApplicationData.addListener(function (data) {
-		    		
-			        // Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
-		    		map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), 15);
-					
-		    		// Генерируем дотопримечательности на карте.
-		    		$.each(data.objects, function(index, geoObject) {	
+				// Создает экземпляр карты и привязывает его к созданному контейнеру
+				var map = new YMaps.Map(jQuery("#map")[0]);
 
-		    			var geoObjectOptions = {
-	    				    hasBalloon: false,
-	    				    hasHint: false,
-		    			}
-		    			
-		    			var placemark = new YMaps.Placemark(new YMaps.GeoPoint(geoObject.point.lat, geoObject.point.lng), geoObjectOptions);
-		    			placemark.name = geoObject.name;
-		    			placemark.description = geoObject.description;
-		    			
-		    			YMaps.Events.observe(placemark, placemark.Events.Click, function () {
-		    				$("#slideContainer").css("visibility", "hidden");
-		    		        $("#objectInfo").css("visibility", "visible");		    				
-		    			});	
-		    			map.addOverlay(placemark); 
-		    		});
-		    		
-		    	});
-		    	
+				PermGuide.ApplicationData.addListener(function (data) {
+
+					// Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
+					map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), 15);
+
+					// Генерируем дотопримечательности на карте.
+					$.each(data.objects, function(index, geoObject) {	
+
+						var geoObjectOptions = {
+							hasBalloon: false,
+							hasHint: false,
+						}
+
+						var placemark = new YMaps.Placemark(new YMaps.GeoPoint(geoObject.point.lat, geoObject.point.lng), geoObjectOptions);
+						placemark.name = geoObject.name;
+						placemark.description = geoObject.description;
+
+						YMaps.Events.observe(placemark, placemark.Events.Click, function () {
+							$("#slideContainer").css("visibility", "hidden");
+							$("#objectInfo").css("visibility", "visible");		    				
+						});	
+						map.addOverlay(placemark); 
+					});
+
+				});
+
 				$("#splash").css("visibility", "hidden");
-		        $("#slideContainer").css("visibility", "visible");
+				$("#slideContainer").css("visibility", "visible");
 			}
 			YMaps.load(mapInitialization);
-/*			
+/*
 			jQuery.getScript("http://api-maps.yandex.ru/1.1/index.xml?key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==")
 			.done(function(script, textStatus) {
 		//		YMaps.init();
@@ -96,13 +95,12 @@
 					.success( function( data ) {
 						alert(data);
 					});
-*/					
+*/
 		});
-	    </script>
+		</script>
 	</head>
 	<body>
 		<div id="splash" style="text-align: center;">
-				
 			<div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div> 
 		</div>
 		
@@ -114,7 +112,7 @@
 					</div> 
 					<div style="width:100%; height: 10%;"> 
 						<div style="margin-top: 2%">Полоска для прокручивания</div> 
-					</div>					
+					</div>
 				</div>
 				<div class="slide"> 
 					<div id="map" style="width:100%; height: 90%;"></div>
@@ -129,9 +127,9 @@
 						</div>
 					</div>
 					<div style="width:100%; height: 10%;"> 
-						<div style="margin-top: 2%">Полоска для прокручивания</div> 
-					</div>					
-				</div>				
+						<div style="margin-top: 2%">Полоска для прокручивания</div>
+					</div>
+				</div>
 				<!-- div class="slide">
 					<h1>Slide1</h1>
 					<span id="spanText">+</span>
@@ -152,7 +150,7 @@
 				</div-->
 			</div>
 		</div>
-		
+
 		<div id="objectInfo"> 
 			<div style="width:100%; height: 90%; overflow: hidden;">
 				<div class="vScroller"> 
@@ -166,13 +164,13 @@
 				
 					<p>
 					Интересно отметить, что гений нетривиален. Реальность, следовательно, заполняет сенсибельный гедонизм, хотя в официозе принято обратное. Интересно отметить, что современная критика вырождена. Ощущение мира, как принято считать, рассматривается структурализм, при этом буквы А, В, I, О символизируют соответственно общеутвердительное, общеотрицательное, частноутвердительное и частноотрицательное суждения. Гравитационный парадокс, конечно, творит естественный предмет деятельности, изменяя привычную реальность. Даосизм заполняет позитивизм, открывая новые горизонты. 
-					</p>	
+					</p>
 				</div>
 			</div>
 			<div style="width:100%; height: 10%;"> 
 				<div id="closeButton" style="margin-top: 2%; text-align: center;">Нажми, что бы закрыть</div> 
-			</div>				
+			</div>
 		</div>
-				
+
 	</body>
 </html>
