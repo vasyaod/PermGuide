@@ -11,18 +11,19 @@ PermGuide = {}; // Будет spacename-мом.
 PermGuide.TouchSupport = {
 	
 	/**
-	 * Обработчик событий.
+	 * Обработчик событий.тача.
 	 */	
 	touchHandler: function (event) {
 		
 		var touches = event.changedTouches,
 			first = touches[0],
 			type = "";
+		
 		switch(event.type)
 		{
-			case "touchstart": type = "mousedown"; break;
-			case "touchmove":  type="mousemove"; break;        
-			case "touchend":   type="mouseup"; break;
+			case "touchstart": type = "permguide-mousedown"; break;
+			case "touchmove":  type = "permguide-mousemove"; break;        
+			case "touchend":   type = "permguide-mouseup"; break;
 			default: return;
 		}
 		var simulatedEvent = document.createEvent("MouseEvent");
@@ -33,18 +34,53 @@ PermGuide.TouchSupport = {
 
 		first.target.dispatchEvent(simulatedEvent);
 		event.preventDefault();
-	}, 
+	},
+	
+	/**
+	 * Обработчик событий.мыши.
+	 */	
+	mouseHandler: function (event) {
+		
+		var	type = "";
+		
+		switch(event.type)
+		{
+			case "mousedown": type = "permguide-mousedown"; break;
+			case "mousemove": type = "permguide-mousemove"; break;        
+			case "mouseup":   type = "permguide-mouseup"; break;
+			default: return;
+		}
+
+		var simulatedEvent = document.createEvent("MouseEvent");
+		simulatedEvent.initMouseEvent(type, true, true, window, 1,
+									event.screenX, event.screenY,
+									event.clientX, event.clientY, false,
+									false, false, false, 0, null);
+		//simulatedEvent.type = type;
+		event.target.dispatchEvent(simulatedEvent);
+		event.preventDefault();
+	},
 	
 	/**
 	 * Функция инициализации.
 	 *
-	 * Вешает обработчик событий тача.
+	 * Вешает обработчик событий тача или мыши.
 	 */
 	init: function() {
-		document.addEventListener("touchstart",  PermGuide.TouchSupport.touchHandler, false);
-		document.addEventListener("touchmove",   PermGuide.TouchSupport.touchHandler, false);
-		document.addEventListener("touchend",    PermGuide.TouchSupport.touchHandler, false);
-		document.addEventListener("touchcancel", PermGuide.TouchSupport.touchHandler, false);    
+		$.support.touch = typeof Touch === 'object';
+
+		if (!$.support.touch) {
+			document.addEventListener("mousedown",  this.mouseHandler, false);
+			document.addEventListener("mousemove",  this.mouseHandler, false);
+			document.addEventListener("mouseup",    this.mouseHandler, false);
+		}
+		else
+		{
+			document.addEventListener("touchstart",  this.touchHandler, false);
+			document.addEventListener("touchmove",   this.touchHandler, false);
+			document.addEventListener("touchend",    this.touchHandler, false);
+			document.addEventListener("touchcancel", this.touchHandler, false);
+		}
 	}
 }
 
@@ -59,7 +95,33 @@ PermGuide.TouchSupport = {
  */
 PermGuide.PageSlider = {
 
+	/**
+	 * Флаг режима перетаскивания окна.
+	 */
+	draged: false,
+	
 	init: function() { 
+		var self = this;
+
+		this.containerPosition = $("#slideContainer").position();
+		this.slideWidth = $(".slide").width();
+		this.slideCount = $("#slideContainer > div.slide").length;
+		this.index = 1;
+		
+		$("#slideContainer").bind("permguide-mousedown", function(event) {
+			alert(event.type);
+			self.down(event);
+		});
+		
+		$("#slideContainer").bind("permguide-mousemove", function(event) {
+			self.move(event);
+		});
+
+		$("#slideContainer").bind("permguide-mouseup", function(event) {
+			self.up(event);
+		});
+		
+/*
 		var cont_pos = $("#slideContainer").position();
 		var item_width = $(".slide").width();
 		var items = $("#slideContainer > div.slide").length;
@@ -113,6 +175,32 @@ PermGuide.PageSlider = {
 		$("#slideContainer").mouseup(function() {
 			bindMouseUp();
 		});
+*/
+	},
+
+	down: function(event) {
+		this.x = event.clientX;
+		this.y = event.clientY;
+		this.containerPosition = $("#slideContainer").offset();
+		
+		this.draged = true;
+	},
+	
+	move: function(event) {
+		
+		if (!this.draged)
+			return;
+
+		var tX = event.clientX;
+		var tY = event.clientY;
+		$("#slideContainer").offset({ 
+			top:  this.containerPosition.top, 
+			left: this.containerPosition.left + (tX - this.x) 
+		});
+	},
+
+	up: function(event) {
+		this.draged = false;
 	}
 }
 
