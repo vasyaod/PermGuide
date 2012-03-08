@@ -1,4 +1,100 @@
 
+(function ($) {
+	
+	$.support.touch = typeof Touch === 'object';
+	if (!$.fn.browserTouchSupport.touches) {
+		// Если тач не поддерживается, то используем события мыши.
+		$.fn.touchstart = function(fn) {
+			var newFn = function (event)
+			{
+				fn({
+					type: "touchstart",
+					target: event.target,
+					changedTouches: 
+					[
+						{
+							clientX: event.clientX,
+							clientY: event.clientY,
+							screenX: event.screenX,
+							screenY: event.screenY,
+							pageX: event.pageX,
+							pageY: event.pageY
+						}
+					]
+				});
+			}
+			$(this).on("mousedown", newFn);
+		};
+		
+		$.fn.touchmove = function(fn) {
+			var newFn = function (event)
+			{
+				fn({
+					type: "touchmove",
+					target: event.target,
+					changedTouches: 
+					[
+						{
+							clientX: event.clientX,
+							clientY: event.clientY,
+							screenX: event.screenX,
+							screenY: event.screenY,
+							pageX: event.pageX,
+							pageY: event.pageY
+						}
+					]
+				});
+			}
+			$(this).on("mousemove", newFn);
+		};
+		
+		$.fn.touchend = function(fn) {
+			var newFn = function (event)
+			{
+				fn({
+					type: "touchend",
+					target: event.target,
+					changedTouches: 
+					[
+						{
+							clientX: event.clientX,
+							clientY: event.clientY,
+							screenX: event.screenX,
+							screenY: event.screenY,
+							pageX: event.pageX,
+							pageY: event.pageY
+						}
+					]
+				});
+			}
+			$(this).on("mouseup", newFn);
+		};
+	} else {
+		// Если тач поддерживается, то используем нужные события.
+		$.fn.touchstart = function(fn) {
+			$(this).each( function () {
+				this.addEventListener("touchstart", fn);
+			});		
+		};
+		
+		$.fn.touchmove = function(fn) {
+			$(this).each( function () {
+				this.addEventListener("touchmove", fn);
+			});		
+		};
+		
+		$.fn.touchend = function(fn) {
+			$(this).each( function () {
+				this.addEventListener("touchend", fn);
+			});		
+		};	
+
+	}
+	
+
+})(jQuery);
+
+
 PermGuide = {}; // Будет spacename-мом.
 
 /**
@@ -96,9 +192,18 @@ PermGuide.TouchSupport = {
 PermGuide.PageSlider = {
 
 	/**
+	 * Индекс текущего слайда.
+	 */
+	index: 0,
+	/**
 	 * Флаг режима перетаскивания окна.
 	 */
 	draged: false,
+	
+	/**
+	 * Флаг, того, можно ли двигать слады.
+	 */
+	canDraged: true,
 	
 	init: function() { 
 		var self = this;
@@ -106,18 +211,17 @@ PermGuide.PageSlider = {
 		this.containerPosition = $("#slideContainer").position();
 		this.slideWidth = $(".slide").width();
 		this.slideCount = $("#slideContainer > div.slide").length;
-		this.index = 1;
+		this.index = 0;
 		
-		$("#slideContainer").bind("permguide-mousedown", function(event) {
-			alert(event.type);
+		$("#slideContainer").touchstart( function(event) {
 			self.down(event);
 		});
 		
-		$("#slideContainer").bind("permguide-mousemove", function(event) {
+		$("#slideContainer").touchmove( function(event) {
 			self.move(event);
 		});
 
-		$("#slideContainer").bind("permguide-mouseup", function(event) {
+		$("#slideContainer").touchend( function(event) {
 			self.up(event);
 		});
 		
@@ -179,8 +283,12 @@ PermGuide.PageSlider = {
 	},
 
 	down: function(event) {
-		this.x = event.clientX;
-		this.y = event.clientY;
+		
+		if (!this.canDraged)
+			return;
+		
+		this.x = event.changedTouches[0].clientX;
+		this.y = event.changedTouches[0].clientY;
 		this.containerPosition = $("#slideContainer").offset();
 		
 		this.draged = true;
@@ -191,8 +299,8 @@ PermGuide.PageSlider = {
 		if (!this.draged)
 			return;
 
-		var tX = event.clientX;
-		var tY = event.clientY;
+		var tX = event.changedTouches[0].clientX;
+		var tY = event.changedTouches[0].clientY;
 		$("#slideContainer").offset({ 
 			top:  this.containerPosition.top, 
 			left: this.containerPosition.left + (tX - this.x) 
@@ -200,7 +308,66 @@ PermGuide.PageSlider = {
 	},
 
 	up: function(event) {
+		if (!this.draged)
+			return;
 		this.draged = false;
+		
+		if ((tX - this.x) == 0)
+			return;
+		
+		Math.abs(tX - this.x)
+		var tX = event.changedTouches[0].clientX;
+		var tY = event.changedTouches[0].clientY;
+		var self = this;
+		
+		if (Math.abs(tX - this.x) > this.slideWidth/4)
+		{
+			if ((tX - this.x) < 0)
+				this.index ++;
+			else
+				this.index --;
+		}
+		
+		if (this.index < 0)
+			this.index = 0;
+		if (this.index == this.slideCount)
+			this.index =  this.slideCount-1;
+		
+		var delta = $("#slideContainer > div.slide").slice(this.index).offset().left
+		this.canDraged = false;
+		$("#slideContainer").animate({
+			left: ((delta < 0) ? '+=' + Math.abs(delta) : '-=' + Math.abs(delta))
+		}, 500, function() {
+			self.canDraged = true;
+		});
+
+/*		
+		if ((tX - this.x) > 0)
+		{
+			this.canDraged = false;
+			//var moveLeft = Math.abs(tX - this.x);
+			var moveLeft = this.slideWidth;
+			$("#slideContainer").animate({
+				left: '+=' + moveLeft
+			}, 500, function() {
+				self.canDraged = true;
+			});
+			this.index ++;
+		}
+		else if ((tX - this.x) < 0)
+		{
+			this.canDraged = false;
+			//var moveLeft = Math.abs(tX - this.x);
+			var moveLeft = this.slideWidth;
+			$("#slideContainer").animate({
+				left: '-=' + moveLeft
+			}, 500, function() {
+				self.canDraged = true;
+				
+			});
+			this.index --;
+		}
+*/
 	}
 }
 
