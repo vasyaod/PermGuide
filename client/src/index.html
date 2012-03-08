@@ -60,7 +60,26 @@
 			////
 			// Инициализируем слайдер страниц.
 			PermGuide.PageSlider.init();
-			// Вешаем на скроллер
+			
+			// Устанавливает обработчик переключения страниц.
+			PermGuide.PageSlider.listener = function(index) {
+				$(".pageIndicator").css("background-color","#eeeeee");
+				$(".pageIndicator").slice(index, index+1).css("background-color","#666666");
+			};
+			PermGuide.PageSlider.listener(0); // Подсветим сразуже первую страницу.
+			
+			$(".pageIndicator").click( function(event) {
+				PermGuide.PageSlider.select(parseInt($(event.target).text())-1);
+			});
+			$("#nextButton").click( function(event) {
+				PermGuide.PageSlider.next();
+			});
+			
+			$("#prevButton").click( function(event) {
+				PermGuide.PageSlider.prev();
+			});
+			
+			// Вешаем на скроллер события тача.
 			$("#pageScroller").touchstart( function(event) {
 				PermGuide.PageSlider.down(event);
 			});
@@ -72,15 +91,6 @@
 			$("#pageScroller").touchend( function(event) {
 				PermGuide.PageSlider.up(event);
 			});
-			
-			$("#nextButton").click( function(event) {
-				PermGuide.PageSlider.next();
-			});
-			
-			$("#prevButton").click( function(event) {
-				PermGuide.PageSlider.prev();
-			});
-			
 			////
 
 			// Загружаем данные об объектах (достопримечательности, линии и т.д.).
@@ -160,15 +170,18 @@
 		<div id="pageSlider">
 			<div id="slideContainer">
 				<div class="slide">
-					<div style="width:100%; height: 100%;">
+					<div style="height: 100%;">
 						<div style="padding-top: 30%">Красивая картинка и менюшка!.</div>
 					</div> 
 				</div>
 				<div class="slide"> 
-					<div id="map" style="width:100%; height: 100%;"></div>
+					<div style="height: 5%; z-index: 1000">
+						Жать сюда (пока не работает.)
+					</div>
+					<div id="map" style="height: 95%;"></div>
 				</div>
 				<div class="slide">
-					<div style="width:100%; height: 100%; overflow: hidden;">
+					<div style="height: 100%; overflow: hidden;">
 						<div class="vScroller"> 
 							<ul>
 								<li>11111</li>
@@ -223,9 +236,9 @@
 				<table border="0" cellpadding="0" cellspacing="0">
 					<tr>
 						<td><div id="prevButton">Влево</div></td>
-						<td> 1 </td>
-						<td> 2 </td>
-						<td> 3 </td>
+						<td><div class="pageIndicator">1</div></td>
+						<td><div class="pageIndicator">2</div></td>
+						<td><div class="pageIndicator">3</div></td>
 						<td style="text-align: right;"><div id="nextButton">Вправо</div></td>
 					</tr>
 				</table>

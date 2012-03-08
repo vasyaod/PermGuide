@@ -257,13 +257,13 @@ PermGuide.PageSlider = {
 	select: function(index) {
 		if (this.index == index)
 			return;
-		this.index == index;
+		this.index = index;
 		
 		if (this.index < 0)
 			this.index = 0;
 		if (this.index == this.slideCount)
 			this.index =  this.slideCount-1;
-		
+
 		if (this.listener != null)
 			this.listener(this.index);
 		this.refresh();
@@ -354,13 +354,13 @@ PermGuide.PageSlider = {
 			if ((tX - this.x) < 0)
 			{
 				this.index ++;
-				if (this.listener != null)
+				if (this.listener != null && this.index < this.slideCount)
 					this.listener(this.index);
 			}
 			else
 			{
 				this.index --;
-				if (this.listener != null)
+				if (this.listener != null && this.index >= 0)
 					this.listener(this.index);
 			}
 		}
