@@ -26,22 +26,8 @@
 			$("#slideContainer").css("width", $("#pageSlider").width()*$(".slide").length);
 			$(".slide").css("width", $("#pageSlider").width());
 
-			// Вертикалиный скролинг, пока в виде draggable-дива.
-			// TODO: В будщем оформить как плагин к jQuery.
-			$.each($(".vScroller"), function(key, value) { 
-				var parentWidth = $(value).parent().width();
-				var parentHeight = $(value).parent().height();
-				var height = $(value).height();
-				var t = (height - parentHeight);
-				
-				if (t > 0) {
-					$(value).draggable(
-						{
-							axis: "y",
-							containment: [0, -t, parentWidth, t]
-						});
-				}
-			});
+			// Скролинг дива.
+			$(".vScroller").scrolled();
 			
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
 			$("#closeButton").on("click", function () {
@@ -49,13 +35,15 @@
 				$("#slideContainer").css("visibility", "visible");
 			});
 			
+			$("li").on("click", function (event) {
+				event.preventDefault();
+				alert("11111");
+			});
+
 			//$("#pageScroller").on("permguide-mouseup", function () {
 			//	alert("permguide-mouseup");
 			//});
 			//$("#pageScroller").on("touchstart", function (event) {
-			//	alert("touchstart: "+event.changedTouches[0].clientY);
-			//});
-			//$("#pageScroller").touchstart( function (event) {
 			//	alert("touchstart: "+event.changedTouches[0].clientY);
 			//});
 			

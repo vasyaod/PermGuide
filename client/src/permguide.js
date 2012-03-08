@@ -72,23 +72,40 @@
 	} else {
 		// Если тач поддерживается, то используем нужные события.
 		$.fn.touchstart = function(fn) {
+			var newFn = function (event)
+			{
+				event.preventDefault();
+				fn(event);
+			}
 			$(this).each( function () {
-				this.addEventListener("touchstart", fn);
+				this.addEventListener("touchstart", newFn);
 			});		
 		};
 		
 		$.fn.touchmove = function(fn) {
+			var newFn = function (event)
+			{
+				event.preventDefault();
+				fn(event);
+			}
 			$(this).each( function () {
-				this.addEventListener("touchmove", fn);
+				this.addEventListener("touchmove", newFn);
 			});		
 		};
 		
 		$.fn.touchend = function(fn) {
+			var newFn = function (event)
+			{
+				event.preventDefault();
+				fn(event);
+			}
 			$(this).each( function () {
-				this.addEventListener("touchend", fn);
+				this.addEventListener("touchend", newFn);
+			});		
+			$(this).each( function () {
+				this.addEventListener("touchcancel", newFn);
 			});		
 		};	
-
 	}
 	
 
@@ -207,79 +224,25 @@ PermGuide.PageSlider = {
 	
 	init: function() { 
 		var self = this;
-
-		this.containerPosition = $("#slideContainer").position();
-		this.slideWidth = $(".slide").width();
-		this.slideCount = $("#slideContainer > div.slide").length;
+		
+		this.containerElement = $("#slideContainer");
+		this.containerPosition = $(this.containerElement).position();
+		this.slideWidth = $(this.containerElement).children(".slide").width();
+		this.slideCount = $(this.containerElement).children(".slide").length;
 		this.index = 0;
 		
-		$("#slideContainer").touchstart( function(event) {
+		$(this.containerElement).touchstart( function(event) {
 			self.down(event);
 		});
 		
-		$("#slideContainer").touchmove( function(event) {
+		$(this.containerElement).touchmove( function(event) {
 			self.move(event);
 		});
 
-		$("#slideContainer").touchend( function(event) {
+		$(this.containerElement).touchend( function(event) {
 			self.up(event);
 		});
 		
-/*
-		var cont_pos = $("#slideContainer").position();
-		var item_width = $(".slide").width();
-		var items = $("#slideContainer > div.slide").length;
-		var item_index = 1;
-		var cont_post_temp;
-		
-		$("#slideContainer").draggable({ axis: "x", revert: true });
-
-		function bindMouseUp() {
-			$("#slideContainer").unbind('mouseup');
-			cont_post_temp = $("#slideContainer").position().left;
-			if (cont_pos.left > cont_post_temp && item_index != items) {
-				// Перелистывание вправо
-				$("#slideContainer").draggable("option", "revert", false);
-				var moveLeft = cont_pos.left - cont_post_temp;
-				moveLeft = Math.abs(item_width - moveLeft);
-				$("#slideContainer").animate({
-					left: '-=' + moveLeft
-				}, 500, function() {
-					$("#slideContainer").draggable("option", "revert", true);
-					cont_pos = $("#slideContainer").position();
-					$("#slideContainer").bind('mouseup', function() {
-						bindMouseUp();
-					});
-				});
-				item_index ++;
-			} else if (cont_pos.left < cont_post_temp && item_index != 1) {
-				// Перелистывание влево
-				$("#slideContainer").draggable("option", "revert", false);
-				var moveLeft = cont_post_temp - cont_pos.left;
-				moveLeft = Math.abs(item_width - moveLeft);
-				$("#slideContainer").animate({
-					left: '+=' + moveLeft
-				}, 500, function() {
-					$("#slideContainer").draggable("option", "revert", true);
-					cont_pos = $("#slideContainer").position();
-					$("#slideContainer").bind('mouseup', function() {
-						bindMouseUp();
-					});
-				});
-				item_index --;
-			} else {
-				// В начале или в конце перелистывания страницы
-				$("#slideContainer").draggable( "option", "revert", true );
-				$("#slideContainer").bind('mouseup', function() {
-					bindMouseUp();
-				});
-			}
-		}
-
-		$("#slideContainer").mouseup(function() {
-			bindMouseUp();
-		});
-*/
 	},
 
 	down: function(event) {
@@ -289,7 +252,7 @@ PermGuide.PageSlider = {
 		
 		this.x = event.changedTouches[0].clientX;
 		this.y = event.changedTouches[0].clientY;
-		this.containerPosition = $("#slideContainer").offset();
+		this.containerPosition = $(this.containerElement).offset();
 		
 		this.draged = true;
 	},
@@ -298,24 +261,24 @@ PermGuide.PageSlider = {
 		
 		if (!this.draged)
 			return;
-
 		var tX = event.changedTouches[0].clientX;
 		var tY = event.changedTouches[0].clientY;
-		$("#slideContainer").offset({ 
-			top:  this.containerPosition.top, 
+		$(this.containerElement).offset({ 
+//			top:  this.containerPosition.top, 
 			left: this.containerPosition.left + (tX - this.x) 
 		});
 	},
 
 	up: function(event) {
+
 		if (!this.draged)
 			return;
 		this.draged = false;
 		
+
 		if ((tX - this.x) == 0)
 			return;
 		
-		Math.abs(tX - this.x)
 		var tX = event.changedTouches[0].clientX;
 		var tY = event.changedTouches[0].clientY;
 		var self = this;
@@ -333,43 +296,84 @@ PermGuide.PageSlider = {
 		if (this.index == this.slideCount)
 			this.index =  this.slideCount-1;
 		
-		var delta = $("#slideContainer > div.slide").slice(this.index).offset().left
+		var delta = $(this.containerElement).children(".slide").slice(this.index).offset().left
 		this.canDraged = false;
-		$("#slideContainer").animate({
+		$(this.containerElement).animate({
 			left: ((delta < 0) ? '+=' + Math.abs(delta) : '-=' + Math.abs(delta))
 		}, 500, function() {
 			self.canDraged = true;
 		});
-
-/*		
-		if ((tX - this.x) > 0)
-		{
-			this.canDraged = false;
-			//var moveLeft = Math.abs(tX - this.x);
-			var moveLeft = this.slideWidth;
-			$("#slideContainer").animate({
-				left: '+=' + moveLeft
-			}, 500, function() {
-				self.canDraged = true;
-			});
-			this.index ++;
-		}
-		else if ((tX - this.x) < 0)
-		{
-			this.canDraged = false;
-			//var moveLeft = Math.abs(tX - this.x);
-			var moveLeft = this.slideWidth;
-			$("#slideContainer").animate({
-				left: '-=' + moveLeft
-			}, 500, function() {
-				self.canDraged = true;
-				
-			});
-			this.index --;
-		}
-*/
 	}
-}
+};
+
+(function ($) {
+	$.fn.scrolled = function() {
+		
+		this.each(function(){
+			
+			var state = {
+				containerElement: this,
+				draged: false,
+				canDraged: true
+			};
+			
+			$(this).touchstart( $.proxy(function(event) {
+				if (!this.canDraged)
+					return;
+				
+				this.x = event.changedTouches[0].clientX;
+				this.y = event.changedTouches[0].clientY;
+				this.containerPosition = $(this.containerElement).offset();
+				
+				this.draged = true;
+			}, state));
+			
+			$(this).touchmove( $.proxy(function(event) {
+				
+				if (!this.draged)
+					return;
+				var tX = event.changedTouches[0].clientX;
+				var tY = event.changedTouches[0].clientY;
+				$(this.containerElement).offset({ 
+					top:  this.containerPosition.top + (tY - this.y), 
+//					left: this.containerPosition.left, 
+				});
+				
+			}, state));
+			
+			$(this).touchend( $.proxy(function(event) {
+				
+				if (!this.draged)
+					return;
+				this.draged = false;
+				
+				var delta = 0;
+				var parentHeight = $(this.containerElement).parent().height();
+				var height = $(this.containerElement).height();
+				var position = $(this.containerElement).offset().top;
+				
+				if (position < -(height - parentHeight))
+					delta = -position - (height - parentHeight);
+				else if (position > 0)
+					delta = - position;
+				
+				//alert("!");
+				if (delta == 0)
+					return;
+				
+				this.canDraged = false;
+				var self = this;
+				$(this.containerElement).animate({
+					top: ((delta > 0) ? '+=' + Math.abs(delta) : '-=' + Math.abs(delta))
+				}, 500, function() {
+					self.canDraged = true;
+				});
+			
+			}, state));
+			
+		});
+	};
+})(jQuery);
 
 /**
  * Хранятся данные (события, достопримечательности, ...)
