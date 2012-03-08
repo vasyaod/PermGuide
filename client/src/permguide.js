@@ -222,11 +222,18 @@ PermGuide.PageSlider = {
 	 */
 	canDraged: true,
 	
+	/**
+	 * Слушатель событий, переключения страниц.
+	 */
+	listener: null,
+	
 	init: function() { 
 		var self = this;
 		
 		this.containerElement = $("#slideContainer");
+		// 
 		$(this.containerElement).offset({});
+		
 		this.containerPosition = $(this.containerElement).position();
 		this.slideWidth = $(this.containerElement).children(".slide").width();
 		this.slideCount = $(this.containerElement).children(".slide").length;
@@ -245,7 +252,23 @@ PermGuide.PageSlider = {
 		});
 		
 	},
-
+	
+	// 
+	select: function(index) {
+		if (this.index == index)
+			return;
+		this.index == index;
+		
+		if (this.index < 0)
+			this.index = 0;
+		if (this.index == this.slideCount)
+			this.index =  this.slideCount-1;
+		
+		if (this.listener != null)
+			this.listener(this.index);
+		this.refresh();
+	},
+	
 	down: function(event) {
 		
 		if (!this.canDraged)
@@ -279,6 +302,8 @@ PermGuide.PageSlider = {
 			return;
 		
 		this.index ++;
+		if (this.listener != null)
+			this.listener(this.index);
 		this.refresh();
 	},
 	
@@ -287,6 +312,8 @@ PermGuide.PageSlider = {
 			return;
 		
 		this.index --;
+		if (this.listener != null)
+			this.listener(this.index);
 		this.refresh();
 	},
 	
@@ -325,9 +352,17 @@ PermGuide.PageSlider = {
 		if (Math.abs(tX - this.x) > this.slideWidth/4)
 		{
 			if ((tX - this.x) < 0)
+			{
 				this.index ++;
+				if (this.listener != null)
+					this.listener(this.index);
+			}
 			else
+			{
 				this.index --;
+				if (this.listener != null)
+					this.listener(this.index);
+			}
 		}
 		
 		this.refresh();
