@@ -74,7 +74,7 @@
 		$.fn.touchstart = function(fn) {
 			var newFn = function (event)
 			{
-				event.preventDefault();
+		//		event.preventDefault();
 				fn(event);
 			}
 			$(this).each( function () {
@@ -85,7 +85,7 @@
 		$.fn.touchmove = function(fn) {
 			var newFn = function (event)
 			{
-				event.preventDefault();
+		//		event.preventDefault();
 				fn(event);
 			}
 			$(this).each( function () {
@@ -96,7 +96,7 @@
 		$.fn.touchend = function(fn) {
 			var newFn = function (event)
 			{
-				event.preventDefault();
+		//		event.preventDefault();
 				fn(event);
 			}
 			$(this).each( function () {
@@ -226,6 +226,7 @@ PermGuide.PageSlider = {
 		var self = this;
 		
 		this.containerElement = $("#slideContainer");
+		$(this.containerElement).offset({});
 		this.containerPosition = $(this.containerElement).position();
 		this.slideWidth = $(this.containerElement).children(".slide").width();
 		this.slideCount = $(this.containerElement).children(".slide").length;
@@ -263,25 +264,63 @@ PermGuide.PageSlider = {
 			return;
 		var tX = event.changedTouches[0].clientX;
 		var tY = event.changedTouches[0].clientY;
+		// Если сдвиг не очень большой, то стоим на месте.
+		if (Math.abs(tX - this.x) < 10)
+			return;
+			
 		$(this.containerElement).offset({ 
 //			top:  this.containerPosition.top, 
 			left: this.containerPosition.left + (tX - this.x) 
 		});
 	},
-
+	
+	next: function() {
+		if (this.index == this.slideCount-1)
+			return;
+		
+		this.index ++;
+		this.refresh();
+	},
+	
+	prev: function() {
+		if (this.index == 0)
+			return;
+		
+		this.index --;
+		this.refresh();
+	},
+	
+	refresh: function() {
+		if (this.index < 0)
+			this.index = 0;
+		if (this.index == this.slideCount)
+			this.index =  this.slideCount-1;
+		
+		var delta = $(this.containerElement).children(".slide").slice(this.index).offset().left
+		if (delta == 0)
+			return;
+		
+		var self = this;
+		this.canDraged = false;
+		$(this.containerElement).animate({
+			left: ((delta < 0) ? '+=' + Math.abs(delta) : '-=' + Math.abs(delta))
+		}, 500, function() {
+			self.canDraged = true;
+		});
+	
+	},
+	
 	up: function(event) {
 
 		if (!this.draged)
 			return;
 		this.draged = false;
 		
-
-		if ((tX - this.x) == 0)
-			return;
-		
 		var tX = event.changedTouches[0].clientX;
 		var tY = event.changedTouches[0].clientY;
-		var self = this;
+
+		if (Math.abs(tX - this.x) < 10)
+			return;
 		
 		if (Math.abs(tX - this.x) > this.slideWidth/4)
 		{
@@ -291,18 +330,7 @@ PermGuide.PageSlider = {
 				this.index --;
 		}
 		
-		if (this.index < 0)
-			this.index = 0;
-		if (this.index == this.slideCount)
-			this.index =  this.slideCount-1;
-		
-		var delta = $(this.containerElement).children(".slide").slice(this.index).offset().left
-		this.canDraged = false;
-		$(this.containerElement).animate({
-			left: ((delta < 0) ? '+=' + Math.abs(delta) : '-=' + Math.abs(delta))
-		}, 500, function() {
-			self.canDraged = true;
-		});
+		this.refresh();
 	}
 };
 
@@ -357,7 +385,6 @@ PermGuide.PageSlider = {
 				else if (position > 0)
 					delta = - position;
 				
-				//alert("!");
 				if (delta == 0)
 					return;
 				

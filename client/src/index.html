@@ -5,7 +5,6 @@
 		<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-		<script type="text/javascript" src="jquery.json-2.3.js"></script>
 		<script type="text/javascript" src="browserTouchSupport.js"></script>
 		<!-- script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script-->
 		<script type="text/javascript" src="jquery-ui.min.js"></script>
@@ -32,7 +31,7 @@
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
 			$("#closeButton").on("click", function () {
 				$("#objectInfo").css("visibility", "hidden");
-				$("#slideContainer").css("visibility", "visible");
+				$("#pageSlider").css("visibility", "visible");
 			});
 			
 			$("li").on("click", function (event) {
@@ -57,9 +56,32 @@
 			//$("#pageScroller").on("mousedown", function () {
 			//	alert("mousedown");
 			//});			
-			
+
+			////
 			// Инициализируем слайдер страниц.
 			PermGuide.PageSlider.init();
+			// Вешаем на скроллер
+			$("#pageScroller").touchstart( function(event) {
+				PermGuide.PageSlider.down(event);
+			});
+			
+			$("#pageScroller").touchmove( function(event) {
+				PermGuide.PageSlider.move(event);
+			});
+
+			$("#pageScroller").touchend( function(event) {
+				PermGuide.PageSlider.up(event);
+			});
+			
+			$("#nextButton").click( function(event) {
+				PermGuide.PageSlider.next();
+			});
+			
+			$("#prevButton").click( function(event) {
+				PermGuide.PageSlider.prev();
+			});
+			
+			////
 
 			// Загружаем данные об объектах (достопримечательности, линии и т.д.).
 			PermGuide.ApplicationData.load();
@@ -92,7 +114,7 @@
 						placemark.description = geoObject.description;
 
 						YMaps.Events.observe(placemark, placemark.Events.Click, function () {
-							$("#slideContainer").css("visibility", "hidden");
+							$("#pageSlider").css("visibility", "hidden");
 							$("#objectInfo").css("visibility", "visible");
 						});	
 						map.addOverlay(placemark); 
@@ -197,8 +219,16 @@
 					</div>
 				</div>
 			</div>
-			<div id="pageScroller" style="height: 10%;"> 
-				<div style="margin-top: 2%" text-align: center;>Полоска для прокручивания</div>
+			<div id="pageScroller" style="height: 10%;">
+				<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td><div id="prevButton">Влево</div></td>
+						<td> 1 </td>
+						<td> 2 </td>
+						<td> 3 </td>
+						<td style="text-align: right;"><div id="nextButton">Вправо</div></td>
+					</tr>
+				</table>
 			</div>			
 		</div>
 

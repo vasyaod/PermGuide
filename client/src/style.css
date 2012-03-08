@@ -1,13 +1,13 @@
 @CHARSET "UTF-8";
 body
 {
-    margin: 0px;	
-	padding: 0px;	
+	margin: 0px;
+	padding: 0px;
 }
 
 div
 {
-    margin: 0px;	
+	margin: 0px;	
 	padding: 0px;	
 }
 
@@ -15,9 +15,17 @@ div
 	
 	width: 100%;
 	height: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+#pageScroller table {
+	width: 100%;
+	border-width: 1px;
+}
+#pageScroller td {
+	border-width: 1px;
 }
 
 #pageSlider {
@@ -25,11 +33,11 @@ div
 	height: 100%;
 	overflow: hidden;
 	border: 0px;
-    margin:0 auto;
-    visibility: hidden;
-    position: absolute;
-    top: 0px;
-    left: 0px;
+	margin:0 auto;
+	visibility: hidden;
+	position: absolute;
+	top: 0px;
+	left: 0px;
 }
 
 
@@ -50,11 +58,11 @@ div
 	
 	width: 100%;
 	height: 100%;
- 	overflow: hidden;
-    visibility: hidden;
- 	position: absolute;
-    top: 0px;
-    left: 0px;
+	overflow: hidden;
+	visibility: hidden;
+	position: absolute;
+	top: 0px;
+	left: 0px;
 }
 
 .black {
