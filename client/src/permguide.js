@@ -31,10 +31,10 @@ PermGuide.PageSlider = {
 	 */
 	listener: null,
 	
-	init: function() { 
+	init: function(containerElement) { 
 		var self = this;
 		
-		this.containerElement = $("#slideContainer");
+		this.containerElement = containerElement;
 		// 
 		$(this.containerElement).offset({});
 		
@@ -173,6 +173,30 @@ PermGuide.PageSlider = {
 	}
 };
 
+PermGuide.DropDownWindow = {
+	// Состоние окна.
+	closed: true,
+	// Исходная позиция элемента.
+	position: {top: 0, left: 0},	//
+	
+	init: function(element) { 
+		this.element = element;
+		this.position = $(element).offset();
+
+		// Вешаем обработчик на книпку "свернуть/развернуть"
+		$(this.element).children(".toggleButton").touchclick( $.proxy(function () {
+			var topPosition = 0;
+			if (!this.closed)
+				topPosition = this.position.top;
+			this.closed = !this.closed;
+			
+			$(this.element).animate({
+				top: topPosition
+			}, 500);
+		},this));
+	}
+};
+
 (function ($) {
 	$.fn.scrolled = function() {
 		
@@ -183,6 +207,8 @@ PermGuide.PageSlider = {
 				draged: false,
 				canDraged: true
 			};
+			// Сохраним состояние внутри элемента.
+			$(this).data(state);
 			
 			$(this).touchstart( $.proxy(function(event) {
 				if (!this.canDraged)

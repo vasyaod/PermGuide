@@ -25,40 +25,23 @@
 			$(".slide").css("width", $("#pageSlider").width());
 			
 			////
-			// Позиционируем меню с метками в верху экрана и вешаем обработчики
-			// событий.
-			var tagsMenuState = {
-				closed: true
-			}
-			$("#tagsMenu").offset({top: -( $("#tagsMenu").height() - $("#tagsMenuBg").height())});
-			$("#tagsToggle").touchclick( function () {
-				var top = 0;
-				if (!tagsMenuState.closed)
-					top = -( $("#tagsMenu").height() - $("#tagsMenuBg").height());
-				tagsMenuState.closed = !tagsMenuState.closed;
-				
-				$("#tagsMenu").animate({
-					top: top
-				}, 500);
-			});
-			
-			////
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
 			$("#closeButton").touchclick( function () {
 				$("#objectInfo").css("visibility", "hidden");
 				//$("#pageSlider").css("visibility", "visible");
 			});
 			
-			// Скролинг дива.
-			$(".vScroller").scrolled();
-
 			$("li").touchclick(function () {
 				alert("11111");
 			});
 
 			////
+			// Инициализируем выпадаущее окно со списком меток.
+			PermGuide.DropDownWindow.init($("#tagsMenu"));
+
+			////
 			// Инициализируем слайдер страниц.
-			PermGuide.PageSlider.init();
+			PermGuide.PageSlider.init($("#slideContainer"));
 			
 			// Устанавливает обработчик переключения страниц.
 			PermGuide.PageSlider.listener = function(index) {
@@ -91,7 +74,11 @@
 			$("#pageScroller").touchend( function(event) {
 				PermGuide.PageSlider.up(event);
 			});
-			////*/
+			////
+
+			////
+			// Инициализация скроленга страниц.
+			$(".vScroller").scrolled();
 
 			// Загружаем данные об объектах (достопримечательности, линии и т.д.).
 			PermGuide.ApplicationData.load();
@@ -147,10 +134,15 @@
 		
 		<div id="pageSlider">
 			<div id="tagsMenu">
+				<!--  
+					В выподающем окне, для скрипта важен только элемент 
+					с классом "toggleButton", все остальные id и классы, нужны
+					чтобы накладывать стиль.
+				-->
 				<div id="tagsBg">
 					
 				</div>
-				<div id="tagsToggle">
+				<div class="toggleButton">
 					Жать сюда, здесь метки.
 				</div>
 			</div>
@@ -158,6 +150,10 @@
 				
 			</div>
 			<div id="slideContainer">
+				<!-- 
+					Для для программы сладера страниц, ваден только элемент с
+					классом "slide", который и является страницей.
+				 -->
 				<div class="slide">
 					<div style="height: 100%;">
 						<div style="padding-top: 30%">Красивая картинка и менюшка!.</div>
