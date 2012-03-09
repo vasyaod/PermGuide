@@ -173,11 +173,15 @@ PermGuide.PageSlider = {
 	}
 };
 
+/**
+ * Управление и сотояние выподающим окном, которе служит для 
+ * включение/выключение меток.
+ */
 PermGuide.DropDownWindow = {
 	// Состоние окна.
 	closed: true,
 	// Исходная позиция элемента.
-	position: {top: 0, left: 0},	//
+	position: {top: 0, left: 0},	// Просто для рыбы.
 	
 	init: function(element) { 
 		this.element = element;
@@ -185,6 +189,36 @@ PermGuide.DropDownWindow = {
 
 		// Вешаем обработчик на книпку "свернуть/развернуть"
 		$(this.element).children(".toggleButton").touchclick( $.proxy(function () {
+			this.toggle();
+		},this));
+	},
+	
+	toggle: function()
+	{
+		var topPosition = 0;
+		if (!this.closed)
+			topPosition = this.position.top;
+		this.closed = !this.closed;
+		
+		$(this.element).animate({
+			top: topPosition
+		}, 500);
+	}
+};
+
+PermGuide.ObjectInfoWindow = {
+		// Состоние окна.
+		closed: true,
+		// Исходная позиция элемента.
+		position: {top: 0, left: 0},	// Просто для рыбы.
+		
+		init: function(element) { 
+			this.element = element;
+			this.position = $(element).offset();
+		},
+		
+		toggle: function()
+		{
 			var topPosition = 0;
 			if (!this.closed)
 				topPosition = this.position.top;
@@ -193,9 +227,8 @@ PermGuide.DropDownWindow = {
 			$(this.element).animate({
 				top: topPosition
 			}, 500);
-		},this));
-	}
-};
+		}		
+	};
 
 (function ($) {
 	$.fn.scrolled = function() {

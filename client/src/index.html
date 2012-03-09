@@ -27,8 +27,9 @@
 			////
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
 			$("#closeButton").touchclick( function () {
-				$("#objectInfo").css("visibility", "hidden");
+				//$("#objectInfo").css("visibility", "hidden");
 				//$("#pageSlider").css("visibility", "visible");
+				PermGuide.ObjectInfoWindow.toggle();
 			});
 			
 			$("li").touchclick(function () {
@@ -38,6 +39,10 @@
 			////
 			// Инициализируем выпадаущее окно со списком меток.
 			PermGuide.DropDownWindow.init($("#tagsMenu"));
+
+			////
+			// Инициализируем окна информации.
+			PermGuide.ObjectInfoWindow.init($("#objectInfo"));
 
 			////
 			// Инициализируем слайдер страниц.
@@ -111,8 +116,7 @@
 						placemark.description = geoObject.description;
 
 						YMaps.Events.observe(placemark, placemark.Events.Click, function () {
-							//$("#pageSlider").css("visibility", "hidden");
-							$("#objectInfo").css("visibility", "visible");
+							PermGuide.ObjectInfoWindow.toggle();
 						});	
 						map.addOverlay(placemark); 
 					});
