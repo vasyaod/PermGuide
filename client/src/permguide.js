@@ -487,10 +487,17 @@ PermGuide.PageSlider = {
 				var height = $(this.containerElement).height();
 				var position = $(this.containerElement).offset().top;
 				
-				if (position < -(height - parentHeight))
-					delta = -position - (height - parentHeight);
-				else if (position > 0)
-					delta = - position;
+				if(height > parentHeight)
+				{
+					if (position > 0)
+						delta = - position;
+					else if (position < -(height - parentHeight))
+						delta = -position - (height - parentHeight);
+				}
+				else
+				{
+					delta = -position;
+				}
 				
 				if (delta == 0)
 					return;
