@@ -6,9 +6,6 @@
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="browserTouchSupport.js"></script>
-		<!-- script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script-->
-		<script type="text/javascript" src="jquery-ui.min.js"></script>
-		<!-- script type="text/javascript" src="jquery.ui.touch-punch.js"></script -->
 		<script src="http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==" type="text/javascript"></script>
 
 		<!-- Загрузка основного кода. -->
@@ -20,21 +17,41 @@
 		$(document).ready(function() {
 			// Инициализируем трансляцию событий тача в события мыши. 
 			//PermGuide.TouchSupport.init();
-
+			
+			////
 			// Это такой хитрый способ, выстроить дивы в линейку.
 			$("#slideContainer").css("width", $("#pageSlider").width()*$(".slide").length);
 			$(".slide").css("width", $("#pageSlider").width());
-
-			// Скролинг дива.
-			$(".vScroller").scrolled();
 			
-			// Вешаем событие на кнопку "Нажми, что бы закрыть"
-			$("#closeButton").on("click", function () {
-				$("#objectInfo").css("visibility", "hidden");
-				$("#pageSlider").css("visibility", "visible");
+			////
+			// Позиционируем меню с метками в верху экрана и вешаем обработчики
+			// событий.
+			var tagsMenuState = {
+				closed: true
+			}
+			$("#tagsMenu").offset({top: -( $("#tagsMenu").height() - $("#tagsMenuBg").height())});
+			$("#tagsToggle").touchclick( function () {
+				var top = 0;
+				if (!tagsMenuState.closed)
+					top = -( $("#tagsMenu").height() - $("#tagsMenuBg").height());
+				tagsMenuState.closed = !tagsMenuState.closed;
+				
+				$("#tagsMenu").animate({
+					top: top
+				}, 500);
 			});
 			
-			$("li").touchclick(function (event) {
+			////
+			// Вешаем событие на кнопку "Нажми, что бы закрыть"
+			$("#closeButton").touchclick( function () {
+				$("#objectInfo").css("visibility", "hidden");
+				//$("#pageSlider").css("visibility", "visible");
+			});
+			
+			// Скролинг дива.
+			$(".vScroller").scrolled();
+
+			$("li").touchclick(function () {
 				alert("11111");
 			});
 
@@ -106,7 +123,7 @@
 						placemark.description = geoObject.description;
 
 						YMaps.Events.observe(placemark, placemark.Events.Click, function () {
-							$("#pageSlider").css("visibility", "hidden");
+							//$("#pageSlider").css("visibility", "hidden");
 							$("#objectInfo").css("visibility", "visible");
 						});	
 						map.addOverlay(placemark); 
@@ -118,29 +135,7 @@
 				$("#pageSlider").css("visibility", "visible");
 			}
 			YMaps.load(mapInitialization);
-/*
-			// Попытка реализовать отложенную загрузку скриптов карты.
-			// Пока, она провалена.
-			
-			jQuery.getScript("http://api-maps.yandex.ru/1.1/index.xml?key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==")
-			.done(function(script, textStatus) {
-		//		YMaps.init();
-				//console.log( textStatus );
-				alert(textStatus);
-				mapInitialization();
-			})
-			.fail(function(jqxhr, settings, exception) {
-				//$( "div.log" ).text( "Triggered ajaxError handler." );
-				alert("Ошибка загрузки карты.");
-			});  
-*/
-			//jQuery.getScript("http://api-maps.yandex.ru/1.1/index.xml?key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==")
-/*
-			jQuery.get('http://api-maps.yandex.ru/1.1/index.xml?key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==') 
-					.success( function( data ) {
-						alert(data);
-					});
-*/
+
 		});
 		</script>
 	</head>
@@ -150,6 +145,17 @@
 		</div>
 		
 		<div id="pageSlider">
+			<div id="tagsMenu">
+				<div id="tagsBg">
+					
+				</div>
+				<div id="tagsToggle">
+					Жать сюда, здесь метки.
+				</div>
+			</div>
+			<div id="tagsMenuBg">
+				
+			</div>
 			<div id="slideContainer">
 				<div class="slide">
 					<div style="height: 100%;">
@@ -157,10 +163,7 @@
 					</div> 
 				</div>
 				<div class="slide"> 
-					<div style="height: 5%; z-index: 1000">
-						Жать сюда (пока не работает.)
-					</div>
-					<div id="map" style="height: 95%;"></div>
+					<div id="map" style="height: 100%;"></div>
 				</div>
 				<div class="slide">
 					<div style="height: 100%; overflow: hidden;">
@@ -214,10 +217,14 @@
 					</div>
 				</div>
 			</div>
-			<div id="pageScroller" style="height: 10%;">
+			<div id="pageScroller">
 				<table border="0" cellpadding="0" cellspacing="0">
 					<tr>
 						<td><div id="prevButton">Влево</div></td>
+						<!-- 
+							Внимание! От содержимого ячеек зависит их кликабильность
+						 	смотрите код!
+						-->
 						<td><div class="pageIndicator">1</div></td>
 						<td><div class="pageIndicator">2</div></td>
 						<td><div class="pageIndicator">3</div></td>
@@ -228,7 +235,7 @@
 		</div>
 
 		<div id="objectInfo"> 
-			<div style="width:100%; height: 90%; overflow: hidden;">
+			<div style="height: 90%; overflow: hidden;">
 				<div class="vScroller"> 
 					<p>
 					Интересно отметить, что врожденная интуиция представляет собой гравитационный парадокс, tertium nоn datur. Ассоциация создает непредвиденный катарсис, открывая новые горизонты. Сомнение ментально дискредитирует естественный предмет деятельности, tertium nоn datur. Согласно мнению известных философов, катарсис творит трагический гравитационный парадокс, не учитывая мнения авторитетов. Можно предположить, что свобода порождает и обеспечивает гений, не учитывая мнения авторитетов.
@@ -243,7 +250,7 @@
 					</p>
 				</div>
 			</div>
-			<div style="width:100%; height: 10%;"> 
+			<div style="height: 10%;"> 
 				<div id="closeButton" style="margin-top: 2%; text-align: center;">Нажми, что бы закрыть</div> 
 			</div>
 		</div>

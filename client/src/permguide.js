@@ -7,6 +7,7 @@
 		$.fn.touchstart = function(fn) {
 			var newFn = function (event)
 			{
+				event.preventDefault();
 				fn({
 					type: "touchstart",
 					target: event.target,
@@ -29,6 +30,7 @@
 		$.fn.touchmove = function(fn) {
 			var newFn = function (event)
 			{
+				event.preventDefault();
 				fn({
 					type: "touchmove",
 					target: event.target,
@@ -51,6 +53,7 @@
 		$.fn.touchend = function(fn) {
 			var newFn = function (event)
 			{
+				event.preventDefault();
 				fn({
 					type: "touchend",
 					target: event.target,
@@ -76,6 +79,7 @@
 			
 			var downHandler = function (event)
 			{
+				event.preventDefault();
 				touchclickState = {
 					x: event.clientX,
 					y: event.clientY
@@ -84,6 +88,7 @@
 			
 			var upHandler = function (event)
 			{
+				event.preventDefault();
 				if (touchclickState == null)
 					return;
 				
