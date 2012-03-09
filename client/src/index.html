@@ -34,28 +34,9 @@
 				$("#pageSlider").css("visibility", "visible");
 			});
 			
-			$("li").on("click", function (event) {
-				event.preventDefault();
+			$("li").touchclick(function (event) {
 				alert("11111");
 			});
-
-			//$("#pageScroller").on("permguide-mouseup", function () {
-			//	alert("permguide-mouseup");
-			//});
-			//$("#pageScroller").on("touchstart", function (event) {
-			//	alert("touchstart: "+event.changedTouches[0].clientY);
-			//});
-			
-			//$("#splash").css("visibility", "hidden");
-			//$("#pageSlider").css("visibility", "visible");
-			
-			//$("#slideContainer").on("click", function () {
-			//	alert("");
-			//});
-			
-			//$("#pageScroller").on("mousedown", function () {
-			//	alert("mousedown");
-			//});			
 
 			////
 			// Инициализируем слайдер страниц.
@@ -68,14 +49,15 @@
 			};
 			PermGuide.PageSlider.listener(0); // Подсветим сразуже первую страницу.
 			
-			$(".pageIndicator").click( function(event) {
+			$(".pageIndicator").touchclick( function(event) {
 				PermGuide.PageSlider.select(parseInt($(event.target).text())-1);
 			});
-			$("#nextButton").click( function(event) {
+			
+			$("#nextButton").touchclick( function(event) {
 				PermGuide.PageSlider.next();
 			});
 			
-			$("#prevButton").click( function(event) {
+			$("#prevButton").touchclick( function(event) {
 				PermGuide.PageSlider.prev();
 			});
 			
@@ -91,7 +73,7 @@
 			$("#pageScroller").touchend( function(event) {
 				PermGuide.PageSlider.up(event);
 			});
-			////
+			////*/
 
 			// Загружаем данные об объектах (достопримечательности, линии и т.д.).
 			PermGuide.ApplicationData.load();
