@@ -2,10 +2,14 @@
 	<head>
 		<title>PhoneGap</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 		<link rel="stylesheet" type="text/css" href="style.css" />
+
+		<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+
 		<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="browserTouchSupport.js"></script>
+		<script type="text/javascript" src="jsrender.js"></script>
+
 		<script src="http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==" type="text/javascript"></script>
 
 		<!-- Загрузка основного кода. -->
@@ -17,7 +21,6 @@
 
 
 		$(document).ready(function() {
-			
 			////
 			// Это такой хитрый способ, выстроить дивы в линейку.
 			$("#slideContainer").css("width", $("#pageSlider").width()*$(".slide").length);
@@ -82,6 +85,27 @@
 			
 			// Загружаем данные об объектах (достопримечательности, линии и т.д.).
 			PermGuide.ApplicationData.load();
+			
+			// При загрузке данных формируем содержимое выподающего окна
+			// со списком меток.
+			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
+				
+				$("#tagsBg > .vScroller").html(
+					$( "#tagTemplate" ).render(applicationData.tagsAsArray)
+				);
+				
+				$(".tag").touchclick( function (event) {
+					var tagsName = $(event.target).attr("_id");
+					var tag = applicationData.tags[tagsName];
+					if (tag == null)
+						return;
+					if (tag.visible)
+						$(event.target).removeClass("visibledTag");
+					else
+						$(event.target).addClass("visibledTag");
+					tag.visible = !tag.visible;
+				});
+			});
 
 			/**
 			* Инициализация карты.
@@ -93,8 +117,8 @@
 				// Создает экземпляр карты и привязывает его к созданному контейнеру
 				var map = new YMaps.Map(jQuery("#map")[0]);
 
-				var loadedListener = function (data) {
-
+				var loadedListener = function (applicationData) {
+					var data = applicationData.data
 					// Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
 					map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), 15);
 
@@ -119,7 +143,7 @@
 				};
 		
 				if (PermGuide.ApplicationData.loaded)
-					loadedListener(PermGuide.ApplicationData.data);
+					loadedListener(PermGuide.ApplicationData);
 				else
 					PermGuide.ApplicationData.attachListener("loaded",loadedListener);
 				
@@ -130,6 +154,14 @@
 
 		});
 		</script>
+		
+		<!-- 
+			Шаблон тэгов в выподающем окне.
+		-->
+		<script id="tagTemplate" type="text/x-jsrender">
+			<div class="tag{{if visible}} visibledTag{{/if}}" _id="{{:name}}">{{:name}}</div>
+		</script>
+
 	</head>
 	<body>
 		<div id="splash" style="text-align: center;">
@@ -144,14 +176,15 @@
 					чтобы накладывать стиль.
 				-->
 				<div id="tagsBg">
-					
+					<div class="vScroller"> 
+						<!-- Пусто, значения подствляются скриптом.-->
+					</div>
 				</div>
 				<div class="toggleButton">
 					Жать сюда, здесь метки.
 				</div>
 			</div>
 			<div id="tagsMenuBg">
-				
 			</div>
 			<div id="slideContainer">
 				<!-- 

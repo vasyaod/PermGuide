@@ -322,10 +322,55 @@ PermGuide.ApplicationData = {
 	loaded: false,
 	
 	/**
+	 * Список доступных тегов, в виде ассоциативного массива.
+	 */
+	tags: {},
+	/**
+	 * Тотже список тагов, но в виде массива.
+	 */
+	tagsAsArray: [],
+	
+	/**
 	 * Собственно сами данные. 
 	 */
 	data: null,// просто рыба.
 	
+	/**
+	 * Метод занимается обработкой полученных данных:
+	 *  - Строит индекс тегов;
+	 */
+	processing: function()
+	{
+		var self = this;
+		// Очистим списки тагов.
+		this.tags = {};
+		this.tagsAsArray = [];
+		
+		// 
+		$.each(this.data.objects, $.proxy(function(index, object) {	
+			$.each(object.tags, $.proxy(function(index, tag) {	
+				// Если такого тэга еще не существует, то создадим его.
+				if (this.tags[tag] == null)
+					this.tags[tag] = {
+						name: tag,
+						visible: true,
+						objects: []
+					};
+				// Проверим наличие ссылки на объект у данного тэга, если
+				// её нет, то добавляем её.
+				if (!$.inArray(object, this.tags[tag].objects))
+					this.tags[tag].objects.push(object);
+			
+			}, this));
+		}, this));
+		
+		$.each(this.tags, $.proxy(function(index, tag) {	
+			this.tagsAsArray.push(tag);
+		}, this));
+		
+		this.notify("loaded", this);
+	},
+
 	/**
 	 * Загрузка данных из различных источников. 
 	 */
@@ -335,9 +380,9 @@ PermGuide.ApplicationData = {
 		$.getJSON('data.json', function(data) {
 			self.data = data;
 			self.loaded = true;
-			self.notify("loaded", self.data);
+			self.processing();
 		});
 	}
 }
-// Расширим ApplicationData до ApplicationData.
+// Расширим ApplicationData до Observable.
 $.extend(PermGuide.ApplicationData, PermGuide.Observable);

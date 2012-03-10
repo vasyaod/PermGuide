@@ -45,8 +45,20 @@ div
 }
 
 #tagsMenu #tagsBg {
+	overflow: hidden;
 	height: 90%;}
-	
+
+#tagsMenu .tag {
+	cursor: pointer;
+	margin: 5px;
+	padding: 5px;
+	background-color: #bbbbbb;
+}
+
+#tagsMenu .visibledTag {
+	background-color: #888888;
+}
+
 #pageScroller {
 	height: 7%;
 }

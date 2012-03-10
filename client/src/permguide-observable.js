@@ -42,7 +42,7 @@ PermGuide.Observable = {
 
 		for(var i = 0, aObservers = this.aObservers[sEventType], iLength = aObservers.length; i < iLength; i++) {
 			if(aObservers[i] instanceof Function) {
-				aObservers[i](sEventType, parameters);
+				aObservers[i](parameters);
 			}
 		}
 	}
