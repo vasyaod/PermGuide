@@ -1,5 +1,8 @@
 
-PermGuide = {};
+// Проверка существования неймспейса.
+if(typeof PermGuide == "undefined")
+	PermGuide = {};
+
 
 /**
  * Слайдер страниц (или если угодно дивов).
@@ -307,6 +310,7 @@ PermGuide.ObjectInfoWindow = {
 	};
 })(jQuery);
 
+
 /**
  * Хранятся данные (события, достопримечательности, ...)
  */
@@ -320,23 +324,7 @@ PermGuide.ApplicationData = {
 	/**
 	 * Собственно сами данные. 
 	 */
-	data: null,	// просто рыба.
-	
-	/**
-	 * Обработчик событий готовности данных. 
-	 */
-	listener: null,
-
-	/**
-	 * Регистрирует обработчик событий, который вызывается при готовности данных.
-	 */
-	addListener: function (fn) {
-
-		this.listener = fn;
-		
-		if (this.loaded == true)
-			fn(this.data);
-	},
+	data: null,// просто рыба.
 	
 	/**
 	 * Загрузка данных из различных источников. 
@@ -347,8 +335,9 @@ PermGuide.ApplicationData = {
 		$.getJSON('data.json', function(data) {
 			self.data = data;
 			self.loaded = true;
-			if (!self.listener === null)
-				self.listener(self.data);
+			self.notify("loaded", self.data);
 		});
 	}
 }
+// Расширим ApplicationData до ApplicationData.
+$.extend(PermGuide.ApplicationData, PermGuide.Observable);
