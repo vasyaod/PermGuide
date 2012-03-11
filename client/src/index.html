@@ -21,6 +21,7 @@
 
 
 		$(document).ready(function() {
+
 			////
 			// Это такой хитрый способ, выстроить дивы в линейку.
 			$("#slideContainer").css("width", $("#pageSlider").width()*$(".slide").length);
@@ -103,55 +104,14 @@
 						$(event.target).removeClass("visibledTag");
 					else
 						$(event.target).addClass("visibledTag");
-					tag.visible = !tag.visible;
+					tag.setVisible(!tag.visible);
 				});
 			});
 
-			/**
-			* Инициализация карты.
-			*
-			* Производит создание карты в указанном диве. Позиционирование карты, а
-			* так же размещение первоночальных объектов.
-			*/ 
-			var mapInitialization = function () {
-				// Создает экземпляр карты и привязывает его к созданному контейнеру
-				var map = new YMaps.Map(jQuery("#map")[0]);
-
-				var loadedListener = function (applicationData) {
-					var data = applicationData.data
-					// Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
-					map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), 15);
-
-					// Генерируем дотопримечательности на карте.
-					$.each(data.objects, function(index, geoObject) {	
-
-						var geoObjectOptions = {
-							hasBalloon: false,
-							hasHint: false,
-						}
-
-						var placemark = new YMaps.Placemark(new YMaps.GeoPoint(geoObject.point.lat, geoObject.point.lng), geoObjectOptions);
-						placemark.name = geoObject.name;
-						placemark.description = geoObject.description;
-
-						YMaps.Events.observe(placemark, placemark.Events.Click, function () {
-							PermGuide.ObjectInfoWindow.toggle();
-						});	
-						map.addOverlay(placemark); 
-					});
-
-				};
-		
-				if (PermGuide.ApplicationData.loaded)
-					loadedListener(PermGuide.ApplicationData);
-				else
-					PermGuide.ApplicationData.attachListener("loaded",loadedListener);
-				
-				$("#splash").css("visibility", "hidden");
-				$("#pageSlider").css("visibility", "visible");
-			}
-			YMaps.load(mapInitialization);
-
+			////
+			// Инициализация карты.
+			PermGuide.MapManager.init(jQuery("#map")[0]);
+//*/
 		});
 		</script>
 		

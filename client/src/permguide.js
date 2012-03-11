@@ -342,11 +342,12 @@ PermGuide.ApplicationData = {
 	processing: function()
 	{
 		var self = this;
-		// Очистим списки тагов.
+		// Очистим массивы тагов.
 		this.tags = {};
 		this.tagsAsArray = [];
 		
-		// 
+		// Формируем ассоциативный массив из тэгов, где название
+		// элемента это имя тэга.
 		$.each(this.data.objects, $.proxy(function(index, object) {	
 			$.each(object.tags, $.proxy(function(index, tag) {	
 				// Если такого тэга еще не существует, то создадим его.
@@ -354,7 +355,16 @@ PermGuide.ApplicationData = {
 					this.tags[tag] = {
 						name: tag,
 						visible: true,
-						objects: []
+						objects: [],
+						setVisible: function(value)
+						{
+							if (this.visible != value)
+							{
+								this.visible = value;
+								// Генерируем событие, что видимость метки изменилась.
+								PermGuide.ApplicationData.notify("visibleChanged", PermGuide.ApplicationData);
+							}
+						}
 					};
 				// Проверим наличие ссылки на объект у данного тэга, если
 				// её нет, то добавляем её.
@@ -363,14 +373,34 @@ PermGuide.ApplicationData = {
 			
 			}, this));
 		}, this));
-		
+		// Формируем простой массив из тэгов.
 		$.each(this.tags, $.proxy(function(index, tag) {	
 			this.tagsAsArray.push(tag);
 		}, this));
 		
+		// Генирируем событие, о том что данные загружены и готовы к использованию.
 		this.notify("loaded", this);
 	},
-
+	
+	/**
+	 * Метод возвращает true если объект видимый, в противном случаи false.
+	 * Объект считается видимым если хотябы один из его тагов видимый. 
+	 */
+	objectIsVisible: function (object) {
+		// Если тагов нет, то объект по умолчанию видимый всегда.
+		if (object.tags == null)
+			return true;
+		
+		var visible = false;
+		$.each(object.tags, $.proxy(function(index, tagName) {	
+			var tag = this.tags[tagName];
+			if (tag != null && tag.visible)
+				visible = true;
+		}, this));
+		
+		return visible;
+	},
+	
 	/**
 	 * Загрузка данных из различных источников. 
 	 */
@@ -386,3 +416,88 @@ PermGuide.ApplicationData = {
 }
 // Расширим ApplicationData до Observable.
 $.extend(PermGuide.ApplicationData, PermGuide.Observable);
+
+/**
+ * Менеджер управления картой и объектами на карте.
+ */
+PermGuide.MapManager = {
+	
+	init: function(mapElement) {
+		this.mapElement = mapElement;
+		YMaps.load($.proxy(this.yMapsLoaded, this));
+	},
+	
+	yMapsLoaded: function() {
+		// Создает экземпляр карты и привязывает его к созданному контейнеру
+		this.map = new YMaps.Map(this.mapElement);
+
+		if (PermGuide.ApplicationData.loaded)
+			this.dataLoaded(PermGuide.ApplicationData);
+		else
+			PermGuide.ApplicationData.attachListener("loaded", this.dataLoaded);
+		
+		PermGuide.ApplicationData.attachListener("visibleChanged", $.proxy(this.visibleChanged, this));
+		
+		$("#splash").css("visibility", "hidden");
+		$("#pageSlider").css("visibility", "visible");
+	},
+	
+	dataLoaded: function(applicationData) {
+		if (this.map == null)
+			return;	           // Если карта еще не загружена, то нам здесь делать нечего. 
+
+		var data = applicationData.data;
+		var map = this.map;
+		// Сбрасываем список со всеми оверлеями.
+		this.overlayStates = [];
+		
+		// Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
+		map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), 15);
+
+		// Генерируем дотопримечательности на карте.
+		$.each(data.objects, $.proxy(function(index, geoObject) {	
+
+			var geoObjectOptions = {
+				hasBalloon: false,
+				hasHint: false,
+			}
+
+			var placemark = new YMaps.Placemark(new YMaps.GeoPoint(geoObject.point.lat, geoObject.point.lng), geoObjectOptions);
+			placemark.name = geoObject.name;
+			placemark.description = geoObject.description;
+
+			YMaps.Events.observe(placemark, placemark.Events.Click, function () {
+				PermGuide.ObjectInfoWindow.toggle();
+			});	
+			
+			var overlayState = {
+				object: geoObject,
+				onmap: false,
+				overlay: placemark
+			}
+			this.overlayStates.push(overlayState);
+			//map.addOverlay(placemark); 
+		}, this));
+		
+		this.visibleChanged();
+	},
+	
+	visibleChanged: function() {
+
+		if (this.map == null)
+			return;				// Если карта еще не загружена, то нам здесь делать нечего. 
+		
+		$.each(this.overlayStates, $.proxy(function(index, overlayState) {	
+			if (PermGuide.ApplicationData.objectIsVisible(overlayState.object) && !overlayState.onmap)
+			{
+				overlayState.onmap = true;
+				this.map.addOverlay(overlayState.overlay);
+			}
+			else if (!PermGuide.ApplicationData.objectIsVisible(overlayState.object) && overlayState.onmap)
+			{
+				overlayState.onmap = false;
+				this.map.removeOverlay(overlayState.overlay);
+			}
+		}, this));
+	}
+};
