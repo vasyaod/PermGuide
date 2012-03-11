@@ -130,14 +130,12 @@ PermGuide.PageSlider = {
 		if (this.index == this.slideCount)
 			this.index =  this.slideCount-1;
 		
-		var delta = $(this.containerElement).children(".slide").slice(this.index).offset().left
-		if (delta == 0)
-			return;
+		var position = $(this.containerElement).children(".slide").slice(this.index).position().left
 		
 		var self = this;
 		this.canDraged = false;
 		$(this.containerElement).animate({
-			left: ((delta < 0) ? '+=' + Math.abs(delta) : '-=' + Math.abs(delta))
+			left: -position
 		}, 500, function() {
 			self.canDraged = true;
 		});
@@ -277,20 +275,29 @@ PermGuide.ObjectInfoWindow = {
 				this.draged = false;
 				
 				var delta = 0;
+				
 				var parentHeight = $(this.containerElement).parent().height();
 				var height = $(this.containerElement).height();
-				var position = $(this.containerElement).offset().top;
+				var position = $(this.containerElement).position().top;
+				var parentPosition = $(this.containerElement).parent().position().top;
 				
 				if(height > parentHeight)
 				{
-					if (position > 0)
-						delta = - position;
-					else if (position < -(height - parentHeight))
-						delta = -position - (height - parentHeight);
+					if (position > parentPosition)
+					{
+						position = parentPosition;
+						delta = 1;
+					}
+					else if (position < parentPosition - (height - parentHeight) - 20)
+					{
+						position = parentPosition - (height - parentHeight) - 20;
+						delta = 1;
+					}
 				}
 				else
 				{
-					delta = -position;
+					position = parentPosition;
+					delta = 1;
 				}
 				
 				if (delta == 0)
@@ -298,14 +305,14 @@ PermGuide.ObjectInfoWindow = {
 				
 				this.canDraged = false;
 				var self = this;
+				
 				$(this.containerElement).animate({
-					top: ((delta > 0) ? '+=' + Math.abs(delta) : '-=' + Math.abs(delta))
+					top: position
 				}, 500, function() {
 					self.canDraged = true;
 				});
 			
 			}, state));
-			
 		});
 	};
 })(jQuery);
