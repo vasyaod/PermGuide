@@ -380,6 +380,8 @@ PermGuide.ApplicationData = {
 		
 		// Генирируем событие, о том что данные загружены и готовы к использованию.
 		this.notify("loaded", this);
+		// Посылаем уведомление, о том что изменилась видимость объектов.
+		this.notify("visibleChanged", this);
 	},
 	
 	/**
@@ -399,6 +401,34 @@ PermGuide.ApplicationData = {
 		}, this));
 		
 		return visible;
+	},
+
+	/**
+	 * Метод возвращает список видимых объектов. 
+	 */
+	getVisibleObjects: function () {
+		var res = [];
+		
+		$.each(this.data.objects, $.proxy(function(index, object) {	
+			if (this.objectIsVisible(object))
+				res.push(object);
+		}, this));
+		
+		return res;
+	},
+	
+	/**
+	 * Метод возвращает объект по его id.
+	 */
+	getObjectById: function (id) {
+		var res = null;
+		
+		$.each(this.data.objects, $.proxy(function(index, object) {	
+			if (object.id == id)
+				res = object;
+		}, this));
+		
+		return res;
 	},
 	
 	/**
@@ -421,15 +451,19 @@ $.extend(PermGuide.ApplicationData, PermGuide.Observable);
  * Менеджер управления картой и объектами на карте.
  */
 PermGuide.MapManager = {
+	/**
+	 * Список оверлеев и информации об них.
+	 */
+	overlayStates: [],
 	
 	init: function(mapElement) {
-		this.mapElement = mapElement;
+		this.yMapElement = mapElement;
 		YMaps.load($.proxy(this.yMapsLoaded, this));
 	},
 	
 	yMapsLoaded: function() {
 		// Создает экземпляр карты и привязывает его к созданному контейнеру
-		this.map = new YMaps.Map(this.mapElement);
+		this.yMap = new YMaps.Map(this.yMapElement);
 
 		if (PermGuide.ApplicationData.loaded)
 			this.dataLoaded(PermGuide.ApplicationData);
@@ -443,11 +477,11 @@ PermGuide.MapManager = {
 	},
 	
 	dataLoaded: function(applicationData) {
-		if (this.map == null)
+		if (this.yMap == null)
 			return;	           // Если карта еще не загружена, то нам здесь делать нечего. 
 
 		var data = applicationData.data;
-		var map = this.map;
+		var map = this.yMap;
 		// Сбрасываем список со всеми оверлеями.
 		this.overlayStates = [];
 		
@@ -476,7 +510,6 @@ PermGuide.MapManager = {
 				overlay: placemark
 			}
 			this.overlayStates.push(overlayState);
-			//map.addOverlay(placemark); 
 		}, this));
 		
 		this.visibleChanged();
@@ -484,19 +517,19 @@ PermGuide.MapManager = {
 	
 	visibleChanged: function() {
 
-		if (this.map == null)
+		if (this.yMap == null)
 			return;				// Если карта еще не загружена, то нам здесь делать нечего. 
 		
 		$.each(this.overlayStates, $.proxy(function(index, overlayState) {	
 			if (PermGuide.ApplicationData.objectIsVisible(overlayState.object) && !overlayState.onmap)
 			{
 				overlayState.onmap = true;
-				this.map.addOverlay(overlayState.overlay);
+				this.yMap.addOverlay(overlayState.overlay);
 			}
 			else if (!PermGuide.ApplicationData.objectIsVisible(overlayState.object) && overlayState.onmap)
 			{
 				overlayState.onmap = false;
-				this.map.removeOverlay(overlayState.overlay);
+				this.yMap.removeOverlay(overlayState.overlay);
 			}
 		}, this));
 	}
