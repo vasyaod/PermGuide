@@ -432,6 +432,14 @@ PermGuide.ApplicationData = {
 	},
 	
 	/**
+	 * Метод выделяет объект делая его текущим. 
+	 */
+	selectObject: function (object)
+	{
+		this.notify("objectSelected", object);
+	},
+	
+	/**
 	 * Загрузка данных из различных источников. 
 	 */
 	load: function () {
@@ -497,11 +505,13 @@ PermGuide.MapManager = {
 			}
 
 			var placemark = new YMaps.Placemark(new YMaps.GeoPoint(geoObject.point.lat, geoObject.point.lng), geoObjectOptions);
+			placemark.permGuideObject = geoObject;
 			placemark.name = geoObject.name;
 			placemark.description = geoObject.description;
 
 			YMaps.Events.observe(placemark, placemark.Events.Click, function () {
-				PermGuide.ObjectInfoWindow.toggle();
+				PermGuide.ApplicationData.selectObject(placemark.permGuideObject);
+				//PermGuide.ObjectInfoWindow.toggle();
 			});	
 			
 			var overlayState = {

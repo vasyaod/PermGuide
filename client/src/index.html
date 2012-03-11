@@ -91,7 +91,7 @@
 			// со списком меток.
 			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
 				
-				$("#tagsBg > .vScroller").html(
+				$("#tagsBg .vScroller").html(
 					$( "#tagTemplate" ).render(applicationData.tagsAsArray)
 				);
 				
@@ -107,7 +107,7 @@
 					tag.setVisible(!tag.visible);
 				});
 			});
-			
+			// При включении/отключении тэгов, формируем 
 			PermGuide.ApplicationData.attachListener("visibleChanged", function (applicationData){
 				
 				$("#objectsCatalog").html(
@@ -117,10 +117,16 @@
 				$(".catalogItem").touchclick( function (event) {
 					var objectId = $(event.target).attr("_id");
 					var object = applicationData.getObjectById(objectId);
-					alert(object.name);
+					PermGuide.ApplicationData.selectObject(object);
 				});
 			});
 			
+			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
+				$("#objectInfo .vScroller").html(
+					$( "#objectInfoTemplate" ).render([object])
+				);
+				PermGuide.ObjectInfoWindow.toggle();
+			});
 			////
 			// Инициализация карты.
 			PermGuide.MapManager.init(jQuery("#map")[0]);
@@ -142,6 +148,13 @@
 			<div class="catalogItem" _id="{{:id}}">{{:name}}</div>
 		</script>
 
+		<!-- 
+			Шаблон информации об объекте.
+		-->
+		<script id="objectInfoTemplate" type="text/x-jsrender">
+			<div>{{:name}}</div>
+			<div>{{:description}}</div>
+		</script>
 	</head>
 	<body>
 		<div id="splash" style="text-align: center;">
