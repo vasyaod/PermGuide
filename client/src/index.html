@@ -24,8 +24,18 @@
 
 			////
 			// Это такой хитрый способ, выстроить дивы в линейку.
-			$("#slideContainer").css("width", $("#pageSlider").width()*$(".slide").length);
-			$(".slide").css("width", $("#pageSlider").width());
+			var slideToLine = function() {
+//				$(".slide").css("width", "100%");
+//				$("#slideContainer").css("width", "100%");
+				$("#slideContainer").css("width", $("#pageSlider").width()*$(".slide").length);
+				$(".slide").css("width", $("#pageSlider").width());
+			};
+			slideToLine();
+			$(window).resize(function() {
+				// Пересчитаем нашу линейку сладов.
+				slideToLine();
+				PermGuide.PageSlider.refresh();
+			});
 			
 			////
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
@@ -123,11 +133,13 @@
 			});
 			
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
-				/*
+				
+				// Сбросим позицию дива.
+				$("#objectInfo .vScroller").data().resetPosition();
+				// Сгенерируем из шаблона новую информацию об объекте.
 				$("#objectInfo .vScroller").html(
 					$( "#objectInfoTemplate" ).render([object])
 				);
-				*/
 				PermGuide.ObjectInfoWindow.toggle();
 			});
 			////

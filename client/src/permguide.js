@@ -241,8 +241,24 @@ PermGuide.ObjectInfoWindow = {
 				draged: false,
 				canDraged: true
 			};
-			// Сохраним состояние внутри элемента.
-			$(this).data(state);
+			
+			state.resetPosition = $.proxy(function()
+			{	
+				var parentPosition = $(this.containerElement).parent().position().top;
+				$(this.containerElement).animate({
+					top: parentPosition
+				}, 200, function() {
+					self.canDraged = true;
+				});
+				
+				//$(this.containerElement).offset({ 
+				//	top:  0 
+				//});
+			}, state);
+			
+			$(window).resize(function() {
+				state.resetPosition();
+			});
 			
 			$(this).touchstart( $.proxy(function(event) {
 				if (!this.canDraged)
@@ -313,6 +329,9 @@ PermGuide.ObjectInfoWindow = {
 				});
 			
 			}, state));
+
+			// Сохраним состояние внутри элемента.
+			$(this).data(state);
 		});
 	};
 })(jQuery);
