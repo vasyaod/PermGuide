@@ -336,6 +336,31 @@ PermGuide.ApplicationData = {
 	data: null,// просто рыба.
 	
 	/**
+	 * Внутренний метод, создает пустой тэг.
+	 */
+	createTag: function(tagName)
+	{
+		if (this.tags[tagName] == null)
+		{
+			this.tags[tagName] = {
+				name: tagName,
+				visible: true,
+				objects: [],
+				setVisible: function(value)
+				{
+					if (this.visible != value)
+					{
+						this.visible = value;
+						// Генерируем событие, что видимость метки изменилась.
+						PermGuide.ApplicationData.notify("visibleChanged", PermGuide.ApplicationData);
+					}
+				}
+			};
+		}
+		return this.tags[tagName];
+	},
+	
+	/**
 	 * Метод занимается обработкой полученных данных:
 	 *  - Строит индекс тегов;
 	 */
@@ -349,30 +374,28 @@ PermGuide.ApplicationData = {
 		// Формируем ассоциативный массив из тэгов, где название
 		// элемента это имя тэга.
 		$.each(this.data.objects, $.proxy(function(index, object) {	
-			$.each(object.tags, $.proxy(function(index, tag) {	
-				// Если такого тэга еще не существует, то создадим его.
-				if (this.tags[tag] == null)
-					this.tags[tag] = {
-						name: tag,
-						visible: true,
-						objects: [],
-						setVisible: function(value)
-						{
-							if (this.visible != value)
-							{
-								this.visible = value;
-								// Генерируем событие, что видимость метки изменилась.
-								PermGuide.ApplicationData.notify("visibleChanged", PermGuide.ApplicationData);
-							}
-						}
-					};
+			$.each(object.tags, $.proxy(function(index, tagName) {	
+				var tag = this.createTag(tagName);
 				// Проверим наличие ссылки на объект у данного тэга, если
 				// её нет, то добавляем её.
-				if (!$.inArray(object, this.tags[tag].objects))
-					this.tags[tag].objects.push(object);
+				if (!$.inArray(object, tag.objects))
+					tag.objects.push(object);
 			
 			}, this));
 		}, this));
+
+		// Делае тоже самое но с маршрутами.
+		$.each(this.data.routes, $.proxy(function(index, route) {	
+			$.each(route.tags, $.proxy(function(index, tagName) {	
+				var tag = this.createTag(tagName);
+				// Проверим наличие ссылки на объект у данного тэга, если
+				// её нет, то добавляем её.
+				if (!$.inArray(route, tag.objects))
+					tag.objects.push(route);
+			
+			}, this));
+		}, this));
+		
 		// Формируем простой массив из тэгов.
 		$.each(this.tags, $.proxy(function(index, tag) {	
 			this.tagsAsArray.push(tag);
@@ -496,7 +519,7 @@ PermGuide.MapManager = {
 		// Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
 		map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), 15);
 
-		// Генерируем дотопримечательности на карте.
+		// Генерируем дотопримечательности (метки) на карте.
 		$.each(data.objects, $.proxy(function(index, geoObject) {	
 
 			var geoObjectOptions = {
@@ -519,9 +542,28 @@ PermGuide.MapManager = {
 				onmap: false,
 				overlay: placemark
 			}
+			
 			this.overlayStates.push(overlayState);
 		}, this));
 		
+		// Генерируем маршруты (линии) на карте.
+		$.each(data.routes, $.proxy(function(index, route) {	
+
+			var pl = new YMaps.Polyline(); 
+			
+			$.each(route.points, function(index, point) {
+				pl.addPoint(new YMaps.GeoPoint(point.lat,point.lng));
+			});
+			
+			var overlayState = {
+				object: route,
+				onmap: false,
+				overlay: pl
+			}
+			
+			this.overlayStates.push(overlayState);
+		}, this));
+
 		this.visibleChanged();
 	},
 	
