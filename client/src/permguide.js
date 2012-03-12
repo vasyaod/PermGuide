@@ -583,7 +583,10 @@ PermGuide.MapManager = {
 	
 	init: function(mapElement) {
 		this.yMapElement = mapElement;
-		YMaps.load($.proxy(this.yMapsLoaded, this));
+		
+		//$.getScript('http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==', function() {
+			YMaps.load($.proxy(this.yMapsLoaded, this));
+		//});
 	},
 	
 	yMapsLoaded: function() {

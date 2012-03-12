@@ -10,19 +10,15 @@
 		<script type="text/javascript" src="browserTouchSupport.js"></script>
 		<script type="text/javascript" src="jsrender.js"></script>
 
-
 		<!-- Загрузка основного кода. -->
 		<script type="text/javascript" src="permguide-touch-support.js"></script>
 		<script type="text/javascript" src="permguide-observable.js"></script>
 		<script type="text/javascript" src="permguide-scrollable-plugin.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
-		<script src="http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==" type="text/javascript"></script>
-
 		<script type="text/javascript">
 
-		$(document).ready(function() {
-
+		init = function() {
 			////
 			// Это такой хитрый способ, выстроить дивы в линейку.
 			var slideToLine = function() {
@@ -143,11 +139,19 @@
 				);
 				PermGuide.ObjectInfoWindow.toggle();
 			});
+			
 			////
 			// Инициализация карты.
-			PermGuide.MapManager.init(jQuery("#map")[0]);
+			$.getScript('http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=AAC5U08BAAAAhG98TwIAUF_dcR_gLZsbQ6zwFcalQlEjkMsAAAAAAAAAAADLl1k_yHuuKf8xCzG-8rc6q0B5jA==', function() {
+				PermGuide.MapManager.init(jQuery("#map")[0]);
+			});
 //*/
+		};
+		
+		$(document).ready(function() {
+			init();
 		});
+
 		</script>
 		
 		<!-- 
