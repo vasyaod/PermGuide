@@ -10,15 +10,15 @@
 		<script type="text/javascript" src="browserTouchSupport.js"></script>
 		<script type="text/javascript" src="jsrender.js"></script>
 
-		<script src="http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==" type="text/javascript"></script>
 
 		<!-- Загрузка основного кода. -->
 		<script type="text/javascript" src="permguide-touch-support.js"></script>
 		<script type="text/javascript" src="permguide-observable.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
-		<script type="text/javascript">
+		<script src="http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==" type="text/javascript"></script>
 
+		<script type="text/javascript">
 
 		$(document).ready(function() {
 
@@ -205,6 +205,10 @@
 					</div> 
 				</div>
 				<div class="slide"> 
+					<canvas id="myCanvas" class="canvasLayer">
+							Альтернативное содержимое, которое будет показано, если браузер не поддерживает Canvas.
+					</canvas>
+				
 					<div id="map" style="height: 100%;"></div>
 				</div>
 				<div class="slide">
