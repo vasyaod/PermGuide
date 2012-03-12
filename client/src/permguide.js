@@ -682,7 +682,8 @@ PermGuide.MapManager = {
 	yMapsLoaded: function() {
 		// Создает экземпляр карты и привязывает его к созданному контейнеру
 		this.yMap = new YMaps.Map(this.yMapElement);
-
+		this.yMap.enableScrollZoom();
+		
 		// Инициализируем собственный слой. 
 		this.canvasLayer = new PermGuide.CanvasLayer();
 		this.yMap.addLayer(this.canvasLayer);
