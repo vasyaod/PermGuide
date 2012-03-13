@@ -8,17 +8,23 @@
 		[	
 			{
 				"id": 1,
-				"type": "event",
-				"start": "2012.06.01 00:00",
-				"end": "2012.06.31 00:00",
 				"point": {
 					"lat": 58.009077,
 					"lng": 56.246271
 				},
-				"name": "Здесь бы я! (название)",
-				"description": "Здесь бы я! (описание объекта)",
+				"name": {
+					"ru":"Здесь бы я! (название)",
+					"en": "I was here! (name)"
+				},
+				"description": {
+					"ru": "Здесь бы я! (описание объекта)",
+					"en": "I was here! (description)"
+				},
 				"contacts": {
-					"address": "Комсомольский проспект, 15",
+					"address": {
+						"ru": "Комсомольский проспект, 15",
+						"en": "Konsomolskiy prospect, 15"
+					},
 					"phoneNumber": ""
 				},
 				"pictures": ["./1.png", "./1.png"],
@@ -29,8 +35,14 @@
 		[	
 			{
 				"color": "#FFFFF",
-				"name": "Зеленая линия",
-				"description": "Описание зеленой линии.",
+				"name": {
+					"ru": "Зеленая линия",
+					"en": "Green line"
+				},
+				"description": {
+					"ru": "Описание зеленой линии",
+					"en": "Description of green line"
+				},
 				"tags": ["Зеленая линия", "Туристический маршрут"],
 				"points": 
 				[

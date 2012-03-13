@@ -237,7 +237,32 @@ PermGuide.ObjectInfoWindow = {
 		}		
 	};
 
-
+/**
+ * Объект отвечает за работу с мультиизычностью.
+ */
+PermGuide.Language = {
+	
+	// Пока язык задан статично.
+	currentLanguage: "ru",
+	
+	/**
+	 * Возвращает строку на основании текущего(выбранного) языка.
+	 */
+	getString: function(object)
+	{
+		if (object == null)
+			return null;
+		
+		// Если объект уже является строкой, то возвразщаем строку.
+		if (typeof obj === "string")
+			return obj;
+			
+		if (this.currentLanguage == "ru" && object[this.currentLanguage] == null)
+			return object["rus"];
+		
+		return object[this.currentLanguage];
+	}
+}
 
 /**
  * Хранятся данные (события, достопримечательности, ...)
@@ -300,8 +325,16 @@ PermGuide.ApplicationData = {
 		this.tagsAsArray = [];
 		
 		// Формируем ассоциативный массив из тэгов, где название
-		// элемента это имя тэга.
+		// элемента это имя тэга, а так же делаем локализацию.		
 		$.each(this.data.objects, $.proxy(function(index, object) {	
+			
+			object.name = PermGuide.Language.getString(object.name);
+			object.description = PermGuide.Language.getString(object.description);
+
+			// Если имеется контактная информация, то её надо тоже обработать.
+			if (object.contacts != null)
+				object.contacts.address = PermGuide.Language.getString(object.contacts.address);
+			
 			$.each(object.tags, $.proxy(function(index, tagName) {	
 				var tag = this.createTag(tagName);
 				// Проверим наличие ссылки на объект у данного тэга, если
@@ -314,6 +347,10 @@ PermGuide.ApplicationData = {
 
 		// Делае тоже самое но с маршрутами.
 		$.each(this.data.routes, $.proxy(function(index, route) {	
+			
+			route.name = PermGuide.Language.getString(route.name);
+			route.description = PermGuide.Language.getString(route.description);
+
 			$.each(route.tags, $.proxy(function(index, tagName) {	
 				var tag = this.createTag(tagName);
 				// Проверим наличие ссылки на объект у данного тэга, если
