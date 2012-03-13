@@ -19,6 +19,7 @@
 		<script type="text/javascript">
 
 		init = function() {
+			
 			// Зададим мертвый радиус для клика в процентах экрана.
 			PermGuide.deadRadius = $(window).width()*0.02;
 				
@@ -152,6 +153,30 @@
 		};
 		
 		$(document).ready(function() {
+			
+			PermGuide.Scheduler.addTask("stage3",{
+				activateFn: function(taskName){ 
+					alert("stage3"); 
+					PermGuide.Scheduler.finished("stage3");
+				},
+				dependence: ["stage1", "stage2"]
+			});
+			PermGuide.Scheduler.addTask("stage2",{
+				activateFn: function(taskName){ 
+					alert("stage2");
+					PermGuide.Scheduler.finished("stage2");
+				},
+				dependence: []
+			});
+			PermGuide.Scheduler.addTask("stage1",{
+				activateFn: function(taskName){ 
+					alert("stage1"); 
+					PermGuide.Scheduler.finished("stage1");
+				},
+				dependence: []
+			});
+			PermGuide.Scheduler.start();
+			
 			init();
 		});
 

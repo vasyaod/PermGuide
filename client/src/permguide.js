@@ -3,6 +3,87 @@
 if(typeof PermGuide == "undefined")
 	PermGuide = {};
 
+/**
+ * Планировщик запуска приложения.
+ * 
+ * Формат параметров task-а:
+ * {
+ *  	activateFn: function(taskName){},
+ *  	dependence: [],
+ *  	finished: false,
+ *  	started: false
+ * }
+ */
+PermGuide.Scheduler = {
+	
+	/**
+	 * Список задач которые надо выполнить.
+	 */
+	tasks: {},
+	
+	/**
+	 * Метод добавляет задачу в планировщик. 
+	 */
+	addTask: function(taskName, taskParameters) {
+		this.tasks[taskName] = taskParameters;
+		
+		if (taskParameters.activateFn == null)
+			taskParameters.activateFn = function(){};
+
+		if (taskParameters.dependence == null)
+			taskParameters.dependence = [];
+		
+		taskParameters.finished = false;
+		taskParameters.started = false;
+	},
+	
+	/**
+	 * Метод необходимо вызвать, когда задача завершена.
+	 */
+	finished: function(taskName){
+		if (this.tasks[taskName] == null)
+			return;
+		
+		this.tasks[taskName].finished = true;
+		
+		this.start();
+	},
+	
+	/**
+	 * Возвращает true, если задача с указанным именем уже увуполнена. 
+	 */
+	isFinished: function(taskName){
+		if (this.tasks[taskName] == null)
+			return false;
+		
+		return this.tasks[taskName].finished;
+	},
+	
+	/**
+	 * Метод возвращает true если все задания указанные в taskNameArray 
+	 * выполнены, в противном случаи false.
+	 */
+	isTasksFinished: function(taskNameArray){
+		var res = true;
+		$.each(taskNameArray, $.proxy(function(index, taskName) {	
+			if (!this.isFinished(taskName))
+				res = false;
+		}, this));
+		return res;
+	},
+	
+	start: function(){
+		$.each(this.tasks, $.proxy(function(taskName, task) {	
+			if(!task.finished && !task.started) {
+				if (this.isTasksFinished(task.dependence)) {
+					task.started = true;
+					task.activateFn();
+				}
+			}
+		
+		}, this));
+	}
+}
 
 /**
  * Слайдер страниц (или если угодно дивов).
