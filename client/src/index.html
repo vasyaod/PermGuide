@@ -19,6 +19,9 @@
 		<script type="text/javascript">
 
 		init = function() {
+			// Зададим мертвый радиус для клика в процентах экрана.
+			PermGuide.deadRadius = $(window).width()*0.02;
+				
 			////
 			// Это такой хитрый способ, выстроить дивы в линейку.
 			var slideToLine = function() {

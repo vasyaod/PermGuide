@@ -1,3 +1,9 @@
+// Проверка существования неймспейса.
+if(typeof PermGuide == "undefined")
+	PermGuide = {};
+
+PermGuide.deadRadius = 15;
+
 /**
  * Плагин для jQuery, который позволяет использовать события тача, если тач
  * не поддерживается, то он эмулируется за счет мыши. 
@@ -97,8 +103,8 @@
 				
 				var touchclickStateTmp = touchclickState;
 				touchclickState = null;
-				if (Math.abs(event.clientX - touchclickStateTmp.x) < 10 &&
-					Math.abs(event.clientY - touchclickStateTmp.y) < 10)
+				if (Math.abs(event.clientX - touchclickStateTmp.x) < PermGuide.deadRadius &&
+					Math.abs(event.clientY - touchclickStateTmp.y) < PermGuide.deadRadius)
 				{
 					fn({
 						type: "touchclick",

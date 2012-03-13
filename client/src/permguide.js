@@ -19,10 +19,13 @@ PermGuide.PageSlider = {
 	 * Индекс текущего слайда.
 	 */
 	index: 0,
+	
 	/**
 	 * Флаг режима перетаскивания окна.
 	 */
 	draged: false,
+	
+	moved: false,
 	
 	/**
 	 * Флаг, того, можно ли двигать слады.
@@ -86,6 +89,7 @@ PermGuide.PageSlider = {
 		this.containerPosition = $(this.containerElement).offset();
 		
 		this.draged = true;
+		this.moved = false;
 	},
 	
 	move: function(event) {
@@ -95,9 +99,10 @@ PermGuide.PageSlider = {
 		var tX = event.changedTouches[0].clientX;
 		var tY = event.changedTouches[0].clientY;
 		// Если сдвиг не очень большой, то стоим на месте.
-		if (Math.abs(tX - this.x) < 10)
+		if (!this.moved && Math.abs(tX - this.x) < PermGuide.deadRadius)
 			return;
-			
+		this.moved = true;
+		
 		$(this.containerElement).offset({ 
 //			top:  this.containerPosition.top, 
 			left: this.containerPosition.left + (tX - this.x) 
@@ -148,12 +153,13 @@ PermGuide.PageSlider = {
 			return;
 		this.draged = false;
 		
+		if (!this.moved)
+			return;
+		this.moved = false;
+		
 		var tX = event.changedTouches[0].clientX;
 		var tY = event.changedTouches[0].clientY;
-
-		if (Math.abs(tX - this.x) < 10)
-			return;
-		
+	
 		if (Math.abs(tX - this.x) > this.slideWidth/4)
 		{
 			if ((tX - this.x) < 0)
