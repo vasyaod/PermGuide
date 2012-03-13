@@ -11,6 +11,7 @@
 		<script type="text/javascript" src="jsrender.js"></script>
 
 		<!-- Загрузка основного кода. -->
+		<script type="text/javascript" src="permguide-scheduler.js"></script>
 		<script type="text/javascript" src="permguide-touch-support.js"></script>
 		<script type="text/javascript" src="permguide-observable.js"></script>
 		<script type="text/javascript" src="permguide-scrollable-plugin.js"></script>
@@ -18,7 +19,7 @@
 
 		<script type="text/javascript">
 
-		init = function() {
+		interfaceInit = function() {
 			
 			// Зададим мертвый радиус для клика в процентах экрана.
 			PermGuide.deadRadius = $(window).width()*0.02;
@@ -150,34 +151,43 @@
 				PermGuide.MapManager.init(jQuery("#map")[0]);
 			});
 //*/
+			PermGuide.Scheduler.finished("InterfaceInit");
 		};
+		
+		languageSelectInit = function() {
+			if (PermGuide.Language.languageSelected)
+			{
+				PermGuide.Scheduler.finished("LanguageSelect");
+				return;
+			}
+			// Повешаем на кнопки выбора языка обработчики.
+			$(".langSelectItem").touchclick( function(event) {
+				var lang = $(event.target).attr("_lang");
+				PermGuide.Language.currentLanguage = lang;
+				
+				$("#langSelectScreen").css("visibility", "hidden");
+				$("#splashScreen").css("visibility", "visible");			
+				
+				// Завершим выполнение задания.
+				PermGuide.Scheduler.finished("LanguageSelect");
+			});
+			
+			$("#splashScreen").css("visibility", "hidden");
+			$("#langSelectScreen").css("visibility", "visible");
+		}
 		
 		$(document).ready(function() {
 			
-			PermGuide.Scheduler.addTask("stage3",{
-				activateFn: function(taskName){ 
-					alert("stage3"); 
-					PermGuide.Scheduler.finished("stage3");
-				},
-				dependence: ["stage1", "stage2"]
-			});
-			PermGuide.Scheduler.addTask("stage2",{
-				activateFn: function(taskName){ 
-					alert("stage2");
-					PermGuide.Scheduler.finished("stage2");
-				},
+			PermGuide.Scheduler.addTask("LanguageSelect",{
+				activateFn: languageSelectInit,
 				dependence: []
 			});
-			PermGuide.Scheduler.addTask("stage1",{
-				activateFn: function(taskName){ 
-					alert("stage1"); 
-					PermGuide.Scheduler.finished("stage1");
-				},
-				dependence: []
+			PermGuide.Scheduler.addTask("InterfaceInit",{
+				activateFn: interfaceInit,
+				dependence: ["LanguageSelect"]
 			});
+
 			PermGuide.Scheduler.start();
-			
-			init();
 		});
 
 		</script>
@@ -205,8 +215,13 @@
 		</script>
 	</head>
 	<body>
-		<div id="splash" style="text-align: center;">
+		<div id="splashScreen" style="">
 			<div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div> 
+		</div>
+
+		<div id="langSelectScreen">
+			<div class="langSelectItem" _lang="ru">Русский</div>
+			<div class="langSelectItem" _lang="en">English</div>
 		</div>
 		
 		<div id="pageSlider">
