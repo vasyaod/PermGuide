@@ -262,6 +262,19 @@ PermGuide.Language = {
 			return object["rus"];
 		
 		return object[this.currentLanguage];
+	},
+
+	/**
+	 * Возвращает строку из языковых ресурсов в соответствии с выбранным 
+	 * языком.
+	 */
+	getInterfaceString: function(key)
+	{
+		var object = PermGuide.lr[key];
+		if (object == null)
+			return key;
+		
+		return this.getString(object);
 	}
 }
 
@@ -648,9 +661,6 @@ PermGuide.MapManager = {
 			PermGuide.ApplicationData.attachListener("loaded", this.dataLoaded);
 		
 		PermGuide.ApplicationData.attachListener("visibleChanged", $.proxy(this.visibleChanged, this));
-		
-		$("#splashScreen").css("visibility", "hidden");
-		$("#pageSlider").css("visibility", "visible");
 	},
 	
 	dataLoaded: function(applicationData) {
@@ -732,6 +742,8 @@ PermGuide.MapManager = {
 		}, this));
 		
 		this.visibleChanged();
+
+		PermGuide.Scheduler.finished("InterfaceInit");
 	},
 	
 	visibleChanged: function() {

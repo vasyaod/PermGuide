@@ -11,6 +11,7 @@
 		<script type="text/javascript" src="jsrender.js"></script>
 
 		<!-- Загрузка основного кода. -->
+		<script type="text/javascript" src="permguide-lr.js"></script>
 		<script type="text/javascript" src="permguide-scheduler.js"></script>
 		<script type="text/javascript" src="permguide-touch-support.js"></script>
 		<script type="text/javascript" src="permguide-observable.js"></script>
@@ -22,7 +23,8 @@
 		interfaceInit = function() {
 			
 			// Зададим мертвый радиус для клика в процентах экрана.
-			PermGuide.deadRadius = $(window).width()*0.02;
+			//PermGuide.deadRadius = $(window).width()*0.04;
+			PermGuide.deadRadius = 20;
 				
 			////
 			// Это такой хитрый способ, выстроить дивы в линейку.
@@ -151,7 +153,6 @@
 				PermGuide.MapManager.init(jQuery("#map")[0]);
 			});
 //*/
-			PermGuide.Scheduler.finished("InterfaceInit");
 		};
 		
 		languageSelectInit = function() {
@@ -174,6 +175,18 @@
 			
 			$("#splashScreen").css("visibility", "hidden");
 			$("#langSelectScreen").css("visibility", "visible");
+		};
+
+		closeSplash = function() {
+			// Перед тем как скрыть splash интернацианализируем интерфейс.
+			$(".i18n").each(function(index){
+				var text = PermGuide.Language.getInterfaceString($(this).text());
+				$(this).text(text);
+			});
+		
+			// Закроем splash-screen
+			$("#splashScreen").css("visibility", "hidden");
+			$("#pageSlider").css("visibility", "visible");
 		}
 		
 		$(document).ready(function() {
@@ -185,6 +198,10 @@
 			PermGuide.Scheduler.addTask("InterfaceInit",{
 				activateFn: interfaceInit,
 				dependence: ["LanguageSelect"]
+			});
+			PermGuide.Scheduler.addTask("CloseSplash",{
+				activateFn: closeSplash,
+				dependence: ["InterfaceInit"]
 			});
 
 			PermGuide.Scheduler.start();
@@ -236,9 +253,7 @@
 						<!-- Пусто, значения подствляются скриптом.-->
 					</div>
 				</div>
-				<div class="toggleButton">
-					Жать сюда, здесь метки.
-				</div>
+				<div class="toggleButton i18n">ТoggleButton</div>
 			</div>
 			<div id="tagsMenuBg">
 			</div>
@@ -249,12 +264,12 @@
 				 -->
 				<div class="slide">
 					<div style="height: 100%;">
-						<div style="padding-top: 30%">Красивая картинка и менюшка!.</div>
+						<div class="i18n" style="padding-top: 30%">Intro</div>
 					</div> 
 				</div>
 				<div class="slide"> 
 					<canvas id="myCanvas" class="canvasLayer">
-							Альтернативное содержимое, которое будет показано, если браузер не поддерживает Canvas.
+						Браузер не поддерживает Canvas.
 					</canvas>
 				
 					<div id="map" style="height: 100%;"></div>
@@ -314,7 +329,9 @@
 			<div id="pageScroller">
 				<table border="0" cellpadding="0" cellspacing="0">
 					<tr>
-						<td><div id="prevButton">Влево</div></td>
+						<td>
+							<div id="prevButton" class="i18n">PrevButton</div>
+						</td>
 						<!-- 
 							Внимание! От содержимого ячеек зависит их кликабильность
 						 	смотрите код!
@@ -322,7 +339,9 @@
 						<td><div class="pageIndicator">1</div></td>
 						<td><div class="pageIndicator">2</div></td>
 						<td><div class="pageIndicator">3</div></td>
-						<td style="text-align: right;"><div id="nextButton">Вправо</div></td>
+						<td style="text-align: right;">
+							<div id="nextButton" class="i18n">NextButton</div>
+						</td>
 					</tr>
 				</table>
 			</div>			
