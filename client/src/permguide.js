@@ -292,10 +292,6 @@ PermGuide.ApplicationData = {
 	 * Список доступных тегов, в виде ассоциативного массива.
 	 */
 	tags: {},
-	/**
-	 * Тотже список тагов, но в виде массива.
-	 */
-	tagsAsArray: [],
 	
 	/**
 	 * Собственно сами данные. 
@@ -303,28 +299,23 @@ PermGuide.ApplicationData = {
 	data: null,// просто рыба.
 	
 	/**
-	 * Внутренний метод, создает пустой тэг.
+	 * Метод возвращает тэг по его id.
 	 */
-	createTag: function(tagName)
-	{
-		if (this.tags[tagName] == null)
-		{
-			this.tags[tagName] = {
-				name: tagName,
-				visible: true,
-				objects: [],
-				setVisible: function(value)
-				{
-					if (this.visible != value)
-					{
-						this.visible = value;
-						// Генерируем событие, что видимость метки изменилась.
-						PermGuide.ApplicationData.notify("visibleChanged", PermGuide.ApplicationData);
-					}
-				}
-			};
-		}
-		return this.tags[tagName];
+	getTagById: function(tagId)
+	{	
+		// Ищем тэги в кэше.
+		if (this.tags[tagId] != null)
+			return this.tags[tagId]
+		
+		var res = null
+		$.each(this.data.tags, function(index, tag) {	
+			if (tag.id == tagId)
+				res = tag;
+		});
+		if (res != null)
+			this.tags[tagId] = res;
+		
+		return res;
 	},
 	
 	/**
@@ -338,6 +329,21 @@ PermGuide.ApplicationData = {
 		this.tags = {};
 		this.tagsAsArray = [];
 		
+		// Обработаем тэги заменим поля в соответствии с выбранным языком.
+		$.each(this.data.tags, function(index, tag) {	
+			tag.name = PermGuide.Language.getString(tag.name);
+			tag.isObjectTag = false;
+			tag.isRouteTag = false;
+			tag.visible = true;
+			tag.setVisible = $.proxy(function(value) {
+				if (this.visible != value) {
+					this.visible = value;
+					// Генерируем событие, что видимость метки изменилась.
+					PermGuide.ApplicationData.notify("visibleChanged", PermGuide.ApplicationData);
+					}
+				}, tag);
+		});
+		
 		// Формируем ассоциативный массив из тэгов, где название
 		// элемента это имя тэга, а так же делаем локализацию.		
 		$.each(this.data.objects, $.proxy(function(index, object) {	
@@ -349,14 +355,23 @@ PermGuide.ApplicationData = {
 			if (object.contacts != null)
 				object.contacts.address = PermGuide.Language.getString(object.contacts.address);
 			
-			$.each(object.tags, $.proxy(function(index, tagName) {	
-				var tag = this.createTag(tagName);
+			var newTags = [];
+			$.each(object.tags, $.proxy(function(index, tagId) {	
+				var tag = this.getTagById(tagId);
+				if (tag == null) {
+					alert("Tag id "+tagId+"not found.");
+				} else {
+					tag.isObjectTag = true;
+					newTags.push(tag);
+				}
 				// Проверим наличие ссылки на объект у данного тэга, если
 				// её нет, то добавляем её.
-				if (!$.inArray(object, tag.objects))
-					tag.objects.push(object);
+				//if (!$.inArray(object, tag.objects))
+				//	tag.objects.push(object);
 			
-			}, this));
+			}, this));			
+			object.tagIds = object.tags;
+			object.tags = newTags;
 		}, this));
 
 		// Делае тоже самое но с маршрутами.
@@ -365,19 +380,18 @@ PermGuide.ApplicationData = {
 			route.name = PermGuide.Language.getString(route.name);
 			route.description = PermGuide.Language.getString(route.description);
 
-			$.each(route.tags, $.proxy(function(index, tagName) {	
-				var tag = this.createTag(tagName);
-				// Проверим наличие ссылки на объект у данного тэга, если
-				// её нет, то добавляем её.
-				if (!$.inArray(route, tag.objects))
-					tag.objects.push(route);
-			
+			var newTags = [];
+			$.each(route.tags, $.proxy(function(index, tagId) {	
+				var tag = this.getTagById(tagId);
+				if (tag == null) {
+					alert("Tag id "+tagId+"not found.");
+				} else {
+					tag.isRouteTag = true;
+					newTags.push(tag);
+				}
 			}, this));
-		}, this));
-		
-		// Формируем простой массив из тэгов.
-		$.each(this.tags, $.proxy(function(index, tag) {	
-			this.tagsAsArray.push(tag);
+			route.tagIds = route.tags;
+			route.tags = newTags;
 		}, this));
 		
 		// Генирируем событие, о том что данные загружены и готовы к использованию.
@@ -391,13 +405,10 @@ PermGuide.ApplicationData = {
 	 * Объект считается видимым если хотябы один из его тагов видимый. 
 	 */
 	objectIsVisible: function (object) {
-		// Если тагов нет, то объект по умолчанию видимый всегда.
-		if (object.tags == null)
-			return true;
 		
 		var visible = false;
-		$.each(object.tags, $.proxy(function(index, tagName) {	
-			var tag = this.tags[tagName];
+		$.each(object.tagIds, $.proxy(function(index, tagId) {	
+			var tag = this.getTagById(tagId);
 			if (tag != null && tag.visible)
 				visible = true;
 		}, this));

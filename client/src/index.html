@@ -106,12 +106,12 @@
 			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
 			
 				$("#tagsBg .vScroller").html(
-					$( "#tagTemplate" ).render(applicationData.tagsAsArray)
+					$( "#tagTemplate" ).render(applicationData.data.tags)
 				);
 				
 				$(".tag").touchclick( function (event) {
-					var tagsName = $(event.target).attr("_id");
-					var tag = applicationData.tags[tagsName];
+					var tagId = $(event.target).attr("_id");
+					var tag = applicationData.getTagById(tagId);
 					if (tag == null)
 						return;
 					if (tag.visible)
@@ -167,7 +167,7 @@
 				PermGuide.Language.currentLanguage = lang;
 				
 				$("#langSelectScreen").css("visibility", "hidden");
-				$("#splashScreen").css("visibility", "visible");			
+				$("#splashScreen").css("visibility", "visible");
 				
 				// Завершим выполнение задания.
 				PermGuide.Scheduler.finished("LanguageSelect");
@@ -213,7 +213,7 @@
 			Шаблон тэгов в выподающем окне.
 		-->
 		<script id="tagTemplate" type="text/x-jsrender">
-			<div class="tag{{if visible}} visibledTag{{/if}}" _id="{{:name}}">{{:name}}</div>
+			<div class="tag{{if visible}} visibledTag{{/if}}" _id="{{:id}}">{{:name}}</div>
 		</script>
 
 		<!-- 
