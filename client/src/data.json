@@ -28,7 +28,7 @@
 					"phoneNumber": ""
 				},
 				"pictures": ["./1.png", "./1.png"],
-				"tags": ["Неведомая фигня", "Я тут был"]
+				"tags": [1, 2]
 			}
 		],
 		"routes": 
@@ -43,7 +43,7 @@
 					"ru": "Описание зеленой линии",
 					"en": "Description of green line"
 				},
-				"tags": ["Зеленая линия", "Туристический маршрут"],
+				"tags": [2, 3],
 				"points": 
 				[
 					{
@@ -63,12 +63,29 @@
 			{
 				"id": 1,
 				"name": {
+					"ru": "Неведомая фигня",
+					"en": "Unknown place"
+				},
+				"picture": "...",
+				"color": "..."
+			},
+			{
+				"id": 2,
+				"name": {
+					"ru": "Здесь бы я",
+					"en": "I was here"
+				},
+				"picture": "...",
+				"color": "..."
+			},
+			{
+				"id": 3,
+				"name": {
 					"ru": "Зеленая линия",
 					"en": "Green line"
 				},
 				"picture": "...",
 				"color": "..."
 			}
-		
 		]		
 	}
