@@ -394,6 +394,7 @@ PermGuide.ApplicationData = {
 			route.tags = newTags;
 		}, this));
 		
+		this.loaded = true;
 		// Генирируем событие, о том что данные загружены и готовы к использованию.
 		this.notify("loaded", this);
 		// Посылаем уведомление, о том что изменилась видимость объектов.
@@ -460,7 +461,6 @@ PermGuide.ApplicationData = {
 		var self = this;
 		$.getJSON('data.json', function(data) {
 			self.data = data;
-			self.loaded = true;
 			self.processing();
 		});
 	}
