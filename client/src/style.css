@@ -13,6 +13,17 @@ div {
 	padding: 0px;
 }
 
+#body {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+/**
+ * Стиль splash-экрана.
+ */
 #splashScreen {
 	position: absolute;
 	top: 0px;
@@ -22,6 +33,9 @@ div {
 	text-align: center;
 }
 
+/**
+ * Экран выбора языка.
+ */
 #langSelectScreen {
 	position: absolute;
 	visibility: hidden;
@@ -42,6 +56,9 @@ div {
 	cursor: pointer;
 }
 
+/**
+ * Стили элементов карты.
+ */
 .overlay {
 	position: absolute;
 	z-index: 1;
@@ -60,42 +77,47 @@ div {
 //	height: 100%;
 }
 
-#tagsMenuBg {
-	height: 7%; //
-	z-index: 1000; //
-	position: absolute;
+/**
+ * Стили выподающего окна и его элементов.
+ */
+.dropDownMenuSeparator {
+	height: 7%;
+	z-index: 1000; 
 }
 
-#tagsMenu {
+.dropDownMenu {
 	top: -43%;
-	width: 100%;
 	height: 50%;
 	z-index: 1000;
 	position: absolute;
 	background-color: #eeeeee;
 }
 
-#tagsMenu .toggleButton {
+.dropDownMenu .toggleButton {
 	height: 10%;
 	text-align: center;
 	background-color: #666666;
 }
 
-#tagsMenu #tagsBg {
+.dropDownMenu #tagsBg {
 	overflow: hidden;
 	height: 90%;
 }
 
-#tagsMenu .tag {
+.dropDownMenu .tag {
 	cursor: pointer;
 	margin: 5px;
 	padding: 5px;
 	background-color: #bbbbbb;
 }
 
-#tagsMenu .visibledTag {
+.dropDownMenu .visibledTag {
 	background-color: #888888;
 }
+
+/**
+ * Стили скроллера страниц.
+ */
 
 #pageScroller {
 	height: 7%;
@@ -123,7 +145,7 @@ div {
 
 #slideContainer {
 	width: 100%;
-	height: 84%;
+	height: 94%;
 }
 
 .slide {
@@ -144,4 +166,18 @@ div {
 	position: absolute;
 	top: 100%;
 	left: 0px;
+}
+
+#objectsMap
+{
+	height: 93%; 
+	position: relative;
+}
+
+#objectsCatalog
+{
+	height: 93%; 
+	overflow: hidden;
+	display: none;
+	position: relative;
 }

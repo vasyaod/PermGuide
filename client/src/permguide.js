@@ -191,7 +191,8 @@ PermGuide.DropDownWindow = {
 	init: function(element) { 
 		this.element = element;
 		this.position = $(element).offset();
-
+		$(element).css("width", $(element).parent().width());
+		
 		// Вешаем обработчик на книпку "свернуть/развернуть"
 		$(this.element).children(".toggleButton").touchclick( $.proxy(function () {
 			this.toggle();

@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="permguide-lr.js"></script>
 		<script type="text/javascript" src="permguide-scheduler.js"></script>
 		<script type="text/javascript" src="permguide-touch-support.js"></script>
+		<script type="text/javascript" src="permguide-toggle-button.js"></script>
 		<script type="text/javascript" src="permguide-observable.js"></script>
 		<script type="text/javascript" src="permguide-scrollable-plugin.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
@@ -148,9 +149,28 @@
 			});
 			
 			////
+			// Переключение между картой и списком объектов.
+			$("#switchObjectMode").toggleButton({
+				on: function() {
+					$("#objectsCatalog").css("display", "none");
+					$("#objectsMap").css("display", "block");
+				},
+				off: function() {
+					$("#objectsMap").css("display", "none");
+					$("#objectsCatalog").css("display", "block");
+				},
+				state: true
+			});
+			
+			////
 			// Инициализация карты.
 			$.getScript('http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=AAC5U08BAAAAhG98TwIAUF_dcR_gLZsbQ6zwFcalQlEjkMsAAAAAAAAAAADLl1k_yHuuKf8xCzG-8rc6q0B5jA==', function() {
-				PermGuide.MapManager.init(jQuery("#map")[0]);
+				//alert("Script of map load succesful!");
+				PermGuide.MapManager.init(jQuery("#objectsMap")[0]);
+			}).fail(function(){
+				alert("Load script of map fail!");
+				// Завершим задасу запуска интерфейса.
+				PermGuide.Scheduler.finished("InterfaceInit");
 			});
 //*/
 		};
@@ -232,141 +252,102 @@
 		</script>
 	</head>
 	<body>
-		<div id="splashScreen" style="">
-			<div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div> 
-		</div>
-
-		<div id="langSelectScreen">
-			<div class="langSelectItem" _lang="ru">Русский</div>
-			<div class="langSelectItem" _lang="en">English</div>
-		</div>
+		<div id="body">
 		
-		<div id="pageSlider">
-			<div id="tagsMenu">
-				<!--  
-					В выподающем окне, для скрипта важен только элемент 
-					с классом "toggleButton", все остальные id и классы, нужны
-					чтобы накладывать стиль.
-				-->
-				<div id="tagsBg">
-					<div class="vScroller"> 
-						<!-- Пусто, значения подствляются скриптом.-->
+			<div id="splashScreen" style="">
+				<div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div> 
+			</div>
+	
+			<div id="langSelectScreen">
+				<div class="langSelectItem" _lang="ru">Русский</div>
+				<div class="langSelectItem" _lang="en">English</div>
+			</div>
+			
+			<div id="pageSlider">
+				<div id="slideContainer">
+					<!-- 
+						Для для программы сладера страниц, ваден только элемент с
+						классом "slide", который и является страницей.
+					 -->
+					<div class="slide">
+						<div style="height: 100%;">
+							<div class="i18n" style="padding-top: 30%">Intro</div>
+						</div> 
 					</div>
-				</div>
-				<div class="toggleButton i18n">ТoggleButton</div>
-			</div>
-			<div id="tagsMenuBg">
-			</div>
-			<div id="slideContainer">
-				<!-- 
-					Для для программы сладера страниц, ваден только элемент с
-					классом "slide", который и является страницей.
-				 -->
-				<div class="slide">
-					<div style="height: 100%;">
-						<div class="i18n" style="padding-top: 30%">Intro</div>
-					</div> 
-				</div>
-				<div class="slide"> 
-					<canvas id="myCanvas" class="canvasLayer">
-						Браузер не поддерживает Canvas.
-					</canvas>
-				
-					<div id="map" style="height: 100%;"></div>
-				</div>
-				<div class="slide">
-					<div style="height: 100%; overflow: hidden;">
-						<div id="objectsCatalog" class="vScroller"> 
-							<ul>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-								<li>11111</li>
-							</ul>
+					
+					<div class="slide">
+						<div id="tagsMenu" class="dropDownMenu">
+							<!--
+								В выподающем окне, для скрипта важен только элемент 
+								с классом "toggleButton", все остальные id и классы, нужны
+								чтобы накладывать стиль.
+							-->
+							<div id="tagsBg">
+								<div class="vScroller"> 
+									<!-- Пусто, значения подствляются скриптом.-->
+								</div>
+							</div>
+							<div class="toggleButton">
+								<table border="0" cellpadding="0" cellspacing="0" style="width: 100%; height: 100%">
+									<tr>
+										<td class="i18n" style="text-align: center;">ТoggleButton</td>
+										<td id="switchObjectMode" style="width: 15%; background-color: #000000; color: #eeeeee">
+											<div class="on">списком</div>
+											<div class="off">на карте</div>
+										</td>
+									</tr>
+								</table>
+							</div>
 						</div>
+						<div class="dropDownMenuSeparator">
+							<!-- Просто что бы отодвинуть содержимое вниз. -->
+						</div>				
+						<canvas id="myCanvas" class="canvasLayer">
+							Браузер не поддерживает Canvas.
+						</canvas>
+					
+						<div id="objectsMap"></div>
+						<div id="objectsCatalog">
+							<div class="vScroller"> 
+								Каталог пуст.
+							</div>
+						</div>					
+					</div>
+					<div class="slide">
+						Пусто, блин!!! Пока.
 					</div>
 				</div>
+				<div id="pageScroller">
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td>
+								<div id="prevButton" class="i18n">PrevButton</div>
+							</td>
+							<!-- 
+								Внимание! От содержимого ячеек зависит их кликабильность
+							 	смотрите код!
+							-->
+							<td><div class="pageIndicator">1</div></td>
+							<td><div class="pageIndicator">2</div></td>
+							<td><div class="pageIndicator">3</div></td>
+							<td style="text-align: right;">
+								<div id="nextButton" class="i18n">NextButton</div>
+							</td>
+						</tr>
+					</table>
+				</div>			
 			</div>
-			<div id="pageScroller">
-				<table border="0" cellpadding="0" cellspacing="0">
-					<tr>
-						<td>
-							<div id="prevButton" class="i18n">PrevButton</div>
-						</td>
-						<!-- 
-							Внимание! От содержимого ячеек зависит их кликабильность
-						 	смотрите код!
-						-->
-						<td><div class="pageIndicator">1</div></td>
-						<td><div class="pageIndicator">2</div></td>
-						<td><div class="pageIndicator">3</div></td>
-						<td style="text-align: right;">
-							<div id="nextButton" class="i18n">NextButton</div>
-						</td>
-					</tr>
-				</table>
-			</div>			
-		</div>
-
-		<div id="objectInfo"> 
-			<div style="height: 90%; overflow: hidden;">
-				<div class="vScroller"> 
-					<p>
-					Интересно отметить, что врожденная интуиция представляет собой гравитационный парадокс, tertium nоn datur. Ассоциация создает непредвиденный катарсис, открывая новые горизонты. Сомнение ментально дискредитирует естественный предмет деятельности, tertium nоn datur. Согласно мнению известных философов, катарсис творит трагический гравитационный парадокс, не учитывая мнения авторитетов. Можно предположить, что свобода порождает и обеспечивает гений, не учитывая мнения авторитетов.
-					</p>
-				
-					<p>
-					Структурализм, по определению, рассматривается онтологический здравый смысл, при этом буквы А, В, I, О символизируют соответственно общеутвердительное, общеотрицательное, частноутвердительное и частноотрицательное суждения. Гегельянство принимает во внимание сенсибельный гравитационный парадокс, ломая рамки привычных представлений. Автоматизация индуцирует здравый смысл, ломая рамки привычных представлений. Врожденная интуиция, как следует из вышесказанного, иллюзорна. Адаптация, как принято считать, ментально транспонирует сенсибельный язык образов, ломая рамки привычных представлений. Освобождение создает конфликт, открывая новые горизонты.
-					</p>
-				
-					<p>
-					Интересно отметить, что гений нетривиален. Реальность, следовательно, заполняет сенсибельный гедонизм, хотя в официозе принято обратное. Интересно отметить, что современная критика вырождена. Ощущение мира, как принято считать, рассматривается структурализм, при этом буквы А, В, I, О символизируют соответственно общеутвердительное, общеотрицательное, частноутвердительное и частноотрицательное суждения. Гравитационный парадокс, конечно, творит естественный предмет деятельности, изменяя привычную реальность. Даосизм заполняет позитивизм, открывая новые горизонты. 
-					</p>
+	
+			<div id="objectInfo"> 
+				<div style="height: 90%; overflow: hidden;">
+					<div class="vScroller"> 
+						Информации нет!
+					</div>
+				</div>
+				<div style="height: 10%;"> 
+					<div id="closeButton" style="margin-top: 2%; text-align: center;">Нажми, что бы закрыть</div> 
 				</div>
 			</div>
-			<div style="height: 10%;"> 
-				<div id="closeButton" style="margin-top: 2%; text-align: center;">Нажми, что бы закрыть</div> 
-			</div>
 		</div>
-
 	</body>
 </html>
