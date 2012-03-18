@@ -466,7 +466,7 @@ PermGuide.ApplicationData = {
 		});
 	}
 }
-// Расширим ApplicationData до Observable.
+// Расширим до Observable.
 $.extend(PermGuide.ApplicationData, PermGuide.Observable);
 
 //Класс пользовательского оверлея, реализующего класс YMaps.IOverlay
@@ -505,11 +505,10 @@ PermGuide.Overlay = function (geoPoint, fn) {
 	};
 }
 
-PermGuide.CanvasLayer = function () {
+PermGuide.CanvasLayer = function (element) {
 	
 	var map = null;
 	var routes = [];
-	var element = $('#myCanvas');
 	var position = null;
 	var parentContainer = null;
 	
@@ -641,31 +640,56 @@ PermGuide.CanvasLayer = function () {
 	};
 }
 
-/**
- * Менеджер управления картой и объектами на карте.
- */
-PermGuide.MapManager = {
+PermGuide.LoadMapManager = {
 	/**
-	 * Список оверлеев и информации об них.
+	 * Флаг загрузки скрипта карты.
 	 */
-	overlayStates: [],
-	
-	init: function(mapElement) {
-		this.yMapElement = mapElement;
+	loaded: false,
 		
-		//$.getScript('http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=ANpUFEkBAAAAf7jmJwMAHGZHrcKNDsbEqEVjEUtCmufxQMwAAAAAAAAAAAAvVrubVT4btztbduoIgTLAeFILaQ==', function() {
-			YMaps.load($.proxy(this.yMapsLoaded, this));
-		//});
+	load: function() {
+		var self = this;
+		$.getScript('http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=AAC5U08BAAAAhG98TwIAUF_dcR_gLZsbQ6zwFcalQlEjkMsAAAAAAAAAAADLl1k_yHuuKf8xCzG-8rc6q0B5jA==', function() {
+			
+			YMaps.load($.proxy(self.yMapsLoaded, self));
+		});
 	},
 	
 	yMapsLoaded: function() {
+		this.loaded = true;
+		this.notify("mapLoaded", this);
+	}
+}
+//Расширим до Observable.
+$.extend(PermGuide.LoadMapManager, PermGuide.Observable);
+
+/**
+ * Менеджер управления картой и объектами на карте.
+ */
+PermGuide.MapManager = function (yMapElement){
+	
+	this.yMapElement = yMapElement;
+	
+	// Вешаем обработчик события на загрузку скрипта сайта.
+	PermGuide.ApplicationData.attachListener("mapLoaded", $.proxy(function(object) {
+		this.yMapsLoaded();
+	}, this));
+	
+	// Инициализируем маршруты.
+	this.overlayStates = [];
+	this.routeStates = [];
+	
+	this.yMapsLoaded = function() {
 		// Создает экземпляр карты и привязывает его к созданному контейнеру
 		this.yMap = new YMaps.Map(this.yMapElement);
 		this.yMap.enableScrollZoom();
 		
 		// Инициализируем собственный слой. 
-		this.canvasLayer = new PermGuide.CanvasLayer();
-		this.yMap.addLayer(this.canvasLayer);
+		if ($(this.yMapElement).parent().children("canvas").length) {
+			this.canvasLayer = new PermGuide.CanvasLayer(
+				$(this.yMapElement).parent().children("canvas")
+			);
+			this.yMap.addLayer(this.canvasLayer);
+		}
 		
 		if (PermGuide.ApplicationData.loaded)
 			this.dataLoaded(PermGuide.ApplicationData);
@@ -675,7 +699,7 @@ PermGuide.MapManager = {
 		PermGuide.ApplicationData.attachListener("visibleChanged", $.proxy(this.visibleChanged, this));
 	},
 	
-	dataLoaded: function(applicationData) {
+	this.dataLoaded = function(applicationData) {
 		if (this.yMap == null)
 			return;	           // Если карта еще не загружена, то нам здесь делать нечего. 
 		
@@ -726,42 +750,44 @@ PermGuide.MapManager = {
 			this.overlayStates.push(overlayState);
 		}, this));
 		
+		
 		// Генерируем маршруты (линии) на карте.
-		$.each(data.routes, $.proxy(function(index, route) {	
-
-			/*
-			var pl = new YMaps.Polyline(); 
-			
-			$.each(route.points, function(index, point) {
-				pl.addPoint(new YMaps.GeoPoint(point.lng, point.lat));
-			});
-			
-			var overlayState = {
-				object: route,
-				onmap: false,
-				overlay: pl
-			}
-			
-			this.overlayStates.push(overlayState);
-			 */
-			var routeState = {
+		if (this.canvasLayer) {
+			$.each(data.routes, $.proxy(function(index, route) {	
+	
+				/*
+				var pl = new YMaps.Polyline(); 
+				
+				$.each(route.points, function(index, point) {
+					pl.addPoint(new YMaps.GeoPoint(point.lng, point.lat));
+				});
+				
+				var overlayState = {
 					object: route,
 					onmap: false,
-					route: route
+					overlay: pl
 				}
 				
-			this.routeStates.push(routeState);
-		}, this));
-		
+				this.overlayStates.push(overlayState);
+				 */
+				var routeState = {
+						object: route,
+						onmap: false,
+						route: route
+					}
+					
+				this.routeStates.push(routeState);
+			}, this));
+		}
 		this.visibleChanged();
 
 		PermGuide.Scheduler.finished("InterfaceInit");
 	},
 	
-	visibleChanged: function() {
+	this.visibleChanged = function() {
 
 		if (this.yMap == null)
-			return;				// Если карта еще не загружена, то нам здесь делать нечего. 
+			return;           // Если карта еще не загружена, то нам здесь делать нечего. 
 		
 		$.each(this.overlayStates, $.proxy(function(index, overlayState) {	
 			if (PermGuide.ApplicationData.objectIsVisible(overlayState.object) && !overlayState.onmap)
@@ -776,17 +802,19 @@ PermGuide.MapManager = {
 			}
 		}, this));
 
-		$.each(this.routeStates, $.proxy(function(index, routeState) {	
-			if (PermGuide.ApplicationData.objectIsVisible(routeState.object) && !routeState.onmap)
-			{
-				routeState.onmap = true;
-				this.canvasLayer.addRoute(routeState.route);
-			}
-			else if (!PermGuide.ApplicationData.objectIsVisible(routeState.object) && routeState.onmap)
-			{
-				routeState.onmap = false;
-				this.canvasLayer.removeRoute(routeState.route);
-			}
-		}, this));
+		if (this.canvasLayer) {
+			$.each(this.routeStates, $.proxy(function(index, routeState) {	
+				if (PermGuide.ApplicationData.objectIsVisible(routeState.object) && !routeState.onmap)
+				{
+					routeState.onmap = true;
+					this.canvasLayer.addRoute(routeState.route);
+				}
+				else if (!PermGuide.ApplicationData.objectIsVisible(routeState.object) && routeState.onmap)
+				{
+					routeState.onmap = false;
+					this.canvasLayer.removeRoute(routeState.route);
+				}
+			}, this));
+		}
 	}
 };

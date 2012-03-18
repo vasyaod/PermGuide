@@ -17,6 +17,7 @@
 		<script type="text/javascript" src="permguide-toggle-button.js"></script>
 		<script type="text/javascript" src="permguide-observable.js"></script>
 		<script type="text/javascript" src="permguide-scrollable-plugin.js"></script>
+		<script type="text/javascript" src="permguide-dropdownmenu-plugin.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
@@ -52,7 +53,8 @@
 			
 			////
 			// Инициализируем выпадаущее окно со списком меток.
-			PermGuide.DropDownWindow.init($("#tagsMenu"));
+			//PermGuide.DropDownWindow.init($("#tagsMenu"));
+			$(".dropDownMenu").dropdownmenu();
 
 			////
 			// Инициализируем окна информации.
@@ -162,16 +164,11 @@
 				state: true
 			});
 			
+			
 			////
 			// Инициализация карты.
-			$.getScript('http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=AAC5U08BAAAAhG98TwIAUF_dcR_gLZsbQ6zwFcalQlEjkMsAAAAAAAAAAADLl1k_yHuuKf8xCzG-8rc6q0B5jA==', function() {
-				//alert("Script of map load succesful!");
-				PermGuide.MapManager.init(jQuery("#objectsMap")[0]);
-			}).fail(function(){
-				alert("Load script of map fail!");
-				// Завершим задасу запуска интерфейса.
-				PermGuide.Scheduler.finished("InterfaceInit");
-			});
+			mapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0]);
+			PermGuide.LoadMapManager.load();
 //*/
 		};
 		
@@ -301,20 +298,21 @@
 						</div>
 						<div class="dropDownMenuSeparator">
 							<!-- Просто что бы отодвинуть содержимое вниз. -->
-						</div>				
-						<canvas id="myCanvas" class="canvasLayer">
+						</div>
+						
+						<canvas class="canvasLayer">
 							Браузер не поддерживает Canvas.
 						</canvas>
-					
 						<div id="objectsMap"></div>
+						
 						<div id="objectsCatalog">
 							<div class="vScroller"> 
 								Каталог пуст.
 							</div>
-						</div>					
+						</div>
 					</div>
 					<div class="slide">
-						Пусто, блин!!! Пока.
+						Пока пусто.
 					</div>
 				</div>
 				<div id="pageScroller">
