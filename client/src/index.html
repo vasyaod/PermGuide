@@ -108,8 +108,12 @@
 			// со списком меток.
 			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
 			
-				$("#tagsBg .vScroller").html(
-					$( "#tagTemplate" ).render(applicationData.data.tags)
+				$("#objectTags").html(
+					$( "#tagTemplate" ).render(applicationData.getObjectTags())
+				);
+				
+				$("#routeTags").html(
+					$( "#tagTemplate" ).render(applicationData.getRouteTags())
 				);
 				
 				$(".tag").touchclick( function (event) {
@@ -123,7 +127,6 @@
 						$(event.target).addClass("visibledTag");
 					tag.setVisible(!tag.visible);
 				});
-			
 			});
 			// При включении/отключении тэгов, формируем 
 			PermGuide.ApplicationData.attachListener("visibleChanged", function (applicationData){
@@ -163,11 +166,25 @@
 				},
 				state: true
 			});
-			
-			
+
+			////
+			// Переключение между картой и списком объектов.
+			$("#switchRouteMode").toggleButton({
+				on: function() {
+					$("#routesCatalog").css("display", "none");
+					$("#routesMap").css("display", "block");
+				},
+				off: function() {
+					$("#routesMap").css("display", "none");
+					$("#routesCatalog").css("display", "block");
+				},
+				state: true
+			});
+
 			////
 			// Инициализация карты.
-			mapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0]);
+			objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0]);
+			routesMapManager = new PermGuide.MapManager(jQuery("#routesMap")[0]);
 			PermGuide.LoadMapManager.load();
 //*/
 		};
@@ -273,14 +290,14 @@
 					</div>
 					
 					<div class="slide">
-						<div id="tagsMenu" class="dropDownMenu">
+						<div class="dropDownMenu">
 							<!--
 								В выподающем окне, для скрипта важен только элемент 
 								с классом "toggleButton", все остальные id и классы, нужны
 								чтобы накладывать стиль.
 							-->
-							<div id="tagsBg">
-								<div class="vScroller"> 
+							<div class="dropDownMenuContent">
+								<div id="objectTags" class="vScroller"> 
 									<!-- Пусто, значения подствляются скриптом.-->
 								</div>
 							</div>
@@ -300,19 +317,58 @@
 							<!-- Просто что бы отодвинуть содержимое вниз. -->
 						</div>
 						
-						<canvas class="canvasLayer">
+						<!--canvas class="canvasLayer">
 							Браузер не поддерживает Canvas.
-						</canvas>
-						<div id="objectsMap"></div>
+						</canvas-->
+						<div id="objectsMap" class="map"></div>
 						
-						<div id="objectsCatalog">
+						<div id="objectsCatalog" class="catalog">
 							<div class="vScroller"> 
 								Каталог пуст.
 							</div>
 						</div>
 					</div>
 					<div class="slide">
-						Пока пусто.
+					
+						<div class="dropDownMenu">
+							<!--
+								В выподающем окне, для скрипта важен только элемент 
+								с классом "toggleButton", все остальные id и классы, нужны
+								чтобы накладывать стиль.
+							-->
+							<div class="dropDownMenuContent">
+								<div id="routeTags" class="vScroller"> 
+									<!-- Пусто, значения подствляются скриптом.-->
+								</div>
+							</div>
+							<div class="toggleButton">
+								<table border="0" cellpadding="0" cellspacing="0" style="width: 100%; height: 100%">
+									<tr>
+										<td class="i18n" style="text-align: center;">ТoggleButton</td>
+										<td id="switchRouteMode" style="width: 15%; background-color: #000000; color: #eeeeee">
+											<div class="on">списком</div>
+											<div class="off">на карте</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+
+						<div class="dropDownMenuSeparator">
+							<!-- Просто что бы отодвинуть содержимое вниз. -->
+						</div>
+						
+						<canvas class="canvasLayer">
+							Браузер не поддерживает Canvas.
+						</canvas>
+						<div id="routesMap" class="map"></div>
+						
+						<div id="routesCatalog" class="catalog">
+							<div class="vScroller"> 
+								Каталог пуст.
+							</div>
+						</div>
+						
 					</div>
 				</div>
 				<div id="pageScroller">

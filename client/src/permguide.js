@@ -178,40 +178,6 @@ PermGuide.PageSlider = {
 	}
 };
 
-/**
- * Управление и сотояние выподающим окном, которе служит для 
- * включение/выключение меток.
- */
-PermGuide.DropDownWindow = {
-	// Состоние окна.
-	closed: true,
-	// Исходная позиция элемента.
-	position: {top: 0, left: 0},	// Просто для рыбы.
-	
-	init: function(element) { 
-		this.element = element;
-		this.position = $(element).offset();
-		$(element).css("width", $(element).parent().width());
-		
-		// Вешаем обработчик на книпку "свернуть/развернуть"
-		$(this.element).children(".toggleButton").touchclick( $.proxy(function () {
-			this.toggle();
-		},this));
-	},
-	
-	toggle: function()
-	{
-		var topPosition = 0;
-		if (!this.closed)
-			topPosition = this.position.top;
-		this.closed = !this.closed;
-		
-		$(this.element).animate({
-			top: topPosition
-		}, 500);
-	}
-};
-
 PermGuide.ObjectInfoWindow = {
 		// Состоние окна.
 		closed: true,
@@ -316,6 +282,32 @@ PermGuide.ApplicationData = {
 		if (res != null)
 			this.tags[tagId] = res;
 		
+		return res;
+	},
+
+	/**
+	 * Возвращает список тэгов принадлежащих объектам.
+	 */
+	getObjectTags: function()
+	{	
+		var res = [];
+		$(this.data.tags).each(function(){
+			if (this.isObjectTag)
+				res.push(this);
+		});
+		return res;
+	},
+	
+	/**
+	 * Возвращает список тэгов принадлежащих маршрутам.
+	 */
+	getRouteTags: function()
+	{	
+		var res = [];
+		$(this.data.tags).each(function(){
+			if (this.isRouteTag)
+				res.push(this);
+		});
 		return res;
 	},
 	
@@ -665,9 +657,10 @@ $.extend(PermGuide.LoadMapManager, PermGuide.Observable);
 /**
  * Менеджер управления картой и объектами на карте.
  */
-PermGuide.MapManager = function (yMapElement){
+PermGuide.MapManager = function (yMapElement, isRoutesMap){
 	
 	this.yMapElement = yMapElement;
+	this.isRoutesMap = isRoutesMap;
 	
 	// Вешаем обработчик события на загрузку скрипта сайта.
 	PermGuide.ApplicationData.attachListener("mapLoaded", $.proxy(function(object) {

@@ -99,7 +99,7 @@ div {
 	background-color: #666666;
 }
 
-.dropDownMenu #tagsBg {
+.dropDownMenu .dropDownMenuContent {
 	overflow: hidden;
 	height: 90%;
 }
@@ -168,13 +168,13 @@ div {
 	left: 0px;
 }
 
-#objectsMap
+.map
 {
 	height: 93%; 
 	position: relative;
 }
 
-#objectsCatalog
+.catalog
 {
 	height: 93%; 
 	overflow: hidden;
