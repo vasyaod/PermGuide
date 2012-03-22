@@ -9,8 +9,7 @@
 				position: null,
 				element: this
 			};
-			state.position = $(this).position();
-			$(this).css("width", $(this).parent().width());
+			state.position = $(this).offset();
 			
 			$(this).children(".toggleButton").touchclick( function (event){
 				var topPosition = 0;

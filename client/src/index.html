@@ -132,7 +132,10 @@
 			PermGuide.ApplicationData.attachListener("visibleChanged", function (applicationData){
 				
 				$("#objectsCatalog").html(
-					$( "#catalogItemTemplate" ).render(applicationData.getVisibleObjects())
+					$( "#catalogItemTemplate" ).render(applicationData.getVisibleObjects("objects"))
+				);
+				$("#routesCatalog").html(
+					$( "#catalogItemTemplate" ).render(applicationData.getVisibleObjects("routes"))
 				);
 				
 				$(".catalogItem").touchclick( function (event) {
@@ -183,8 +186,8 @@
 
 			////
 			// Инициализация карты.
-			objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0]);
-			routesMapManager = new PermGuide.MapManager(jQuery("#routesMap")[0]);
+			objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0], "objects");
+			routesMapManager = new PermGuide.MapManager(jQuery("#routesMap")[0], "routes");
 			PermGuide.LoadMapManager.load();
 //*/
 		};

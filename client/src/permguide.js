@@ -372,7 +372,7 @@ PermGuide.ApplicationData = {
 			
 			route.name = PermGuide.Language.getString(route.name);
 			route.description = PermGuide.Language.getString(route.description);
-
+			
 			var newTags = [];
 			$.each(route.tags, $.proxy(function(index, tagId) {	
 				var tag = this.getTagById(tagId);
@@ -383,6 +383,22 @@ PermGuide.ApplicationData = {
 					newTags.push(tag);
 				}
 			}, this));
+			
+			// Пускай маршрут знает о своих объектах.
+			route.objects = [];
+			// Переберем все точки маршрута, дабы востаноить связь объект->маршрут.
+			$.each(route.points, $.proxy(function(index, point) {	
+				if (point.id != null) {
+					
+					var object = this.getObjectById(point.id);
+					if (object.routes == null)
+						object.routes = [];
+					object.routes.push(route);
+					route.objects.push(object);
+				}
+				
+			}, this));
+			
 			route.tagIds = route.tags;
 			route.tags = newTags;
 		}, this));
@@ -395,10 +411,9 @@ PermGuide.ApplicationData = {
 	},
 	
 	/**
-	 * Метод возвращает true если объект видимый, в противном случаи false.
-	 * Объект считается видимым если хотябы один из его тагов видимый. 
+	 * Внутренний метод.
 	 */
-	objectIsVisible: function (object) {
+	_objectIsVisible: function (object) {
 		
 		var visible = false;
 		$.each(object.tagIds, $.proxy(function(index, tagId) {	
@@ -409,19 +424,78 @@ PermGuide.ApplicationData = {
 		
 		return visible;
 	},
+	
+	/**
+	 * Метод возвращает true если маршрут видим.
+	 */
+	routeIsVisible: function (route) {
+		return this._objectIsVisible(route);
+	},
+	
+	/**
+	 * Метод возвращает true если объект видимый, в противном случаи false.
+	 * Объект считается видимым если хотябы один из его тагов видимый. 
+	 */
+	objectIsVisible: function (object, mode) {
+		
+		if (mode == "objects") {
+			return this._objectIsVisible(object);
+		} else if (mode == "routes") {
+			if (object.routes == null)
+				return false;
+			else {
+				var visible = false;
+				$.each(object.routes, $.proxy(function(index, route) {	
+					if (!visible && this._objectIsVisible(route))
+						visible = true;
+				}, this));
+				return visible;
+			}
+		} else {
+			alert("mode not found.");
+		}
+		return false;
+	},
 
 	/**
 	 * Метод возвращает список видимых объектов. 
 	 */
-	getVisibleObjects: function () {
+	getVisibleObjects: function (mode) {
+		
 		var res = [];
+		if (!mode) {
+			alert("mode not found.");
+			return res;
+		}
 		
 		$.each(this.data.objects, $.proxy(function(index, object) {	
-			if (this.objectIsVisible(object))
+			if (this.objectIsVisible(object, mode))
 				res.push(object);
 		}, this));
 		
 		return res;
+	},
+	
+	/**
+	 * Возвращает список всех объектов в зависимости от режима.
+	 */
+	getAllObjects: function (mode) {
+		
+		if (mode == "objects") {
+			return this.data.objects;
+		} else if (mode == "routes") {
+			var res = [];
+			$.each(this.data.objects, $.proxy(function(index, object) {	
+				if (object.routes != null)
+					res.push(object);
+			}, this));
+			alert(res.length);
+			return res;
+		} else {
+			alert("mode not found.");
+		}
+		
+		return [];
 	},
 	
 	/**
@@ -657,10 +731,10 @@ $.extend(PermGuide.LoadMapManager, PermGuide.Observable);
 /**
  * Менеджер управления картой и объектами на карте.
  */
-PermGuide.MapManager = function (yMapElement, isRoutesMap){
+PermGuide.MapManager = function (yMapElement, mode){
 	
 	this.yMapElement = yMapElement;
-	this.isRoutesMap = isRoutesMap;
+	this.mode = mode;
 	
 	// Вешаем обработчик события на загрузку скрипта сайта.
 	PermGuide.ApplicationData.attachListener("mapLoaded", $.proxy(function(object) {
@@ -698,7 +772,7 @@ PermGuide.MapManager = function (yMapElement, isRoutesMap){
 		
 		var data = applicationData.data;
 		var map = this.yMap;
-
+		
 		// Сбрасываем список со всеми оверлеями.
 		this.overlayStates = [];
 		this.routeStates = [];
@@ -707,7 +781,7 @@ PermGuide.MapManager = function (yMapElement, isRoutesMap){
 		map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), 15);
 		
 		// Генерируем дотопримечательности (метки) на карте.
-		$.each(data.objects, $.proxy(function(index, geoObject) {	
+		$.each(applicationData.getAllObjects(this.mode), $.proxy(function(index, geoObject) {	
 			/*
 			  Эта версия работает с балунами, но у нас создан собственный оверлай
 			  и поэтому пока код закоментирован.
@@ -783,12 +857,13 @@ PermGuide.MapManager = function (yMapElement, isRoutesMap){
 			return;           // Если карта еще не загружена, то нам здесь делать нечего. 
 		
 		$.each(this.overlayStates, $.proxy(function(index, overlayState) {	
-			if (PermGuide.ApplicationData.objectIsVisible(overlayState.object) && !overlayState.onmap)
+			var objectIsVisible = PermGuide.ApplicationData.objectIsVisible(overlayState.object, this.mode);
+			if ( objectIsVisible && !overlayState.onmap)
 			{
 				overlayState.onmap = true;
 				this.yMap.addOverlay(overlayState.overlay);
 			}
-			else if (!PermGuide.ApplicationData.objectIsVisible(overlayState.object) && overlayState.onmap)
+			else if (!objectIsVisible && overlayState.onmap)
 			{
 				overlayState.onmap = false;
 				this.yMap.removeOverlay(overlayState.overlay);
@@ -797,12 +872,13 @@ PermGuide.MapManager = function (yMapElement, isRoutesMap){
 
 		if (this.canvasLayer) {
 			$.each(this.routeStates, $.proxy(function(index, routeState) {	
-				if (PermGuide.ApplicationData.objectIsVisible(routeState.object) && !routeState.onmap)
+				var routeIsVisible = PermGuide.ApplicationData.routeIsVisible(routeState.object);
+				if (routeIsVisible && !routeState.onmap)
 				{
 					routeState.onmap = true;
 					this.canvasLayer.addRoute(routeState.route);
 				}
-				else if (!PermGuide.ApplicationData.objectIsVisible(routeState.object) && routeState.onmap)
+				else if (!routeIsVisible && routeState.onmap)
 				{
 					routeState.onmap = false;
 					this.canvasLayer.removeRoute(routeState.route);

@@ -88,6 +88,7 @@ div {
 .dropDownMenu {
 	top: -43%;
 	height: 50%;
+	width:100%;
 	z-index: 1000;
 	position: absolute;
 	background-color: #eeeeee;
@@ -154,6 +155,7 @@ div {
 	text-align: center;
 	vertical-align: middle;
 	float: left;
+	position: relative;
 }
 
 #objectInfo {
