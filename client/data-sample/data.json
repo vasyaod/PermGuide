@@ -1,0 +1,92 @@
+
+	{ 
+		"centerLat": 56.246271, 
+		"centerLng": 58.009077,
+		"zoom": 14,
+		
+		"objects": 
+		[	
+			{
+				"id": 1,
+				"point": {
+					"lat": 58.009077,
+					"lng": 56.246271
+				},
+				"name": {
+					"ru":"Здесь бы я! (название)",
+					"en": "I was here! (name)"
+				},
+				"description": {
+					"ru": "Здесь бы я! (описание объекта)",
+					"en": "I was here! (description)"
+				},
+				"contacts": {
+					"address": {
+						"ru": "Комсомольский проспект, 15",
+						"en": "Konsomolskiy prospect, 15"
+					},
+					"phoneNumber": ""
+				},
+				"pictures": ["./1.png", "./1.png"],
+				"tags": [1, 2]
+			}
+		],
+		"routes": 
+		[	
+			{
+				"color": "#FFFFF",
+				"name": {
+					"ru": "Зеленая линия",
+					"en": "Green line"
+				},
+				"description": {
+					"ru": "Описание зеленой линии",
+					"en": "Description of green line"
+				},
+				"tags": [2, 3],
+				"points": 
+				[
+					{
+						"lat": 58.009077,
+						"lng": 56.246271
+					},
+					{
+						"id": 1,
+						"lat": 58.009077,
+						"lng": 56.247271
+					}
+				]
+			}
+		
+		],
+		"tags": 
+		[	
+			{
+				"id": 1,
+				"name": {
+					"ru": "Неведомая фигня",
+					"en": "Unknown place"
+				},
+				"picture": "...",
+				"color": "..."
+			},
+			{
+				"id": 2,
+				"name": {
+					"ru": "Здесь бы я",
+					"en": "I was here"
+				},
+				"picture": "...",
+				"color": "..."
+			},
+			{
+				"id": 3,
+				"name": {
+					"ru": "Зеленая линия",
+					"en": "Green line"
+				},
+				"picture": "...",
+				"color": "..."
+			}
+		]		
+	}

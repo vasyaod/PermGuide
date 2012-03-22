@@ -402,12 +402,13 @@ PermGuide.ApplicationData = {
 			route.tagIds = route.tags;
 			route.tags = newTags;
 		}, this));
-		
+
 		this.loaded = true;
 		// Генирируем событие, о том что данные загружены и готовы к использованию.
 		this.notify("loaded", this);
 		// Посылаем уведомление, о том что изменилась видимость объектов.
 		this.notify("visibleChanged", this);
+		
 	},
 	
 	/**
@@ -489,7 +490,6 @@ PermGuide.ApplicationData = {
 				if (object.routes != null)
 					res.push(object);
 			}, this));
-			alert(res.length);
 			return res;
 		} else {
 			alert("mode not found.");
