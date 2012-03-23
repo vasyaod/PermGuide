@@ -6,12 +6,29 @@
 		this.each( function() {
 			var state = {
 				closed: true,
-				position: null,
+				position: {top: 0},
 				element: this
 			};
-			state.position = $(this).offset();
 			
-			var close = function() {
+			// Метод изменения размера и позиции меню.
+			state.resize = function() {
+				var separatorHeight =  $(state.element).parent().children(".dropDownMenuSeparator").height();
+				var contentHeight = $(state.element).find(".vScroller").height()+10;
+				var dropdownmenuHeight = (contentHeight+separatorHeight);
+				alert(dropdownmenuHeight);
+				$(state.element).css("height", dropdownmenuHeight+"px");
+				$(state.element).find(".dropDownMenuContent").css("height", contentHeight+"px");
+				$(state.element).find(".toggleButton").css("height", separatorHeight+"px");
+				
+				// Вычисляем верхнюю позицию меню.
+				var top = dropdownmenuHeight - separatorHeight;
+				$(state.element).offset({
+					top: -top
+				});
+				state.position.top = -top;
+			};
+			
+			state.close = function() {
 				if (state.closed)
 					return;
 
@@ -24,7 +41,7 @@
 				}, 500);
 			};
 			
-			var open = function() {
+			state.open = function() {
 				if (!state.closed)
 					return;
 
@@ -36,20 +53,32 @@
 					top: topPosition
 				}, 500);
 			};
+
+			state.resize();
+			// При изменении размера окна изменим размеры меню.
+			$(window).resize(function() {
+				state.resize();
+			});
 			
+			
+			// Вешаем событие на кнопку сварачивания меню.
 			$(this).children(".toggleButton").touchclick( function (event){
 				if (state.closed)
-					open();
+					state.open();
 				else
-					close();
+					state.close();
 			});
-
+			
+			// Если произошел клик внутри меню, надо его задержать.
 			$(this).touchclick( function (event){
 			}, true);
 
+			// Клик вне меню, должен закрыть его!
 			$(".dropDownMenuBg").touchclick( function (event){
-				close();
+				state.close();
 			}, true);
+			
+			$(this).data(state);
 		});
 	};	
 

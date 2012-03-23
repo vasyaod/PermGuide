@@ -331,6 +331,7 @@ PermGuide.ApplicationData = {
 			tag.setVisible = $.proxy(function(value) {
 				if (this.visible != value) {
 					this.visible = value;
+					
 					// Генерируем событие, что видимость метки изменилась.
 					PermGuide.ApplicationData.notify("visibleChanged", PermGuide.ApplicationData);
 					}
@@ -411,6 +412,21 @@ PermGuide.ApplicationData = {
 		
 	},
 	
+	_setVisibleTags: function (mode, flag) {
+		
+		if (mode == "objects") {
+/*			
+			$.each(this.data.tags, function(index, tag) {	
+				if (tag.isObjectTag)
+					tag.visible
+			});
+*/			
+		} else if (mode == "routes") {
+			
+		} else {
+			alert("mode not found.");
+		}
+	},
 	/**
 	 * Внутренний метод.
 	 */
@@ -711,18 +727,42 @@ PermGuide.LoadMapManager = {
 	 * Флаг загрузки скрипта карты.
 	 */
 	loaded: false,
-		
+	
+	scriptLoaded: false,
+
 	load: function() {
 		var self = this;
-		$.getScript('http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=AAC5U08BAAAAhG98TwIAUF_dcR_gLZsbQ6zwFcalQlEjkMsAAAAAAAAAAADLl1k_yHuuKf8xCzG-8rc6q0B5jA==', function() {
-			
-			YMaps.load($.proxy(self.yMapsLoaded, self));
+//		$.getScript('http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=AAC5U08BAAAAhG98TwIAUF_dcR_gLZsbQ6zwFcalQlEjkMsAAAAAAAAAAADLl1k_yHuuKf8xCzG-8rc6q0B5jA==', function(data, textStatus, jqxhr) {
+//			alert(textStatus);
+//			YMaps.load($.proxy(self.yMapsLoaded, self));
+//		});
+	
+		$.ajax({
+			url: 'http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=AAC5U08BAAAAhG98TwIAUF_dcR_gLZsbQ6zwFcalQlEjkMsAAAAAAAAAAADLl1k_yHuuKf8xCzG-8rc6q0B5jA==',
+			dataType: "script",
+			async: false,
+			timeoutNumber: 5000,
+			success: function() {
+				self.scriptLoaded = true;
+				YMaps.load($.proxy(self.yMapsLoaded, self));
+			},
 		});
+		this.timeoutId = setTimeout($.proxy(this.yMapsFail, this), 1000);
+		
+//*/
+	},
+
+	yMapsFail: function() {
+		clearTimeout(this.timeoutId);
+		if (!this.scriptLoaded)
+			this.notify("mapLoadFail", this);
 	},
 	
 	yMapsLoaded: function() {
+		if (this.loaded)
+			return;		
 		this.loaded = true;
-		this.notify("mapLoaded", this);
+		this.notify("mapLoadSuccess", this);
 	}
 }
 //Расширим до Observable.
@@ -737,7 +777,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 	this.mode = mode;
 	
 	// Вешаем обработчик события на загрузку скрипта сайта.
-	PermGuide.ApplicationData.attachListener("mapLoaded", $.proxy(function(object) {
+	PermGuide.ApplicationData.attachListener("mapLoadSuccess", $.proxy(function(object) {
 		this.yMapsLoaded();
 	}, this));
 	

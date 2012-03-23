@@ -108,13 +108,15 @@
 			// со списком меток.
 			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
 			
-				$("#objectTags").html(
+				$("#objectTags .vScroller").html(
 					$( "#tagTemplate" ).render(applicationData.getObjectTags())
 				);
+				$("#objectTags").data().resize();   // Обновим размеры.
 				
-				$("#routeTags").html(
+				$("#routeTags .vScroller").html(
 					$( "#tagTemplate" ).render(applicationData.getRouteTags())
 				);
+				$("#routeTags").data().resize();   // Обновим размеры.
 				
 				$(".tag").touchclick( function (event) {
 					var tagId = $(event.target).attr("_id");
@@ -131,10 +133,10 @@
 			// При включении/отключении тэгов, формируем 
 			PermGuide.ApplicationData.attachListener("visibleChanged", function (applicationData){
 				
-				$("#objectsCatalog").html(
+				$("#objectsCatalog .vScroller").html(
 					$( "#catalogItemTemplate" ).render(applicationData.getVisibleObjects("objects"))
 				);
-				$("#routesCatalog").html(
+				$("#routesCatalog .vScroller").html(
 					$( "#catalogItemTemplate" ).render(applicationData.getVisibleObjects("routes"))
 				);
 				
@@ -297,14 +299,14 @@
 					</div>
 					
 					<div class="slide">
-						<div class="dropDownMenu">
+						<div id="objectTags" class="dropDownMenu">
 							<!--
 								В выподающем окне, для скрипта важен только элемент 
 								с классом "toggleButton", все остальные id и классы, нужны
 								чтобы накладывать стиль.
 							-->
 							<div class="dropDownMenuContent">
-								<div id="objectTags" class="vScroller"> 
+								<div class="vScroller"> 
 									<!-- Пусто, значения подствляются скриптом.-->
 								</div>
 							</div>
@@ -337,14 +339,14 @@
 					</div>
 					<div class="slide">
 					
-						<div class="dropDownMenu">
+						<div id="routeTags" class="dropDownMenu">
 							<!--
 								В выподающем окне, для скрипта важен только элемент 
 								с классом "toggleButton", все остальные id и классы, нужны
 								чтобы накладывать стиль.
 							-->
 							<div class="dropDownMenuContent">
-								<div id="routeTags" class="vScroller"> 
+								<div class="vScroller"> 
 									<!-- Пусто, значения подствляются скриптом.-->
 								</div>
 							</div>
