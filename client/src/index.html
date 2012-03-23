@@ -123,23 +123,37 @@
 					var tag = applicationData.getTagById(tagId);
 					if (tag == null)
 						return;
-					if (tag.visible)
-						$(event.target).removeClass("visibledTag");
-					else
-						$(event.target).addClass("visibledTag");
-					tag.setVisible(!tag.visible);
+					// При множественном выборе.
+					//tag.setVisible(!tag.visible);
+					// При одиночном.
+					tag.activate();
 				});
 			});
+			
 			// При включении/отключении тэгов, формируем 
 			PermGuide.ApplicationData.attachListener("visibleChanged", function (applicationData){
 				
+				// Переберем все тэги, и раставим классы в зависимости виден данный
+				// тэг или нет.
+				$(".tag").each( function() {
+					var tagId = $(this).attr("_id");
+					var tag = applicationData.getTagById(tagId);
+					if (tag == null)
+						return;
+					if (tag.visible)
+						$(this).addClass("visibledTag");
+					else
+						$(this).removeClass("visibledTag");
+				});
+				
+				// Перерендарим каталоги.
 				$("#objectsCatalog .vScroller").html(
 					$( "#catalogItemTemplate" ).render(applicationData.getVisibleObjects("objects"))
 				);
 				$("#routesCatalog .vScroller").html(
 					$( "#catalogItemTemplate" ).render(applicationData.getVisibleObjects("routes"))
 				);
-				
+				// Повешаем на вубор объекта из каталога, событие.
 				$(".catalogItem").touchclick( function (event) {
 					var objectId = $(event.target).attr("_id");
 					var object = applicationData.getObjectById(objectId);
@@ -148,7 +162,6 @@
 			});
 			
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
-				
 				// Сбросим позицию дива.
 				$("#objectInfo .vScroller").data().resetPosition();
 				// Сгенерируем из шаблона новую информацию об объекте.

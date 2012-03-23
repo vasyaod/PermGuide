@@ -15,7 +15,7 @@
 				var separatorHeight =  $(state.element).parent().children(".dropDownMenuSeparator").height();
 				var contentHeight = $(state.element).find(".vScroller").height()+10;
 				var dropdownmenuHeight = (contentHeight+separatorHeight);
-				alert(dropdownmenuHeight);
+				//alert(dropdownmenuHeight);
 				$(state.element).css("height", dropdownmenuHeight+"px");
 				$(state.element).find(".dropDownMenuContent").css("height", contentHeight+"px");
 				$(state.element).find(".toggleButton").css("height", separatorHeight+"px");

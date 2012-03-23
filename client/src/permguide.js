@@ -327,15 +327,30 @@ PermGuide.ApplicationData = {
 			tag.name = PermGuide.Language.getString(tag.name);
 			tag.isObjectTag = false;
 			tag.isRouteTag = false;
-			tag.visible = true;
+			tag.visible = false;
 			tag.setVisible = $.proxy(function(value) {
 				if (this.visible != value) {
 					this.visible = value;
 					
 					// Генерируем событие, что видимость метки изменилась.
 					PermGuide.ApplicationData.notify("visibleChanged", PermGuide.ApplicationData);
-					}
-				}, tag);
+				}
+			}, tag);
+			tag.activate = $.proxy(function(value) {
+				if (this.visible == true) 
+					return;
+					
+				if (this.isObjectTag)
+					PermGuide.ApplicationData._setVisibleTags("objects", false);
+				if (this.isRouteTag)
+					PermGuide.ApplicationData._setVisibleTags("routes", false);
+				
+				this.visible = true;
+				
+				// Генерируем событие, что видимость метки изменилась.
+				PermGuide.ApplicationData.notify("visibleChanged", PermGuide.ApplicationData);
+				
+			}, tag);
 		});
 		
 		// Формируем ассоциативный массив из тэгов, где название
@@ -403,7 +418,11 @@ PermGuide.ApplicationData = {
 			route.tagIds = route.tags;
 			route.tags = newTags;
 		}, this));
-
+		
+		// Сделаем активным первый тэг в каждом режиме.
+		this.getRouteTags()[0].visible = true;
+		this.getObjectTags()[0].visible = true;
+		
 		this.loaded = true;
 		// Генирируем событие, о том что данные загружены и готовы к использованию.
 		this.notify("loaded", this);
@@ -415,14 +434,16 @@ PermGuide.ApplicationData = {
 	_setVisibleTags: function (mode, flag) {
 		
 		if (mode == "objects") {
-/*			
 			$.each(this.data.tags, function(index, tag) {	
 				if (tag.isObjectTag)
-					tag.visible
+					tag.visible = flag;
 			});
-*/			
-		} else if (mode == "routes") {
 			
+		} else if (mode == "routes") {
+			$.each(this.data.tags, function(index, tag) {	
+				if (tag.isRouteTag)
+					tag.visible = flag;
+			});
 		} else {
 			alert("mode not found.");
 		}
