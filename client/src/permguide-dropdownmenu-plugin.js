@@ -11,16 +11,45 @@
 			};
 			state.position = $(this).offset();
 			
-			$(this).children(".toggleButton").touchclick( function (event){
-				var topPosition = 0;
-				if (!state.closed)
-					topPosition = state.position.top;
+			var close = function() {
+				if (state.closed)
+					return;
+
 				state.closed = !state.closed;
-				
+				var topPosition = state.position.top;
+
+				$(".dropDownMenuBg").css("display", "none");
 				$(state.element).animate({
 					top: topPosition
 				}, 500);
+			};
+			
+			var open = function() {
+				if (!state.closed)
+					return;
+
+				state.closed = !state.closed;
+				var topPosition = 0;
+
+				$(".dropDownMenuBg").css("display", "block");
+				$(state.element).animate({
+					top: topPosition
+				}, 500);
+			};
+			
+			$(this).children(".toggleButton").touchclick( function (event){
+				if (state.closed)
+					open();
+				else
+					close();
 			});
+
+			$(this).touchclick( function (event){
+			}, true);
+
+			$(".dropDownMenuBg").touchclick( function (event){
+				close();
+			}, true);
 		});
 	};	
 
