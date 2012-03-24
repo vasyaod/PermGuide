@@ -18,6 +18,7 @@
 		<script type="text/javascript" src="permguide-observable.js"></script>
 		<script type="text/javascript" src="permguide-scrollable-plugin.js"></script>
 		<script type="text/javascript" src="permguide-dropdownmenu-plugin.js"></script>
+		<script type="text/javascript" src="permguide-slider-plugin.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
@@ -27,21 +28,6 @@
 			// Зададим мертвый радиус для клика в процентах экрана.
 			//PermGuide.deadRadius = $(window).width()*0.04;
 			PermGuide.deadRadius = 20;
-				
-			////
-			// Это такой хитрый способ, выстроить дивы в линейку.
-			var slideToLine = function() {
-//				$(".slide").css("width", "100%");
-//				$("#slideContainer").css("width", "100%");
-				$("#slideContainer").css("width", $("#pageSlider").width()*$(".slide").length);
-				$(".slide").css("width", $("#pageSlider").width());
-			};
-			slideToLine();
-			$(window).resize(function() {
-				// Пересчитаем нашу линейку сладов.
-				slideToLine();
-				PermGuide.PageSlider.refresh();
-			});
 			
 			////
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
@@ -57,43 +43,47 @@
 			$(".dropDownMenu").dropdownmenu();
 
 			////
+			// Инициализируем слайдер страниц.
+			//PermGuide.PageSlider.init($("#slideContainer"));
+			$("#slideContainer").slider();
+
+			////
 			// Инициализируем окна информации.
 			PermGuide.ObjectInfoWindow.init($("#objectInfo"));
 
-			////
-			// Инициализируем слайдер страниц.
-			PermGuide.PageSlider.init($("#slideContainer"));
+			var pageSlider = $("#slideContainer").data("state");
 			
 			// Устанавливает обработчик переключения страниц.
-			PermGuide.PageSlider.listener = function(index) {
+			pageSlider.listener = function(index) {
+				//alert("listener: "+index);
 				$(".pageIndicator").css("background-color","#eeeeee");
 				$(".pageIndicator").slice(index, index+1).css("background-color","#666666");
 			};
-			PermGuide.PageSlider.listener(0); // Подсветим сразуже первую страницу.
+			pageSlider.listener(0); // Подсветим сразуже первую страницу.
 			
 			$(".pageIndicator").touchclick( function(event) {
-				PermGuide.PageSlider.select(parseInt($(event.target).text())-1);
+				pageSlider.select(parseInt($(event.target).text())-1);
 			});
 			
 			$("#nextButton").touchclick( function(event) {
-				PermGuide.PageSlider.next();
+				pageSlider.next();
 			});
 			
 			$("#prevButton").touchclick( function(event) {
-				PermGuide.PageSlider.prev();
+				pageSlider.prev();
 			});
 			
 			// Вешаем на скроллер события тача.
 			$("#pageScroller").touchstart( function(event) {
-				PermGuide.PageSlider.down(event);
+				pageSlider.down(event);
 			});
 			
 			$("#pageScroller").touchmove( function(event) {
-				PermGuide.PageSlider.move(event);
+				pageSlider.move(event);
 			});
 
 			$("#pageScroller").touchend( function(event) {
-				PermGuide.PageSlider.up(event);
+				pageSlider.up(event);
 			});
 			////
 
@@ -128,6 +118,21 @@
 					// При одиночном.
 					tag.activate();
 				});
+				
+				// Заполним слайдер меток.
+				$("#objectTagsSlider").html(
+					$( "#tagSlideTemplate" ).render(applicationData.getObjectTags())
+				);
+				
+				$("#objectTagsSlider").slider();
+				
+				$("#objectTagsSlider").data("state").listener = function(index, element) {
+					var tagId = element.attr("_id");
+					var tag = PermGuide.ApplicationData.getTagById(tagId);
+					if (tag == null)
+						return;
+					tag.activate();
+				};
 			});
 			
 			// При включении/отключении тэгов, формируем 
@@ -145,6 +150,10 @@
 					else
 						$(this).removeClass("visibledTag");
 				});
+				
+				// Спозиционируем слайдер.
+				var tag = applicationData.getVisibleObjectTags()[0];
+				$("#objectTagsSlider").data("state").selectByAttr("_id", tag.id);
 				
 				// Перерендарим каталоги.
 				$("#objectsCatalog .vScroller").html(
@@ -282,6 +291,13 @@
 			<div>{{:name}}</div>
 			<div>{{:description}}</div>
 		</script>
+		
+		<!-- 
+			Шаблон слайда метки.
+		-->
+		<script id="tagSlideTemplate" type="text/x-jsrender">
+			<div class="slide tagSlide" _id="{{:id}}">{{:name}}</div>
+		</script>
 	</head>
 	<body>
 		<div id="body">
@@ -300,18 +316,18 @@
 			</div>
 			
 			<div id="pageSlider">
-				<div id="slideContainer">
+				<div id="slideContainer" class="slider">
 					<!-- 
 						Для для программы сладера страниц, ваден только элемент с
 						классом "slide", который и является страницей.
 					 -->
-					<div class="slide">
+					<div class="slide pageSlide">
 						<div style="height: 100%;">
 							<div class="i18n" style="padding-top: 30%">Intro</div>
 						</div> 
 					</div>
 					
-					<div class="slide">
+					<div class="slide pageSlide">
 						<div id="objectTags" class="dropDownMenu">
 							<!--
 								В выподающем окне, для скрипта важен только элемент 
@@ -324,15 +340,15 @@
 								</div>
 							</div>
 							<div class="toggleButton">
-								<table border="0" cellpadding="0" cellspacing="0" style="width: 100%; height: 100%">
-									<tr>
-										<td class="i18n" style="text-align: center;">ТoggleButton</td>
-										<td id="switchObjectMode" style="width: 15%; background-color: #000000; color: #eeeeee">
-											<div class="on">списком</div>
-											<div class="off">на карте</div>
-										</td>
-									</tr>
-								</table>
+								<div class="tagSliderBg">
+									<div id="objectTagsSlider" class="slider">
+										
+									</div>
+								</div>
+								<div id="switchObjectMode" style="width: 15%; height: 100%; background-color: #000000; color: #eeeeee; float: left;">
+									<div class="on">списком</div>
+									<div class="off">на карте</div>
+								</div>
 							</div>
 						</div>
 						<div class="dropDownMenuSeparator">
@@ -350,7 +366,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="slide">
+					<div class="slide pageSlide">
 					
 						<div id="routeTags" class="dropDownMenu">
 							<!--

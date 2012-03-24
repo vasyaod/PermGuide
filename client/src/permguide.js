@@ -2,182 +2,6 @@
 if(typeof PermGuide == "undefined")
 	PermGuide = {};
 
-/**
- * Слайдер страниц (или если угодно дивов).
- * 
- * В будущем слайдер нужно будет допилить, до нормального состояния. 
- * Сделать:
- *   - перемотку програмную страниц
- *   - оформить в виде плагина к jQuery
- *   - оформить код (в текущей версии код просто спизжен с кокогото сайта.)
- */
-PermGuide.PageSlider = {
-
-	/**
-	 * Индекс текущего слайда.
-	 */
-	index: 0,
-	
-	/**
-	 * Флаг режима перетаскивания окна.
-	 */
-	draged: false,
-	
-	moved: false,
-	
-	/**
-	 * Флаг, того, можно ли двигать слады.
-	 */
-	canDraged: true,
-	
-	/**
-	 * Слушатель событий, переключения страниц.
-	 */
-	listener: null,
-	
-	init: function(containerElement) { 
-		var self = this;
-		
-		this.containerElement = containerElement;
-		// 
-		$(this.containerElement).offset({});
-		
-		this.containerPosition = $(this.containerElement).position();
-		this.slideWidth = $(this.containerElement).children(".slide").width();
-		this.slideCount = $(this.containerElement).children(".slide").length;
-		this.index = 0;
-		
-		$(this.containerElement).touchstart( function(event) {
-			self.down(event);
-		});
-		
-		$(this.containerElement).touchmove( function(event) {
-			self.move(event);
-		});
-
-		$(this.containerElement).touchend( function(event) {
-			self.up(event);
-		});
-		
-	},
-	
-	// 
-	select: function(index) {
-		if (this.index == index)
-			return;
-		this.index = index;
-		
-		if (this.index < 0)
-			this.index = 0;
-		if (this.index == this.slideCount)
-			this.index =  this.slideCount-1;
-
-		if (this.listener != null)
-			this.listener(this.index);
-		this.refresh();
-	},
-	
-	down: function(event) {
-		
-		if (!this.canDraged)
-			return;
-		
-		this.x = event.changedTouches[0].clientX;
-		this.y = event.changedTouches[0].clientY;
-		this.containerPosition = $(this.containerElement).offset();
-		
-		this.draged = true;
-		this.moved = false;
-	},
-	
-	move: function(event) {
-		
-		if (!this.draged)
-			return;
-		var tX = event.changedTouches[0].clientX;
-		var tY = event.changedTouches[0].clientY;
-		// Если сдвиг не очень большой, то стоим на месте.
-		if (!this.moved && Math.abs(tX - this.x) < PermGuide.deadRadius)
-			return;
-		this.moved = true;
-		
-		$(this.containerElement).offset({ 
-//			top:  this.containerPosition.top, 
-			left: this.containerPosition.left + (tX - this.x) 
-		});
-	},
-	
-	next: function() {
-		if (this.index == this.slideCount-1)
-			return;
-		
-		this.index ++;
-		if (this.listener != null)
-			this.listener(this.index);
-		this.refresh();
-	},
-	
-	prev: function() {
-		if (this.index == 0)
-			return;
-		
-		this.index --;
-		if (this.listener != null)
-			this.listener(this.index);
-		this.refresh();
-	},
-	
-	refresh: function() {
-		if (this.index < 0)
-			this.index = 0;
-		if (this.index == this.slideCount)
-			this.index =  this.slideCount-1;
-		
-		var position = $(this.containerElement).children(".slide").slice(this.index).position().left
-		
-		var self = this;
-		this.canDraged = false;
-		$(this.containerElement).animate({
-			left: -position
-		}, 500, function() {
-			self.canDraged = true;
-		});
-	
-	},
-	
-	up: function(event) {
-
-		if (!this.draged)
-			return;
-		this.draged = false;
-		
-		if (!this.moved)
-			return;
-		this.moved = false;
-		
-		var tX = event.changedTouches[0].clientX;
-		var tY = event.changedTouches[0].clientY;
-	
-		if (Math.abs(tX - this.x) > this.slideWidth/4)
-		{
-			if ((tX - this.x) < 0)
-			{
-				this.index ++;
-				if (this.listener != null && this.index < this.slideCount)
-					this.listener(this.index);
-			}
-			else
-			{
-				this.index --;
-				if (this.listener != null && this.index >= 0)
-					this.listener(this.index);
-			}
-		}
-		
-		this.refresh();
-	}
-};
-
 PermGuide.ObjectInfoWindow = {
 		// Состоние окна.
 		closed: true,
@@ -306,6 +130,32 @@ PermGuide.ApplicationData = {
 		var res = [];
 		$(this.data.tags).each(function(){
 			if (this.isRouteTag)
+				res.push(this);
+		});
+		return res;
+	},
+	
+	/**
+	 * Возвращает список видимых тэгов принадлежащих объектам.
+	 */
+	getVisibleObjectTags: function()
+	{	
+		var res = [];
+		$(this.data.tags).each(function(){
+			if (this.isObjectTag && this.visible)
+				res.push(this);
+		});
+		return res;
+	},
+	
+	/**
+	 * Возвращает список видимых тэгов принадлежащих маршрутам.
+	 */
+	getVisibleRouteTags: function()
+	{	
+		var res = [];
+		$(this.data.tags).each(function(){
+			if (this.isRouteTag && this.visible)
 				res.push(this);
 		});
 		return res;
