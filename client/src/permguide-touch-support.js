@@ -38,10 +38,10 @@ PermGuide.deadRadius = 15;
 			$(this).on("mousedown", newFn);
 		};
 		
-		$.fn.touchmove = function(fn, propagation) {
+		$.fn.touchmove = function(fn, stopPropagation) {
 			var newFn = function (event)
 			{
-				if (propagation)
+				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
 				fn({
@@ -63,10 +63,10 @@ PermGuide.deadRadius = 15;
 			$(this).on("mousemove", newFn);
 		};
 		
-		$.fn.touchend = function(fn, propagation) {
+		$.fn.touchend = function(fn, stopPropagation) {
 			var newFn = function (event)
 			{
-				if (propagation)
+				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
 				fn({
@@ -88,13 +88,13 @@ PermGuide.deadRadius = 15;
 			$(this).on("mouseup", newFn);
 		};
 		
-		$.fn.touchclick = function(fn, propagation) {
+		$.fn.touchclick = function(fn, stopPropagation) {
 			
 			var touchclickState = null;
 			
 			var downHandler = function (event)
 			{
-				if (propagation)
+				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
 				touchclickState = {
@@ -105,7 +105,7 @@ PermGuide.deadRadius = 15;
 			
 			var upHandler = function (event)
 			{
-				if (propagation)
+				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
 				if (touchclickState == null)
@@ -139,10 +139,10 @@ PermGuide.deadRadius = 15;
 		};
 	} else {
 		// Если тач поддерживается, то используем нужные события.
-		$.fn.touchstart = function(fn, propagation) {
+		$.fn.touchstart = function(fn, stopPropagation) {
 			var newFn = function (event)
 			{
-				if (propagation)
+				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
 				fn(event);
@@ -152,10 +152,10 @@ PermGuide.deadRadius = 15;
 			});		
 		};
 		
-		$.fn.touchmove = function(fn, propagation) {
+		$.fn.touchmove = function(fn, stopPropagation) {
 			var newFn = function (event)
 			{
-				if (propagation)
+				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
 				fn(event);
@@ -165,10 +165,10 @@ PermGuide.deadRadius = 15;
 			});		
 		};
 		
-		$.fn.touchend = function(fn, propagation) {
+		$.fn.touchend = function(fn, stopPropagation) {
 			var newFn = function (event)
 			{
-				if (propagation)
+				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
 				fn(event);
@@ -178,13 +178,13 @@ PermGuide.deadRadius = 15;
 			});		
 		};	
 
-		$.fn.touchclick = function(fn, propagation) {
+		$.fn.touchclick = function(fn, stopPropagation) {
 			
 			var touchclickState = null;
 			
 			var downHandler = function (event)
 			{
-				if (propagation)
+				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
 				touchclickState = {
@@ -195,6 +195,8 @@ PermGuide.deadRadius = 15;
 			
 			var upHandler = function (event)
 			{
+				if (stopPropagation)
+					event.stopPropagation();
 				event.preventDefault();
 				if (touchclickState == null)
 					return;

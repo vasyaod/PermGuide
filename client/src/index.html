@@ -1,7 +1,9 @@
 <html>
 	<head>
-		<title>PhoneGap</title>
+		<title>Perm guide</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, target-densitydpi=device-dpi" />
+		
 		<link rel="stylesheet" type="text/css" href="style.css" />
 
 		<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
@@ -155,20 +157,36 @@
 						$(this).removeClass("visibledTag");
 				});
 				
-				// Спозиционируем слайдер.
-				var tag = applicationData.getVisibleObjectTags()[0];
-				$("#objectTagsSlider").data("state").selectByAttr("_id", tag.id);
+				// Спозиционируем слайдеры.
+				var objectTag = applicationData.getVisibleObjectTags()[0];
+				$("#objectTagsSlider").data("state").selectByAttr("_id", objectTag.id);
+				var routeTag = applicationData.getVisibleRouteTags()[0];
+				$("#routeTagsSlider").data("state").selectByAttr("_id", routeTag.id);
 				
+				////
 				// Перерендарим каталоги.
+				var objects; 
+				objects = applicationData.getVisibleObjects("objects");
+				// Надо раскрасить объекты перед рендорингом.
+				$(objects).each(function(){
+					this.color = objectTag.color;
+				});
 				$("#objectsCatalog .vScroller").html(
-					$( "#catalogItemTemplate" ).render(applicationData.getVisibleObjects("objects"))
+					$( "#catalogItemTemplate" ).render(objects)
 				);
+				// Надо раскрасить объекты перед рендорингом.
+				objects = applicationData.getVisibleObjects("routes");
+				$(objects).each(function(){
+					this.color = routeTag.color;
+				});
 				$("#routesCatalog .vScroller").html(
-					$( "#catalogItemTemplate" ).render(applicationData.getVisibleObjects("routes"))
+					$( "#catalogItemTemplate" ).render(objects)
 				);
+				
+				////
 				// Повешаем на вубор объекта из каталога, событие.
 				$(".catalogItem").touchclick( function (event) {
-					var objectId = $(event.target).attr("_id");
+					var objectId = $(event.target).parent().attr("_id");
 					var object = applicationData.getObjectById(objectId);
 					PermGuide.ApplicationData.selectObject(object);
 				});
@@ -176,7 +194,7 @@
 			
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
 				// Сбросим позицию дива.
-				$("#objectInfo .vScroller").data().resetPosition();
+				$("#objectInfo .vScroller").data("state").resetPosition();
 				// Сгенерируем из шаблона новую информацию об объекте.
 				$("#objectInfo .vScroller").html(
 					$( "#objectInfoTemplate" ).render([object])
@@ -291,7 +309,12 @@
 			Шаблон пункта в каталоге.
 		-->
 		<script id="catalogItemTemplate" type="text/x-jsrender">
-			<div class="catalogItem" _id="{{:id}}">{{:name}}</div>
+			<div class="catalogItem" _id="{{:id}}">
+				<div class="color" style="background-color: {{:color}};" ></div>
+				<div class="separator"></div>
+				<div class="name">{{:name}}</div>
+				<div class="foground"></div>
+			</div>
 		</script>
 
 		<!-- 
@@ -371,7 +394,7 @@
 						<div id="objectsMap" class="map"></div>
 						
 						<div id="objectsCatalog" class="catalog">
-							<div class="vScroller"> 
+							<div class="vScroller" stopPropagation="true"> 
 								Каталог пуст.
 							</div>
 						</div>
@@ -412,7 +435,7 @@
 						<div id="routesMap" class="map"></div>
 						
 						<div id="routesCatalog" class="catalog">
-							<div class="vScroller"> 
+							<div class="vScroller" stopPropagation="true"> 
 								Каталог пуст.
 							</div>
 						</div>

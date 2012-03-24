@@ -179,6 +179,55 @@ div {
 	width: 4%; 
 }
 /**
+ * Стили пункта катлога.
+ */
+.catalog {
+	position: relative;
+	background-color: #e5e5e5;
+}
+
+.catalogItem {
+	padding: 2px;
+	position: relative;
+	font-size: 1em;
+	height: 2em;
+	color: #000;
+}
+
+.catalogItem:nth-child(odd){
+	background-color: #cccccc;
+}
+.catalogItem:nth-child(even){
+	background-color: #e5e5e5;
+}
+
+.catalogItem .color {
+	width: 1%; 
+	height: 100%;
+	float:left;
+}
+
+.catalogItem .separator {
+	width: 5%; 
+	height: 100%;
+	float:left;
+}
+
+.catalogItem .name {
+	width: 85%; 
+	height: 100%;
+	float:left;
+	text-align: left;
+}
+
+.catalogItem .foground {
+	width: 100%; 
+	height: 100%;
+	position: absolute;
+	cursor: pointer;
+}
+
+/**
  * Стили скроллера страниц.
  */
 

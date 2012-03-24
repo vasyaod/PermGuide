@@ -13,22 +13,33 @@ if(typeof PermGuide == "undefined")
 			var state = {
 				containerElement: this,
 				draged: false,
-				canDraged: true
+				canDraged: true,
+				
+				/**
+				 * Метод сбрасывает позицию скроллера.
+				 */
+				resetPosition: function()
+				{	/*
+					var parentPosition = $(this.containerElement).parent().position().top;
+					$(this.containerElement).animate({
+						top: parentPosition
+					}, 200, function() {
+						self.canDraged = true;
+					});
+					*/
+					//$(this.containerElement).offset({ 
+					//	top:  0 
+					//});
+					$(this.containerElement).css("top", "0px")
+				}
+				
 			};
 			
-			state.resetPosition = $.proxy(function()
-			{	
-				var parentPosition = $(this.containerElement).parent().position().top;
-				$(this.containerElement).animate({
-					top: parentPosition
-				}, 200, function() {
-					self.canDraged = true;
-				});
-				
-				//$(this.containerElement).offset({ 
-				//	top:  0 
-				//});
-			}, state);
+			var stopPropagation = $(this).attr("stopPropagation");
+			if (stopPropagation)
+				stopPropagation = true;
+			else
+				stopPropagation = false;
 			
 			$(window).resize(function() {
 				state.resetPosition();
@@ -43,7 +54,7 @@ if(typeof PermGuide == "undefined")
 				this.containerPosition = $(this.containerElement).offset();
 				
 				this.draged = true;
-			}, state));
+			}, state), stopPropagation);
 			
 			$(this).touchmove( $.proxy(function(event) {
 				
@@ -56,7 +67,7 @@ if(typeof PermGuide == "undefined")
 //					left: this.containerPosition.left, 
 				});
 				
-			}, state));
+			}, state), stopPropagation);
 			
 			$(this).touchend( $.proxy(function(event) {
 				
@@ -69,7 +80,7 @@ if(typeof PermGuide == "undefined")
 				var parentHeight = $(this.containerElement).parent().height();
 				var height = $(this.containerElement).height();
 				var position = $(this.containerElement).position().top;
-				var parentPosition = $(this.containerElement).parent().position().top;
+				var parentPosition = 0;//$(this.containerElement).parent().offset().top;
 				
 				if(height > parentHeight)
 				{
@@ -102,10 +113,10 @@ if(typeof PermGuide == "undefined")
 					self.canDraged = true;
 				});
 			
-			}, state));
+			}, state), stopPropagation);
 
 			// Сохраним состояние внутри элемента.
-			$(this).data(state);
+			$(this).data("state", state);
 		});
 	};
 })(jQuery);

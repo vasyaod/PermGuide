@@ -202,7 +202,7 @@ if(typeof PermGuide == "undefined")
 			};
 			
 			// Сохраним состояние внутри элемента.
-			$(this).data("state",state);
+			$(this).data("state", state);
 			state.init(this);
 		});
 	};
