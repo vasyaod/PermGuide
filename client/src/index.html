@@ -56,21 +56,14 @@
 			// Устанавливает обработчик переключения страниц.
 			pageSlider.listener = function(index) {
 				//alert("listener: "+index);
-				$(".pageIndicator").css("background-color","#eeeeee");
-				$(".pageIndicator").slice(index, index+1).css("background-color","#666666");
+				$(".pageIndicator").removeClass("active");
+				$(".pageIndicator").slice(index, index+1).addClass("active");
 			};
 			pageSlider.listener(0); // Подсветим сразуже первую страницу.
 			
 			$(".pageIndicator").touchclick( function(event) {
-				pageSlider.select(parseInt($(event.target).text())-1);
-			});
-			
-			$("#nextButton").touchclick( function(event) {
-				pageSlider.next();
-			});
-			
-			$("#prevButton").touchclick( function(event) {
-				pageSlider.prev();
+				var pageId = parseInt($(event.target).parent().attr("_id"));
+				pageSlider.select(pageId);
 			});
 			
 			// Вешаем на скроллер события тача.
@@ -353,7 +346,7 @@
 							<div class="toggleButton">
 								<div class="tagSliderBg">
 									<div id="objectTagsSlider" class="slider tagSlider">
-										
+										<!--  Заполняется шаблонизатором, см. код -->
 									</div>
 								</div>
 								<div id="switchObjectMode" style="width: 15%; height: 100%; background-color: #000000; color: #eeeeee; float: left;">
@@ -393,7 +386,7 @@
 							<div class="toggleButton">
 								<div class="tagSliderBg">
 									<div id="routeTagsSlider" class="slider tagSlider">
-										
+										<!--  Заполняется шаблонизатором, см. код -->
 									</div>
 								</div>
 								<div id="switchRouteMode" style="width: 15%; background-color: #000000; color: #eeeeee; float: left; height: 100%">
@@ -419,25 +412,32 @@
 						</div>
 						
 					</div>
+					<div class="slide pageSlide">
+						Раздел полезное!
+					</div>
 				</div>
 				<div id="pageScroller">
-					<table border="0" cellpadding="0" cellspacing="0">
-						<tr>
-							<td>
-								<div id="prevButton" class="i18n">PrevButton</div>
-							</td>
-							<!-- 
-								Внимание! От содержимого ячеек зависит их кликабильность
-							 	смотрите код!
-							-->
-							<td><div class="pageIndicator">1</div></td>
-							<td><div class="pageIndicator">2</div></td>
-							<td><div class="pageIndicator">3</div></td>
-							<td style="text-align: right;">
-								<div id="nextButton" class="i18n">NextButton</div>
-							</td>
-						</tr>
-					</table>
+					<div id="pMain" _id="0" class="pageIndicator">
+							
+								<div class="pagePicture"></div>
+								<div class="pageCaption">Пермский гид</div>
+								<div class="pageIndicatorFoground"></div>
+					</div>
+					<div id="pObjects" _id="1" class="pageIndicator">
+								<div class="pagePicture"></div>
+								<div class="pageCaption">Места</div>
+								<div class="pageIndicatorFoground"></div>
+					</div>
+					<div id="pWays" _id="2" class="pageIndicator">
+								<div class="pagePicture"></div>
+								<div class="pageCaption">Маршруты</div>
+								<div class="pageIndicatorFoground"></div>
+					</div>
+					<div id="pInfo" _id="3" class="pageIndicator">
+								<div class="pagePicture"></div>
+								<div class="pageCaption">Пелезное</div>
+								<div class="pageIndicatorFoground"></div>
+					</div>
 				</div>			
 			</div>
 	

@@ -132,36 +132,97 @@ div {
  */
 
 #pageScroller {
-	height: 7%;
-}
-
-#pageScroller table {
-	width: 100%;
+	height: 8%;
+	border-top: 2px #ff0000 solid;
 }
 
 #pageScroller .pageIndicator {
+	width: 25%;
+	height: 100%;
+	position: relative;
+	float: left;
 	text-align: center;
+	
+	vertical-align: bottom;
+	padding-bottom: 2px;
+	font-size: 0.8em;
+}
+
+#pageScroller .pageIndicator .pageIndicatorFoground{
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+#pageScroller .active {
+	border-top: 2px solid #F00;
+}
+#pageScroller .pageIndicator .pagePicture{
+	width: 100%;
+	height: 44px;
+	background-position: center top;
+	background-repeat: no-repeat;
+}
+
+#pageScroller #pMain.pageIndicator .pagePicture{
+	background-image: url('img/perm2.png');
+}
+
+#pageScroller #pObjects.pageIndicator .pagePicture{
+	background-image: url('img/map2.png');
+}
+
+#pageScroller #pWays.pageIndicator .pagePicture{
+	background-image: url('img/way2.png');
+}
+
+#pageScroller #pInfo.pageIndicator .pagePicture{
+	background-image: url('img/about2.png');
+	background-position: center -2px;
+}
+
+#pageScroller #pMain.pageIndicator.active .pagePicture{
+	background-image: url('img/perm1.png');
+	background-position: center -2px;
+}
+
+#pageScroller #pObjects.pageIndicator.active .pagePicture{
+	background-image: url('img/map1.png');
+	background-position: center -2px;
+}
+
+#pageScroller #pWays.pageIndicator.active .pagePicture{
+	background-image: url('img/way1.png');
+	background-position: center -2px;
+}
+
+#pageScroller #pInfo.pageIndicator.active .pagePicture{
+	background-image: url('img/about1.png');
+	background-position: center -2px;
 }
 
 /**
  * Стили сладера страниц.
  */ 
 #pageSlider {
+	top: 0px;
+	left: 0px;
 	width: 100%;
 	height: 100%;
+	
 	overflow: hidden;
 	border: 0px;
 	margin: 0 auto;
 	visibility: hidden;
 	position: absolute;
-	top: 0px;
-	left: 0px;
 	position: relative;
 }
 
 #slideContainer {
 	width: 100%;
-	height: 94%;
+	height: 92%;
 }
 
 .pageSlide {
@@ -210,14 +271,12 @@ div {
 	left: 0px;
 }
 
-.map
-{
+.map {
 	height: 93%; 
 	position: relative;
 }
 
-.catalog
-{
+.catalog {
 	height: 93%; 
 	overflow: hidden;
 	display: none;
