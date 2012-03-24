@@ -177,10 +177,14 @@ div {
  */ 
 .tagSliderBg {
 	text-align: center; 
-	overflow: hidden; 
+	overflow: hidden;
+	position: relative;
 	width: 85%; 
 	height: 100%; 
 	float: left;
+}
+
+.tagSlider {
 }
 
 .tagSlide {

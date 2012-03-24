@@ -124,7 +124,11 @@
 					$( "#tagSlideTemplate" ).render(applicationData.getObjectTags())
 				);
 				
-				$("#objectTagsSlider").slider();
+				$("#routeTagsSlider").html(
+					$( "#tagSlideTemplate" ).render(applicationData.getRouteTags())
+				);
+				
+				$(".tagSlider").slider();
 				
 				$("#objectTagsSlider").data("state").listener = function(index, element) {
 					var tagId = element.attr("_id");
@@ -133,6 +137,13 @@
 						return;
 					tag.activate();
 				};
+				$("#routeTagsSlider").data("state").listener = function(index, element) {
+					var tagId = element.attr("_id");
+					var tag = PermGuide.ApplicationData.getTagById(tagId);
+					if (tag == null)
+						return;
+					tag.activate();
+				};				
 			});
 			
 			// При включении/отключении тэгов, формируем 
@@ -341,7 +352,7 @@
 							</div>
 							<div class="toggleButton">
 								<div class="tagSliderBg">
-									<div id="objectTagsSlider" class="slider">
+									<div id="objectTagsSlider" class="slider tagSlider">
 										
 									</div>
 								</div>
@@ -380,15 +391,15 @@
 								</div>
 							</div>
 							<div class="toggleButton">
-								<table border="0" cellpadding="0" cellspacing="0" style="width: 100%; height: 100%">
-									<tr>
-										<td class="i18n" style="text-align: center;">ТoggleButton</td>
-										<td id="switchRouteMode" style="width: 15%; background-color: #000000; color: #eeeeee">
-											<div class="on">списком</div>
-											<div class="off">на карте</div>
-										</td>
-									</tr>
-								</table>
+								<div class="tagSliderBg">
+									<div id="routeTagsSlider" class="slider tagSlider">
+										
+									</div>
+								</div>
+								<div id="switchRouteMode" style="width: 15%; background-color: #000000; color: #eeeeee; float: left; height: 100%">
+									<div class="on">списком</div>
+									<div class="off">на карте</div>
+								</div>
 							</div>
 						</div>
 
