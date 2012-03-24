@@ -102,7 +102,7 @@
 				$("#routeTags").data().resize();   // Обновим размеры.
 				
 				$(".tag").touchclick( function (event) {
-					var tagId = $(event.target).attr("_id");
+					var tagId = $(event.target).parent().attr("_id");
 					var tag = applicationData.getTagById(tagId);
 					if (tag == null)
 						return;
@@ -278,7 +278,12 @@
 			Шаблон тэгов в выподающем окне.
 		-->
 		<script id="tagTemplate" type="text/x-jsrender">
-			<div class="tag{{if visible}} visibledTag{{/if}}" _id="{{:id}}">{{:name}}</div>
+			<div class="tag{{if visible}} visibledTag{{/if}}" _id="{{:id}}">
+				<div class="color" style="background-color: {{:color}};" ></div>
+				<div class="name">{{:name}}</div>
+				<div class="picture" style="background-image: url('{{:picture}}');"></div>
+				<div class="foground"></div>
+			</div>
 		</script>
 
 		<!-- 
@@ -307,7 +312,7 @@
 		<div id="body">
 		
 			<div id="splashScreen" style="">
-				<div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div> 
+				<!-- div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div--> 
 			</div>
 	
 			<div id="langSelectScreen">
