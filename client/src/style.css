@@ -107,13 +107,13 @@ div {
 	height: 50%;
 	width:100%;
 	position: absolute;
-	background-color: #eeeeee;
+	background-color: #4c4c4c;
 }
 
 .dropDownMenu .toggleButton {
 	height: 10%;
 	text-align: center;
-	background-color: #666666;
+	background-color: #333333;
 }
 
 .dropDownMenu .dropDownMenuContent {
@@ -123,12 +123,18 @@ div {
 }
 
 .dropDownMenu .tag {
-	margin: 5px;
 	padding: 2px;
-	background-color: #bbbbbb;
 	position: relative;
-	height: 1.7em;
-	font-size: 1em;
+	height: 1.9em;
+	font-size: 1.2em;
+	color: #fff;
+}
+
+.dropDownMenu .tag:nth-child(odd){
+	background-color: #333333;
+}
+.dropDownMenu .tag:nth-child(even){
+	background-color: #4c4c4c;
 }
 
 .dropDownMenu .tag .color {
@@ -137,10 +143,17 @@ div {
 	float:left;
 }
 
-.dropDownMenu .tag .name {
-	width: 90%; 
+.dropDownMenu .tag .separator {
+	width: 5%; 
 	height: 100%; 
 	float:left;
+}
+
+.dropDownMenu .tag .name {
+	width: 85%; 
+	height: 100%; 
+	float:left;
+	text-align: left;
 }
 
 .dropDownMenu .tag .picture {
@@ -158,10 +171,13 @@ div {
 	cursor: pointer;
 }
 
-.dropDownMenu .visibledTag {
-	background-color: #888888;
+.dropDownMenu .tag.visibledTag .color{
+	width: 2%; 
 }
 
+.dropDownMenu .tag.visibledTag .separator{
+	width: 4%; 
+}
 /**
  * Стили скроллера страниц.
  */
