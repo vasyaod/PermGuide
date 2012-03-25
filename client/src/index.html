@@ -21,6 +21,7 @@
 		<script type="text/javascript" src="permguide-scrollable-plugin.js"></script>
 		<script type="text/javascript" src="permguide-dropdownmenu-plugin.js"></script>
 		<script type="text/javascript" src="permguide-slider-plugin.js"></script>
+		<script type="text/javascript" src="permguide-map.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
@@ -35,6 +36,11 @@
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
 			$(".backButton").touchclick( function () {
 				PermGuide.ObjectInfoWindow.toggle();
+			});
+			
+			// Обработчик кнопки "обновления" карты.
+			$(".loadMap").touchclick( function () {
+				PermGuide.LoadMapManager.load();
 			});
 			
 			////
@@ -254,14 +260,18 @@
 				state: true
 			});
 
+//*/
+			PermGuide.Scheduler.finished("InterfaceInit");
+		};
+		
+		mapInit = function() {
 			////
 			// Инициализация карты.
 			objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0], "objects");
 			routesMapManager = new PermGuide.MapManager(jQuery("#routesMap")[0], "routes");
 			PermGuide.LoadMapManager.load();
-//*/
 		};
-		
+
 		languageSelectInit = function() {
 			if (PermGuide.Language.languageSelected)
 			{
@@ -297,7 +307,7 @@
 		}
 		
 		$(document).ready(function() {
-			
+			// Перечисляются этапы загрузки приложения.
 			PermGuide.Scheduler.addTask("LanguageSelect",{
 				activateFn: languageSelectInit,
 				dependence: []
@@ -306,9 +316,19 @@
 				activateFn: interfaceInit,
 				dependence: ["LanguageSelect"]
 			});
+			PermGuide.Scheduler.addTask("MapInit",{
+				activateFn: mapInit,
+				dependence: ["InterfaceInit"]
+			});
+			PermGuide.Scheduler.addTask("ObjectsMapInit",{
+				dependence: ["MapInit"]
+			});
+			PermGuide.Scheduler.addTask("RoutesMapInit",{
+				dependence: ["MapInit"]
+			});
 			PermGuide.Scheduler.addTask("CloseSplash",{
 				activateFn: closeSplash,
-				dependence: ["InterfaceInit"]
+				dependence: ["ObjectsMapInit", "RoutesMapInit"]
 			});
 
 			PermGuide.Scheduler.start();
@@ -433,7 +453,11 @@
 							<!--canvas class="canvasLayer">
 								Браузер не поддерживает Canvas.
 							</canvas-->
-							<div id="objectsMap" class="map"></div>
+							<div id="objectsMap" class="map">
+								<div>Карта не была загружена</div>
+								<div>Возможно у вас отсутствует соединение с интернетом, подключитесь к интернету и нажмите "обновить".</div>
+								<div class="loadMap">Обновить</div>
+							</div>
 							
 							<div id="objectsCatalog" class="catalog vScrollerBg">
 								<div class="vScroller" stopPropagation="true"> 
@@ -478,7 +502,11 @@
 							<canvas class="canvasLayer">
 								Браузер не поддерживает Canvas.
 							</canvas>
-							<div id="routesMap" class="map"></div>
+							<div id="routesMap" class="map">
+								<div>Карта не была загружена</div>
+								<div>Возможно у вас отсутствует соединение с интернетом, подключитесь к интернету и нажмите "обновить".</div>
+								<div class="loadMap">Обновить</div>
+							</div>
 							
 							<div id="routesCatalog" class="catalog vScrollerBg">
 								<div class="vScroller" stopPropagation="true"> 

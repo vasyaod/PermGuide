@@ -105,7 +105,8 @@ PermGuide.Scheduler = {
 			if(!task.finished && !task.started) {
 				if (this.isTasksFinished(task.dependence)) {
 					task.started = true;
-					task.activateFn(taskName);
+					if (task.activateFn)
+						task.activateFn(taskName);
 				}
 			}
 		
