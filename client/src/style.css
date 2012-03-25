@@ -22,8 +22,11 @@ div {
 	height: 100%;
 	overflow: hidden;
 }
-
-.vScroller {
+.vScrollerBg {
+	overflow: hidden;
+	position: relative;
+}
+.vScrollerBg .vScroller {
 	min-height: 100%;
 }
 
@@ -102,10 +105,9 @@ div {
 .overlay {
 	position: absolute;
 	z-index: 1;
-	width: 18px;
-	height: 29px;
-	background:
-		url(http://api.yandex.ru/images/maps/ymapsml/examples/icon_station.png);
+	width: 23px;
+	height: 27px;
+	background: url(img/box_990000.png);
 	cursor: pointer;
 }
 

@@ -140,11 +140,11 @@
 			});
 			
 			// При включении/отключении тэгов, формируем 
-			PermGuide.ApplicationData.attachListener("visibleChanged", function (applicationData){
+			PermGuide.ApplicationData.attachListener("objectsVisibleChanged", function (applicationData){
 				
 				// Переберем все тэги, и раставим классы в зависимости виден данный
 				// тэг или нет.
-				$(".tag").each( function() {
+				$("#objectTags .tag").each( function() {
 					var tagId = $(this).attr("_id");
 					var tag = applicationData.getTagById(tagId);
 					if (tag == null)
@@ -158,32 +158,53 @@
 				// Спозиционируем слайдеры.
 				var objectTag = applicationData.getVisibleObjectTags()[0];
 				$("#objectTagsSlider").data("state").selectByAttr("_id", objectTag.id);
-				var routeTag = applicationData.getVisibleRouteTags()[0];
-				$("#routeTagsSlider").data("state").selectByAttr("_id", routeTag.id);
 				
 				////
 				// Перерендарим каталоги.
 				var objects; 
 				objects = applicationData.getVisibleObjects("objects");
-				// Надо раскрасить объекты перед рендорингом.
-				$(objects).each(function(){
-					this.color = objectTag.color;
-				});
 				$("#objectsCatalog .vScroller").html(
-					$( "#catalogItemTemplate" ).render(objects)
-				);
-				// Надо раскрасить объекты перед рендорингом.
-				objects = applicationData.getVisibleObjects("routes");
-				$(objects).each(function(){
-					this.color = routeTag.color;
-				});
-				$("#routesCatalog .vScroller").html(
-					$( "#catalogItemTemplate" ).render(objects)
+					$( "#objectsCatalogItemTemplate" ).render(objects)
 				);
 				
 				////
 				// Повешаем на вубор объекта из каталога, событие.
-				$(".catalogItem").touchclick( function (event) {
+				$("#objectsCatalog .catalogItem").touchclick( function (event) {
+					var objectId = $(event.target).parent().attr("_id");
+					var object = applicationData.getObjectById(objectId);
+					PermGuide.ApplicationData.selectObject(object);
+				});
+			});
+			
+			// При включении/отключении тэгов, формируем 
+			PermGuide.ApplicationData.attachListener("routesVisibleChanged", function (applicationData){
+				
+				// Переберем все тэги, и раставим классы в зависимости виден данный
+				// тэг или нет.
+				$("#routeTags .tag").each( function() {
+					var tagId = $(this).attr("_id");
+					var tag = applicationData.getTagById(tagId);
+					if (tag == null)
+						return;
+					if (tag.visible)
+						$(this).addClass("visibledTag");
+					else
+						$(this).removeClass("visibledTag");
+				});
+				
+				var routeTag = applicationData.getVisibleRouteTags()[0];
+				$("#routeTagsSlider").data("state").selectByAttr("_id", routeTag.id);
+				
+				////
+				// Перерендарим каталоги.
+				var objects = applicationData.getVisibleObjects("routes");
+				$("#routesCatalog .vScroller").html(
+					$( "#routesCatalogItemTemplate" ).render(objects)
+				);
+				
+				////
+				// Повешаем на вубор объекта из каталога, событие.
+				$("#routesCatalog .catalogItem").touchclick( function (event) {
 					var objectId = $(event.target).parent().attr("_id");
 					var object = applicationData.getObjectById(objectId);
 					PermGuide.ApplicationData.selectObject(object);
@@ -311,11 +332,17 @@
 
 		<!-- 
 			Шаблон пункта в каталоге.
-			<div style="clear: both;"></div>
 		-->
-		<script id="catalogItemTemplate" type="text/x-jsrender">
+		<script id="objectsCatalogItemTemplate" type="text/x-jsrender">
 			<div class="catalogItem" _id="{{:id}}">
-				<div class="name" style="border-left-color: {{:color}};">{{:name}}</div>
+				<div class="name" style="border-left-color: {{:objectColor}};">{{:name}}</div>
+				<div class="foground"></div>
+			</div>
+		</script>
+
+		<script id="routesCatalogItemTemplate" type="text/x-jsrender">
+			<div class="catalogItem" _id="{{:id}}">
+				<div class="name" style="border-left-color: {{:routeColor}};">{{:name}}</div>
 				<div class="foground"></div>
 			</div>
 		</script>
@@ -408,7 +435,7 @@
 							</canvas-->
 							<div id="objectsMap" class="map"></div>
 							
-							<div id="objectsCatalog" class="catalog">
+							<div id="objectsCatalog" class="catalog vScrollerBg">
 								<div class="vScroller" stopPropagation="true"> 
 									Каталог пуст.
 								</div>
@@ -453,7 +480,7 @@
 							</canvas>
 							<div id="routesMap" class="map"></div>
 							
-							<div id="routesCatalog" class="catalog">
+							<div id="routesCatalog" class="catalog vScrollerBg">
 								<div class="vScroller" stopPropagation="true"> 
 									Каталог пуст.
 								</div>
@@ -508,7 +535,7 @@
 							
 						</div>
 					</div>
-					<div class="pageContent background">
+					<div class="pageContent vScrollerBg background">
 						<div class="vScroller">
 							Информации нет!
 						</div>

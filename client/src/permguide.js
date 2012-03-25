@@ -191,15 +191,36 @@ PermGuide.ApplicationData = {
 					return;
 					
 				if (this.isObjectTag)
+				{
 					PermGuide.ApplicationData._setVisibleTags("objects", false);
+					this.visible = true;
+					
+					//var objs = PermGuide.ApplicationData.getObjectsByTags(this);
+					var objs = PermGuide.ApplicationData.getAllObjects("objects");
+					$.each(objs, function(index, object) {	
+						object.objectColor = tag.color;
+						object.objectImg = tag.picture;
+					});
+					
+					// Генерируем событие, что видимость метки изменилась.
+					PermGuide.ApplicationData.notify("objectsVisibleChanged", PermGuide.ApplicationData);
+				}
 				if (this.isRouteTag)
+				{
 					PermGuide.ApplicationData._setVisibleTags("routes", false);
-				
-				this.visible = true;
-				
-				// Генерируем событие, что видимость метки изменилась.
-				PermGuide.ApplicationData.notify("visibleChanged", PermGuide.ApplicationData);
-				
+					this.visible = true;
+					
+					//var objs = PermGuide.ApplicationData.getObjectsByTags(this);
+					var objs = PermGuide.ApplicationData.getAllObjects("routes");
+					$.each(objs, function(index, object) {	
+						object.routeColor = tag.color;
+						object.routeImg = tag.picture;
+					});
+					
+					// Генерируем событие, что видимость метки изменилась.
+					PermGuide.ApplicationData.notify("routesVisibleChanged", PermGuide.ApplicationData);
+				}
+
 			}, tag);
 		});
 		
@@ -249,6 +270,8 @@ PermGuide.ApplicationData = {
 					newTags.push(tag);
 				}
 			}, this));
+			route.tagIds = route.tags;
+			route.tags = newTags;
 			
 			// Пускай маршрут знает о своих объектах.
 			route.objects = [];
@@ -265,22 +288,26 @@ PermGuide.ApplicationData = {
 				
 			}, this));
 			
-			route.tagIds = route.tags;
-			route.tags = newTags;
 		}, this));
 		
-		// Сделаем активным первый тэг в каждом режиме.
-		this.getRouteTags()[0].visible = true;
-		this.getObjectTags()[0].visible = true;
 		
 		this.loaded = true;
 		// Генирируем событие, о том что данные загружены и готовы к использованию.
 		this.notify("loaded", this);
+
+		// Сделаем активным первый тэг в каждом режиме.
+		this.getObjectTags()[0].activate();
+		this.getRouteTags()[0].activate();
+
 		// Посылаем уведомление, о том что изменилась видимость объектов.
-		this.notify("visibleChanged", this);
+		//this.notify("visibleChanged", this);
 		
 	},
 	
+	/**
+	 * Внутренний метод. Метод устанавливает флаг видимости в зависимости
+	 * для всех тэгов в зависимости от режима
+	 */
 	_setVisibleTags: function (mode, flag) {
 		
 		if (mode == "objects") {
@@ -298,6 +325,7 @@ PermGuide.ApplicationData = {
 			alert("mode not found.");
 		}
 	},
+	
 	/**
 	 * Внутренний метод.
 	 */
@@ -365,6 +393,31 @@ PermGuide.ApplicationData = {
 	},
 	
 	/**
+	 * Метод возвращает список объектов принадлежащих данному тэгу. 
+	 */
+	getObjectsByTags: function (tag) {
+		
+		var res = [];
+		if (tag.isObjectTag) {
+			$.each(this.data.objects, $.proxy(function(index, object) {	
+				if ($.inArray(object.tags, tag)) {
+					res.push(object);
+				}
+			}, this));
+		}
+		
+		if (tag.isRouteTag) {
+			$.each(this.data.routes, $.proxy(function(index, route) {	
+				if ($.inArray(route.tags, tag)) {
+					res = res.concat(route.objects);
+				}
+			}, this));
+		}
+		
+		return res;
+	},
+	
+	/**
 	 * Возвращает список всех объектов в зависимости от режима.
 	 */
 	getAllObjects: function (mode) {
@@ -425,25 +478,27 @@ $.extend(PermGuide.ApplicationData, PermGuide.Observable);
 //Класс пользовательского оверлея, реализующего класс YMaps.IOverlay
 PermGuide.Overlay = function (geoPoint, fn) {
 	
-	var map, _this = this, offset = new YMaps.Point(-10, -29);
+	var map;
+	var offset = new YMaps.Point(-11, -13);
+	var element = $('<div class="overlay"/>');
 	
-	this.element = $('<div class="overlay"/>');
 	// Устанавливаем z-index как у метки
-	this.element.css("z-index", YMaps.ZIndex.Overlay);
+	element.css("z-index", YMaps.ZIndex.Overlay);
+	
 	if (fn != null)
-		this.element.touchclick(fn);
+		element.touchclick(fn);
 
 	// Вызывается при добавления оверлея на карту 
 	this.onAddToMap = function (pMap, parentContainer) {
 		map = pMap;
-		this.element.appendTo(parentContainer);
+		element.appendTo(parentContainer);
 		this.onMapUpdate();
 	};
 
 	// Вызывается при удаление оверлея с карты
 	this.onRemoveFromMap = function () {
-		if (this.element.parent()) {
-			this.element.remove();
+		if (element.parent()) {
+			element.remove();
 		}
 	};
 
@@ -451,11 +506,23 @@ PermGuide.Overlay = function (geoPoint, fn) {
 	this.onMapUpdate = function () {
 		// Смена позиции оверлея
 		var position = map.converter.coordinatesToMapPixels(geoPoint).moveBy(offset);
-		this.element.css({
-			left : position.x,
-			top :  position.y
+		element.css({
+			left: position.x,
+			top:  position.y
 		})
 	};
+	
+	this.refreshImage = function (img) {
+		element.css("background", "url("+img+")");
+	}
+	
+	this.hide = function () {
+		element.css("display", "none");
+	}
+
+	this.show = function () {
+		element.css("display", "block");
+	}
 }
 
 PermGuide.CanvasLayer = function (element) {
@@ -631,7 +698,7 @@ PermGuide.LoadMapManager = {
 	
 	yMapsLoaded: function() {
 		if (this.loaded)
-			return;		
+			return;
 		this.loaded = true;
 		this.notify("mapLoadSuccess", this);
 	}
@@ -674,7 +741,8 @@ PermGuide.MapManager = function (yMapElement, mode){
 		else
 			PermGuide.ApplicationData.attachListener("loaded", this.dataLoaded);
 		
-		PermGuide.ApplicationData.attachListener("visibleChanged", $.proxy(this.visibleChanged, this));
+		PermGuide.ApplicationData.attachListener("objectsVisibleChanged", $.proxy(this.visibleChanged, this));
+		PermGuide.ApplicationData.attachListener("routesVisibleChanged", $.proxy(this.visibleChanged, this));
 	},
 	
 	this.dataLoaded = function(applicationData) {
@@ -692,7 +760,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), 15);
 		
 		// Генерируем дотопримечательности (метки) на карте.
-		$.each(applicationData.getAllObjects(this.mode), $.proxy(function(index, geoObject) {	
+		$.each(applicationData.getAllObjects(this.mode), $.proxy(function(index, object) {	
 			/*
 			  Эта версия работает с балунами, но у нас создан собственный оверлай
 			  и поэтому пока код закоментирован.
@@ -713,19 +781,22 @@ PermGuide.MapManager = function (yMapElement, mode){
 			*/
 			
 			var placemark = new PermGuide.Overlay(
-				new YMaps.GeoPoint(geoObject.point.lng, geoObject.point.lat),
+				new YMaps.GeoPoint(object.point.lng, object.point.lat),
 				function () {
-					PermGuide.ApplicationData.selectObject(geoObject);
+					PermGuide.ApplicationData.selectObject(object);
 				}
 			);
 			
 			var overlayState = {
-				object: geoObject,
+				object: object,
 				onmap: false,
 				overlay: placemark
 			}
 			
 			this.overlayStates.push(overlayState);
+			// Скроем и сразу же добавим на карту.
+			placemark.hide();
+			this.yMap.addOverlay(placemark);
 		}, this));
 		
 		
@@ -760,24 +831,34 @@ PermGuide.MapManager = function (yMapElement, mode){
 		this.visibleChanged();
 
 		PermGuide.Scheduler.finished("InterfaceInit");
-	},
+	};
 	
 	this.visibleChanged = function() {
-
 		if (this.yMap == null)
 			return;           // Если карта еще не загружена, то нам здесь делать нечего. 
 		
 		$.each(this.overlayStates, $.proxy(function(index, overlayState) {	
 			var objectIsVisible = PermGuide.ApplicationData.objectIsVisible(overlayState.object, this.mode);
-			if ( objectIsVisible && !overlayState.onmap)
+
+			if ( objectIsVisible )
 			{
-				overlayState.onmap = true;
-				this.yMap.addOverlay(overlayState.overlay);
+				if (this.mode == "objects")
+					overlayState.overlay.refreshImage(overlayState.object.objectImg);
+				if (this.mode == "routes")
+					overlayState.overlay.refreshImage(overlayState.object.routeImg);
+				
+				if (!overlayState.onmap)
+				{
+					overlayState.onmap = true;
+					overlayState.overlay.show();
+				}
+				//this.yMap.addOverlay(overlayState.overlay);
 			}
 			else if (!objectIsVisible && overlayState.onmap)
 			{
 				overlayState.onmap = false;
-				this.yMap.removeOverlay(overlayState.overlay);
+				overlayState.overlay.hide();
+				//this.yMap.removeOverlay(overlayState.overlay);
 			}
 		}, this));
 

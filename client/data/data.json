@@ -1509,8 +1509,8 @@
                 "ru": "!!!",
                 "en": "!!!"
             },
-            "picture": "...",
-            "color": "..."
+            "picture": "img/box_00ccff.png",
+            "color": "#00ccff"
         },
         {
             "id": 2,
@@ -1518,8 +1518,8 @@
                 "ru": "памятники",
                 "en": "памятники"
             },
-            "picture": "...",
-            "color": "..."
+            "picture": "img/box_33cc33.png",
+            "color": "#33cc33"
         },
         {
             "id": 3,
@@ -1527,8 +1527,8 @@
                 "ru": "зеленая линия",
                 "en": "зеленая линия"
             },
-            "picture": "...",
-            "color": "..."
+            "picture": "img/box_4c00fe.png",
+            "color": "#4c00fe"
         },
         {
             "id": 4,
@@ -1536,8 +1536,8 @@
                 "ru": "архитектура",
                 "en": "архитектура"
             },
-            "picture": "...",
-            "color": "..."
+            "picture": "img/box_663333.png",
+            "color": "#663333"
         },
         {
             "id": 5,
@@ -1545,8 +1545,8 @@
                 "ru": "храмы",
                 "en": "храмы"
             },
-            "picture": "...",
-            "color": "..."
+            "picture": "img/box_6699ff.png",
+            "color": "#6699ff"
         },
         {
             "id": 6,
@@ -1554,8 +1554,8 @@
                 "ru": "галереи",
                 "en": "галереи"
             },
-            "picture": "...",
-            "color": "..."
+            "picture": "img/box_66ffcc.png",
+            "color": "#66ffcc"
         },
         {
             "id": 7,
@@ -1563,8 +1563,8 @@
                 "ru": "музеи",
                 "en": "музеи"
             },
-            "picture": "...",
-            "color": "..."
+            "picture": "img/box_990000.png",
+            "color": "#990000"
         },
         {
             "id": 8,
@@ -1572,8 +1572,8 @@
                 "ru": "парки",
                 "en": "парки"
             },
-            "picture": "...",
-            "color": "..."
+            "picture": "img/box_9900cc.png",
+            "color": "#9900cc"
         },
         {
             "id": 9,
@@ -1581,8 +1581,8 @@
                 "ru": "театры",
                 "en": "театры"
             },
-            "picture": "...",
-            "color": "..."
+            "picture": "img/box_cccc33.png",
+            "color": "#cccc33"
         },
         {
             "id": 10,
@@ -1590,8 +1590,8 @@
                 "ru": "красная линия",
                 "en": "красная линия"
             },
-            "picture": "...",
-            "color": "..."
+            "picture": "img/box_ff0000.png",
+            "color": "#ff0000"
         }
     ]
 }
