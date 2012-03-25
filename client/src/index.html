@@ -329,7 +329,9 @@
 			Шаблон слайда метки.
 		-->
 		<script id="tagSlideTemplate" type="text/x-jsrender">
-			<div class="slide tagSlide" _id="{{:id}}">{{:name}}</div>
+			<div class="slide tagSlide" _id="{{:id}}" style="display: table;">
+				<div style="display: table-cell; vertical-align: middle;">{{:name}}</div>
+			</div>
 		</script>
 	</head>
 	<body>
@@ -373,29 +375,33 @@
 								</div>
 							</div>
 							<div class="toggleButton">
+								<div class="arrowLeft"></div>
 								<div class="tagSliderBg">
 									<div id="objectTagsSlider" class="slider tagSlider">
 										<!--  Заполняется шаблонизатором, см. код -->
 									</div>
 								</div>
+								<div class="arrowRight"></div>
 								<div id="switchObjectMode" class="switchMode">
 									<div class="on"></div>
 									<div class="off"></div>
 								</div>
 							</div>
 						</div>
-						<div class="dropDownMenuSeparator">
+						<div class="pageHeader dropDownMenuSeparator">
 							<!-- Просто что бы отодвинуть содержимое вниз. -->
 						</div>
 						
-						<!--canvas class="canvasLayer">
-							Браузер не поддерживает Canvas.
-						</canvas-->
-						<div id="objectsMap" class="map"></div>
-						
-						<div id="objectsCatalog" class="catalog">
-							<div class="vScroller" stopPropagation="true"> 
-								Каталог пуст.
+						<div class="pageContent">
+							<!--canvas class="canvasLayer">
+								Браузер не поддерживает Canvas.
+							</canvas-->
+							<div id="objectsMap" class="map"></div>
+							
+							<div id="objectsCatalog" class="catalog">
+								<div class="vScroller" stopPropagation="true"> 
+									Каталог пуст.
+								</div>
 							</div>
 						</div>
 					</div>
@@ -413,11 +419,13 @@
 								</div>
 							</div>
 							<div class="toggleButton">
+								<div class="arrowLeft"></div>
 								<div class="tagSliderBg">
 									<div id="routeTagsSlider" class="slider tagSlider">
 										<!--  Заполняется шаблонизатором, см. код -->
 									</div>
 								</div>
+								<div class="arrowRight"></div>
 								<div id="switchRouteMode" class="switchMode">
 									<div class="on"></div>
 									<div class="off"></div>
@@ -425,27 +433,28 @@
 							</div>
 						</div>
 
-						<div class="dropDownMenuSeparator">
+						<div class="pageHeader dropDownMenuSeparator">
 							<!-- Просто что бы отодвинуть содержимое вниз. -->
 						</div>
 						
-						<canvas class="canvasLayer">
-							Браузер не поддерживает Canvas.
-						</canvas>
-						<div id="routesMap" class="map"></div>
-						
-						<div id="routesCatalog" class="catalog">
-							<div class="vScroller" stopPropagation="true"> 
-								Каталог пуст.
+						<div class="pageContent">
+							<canvas class="canvasLayer">
+								Браузер не поддерживает Canvas.
+							</canvas>
+							<div id="routesMap" class="map"></div>
+							
+							<div id="routesCatalog" class="catalog">
+								<div class="vScroller" stopPropagation="true"> 
+									Каталог пуст.
+								</div>
 							</div>
 						</div>
-						
 					</div>
 					<div class="slide pageSlide">
 						Раздел полезное!
 					</div>
 				</div>
-				<div id="pageScroller">
+				<div id="pageScroller" class="pageBottom">
 					<div id="pMain" _id="0" class="pageIndicator">
 							
 								<div class="pagePicture"></div>
@@ -471,13 +480,16 @@
 			</div>
 	
 			<div id="objectInfo"> 
-				<div style="height: 90%; overflow: hidden;">
-					<div class="vScroller"> 
-						Информации нет!
+				<div class="page">
+					<div class="pageHeader"></div>
+					<div class="pageContent" style="overflow: hidden;">
+						<div class="vScroller">
+							Информации нет!
+						</div>
 					</div>
 				</div>
-				<div style="height: 10%;"> 
-					<div id="closeButton" style="margin-top: 2%; text-align: center;">Нажми, что бы закрыть</div> 
+				<div class="pageBottom" > 
+					<!-- div id="closeButton" style="margin-top: 2%; text-align: center;">Нажми, что бы закрыть</div--> 
 				</div>
 			</div>
 		</div>

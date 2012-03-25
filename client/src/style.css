@@ -39,6 +39,27 @@ div {
 	background-position: center center;
 	background-repeat: no-repeat;	
 }
+/**
+* Стили содержимого общей разметки страниц
+*/
+
+.page {
+	height: 93%;
+}
+
+.pageBottom {
+	height: 7%;
+	border-top: 2px #ff0000 solid;
+}
+
+.pageHeader {
+	height: 7%;
+	background-color: #333333;
+}
+
+.pageContent {
+	height: 93%;
+}
 
 /**
  * Экран выбора языка.
@@ -89,7 +110,7 @@ div {
  */
 .dropDownMenuSeparator {
 	height: 7%;
-	z-index: 1000; 
+	z-index: 1000;
 }
 
 .dropDownMenuBg {
@@ -189,7 +210,7 @@ div {
 	background-color: #e5e5e5;
 	overflow: hidden;
 	display: none;
-	height: 93%; 
+	height: 100%; 
 }
 
 .catalogItem {
@@ -231,11 +252,6 @@ div {
 /**
  * Стили скроллера страниц.
  */
-
-#pageScroller {
-	height: 8%;
-	border-top: 2px #ff0000 solid;
-}
 
 #pageScroller .pageIndicator {
 	width: 25%;
@@ -342,9 +358,27 @@ div {
 	text-align: center; 
 	overflow: hidden;
 	position: relative;
-	width: 90%; 
+	width: 84%; 
 	height: 100%; 
 	float: left;
+}
+
+.arrowLeft {
+	width: 2%; 
+	height: 100%; 
+	float: left;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/arr_l.png');
+}
+
+.arrowRight {
+	width: 2%; 
+	height: 100%; 
+	float: left;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/arr_r.png');
 }
 
 .tagSlider {
@@ -401,13 +435,6 @@ div {
 }
 
 .map {
-	height: 93%; 
-	position: relative;
-}
-
-.catalog {
-	height: 93%; 
-	overflow: hidden;
-	display: none;
+	height: 100%; 
 	position: relative;
 }
