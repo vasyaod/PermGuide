@@ -301,18 +301,18 @@
 				<div class="separator"></div>
 				<div class="name">{{:name}}</div>
 				<div class="picture" style="background-image: url('{{:picture}}');"></div>
+				<div style="clear: both;"></div>
 				<div class="foground"></div>
 			</div>
 		</script>
 
 		<!-- 
 			Шаблон пункта в каталоге.
+			<div style="clear: both;"></div>
 		-->
 		<script id="catalogItemTemplate" type="text/x-jsrender">
 			<div class="catalogItem" _id="{{:id}}">
-				<div class="color" style="background-color: {{:color}};" ></div>
-				<div class="separator"></div>
-				<div class="name">{{:name}}</div>
+				<div class="name" style="border-left-color: {{:color}};">{{:name}}</div>
 				<div class="foground"></div>
 			</div>
 		</script>
