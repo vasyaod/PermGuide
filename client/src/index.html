@@ -33,9 +33,7 @@
 			
 			////
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
-			$("#closeButton").touchclick( function () {
-				//$("#objectInfo").css("visibility", "hidden");
-				//$("#pageSlider").css("visibility", "visible");
+			$(".backButton").touchclick( function () {
 				PermGuide.ObjectInfoWindow.toggle();
 			});
 			
@@ -58,12 +56,12 @@
 			// Устанавливает обработчик переключения страниц.
 			pageSlider.listener = function(index) {
 				//alert("listener: "+index);
-				$(".pageIndicator").removeClass("active");
-				$(".pageIndicator").slice(index, index+1).addClass("active");
+				$("#pageScroller .pageIndicator").removeClass("active");
+				$("#pageScroller .pageIndicator").slice(index, index+1).addClass("active");
 			};
 			pageSlider.listener(0); // Подсветим сразуже первую страницу.
 			
-			$(".pageIndicator").touchclick( function(event) {
+			$("#pageScroller .pageIndicator").touchclick( function(event) {
 				var pageId = parseInt($(event.target).parent().attr("_id"));
 				pageSlider.select(pageId);
 			});
@@ -193,12 +191,17 @@
 			});
 			
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
+				
 				// Сбросим позицию дива.
 				$("#objectInfo .vScroller").data("state").resetPosition();
+				/*
 				// Сгенерируем из шаблона новую информацию об объекте.
 				$("#objectInfo .vScroller").html(
 					$( "#objectInfoTemplate" ).render([object])
 				);
+				*/
+				$("#objectInfo .objectName").text(object.name);
+				$("#objectInfo .vScroller").text(object.description);
 				PermGuide.ObjectInfoWindow.toggle();
 			});
 			
@@ -357,9 +360,16 @@
 						классом "slide", который и является страницей.
 					 -->
 					<div class="slide pageSlide">
-						<div style="height: 100%;">
-							<div class="i18n" style="padding-top: 30%">Intro</div>
-						</div> 
+						<div class="pageHeader">
+							<div class="pageHeaderText">
+								Пермский гид
+							</div> 
+						</div>
+						<div class="pageContent">
+							<div style="height: 100%;">
+								<div class="i18n" style="padding-top: 30%">Intro</div>
+							</div> 
+						</div>
 					</div>
 					
 					<div class="slide pageSlide">
@@ -451,7 +461,16 @@
 						</div>
 					</div>
 					<div class="slide pageSlide">
-						Раздел полезное!
+						<div class="pageHeader">
+							<div class="pageHeaderText">
+								О Перми
+							</div> 
+						</div>
+						<div class="pageContent">
+							<div style="height: 100%;">
+								<div class="i18n" style="padding-top: 30%">Заполнить фигней!!!!</div>
+							</div> 
+						</div>
 					</div>
 				</div>
 				<div id="pageScroller" class="pageBottom">
@@ -473,7 +492,7 @@
 					</div>
 					<div id="pInfo" _id="3" class="pageIndicator">
 								<div class="pagePicture"></div>
-								<div class="pageCaption">Пелезное</div>
+								<div class="pageCaption">О Перми</div>
 								<div class="pageIndicatorFoground"></div>
 					</div>
 				</div>			
@@ -481,15 +500,30 @@
 	
 			<div id="objectInfo"> 
 				<div class="page">
-					<div class="pageHeader"></div>
-					<div class="pageContent" style="overflow: hidden;">
+					<div class="pageHeader">
+						<div class="objectName">
+							
+						</div>
+						<div class="backButton">
+							
+						</div>
+					</div>
+					<div class="pageContent background">
 						<div class="vScroller">
 							Информации нет!
 						</div>
 					</div>
 				</div>
-				<div class="pageBottom" > 
-					<!-- div id="closeButton" style="margin-top: 2%; text-align: center;">Нажми, что бы закрыть</div--> 
+				<div id="objectInfoTabs" class="pageBottom" > 
+					<div _id="0" class="active pageIndicator">
+								Описание
+					</div>
+					<div _id="1" class="pageIndicator">
+								Контактная информация
+					</div>
+					<div _id="2" class="pageIndicator">
+								Фото
+					</div>
 				</div>
 			</div>
 		</div>

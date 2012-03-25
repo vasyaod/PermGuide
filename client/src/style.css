@@ -23,6 +23,10 @@ div {
 	overflow: hidden;
 }
 
+.vScroller {
+	min-height: 100%;
+}
+
 /**
  * Стиль splash-экрана.
  */
@@ -53,12 +57,20 @@ div {
 }
 
 .pageHeader {
+	width: 100%;
 	height: 7%;
 	background-color: #333333;
 }
 
+.pageHeaderText {
+	font-size: 1.7em;
+	color: #fff;
+	text-align: center;
+}
+
 .pageContent {
 	height: 93%;
+	position: relative;
 }
 
 /**
@@ -421,11 +433,11 @@ div {
 	background-image: url('img/btn_map.png');
 }
 /**
- * Другие элементы.
+ * Стили элементов информации об объекте.
  */ 
 #objectInfo {
 	background-color: #fff;
-	z-index: 1100;
+	z-index: 1200;
 	width: 100%;
 	height: 100%;
 	overflow: hidden; 
@@ -433,6 +445,62 @@ div {
 	top: 100%;
 	left: 0px;
 }
+
+#objectInfo .background
+{
+	overflow: hidden;
+	background-color: #e5e5e5;
+}
+	
+#objectInfo .objectName{
+	width: 85%;
+	height: 100%;
+	font-size: 1.2em;
+	color: #fff;
+	float: left;
+}
+
+#objectInfo .backButton{
+	width: 15%;
+	height: 100%;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/btn_back.png');
+	float: left;
+	cursor: pointer;
+}
+
+#objectInfo .vScroller {
+	padding-left: 2em;
+	padding-right: 2em;
+}
+
+/**
+ * Стили переключателя страниц информации об объекте.
+ */
+#objectInfoTabs {
+	display: table;
+	width: 100%;
+}
+#objectInfoTabs .pageIndicator {
+	width: 33.3%;
+	height: 100%;
+	position: relative;
+	float: left;
+	text-align: center;
+	
+	vertical-align: middle;
+	display: table-cell;
+	
+	padding-bottom: 2px;
+	font-size: 1.2em;
+	cursor: pointer;
+}
+
+#objectInfoTabs .active {
+	border-top: 2px solid #F00;
+}
+
 
 .map {
 	height: 100%; 
