@@ -31,48 +31,6 @@ PermGuide.ObjectInfoWindow = {
 		}		
 	};
 
-/**
- * Объект отвечает за работу с мультиизычностью.
- */
-PermGuide.Language = {
-
-	// Флаг того, что пользователь выбрал язык.
-	languageSelected: false,
-	
-	// Пока язык задан статично.
-	currentLanguage: "ru",
-	
-	/**
-	 * Возвращает строку на основании текущего(выбранного) языка.
-	 */
-	getString: function(object)
-	{
-		if (object == null)
-			return null;
-		
-		// Если объект уже является строкой, то возвразщаем строку.
-		if (typeof obj === "string")
-			return obj;
-			
-		if (this.currentLanguage == "ru" && object[this.currentLanguage] == null)
-			return object["rus"];
-		
-		return object[this.currentLanguage];
-	},
-
-	/**
-	 * Возвращает строку из языковых ресурсов в соответствии с выбранным 
-	 * языком.
-	 */
-	getInterfaceString: function(key)
-	{
-		var object = PermGuide.lr[key];
-		if (object == null)
-			return key;
-		
-		return this.getString(object);
-	}
-}
 
 /**
  * Хранятся данные (события, достопримечательности, ...)

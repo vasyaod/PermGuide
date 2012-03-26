@@ -22,6 +22,7 @@
 		<script type="text/javascript" src="permguide-dropdownmenu-plugin.js"></script>
 		<script type="text/javascript" src="permguide-slider-plugin.js"></script>
 		<script type="text/javascript" src="permguide-map.js"></script>
+		<script type="text/javascript" src="permguide-geolocation.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
@@ -110,7 +111,7 @@
 			// Обработчик события загрузки данных 
 			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
 				////
-				// Формирование первой страницы со случайными объектами и маршрутами.
+				// Формирование первой страницы со случайными объектами.
 				var objects = [];
 				//var popularObjects = [];
 				objects.push(PermGuide.ApplicationData.getRandomObject());
@@ -129,19 +130,27 @@
 					}]);
 					if (index%2 == 1)
 						html += '<div style="clear: both;"></div>';
-//					popularObjects.push({
-//						name: object.name,
-//						tagName: tag.name,
-//						color: tag.color
-//					});
 				});
 				html += '<div style="clear: both;"></div>';
 				$("#popularPlacesContent").html(html);
-				
-//				$("#popularPlacesContent").html(
-//					$( "#popularPlaceTemplate" ).render(popularObjects)+
-//					
-//				);
+
+				////
+				// Формирование первой страницы со случайными маршрутами.
+				var html = "";
+				var routes = PermGuide.ApplicationData.data.routes;
+				$.each(routes, function(index, route) { 
+					var tag = route.tags[0];
+					
+					html += $("#popularPlaceTemplate" ).render([{
+						name: route.description,
+						tagName: tag.name,
+						color: tag.color
+					}]);
+					if (index%2 == 1)
+						html += '<div style="clear: both;"></div>';
+				});
+				html += '<div style="clear: both;"></div>';
+				$("#popularRoutesContent").html(html);
 				
 				////
 				// Формирование выподающего окна со списком тэгов.
@@ -370,17 +379,35 @@
 				$(this).text(text);
 			});
 		
+			////
+			// Включим тестовую геолокацию.
+			PermGuide.Geolocation.initTest();
+
 			// Закроем splash-screen
 			$("#splashScreen").css("visibility", "hidden");
 			$("#pageSlider").css("visibility", "visible");
 		};
 		
+		////
+		// Перехватим событие о готовности phonegap к работе.
+		document.addEventListener("deviceready", onDeviceReady, false);
+		function onDeviceReady() {
+			////
+			// Включим тестовую геолокацию.
+			//PermGuide.Geolocation.init();
+			
+			PermGuide.Scheduler.finished("PhonegapReady");
+		}
+		
+		////
+		// Сформируем правила загрузки приложения.
 		$(document).ready(function() {
 			// Перечисляются этапы загрузки приложения.
 			PermGuide.Scheduler.addTask("SplashInit",{
 				activateFn: splashInit,
 				dependence: []
 			});
+			PermGuide.Scheduler.addTask("PhonegapReady");
 			PermGuide.Scheduler.addTask("LanguageSelect",{
 				activateFn: languageSelectInit,
 				dependence: ["SplashInit"]
@@ -405,7 +432,7 @@
 			});
 			PermGuide.Scheduler.addTask("CloseSplash",{
 				activateFn: closeSplash,
-				dependence: ["DataLoad","ObjectsMapInit", "RoutesMapInit"]
+				dependence: ["DataLoad", "ObjectsMapInit", "RoutesMapInit"]
 			});
 
 			PermGuide.Scheduler.start();
@@ -530,7 +557,8 @@
 									<div class="title">
 										Популярные маршруты
 									</div>
-									<div>
+									<div id="popularRoutesContent">
+										<!--
 										<div class="popularPlace">
 											<div class="name">Зеленая линия</div>
 											<div class="tagName"></div>
@@ -540,6 +568,7 @@
 											<div class="tagName"></div>
 										</div>
 										<div style="clear: both;"></div>
+										-->
 									</div>
 								</div>
 							</div>

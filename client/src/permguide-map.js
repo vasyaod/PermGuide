@@ -285,10 +285,34 @@ PermGuide.MapManager = function (yMapElement, mode){
 			this.dataLoaded(PermGuide.ApplicationData);
 		else
 			PermGuide.ApplicationData.attachListener("loaded", this.dataLoaded);
-		
+		////
+		// Повешаем обработчики событий на обновление видимости объектов. 
 		PermGuide.ApplicationData.attachListener("objectsVisibleChanged", $.proxy(this.visibleChanged, this));
 		PermGuide.ApplicationData.attachListener("routesVisibleChanged", $.proxy(this.visibleChanged, this));
-	},
+	
+		////
+		// Повешаем обработчики событий на обновление координат девайса. 
+		PermGuide.Geolocation.attachListener("newPosition", $.proxy(this.newPosition, this));
+	};
+	
+	/**
+	 * Обработчик события обновления координат дивайса.
+	 */
+	this.newPosition = function(position) {
+		var geoObjectOptions = {
+				hasBalloon: false,
+				hasHint: false,
+			}
+		var lng = position.coords.longitude;
+		var lat = position.coords.latitude;
+		if (!this.placemark)
+		{
+			this.placemark = new YMaps.Placemark(new YMaps.GeoPoint(lng, lat), geoObjectOptions);
+			this.placemark.name = "Вы!";
+			this.yMap.addOverlay(this.placemark);
+		}
+		this.placemark.setGeoPoint(new YMaps.GeoPoint(lng, lat));
+	};
 	
 	this.dataLoaded = function(applicationData) {
 		if (this.yMap == null)
@@ -302,7 +326,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		this.routeStates = [];
 		
 		// Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
-		map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), 15);
+		map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), data.zoom);
 		
 		// Генерируем дотопримечательности (метки) на карте.
 		$.each(applicationData.getAllObjects(this.mode), $.proxy(function(index, object) {	
@@ -425,5 +449,5 @@ PermGuide.MapManager = function (yMapElement, mode){
 				}
 			}, this));
 		}
-	}
+	};
 };

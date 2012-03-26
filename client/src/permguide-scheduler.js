@@ -75,6 +75,10 @@ PermGuide.Scheduler = {
 	 * Метод добавляет задачу в планировщик. 
 	 */
 	addTask: function(taskName, taskParameters) {
+		
+		if (!taskParameters)
+			taskParameters = {};
+		
 		this.tasks[taskName] = taskParameters;
 		
 		if (taskParameters.activateFn == null)
