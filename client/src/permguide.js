@@ -15,6 +15,8 @@ PermGuide.ObjectInfoWindow = {
 		
 		toggle: function()
 		{
+			var self = this;
+			
 			var topPosition = 0;
 			if (!this.closed)
 				topPosition = this.position.top;
@@ -22,7 +24,10 @@ PermGuide.ObjectInfoWindow = {
 			
 			$(this.element).animate({
 				top: topPosition
-			}, 500);
+			}, 500, function() {
+				if (self.closed)
+					$(self.element).css("top", "100%");
+			});
 		}		
 	};
 

@@ -74,12 +74,14 @@ div {
 	opacity: 0.5;
 	background-color: #fff
 }
+
 /**
 * Стили содержимого общей разметки страниц
 */
 
 .page {
 	height: 93%;
+	background-color: #e5e5e5;
 }
 
 .pageBottom {
