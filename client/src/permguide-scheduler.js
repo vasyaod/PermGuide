@@ -47,6 +47,31 @@ PermGuide.Scheduler = {
 	tasks: {},
 	
 	/**
+	 * Возвразает количество заданий.
+	 */
+	tasksCount: function() {
+		var res = 0;
+		$.each(this.tasks, function(taskName, task) {	
+			res++;
+		});
+		
+		return res;
+	},	
+
+	/**
+	 * Возвразает количество завершенных заданий.
+	 */
+	finishedTasksCount: function() {
+		var res = 0;
+		$.each(this.tasks, function(taskName, task) {	
+			if (task.finished)
+				res++;
+		});
+		
+		return res;
+	},	
+
+	/**
 	 * Метод добавляет задачу в планировщик. 
 	 */
 	addTask: function(taskName, taskParameters) {
@@ -61,7 +86,6 @@ PermGuide.Scheduler = {
 		taskParameters.finished = false;
 		taskParameters.started = false;
 	},
-	
 	/**
 	 * Метод необходимо вызвать, когда задача завершена.
 	 */
@@ -69,7 +93,11 @@ PermGuide.Scheduler = {
 		if (this.tasks[taskName] == null)
 			return;
 		
-		this.tasks[taskName].finished = true;
+		if (!this.tasks[taskName].finished)
+		{
+			this.notify("finished", this.tasks[taskName]);
+			this.tasks[taskName].finished = true;
+		}
 		
 		this.start();
 	},
@@ -105,6 +133,7 @@ PermGuide.Scheduler = {
 			if(!task.finished && !task.started) {
 				if (this.isTasksFinished(task.dependence)) {
 					task.started = true;
+					this.notify("started", task);
 					if (task.activateFn)
 						task.activateFn(taskName);
 				}
@@ -113,3 +142,5 @@ PermGuide.Scheduler = {
 		}, this));
 	}
 }
+//Расширим до Observable.
+$.extend(PermGuide.Scheduler, PermGuide.Observable);

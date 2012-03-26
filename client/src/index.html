@@ -13,11 +13,11 @@
 		<script type="text/javascript" src="jsrender.js"></script>
 
 		<!-- Загрузка основного кода. -->
+		<script type="text/javascript" src="permguide-observable.js"></script>
 		<script type="text/javascript" src="permguide-lr.js"></script>
 		<script type="text/javascript" src="permguide-scheduler.js"></script>
 		<script type="text/javascript" src="permguide-touch-support.js"></script>
 		<script type="text/javascript" src="permguide-toggle-button.js"></script>
-		<script type="text/javascript" src="permguide-observable.js"></script>
 		<script type="text/javascript" src="permguide-scrollable-plugin.js"></script>
 		<script type="text/javascript" src="permguide-dropdownmenu-plugin.js"></script>
 		<script type="text/javascript" src="permguide-slider-plugin.js"></script>
@@ -25,7 +25,22 @@
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
+		splashInit = function() {
+			// Отобразим splash-экран.
+			$("#splashScreen").css("visibility", "visible");
+			$("#pageSlider").css("visibility", "hidden");
 
+			// При включении/отключении тэгов, формируем 
+			PermGuide.Scheduler.attachListener("started", function (){
+				var tasksCount = PermGuide.Scheduler.tasksCount();
+				var finishedTasksCount = PermGuide.Scheduler.finishedTasksCount();
+				$("#splashScreen .statusLine").text(""+finishedTasksCount+"/"+tasksCount);
+			});
+			
+			// Завершим этот этап загрузки приложения.
+			PermGuide.Scheduler.finished("SplashInit");
+		};
+		
 		interfaceInit = function() {
 			
 			// Зададим мертвый радиус для клика в процентах экрана.
@@ -269,6 +284,18 @@
 			// Инициализация карты.
 			objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0], "objects");
 			routesMapManager = new PermGuide.MapManager(jQuery("#routesMap")[0], "routes");
+			
+			// Обработаем события загрузчика карты.
+			PermGuide.LoadMapManager.attachListener("mapLoading", function() {
+				$(".map .mapLoading").css("display", "block");
+				$(".map .mapLoadFail").css("display", "none");
+			});
+
+			PermGuide.LoadMapManager.attachListener("mapLoadFail", function() {
+				$(".map .mapLoading").css("display", "none");
+				$(".map .mapLoadFail").css("display", "block");
+			});
+			
 			PermGuide.LoadMapManager.load();
 		};
 
@@ -304,13 +331,17 @@
 			// Закроем splash-screen
 			$("#splashScreen").css("visibility", "hidden");
 			$("#pageSlider").css("visibility", "visible");
-		}
+		};
 		
 		$(document).ready(function() {
 			// Перечисляются этапы загрузки приложения.
+			PermGuide.Scheduler.addTask("SplashInit",{
+				activateFn: splashInit,
+				dependence: []
+			});
 			PermGuide.Scheduler.addTask("LanguageSelect",{
 				activateFn: languageSelectInit,
-				dependence: []
+				dependence: ["SplashInit"]
 			});
 			PermGuide.Scheduler.addTask("InterfaceInit",{
 				activateFn: interfaceInit,
@@ -389,6 +420,7 @@
 		
 			<div id="splashScreen" style="">
 				<!-- div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div--> 
+				<div class="statusLine">0/0</div>
 			</div>
 	
 			<div id="langSelectScreen">
@@ -454,9 +486,18 @@
 								Браузер не поддерживает Canvas.
 							</canvas-->
 							<div id="objectsMap" class="map">
-								<div>Карта не была загружена</div>
-								<div>Возможно у вас отсутствует соединение с интернетом, подключитесь к интернету и нажмите "обновить".</div>
-								<div class="loadMap">Обновить</div>
+								<div class="wrapper">
+									<div class="cell">								
+										<div class="mapLoading">
+											<div class="title">Идет загрузка карты</div>
+										</div>
+										<div class="mapLoadFail">
+											<div class="title">Карта не была загружена</div>
+											<div>Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите "обновить".</div>
+											<div class="loadMap">Обновить</div>
+										</div>
+									</div>
+								</div>
 							</div>
 							
 							<div id="objectsCatalog" class="catalog vScrollerBg">
@@ -503,9 +544,18 @@
 								Браузер не поддерживает Canvas.
 							</canvas>
 							<div id="routesMap" class="map">
-								<div>Карта не была загружена</div>
-								<div>Возможно у вас отсутствует соединение с интернетом, подключитесь к интернету и нажмите "обновить".</div>
-								<div class="loadMap">Обновить</div>
+								<div class="wrapper">
+									<div class="cell">
+										<div class="mapLoading">
+											<div class="title">Идет загрузка карты</div>
+										</div>
+										<div class="mapLoadFail">
+											<div class="title">Карта не была загружена</div>
+											<div>Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите "обновить".</div>
+											<div class="loadMap">Обновить</div>
+										</div>
+									</div>
+								</div>
 							</div>
 							
 							<div id="routesCatalog" class="catalog vScrollerBg">

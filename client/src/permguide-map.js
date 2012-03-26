@@ -200,7 +200,11 @@ PermGuide.LoadMapManager = {
 	scriptLoaded: false,
 
 	load: function() {
+		this.loaded = false;
+		this.scriptLoaded = false;
 		var self = this;
+		
+		this.notify("mapLoading", this);
 //		$.getScript('http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=AAC5U08BAAAAhG98TwIAUF_dcR_gLZsbQ6zwFcalQlEjkMsAAAAAAAAAAADLl1k_yHuuKf8xCzG-8rc6q0B5jA==', function(data, textStatus, jqxhr) {
 //			alert(textStatus);
 //			YMaps.load($.proxy(self.yMapsLoaded, self));
@@ -216,16 +220,19 @@ PermGuide.LoadMapManager = {
 				YMaps.load($.proxy(self.yMapsLoaded, self));
 			},
 		});
-		this.timeoutId = setTimeout($.proxy(this.yMapsFail, this), 1000);
+		
+		this.timeoutId = setTimeout($.proxy( function() {
+			clearTimeout(this.timeoutId);
+			this.timeoutId1 = setTimeout($.proxy( this.yMapsFail, this), 1000);
+		}, this), 1000);
 		
 //*/
 	},
 
 	yMapsFail: function() {
-		clearTimeout(this.timeoutId);
+		clearTimeout(this.timeoutId1);
 		if (!this.scriptLoaded)
 		{
-			alert("!!!");
 			PermGuide.Scheduler.finished("MapInit");
 			PermGuide.Scheduler.finished("ObjectsMapInit");
 			PermGuide.Scheduler.finished("RoutesMapInit");
