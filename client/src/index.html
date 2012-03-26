@@ -53,6 +53,7 @@
 				PermGuide.ObjectInfoWindow.toggle();
 			});
 			
+			////
 			// Обработчик кнопки "обновления" карты.
 			$(".loadMap").touchclick( function () {
 				PermGuide.LoadMapManager.load();
@@ -105,13 +106,45 @@
 			// Инициализация скроленга страниц.
 			$(".vScroller").scrollable();
 			
-			// Загружаем данные об объектах (достопримечательности, линии и т.д.).
-			PermGuide.ApplicationData.load();
-			
-			// При загрузке данных формируем содержимое выподающего окна
-			// со списком меток.
+			////
+			// Обработчик события загрузки данных 
 			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
-			
+				////
+				// Формирование первой страницы со случайными объектами и маршрутами.
+				var objects = [];
+				//var popularObjects = [];
+				objects.push(PermGuide.ApplicationData.getRandomObject());
+				objects.push(PermGuide.ApplicationData.getRandomObject());
+				objects.push(PermGuide.ApplicationData.getRandomObject());
+				objects.push(PermGuide.ApplicationData.getRandomObject());
+
+				var html = "";
+				$.each(objects, function(index, object) { 
+					var tag = object.tags[0];
+					
+					html += $("#popularPlaceTemplate" ).render([{
+						name: object.name,
+						tagName: tag.name,
+						color: tag.color
+					}]);
+					if (index%2 == 1)
+						html += '<div style="clear: both;"></div>';
+//					popularObjects.push({
+//						name: object.name,
+//						tagName: tag.name,
+//						color: tag.color
+//					});
+				});
+				html += '<div style="clear: both;"></div>';
+				$("#popularPlacesContent").html(html);
+				
+//				$("#popularPlacesContent").html(
+//					$( "#popularPlaceTemplate" ).render(popularObjects)+
+//					
+//				);
+				
+				////
+				// Формирование выподающего окна со списком тэгов.
 				$("#objectTags .vScroller").html(
 					$( "#tagTemplate" ).render(applicationData.getObjectTags())
 				);
@@ -133,7 +166,8 @@
 					tag.activate();
 				});
 				
-				// Заполним слайдер меток.
+				////
+				// Заполнение слайдера тэгов.
 				$("#objectTagsSlider").html(
 					$( "#tagSlideTemplate" ).render(applicationData.getObjectTags())
 				);
@@ -157,7 +191,7 @@
 					if (tag == null)
 						return;
 					tag.activate();
-				};				
+				};
 			});
 			
 			// При включении/отключении тэгов, формируем 
@@ -279,6 +313,14 @@
 			PermGuide.Scheduler.finished("InterfaceInit");
 		};
 		
+		dataLoad = function() {
+			// Загружаем данные об объектах (достопримечательности, линии и т.д.).
+			PermGuide.ApplicationData.load();
+			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
+				PermGuide.Scheduler.finished("DataLoad");
+			});
+		};
+		
 		mapInit = function() {
 			////
 			// Инициализация карты.
@@ -347,6 +389,10 @@
 				activateFn: interfaceInit,
 				dependence: ["LanguageSelect"]
 			});
+			PermGuide.Scheduler.addTask("DataLoad",{
+				activateFn: dataLoad,
+				dependence: ["InterfaceInit"]
+			});
 			PermGuide.Scheduler.addTask("MapInit",{
 				activateFn: mapInit,
 				dependence: ["InterfaceInit"]
@@ -359,7 +405,7 @@
 			});
 			PermGuide.Scheduler.addTask("CloseSplash",{
 				activateFn: closeSplash,
-				dependence: ["ObjectsMapInit", "RoutesMapInit"]
+				dependence: ["DataLoad","ObjectsMapInit", "RoutesMapInit"]
 			});
 
 			PermGuide.Scheduler.start();
@@ -407,7 +453,17 @@
 		</script>
 		
 		<!-- 
-			Шаблон слайда метки.
+			Шаблон плашки с популярным местом.
+		-->
+		<script id="popularPlaceTemplate" type="text/x-jsrender">
+			<div class="popularPlace" style="border-left-color: {{:color}};">
+				<div class="name" >{{:name}}</div>
+				<div class="tagName">{{:tagName}}</div>
+			</div>
+		</script>
+		
+		<!-- 
+			Шаблон слайда тэга.
 		-->
 		<script id="tagSlideTemplate" type="text/x-jsrender">
 			<div class="slide tagSlide" _id="{{:id}}" style="display: table;">
@@ -450,8 +506,43 @@
 						</div>
 						<div class="pageContent">
 							<div style="height: 100%;">
-								<div class="i18n" style="padding-top: 30%">Intro</div>
-							</div> 
+								<div id="randomObject">
+									<div class="title">
+										Пермский академический театр
+									</div>
+								</div>
+								<div id="popularPlaces" class="popular">
+									<div class="title">
+										Популярные места
+									</div>
+									<div id="popularPlacesContent">
+										<!--
+										Здесь располагаются плашки с маршрутами. 
+										<div class="popularPlace">
+											<div class="name">Место 1</div>
+											<div class="tagName">Храмы</div>
+										</div>
+										<div style="clear: both;"></div>
+										-->
+									</div>
+								</div>
+								<div id="popularRoutes" class="popular">
+									<div class="title">
+										Популярные маршруты
+									</div>
+									<div>
+										<div class="popularPlace">
+											<div class="name">Зеленая линия</div>
+											<div class="tagName"></div>
+										</div>
+										<div class="popularPlace">
+											<div class="name">Красная линия</div>
+											<div class="tagName"></div>
+										</div>
+										<div style="clear: both;"></div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					
@@ -491,7 +582,7 @@
 							</canvas-->
 							<div id="objectsMap" class="map">
 								<div class="wrapper">
-									<div class="cell">								
+									<div class="cell">
 										<div class="mapLoading">
 											<div class="title">Идет загрузка карты</div>
 										</div>

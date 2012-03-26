@@ -458,6 +458,16 @@ PermGuide.ApplicationData = {
 	},
 	
 	/**
+	 * Метод возвращает случайный объект.
+	 */
+	getRandomObject: function (id) {
+		var i = this.data.objects.length;
+		//return a random integer between 0 and 10
+		var index = Math.floor(Math.random()*i);
+		
+		return this.data.objects[index];
+	},	
+	/**
 	 * Метод выделяет объект делая его текущим. 
 	 */
 	selectObject: function (object)
