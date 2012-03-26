@@ -7,6 +7,11 @@ if(typeof PermGuide == "undefined")
  * Сервис геолокации.
  */
 PermGuide.Geolocation = {
+		
+	/**
+	 * Последние координаты полученные устройством.
+	 */
+	lastPosition: null,
 	
 	/**
 	 * Инициализация.
@@ -42,11 +47,36 @@ PermGuide.Geolocation = {
 	},
 	
 	onSuccess: function(position){
+		this.lastPosition = position;
 		this.notify("newPosition", position);
 	},
 	
 	onError: function(){
 		this.notify("error");
+	},
+	
+	deg2rad: function(value){
+		return value/180*3.1412
+	},
+	
+	/**
+	 * Метод вычисляет дистанцию относительно последних координат.
+	 */
+	relativeDistance: function(lat2, lng2){
+		
+		if (!this.lastPosition)
+			return 0;	// Если последние координаты не найдены, то возвращаем 0.
+		
+		var lng = this.lastPosition.coords.longitude;
+		var lat = this.lastPosition.coords.latitude;
+		
+		lat1=this.deg2rad(lat);
+		lng1=this.deg2rad(lng);
+		
+		lat2=this.deg2rad(lat2);
+		lng2=this.deg2rad(lng2);
+
+		return Math.round( 6378137 * Math.acos( Math.cos( lat1 ) * Math.cos( lat2 ) * Math.cos( lng1 - lng2 ) + Math.sin( lat1 ) * Math.sin( lat2 ) ) );
 	}
 
 }

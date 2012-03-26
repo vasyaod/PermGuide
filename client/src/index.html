@@ -124,6 +124,7 @@
 					var tag = object.tags[0];
 					
 					html += $("#popularPlaceTemplate" ).render([{
+						objectId: object.id,
 						name: object.name,
 						tagName: tag.name,
 						color: tag.color
@@ -317,6 +318,26 @@
 				},
 				state: true
 			});
+			
+			////
+			// При изменении позиции устройства, поменяем указатели растояния.
+			PermGuide.Geolocation.attachListener("newPosition", function (){
+				$(".distance").each(function (){
+					var objectId = $(this).attr("_id");
+					if (!objectId)
+						return;
+					var object = PermGuide.ApplicationData.getObjectById(objectId);
+					if (!object)
+						return;
+
+					var distance = PermGuide.Geolocation.relativeDistance(object.point.lat, object.point.lng);
+					if (distance > 1000)
+						distance = Math.round(distance/1000)+"km";
+					else
+						distance = distance + "m";
+					$(this).text(distance);
+				});
+			});
 
 //*/
 			PermGuide.Scheduler.finished("InterfaceInit");
@@ -460,6 +481,7 @@
 		<script id="objectsCatalogItemTemplate" type="text/x-jsrender">
 			<div class="catalogItem" _id="{{:id}}">
 				<div class="name" style="border-left-color: {{:objectColor}};">{{:name}}</div>
+				<div _id="{{:id}}" class="distance"></div>
 				<div class="foground"></div>
 			</div>
 		</script>
@@ -467,6 +489,7 @@
 		<script id="routesCatalogItemTemplate" type="text/x-jsrender">
 			<div class="catalogItem" _id="{{:id}}">
 				<div class="name" style="border-left-color: {{:routeColor}};">{{:name}}</div>
+				<div _id="{{:id}}" class="distance"></div>
 				<div class="foground"></div>
 			</div>
 		</script>
@@ -486,6 +509,7 @@
 			<div class="popularPlace" style="border-left-color: {{:color}};">
 				<div class="name" >{{:name}}</div>
 				<div class="tagName">{{:tagName}}</div>
+				{{if objectId}}<div _id="{{:objectId}}" class="distance"></div>{{/if}}
 			</div>
 		</script>
 		
@@ -542,7 +566,7 @@
 									<div class="title">
 										Популярные места
 									</div>
-									<div id="popularPlacesContent">
+									<div id="popularPlacesContent" class="popularContent">
 										<!--
 										Здесь располагаются плашки с маршрутами. 
 										<div class="popularPlace">
@@ -557,7 +581,7 @@
 									<div class="title">
 										Популярные маршруты
 									</div>
-									<div id="popularRoutesContent">
+									<div id="popularRoutesContent" class="popularContent">
 										<!--
 										<div class="popularPlace">
 											<div class="name">Зеленая линия</div>

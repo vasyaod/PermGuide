@@ -282,6 +282,13 @@ div {
 	cursor: pointer;
 	min-height: 2em;
 }
+.catalogItem .distance {
+	position: absolute;	
+	left: 90%;
+	top: 0;
+	bottom: 0px;
+	right: 0px;
+}
 
 .catalogItem .foground {
 	top: 0px;
@@ -594,7 +601,7 @@ div {
 	font-size: 1.2em;
 	margin: 1.2em;
 }
-
+	
 .popularPlace{
 	font-size: 1em;
 	width: 47%;
