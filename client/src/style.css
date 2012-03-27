@@ -219,6 +219,7 @@ div {
 	height: 100%; 
 	float:left;
 	text-align: left;
+	line-height: 1.9em;
 }
 
 .dropDownMenu .tag .picture {
@@ -275,20 +276,23 @@ div {
 
 .catalogItem .name {
 	border-left: 0.5em #000 solid;
-	width: 90%;
+	width: 85%;
 	padding-left: 3%;
 	padding-right: 2%;
 	text-align: left;
 	cursor: pointer;
 	min-height: 2em;
 }
-.catalogItem .distance {
+
+.catalogItem .distanceBlock {
 	position: absolute;	
 	left: 90%;
 	top: 0;
-	bottom: 0px;
-	right: 0px;
+	bottom: 0;
+	right: 0;
+	font-weight: bold;
 }
+
 
 .catalogItem .foground {
 	top: 0px;

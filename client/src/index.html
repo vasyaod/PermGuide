@@ -158,22 +158,31 @@
 				$("#objectTags .vScroller").html(
 					$( "#tagTemplate" ).render(applicationData.getObjectTags())
 				);
-				$("#objectTags").data().resize();   // Обновим размеры.
+				$("#objectTags").data("state").resize();   // Обновим размеры.
 				
-				$("#routeTags .vScroller").html(
-					$( "#tagTemplate" ).render(applicationData.getRouteTags())
-				);
-				$("#routeTags").data().resize();   // Обновим размеры.
-				
-				$(".tag").touchclick( function (event) {
+				$("#objectTags .tag").touchclick( function (event) {
 					var tagId = $(event.target).parent().attr("_id");
 					var tag = applicationData.getTagById(tagId);
 					if (tag == null)
 						return;
-					// При множественном выборе.
-					//tag.setVisible(!tag.visible);
-					// При одиночном.
 					tag.activate();
+					// Закрываем выподающее окне при выборе тэга.
+					$("#objectTags").data("state").close();
+				});
+
+				$("#routeTags .vScroller").html(
+					$( "#tagTemplate" ).render(applicationData.getRouteTags())
+				);
+				$("#routeTags").data("state").resize();   // Обновим размеры.
+				
+				$("#routeTags .tag").touchclick( function (event) {
+					var tagId = $(event.target).parent().attr("_id");
+					var tag = applicationData.getTagById(tagId);
+					if (tag == null)
+						return;
+					tag.activate();
+					// Закрываем выподающее окне при выборе тэга.
+					$("#routeTags").data("state").close();
 				});
 				
 				////
@@ -481,7 +490,11 @@
 		<script id="objectsCatalogItemTemplate" type="text/x-jsrender">
 			<div class="catalogItem" _id="{{:id}}">
 				<div class="name" style="border-left-color: {{:objectColor}};">{{:name}}</div>
-				<div _id="{{:id}}" class="distance"></div>
+				<div class="distanceBlock">
+					<div class="wrapper">
+						<div _id="{{:id}}" class="cell distance"></div>
+					</div>
+				</div>
 				<div class="foground"></div>
 			</div>
 		</script>
@@ -489,7 +502,11 @@
 		<script id="routesCatalogItemTemplate" type="text/x-jsrender">
 			<div class="catalogItem" _id="{{:id}}">
 				<div class="name" style="border-left-color: {{:routeColor}};">{{:name}}</div>
-				<div _id="{{:id}}" class="distance"></div>
+				<div class="distanceBlock">
+					<div class="wrapper">
+						<div _id="{{:id}}" class="cell distance"></div>
+					</div>
+				</div>
 				<div class="foground"></div>
 			</div>
 		</script>

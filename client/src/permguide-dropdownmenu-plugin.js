@@ -7,51 +7,58 @@
 			var state = {
 				closed: true,
 				position: {top: 0},
-				element: this
-			};
+				element: this,
 			
-			// Метод изменения размера и позиции меню.
-			state.resize = function() {
-				var separatorHeight =  $(state.element).parent().children(".dropDownMenuSeparator").height();
-				var contentHeight = $(state.element).find(".vScroller").height()+10;
-				var dropdownmenuHeight = (contentHeight+separatorHeight);
-				//alert(dropdownmenuHeight);
-				$(state.element).css("height", dropdownmenuHeight+"px");
-				$(state.element).find(".dropDownMenuContent").css("height", contentHeight+"px");
-				$(state.element).find(".toggleButton").css("height", separatorHeight+"px");
+				// Метод изменения размера и позиции меню.
+				resize: function() {
+					var separatorHeight =  $(state.element).parent().children(".dropDownMenuSeparator").height();
+					var contentHeight = $(state.element).find(".vScroller").height()+10;
+					var dropdownmenuHeight = (contentHeight+separatorHeight);
+					//alert(dropdownmenuHeight);
+					$(this.element).css("height", dropdownmenuHeight+"px");
+					$(this.element).find(".dropDownMenuContent").css("height", contentHeight+"px");
+					$(this.element).find(".toggleButton").css("height", separatorHeight+"px");
+					
+					// Вычисляем верхнюю позицию меню.
+					var top = dropdownmenuHeight - separatorHeight;
+					$(this.element).offset({
+						top: -top
+					});
+					this.position.top = -top;
+				},
+			
+				close: function() {
+					if (this.closed)
+						return;
+	
+					this.closed = !this.closed;
+					var topPosition = this.position.top;
+	
+					$(".dropDownMenuBg").css("display", "none");
+					$(this.element).animate({
+						top: topPosition
+					}, 500);
+				},
+			
+				open: function() {
+					if (!this.closed)
+						return;
+	
+					this.closed = !this.closed;
+					var topPosition = 0;
+	
+					$(".dropDownMenuBg").css("display", "block");
+					$(this.element).animate({
+						top: topPosition
+					}, 500);
+				},
 				
-				// Вычисляем верхнюю позицию меню.
-				var top = dropdownmenuHeight - separatorHeight;
-				$(state.element).offset({
-					top: -top
-				});
-				state.position.top = -top;
-			};
-			
-			state.close = function() {
-				if (state.closed)
-					return;
-
-				state.closed = !state.closed;
-				var topPosition = state.position.top;
-
-				$(".dropDownMenuBg").css("display", "none");
-				$(state.element).animate({
-					top: topPosition
-				}, 500);
-			};
-			
-			state.open = function() {
-				if (!state.closed)
-					return;
-
-				state.closed = !state.closed;
-				var topPosition = 0;
-
-				$(".dropDownMenuBg").css("display", "block");
-				$(state.element).animate({
-					top: topPosition
-				}, 500);
+				toggle: function() {
+					if (this.closed)
+						this.open();
+					else
+						this.close();
+				}
 			};
 
 			state.resize();
@@ -63,10 +70,7 @@
 			
 			// Вешаем событие на кнопку сварачивания меню.
 			$(this).children(".toggleButton").touchclick( function (event){
-				if (state.closed)
-					state.open();
-				else
-					state.close();
+				state.toggle();
 			});
 			
 			// Если произошел клик внутри меню, надо его задержать.
@@ -78,7 +82,7 @@
 				state.close();
 			}, true);
 			
-			$(this).data(state);
+			$(this).data("state", state);
 		});
 	};	
 
