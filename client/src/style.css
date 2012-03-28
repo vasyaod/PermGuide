@@ -142,20 +142,16 @@ div {
 /**
  * Стили элементов карты.
  */
-.overlay {
+.boxOverlay {
 	position: absolute;
 	z-index: 1;
-	width: 23px;
-	height: 27px;
 }
 
-.overlay .overlayContainer {
+.boxOverlay .overlayContainer {
 	position: relative;
-	width: 100%;
-	height: 100%;
 }
 
-.overlay .box{
+.boxOverlay .box{
 	position: absolute;
 	left: -11px;
 	top: -13px;
@@ -165,7 +161,7 @@ div {
 	cursor: pointer;
 }
 
-.overlay .glow{
+.boxOverlay .glow{
 	position: absolute;
 	left: -13px;
 	top: -15px;
@@ -176,8 +172,22 @@ div {
 	display: none;
 }
 
-.overlay .overlayContainer:HOVER .glow{
-	display: block;
+.simpleOverlay {
+	position: absolute;
+	z-index: 1;
+}
+
+.simpleOverlay .overlayContainer {
+	position: relative;
+}
+
+.simpleOverlay .img{
+	position: absolute;
+	left: -16px;
+	top: -32px;
+	width: 32px;
+	height: 32px;
+	background: url(img/i_am1.png);
 }
 
 .canvasLayer {

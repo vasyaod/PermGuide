@@ -3,14 +3,61 @@
 if(typeof PermGuide == "undefined")
 	PermGuide = {};
 
-//Класс пользовательского оверлея, реализующего класс YMaps.IOverlay
+/**
+ * Оверлей карты для отображения объекто (мест).
+ */
+PermGuide.SimpleOverlay = function (geoPoint) {
+	
+	var map;
+	var element = $(
+			'	<div class="simpleOverlay">'+
+			'		<div class="overlayContainer">'+
+			'			<div class="img"></div>'+
+			'		</div>'+
+			'	</div>'
+			);	
+	// Устанавливаем z-index как у метки
+	element.css("z-index", YMaps.ZIndex.Overlay);
+	
+	// Вызывается при добавления оверлея на карту 
+	this.onAddToMap = function (_map, _parentContainer) {
+		map = _map;
+		element.appendTo(_parentContainer);
+		this.onMapUpdate();
+	};
+
+	// Вызывается при удаление оверлея с карты
+	this.onRemoveFromMap = function () {
+		if (element.parent()) {
+			element.remove();
+		}
+	};
+
+	// Вызывается при обновлении карты
+	this.onMapUpdate = function () {
+		var position = map.converter.coordinatesToMapPixels(geoPoint);
+		element.css({
+			left: position.x,
+			top:  position.y
+		})
+	};
+	
+	this.setGeoPoint = function (_geoPoint) {
+		geoPoint = _geoPoint
+		this.onMapUpdate();
+	};	
+}
+
+/**
+ * Оверлей карты для отображения объекто (мест).
+ */
 PermGuide.BoxOverlay = function (geoPoint, fn) {
 	
 	var map;
 	var parentContainer;
 //	var offset = new YMaps.Point(-11, -13);
 	var element = $(
-	'	<div class="overlay">'+
+	'	<div class="boxOverlay">'+
 	'		<div class="overlayContainer">'+
 	'			<div class="glow"></div>'+
 	'			<div class="box"></div>'+
@@ -321,16 +368,11 @@ PermGuide.MapManager = function (yMapElement, mode){
 	 * Обработчик события обновления координат дивайса.
 	 */
 	this.newPosition = function(position) {
-		var geoObjectOptions = {
-				hasBalloon: false,
-				hasHint: false,
-			}
 		var lng = position.coords.longitude;
 		var lat = position.coords.latitude;
 		if (!this.placemark)
 		{
-			this.placemark = new YMaps.Placemark(new YMaps.GeoPoint(lng, lat), geoObjectOptions);
-			this.placemark.name = "Вы!";
+			this.placemark = new PermGuide.SimpleOverlay(new YMaps.GeoPoint(lng, lat));
 			this.yMap.addOverlay(this.placemark);
 		}
 		this.placemark.setGeoPoint(new YMaps.GeoPoint(lng, lat));
