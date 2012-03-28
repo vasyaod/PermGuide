@@ -459,5 +459,5 @@ PermGuide.ApplicationData = {
 	}
 }
 // Расширим до Observable.
-$.extend(PermGuide.ApplicationData, PermGuide.Observable);
+$.extend(PermGuide.ApplicationData, new PermGuide.Observable());
 

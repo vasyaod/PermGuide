@@ -249,7 +249,7 @@ PermGuide.LoadMapManager = {
 	}
 }
 //Расширим до Observable.
-$.extend(PermGuide.LoadMapManager, PermGuide.Observable);
+$.extend(PermGuide.LoadMapManager, new PermGuide.Observable());
 
 /**
  * Менеджер управления картой и объектами на карте.
@@ -257,13 +257,13 @@ $.extend(PermGuide.LoadMapManager, PermGuide.Observable);
 PermGuide.MapManager = function (yMapElement, mode){
 	
 	//Расширим до Observable.
-	$.extend(this, PermGuide.Observable);
+	$.extend(this, new PermGuide.Observable());
 	
 	this.yMapElement = yMapElement;
 	this.mode = mode;
 	
 	// Вешаем обработчик события на загрузку скрипта сайта.
-	PermGuide.ApplicationData.attachListener("mapLoadSuccess", $.proxy(function(object) {
+	PermGuide.LoadMapManager.attachListener("mapLoadSuccess", $.proxy(function(object) {
 		this.yMapsLoaded();
 	}, this));
 	

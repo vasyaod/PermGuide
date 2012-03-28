@@ -147,4 +147,4 @@ PermGuide.Scheduler = {
 	}
 }
 //Расширим до Observable.
-$.extend(PermGuide.Scheduler, PermGuide.Observable);
+$.extend(PermGuide.Scheduler, new PermGuide.Observable());

@@ -104,4 +104,4 @@ PermGuide.Geolocation = {
 
 }
 //Расширим до Observable.
-$.extend(PermGuide.Geolocation, PermGuide.Observable);
+$.extend(PermGuide.Geolocation, new PermGuide.Observable());

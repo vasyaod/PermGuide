@@ -8,7 +8,11 @@ if(typeof PermGuide == "undefined")
  * http://www.artlebedev.ru/tools/technogrette/js/observable/ и немного
  * передалана, ибо не понравилось мне оформление кода.
  */	
-PermGuide.Observable = {
+PermGuide.Observable = function(){
+	this.aObservers = {};
+}
+
+PermGuide.Observable.prototype = {
 	
 	aObservers: {},
 		
