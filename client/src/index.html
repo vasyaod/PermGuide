@@ -73,10 +73,8 @@
 			////
 			// 
 			$("#objectsMapSlider").slider();
-			// Просто перехватим все события.
-			$(".mapSliderPlace").touchclick( function (event){
-			
-			}, true);
+			// Просто перехватим все события, что бы они не попадали на карту.
+			$(".mapSliderPlace").touchclick( function (){}, true);
 
 			////
 			// Инициализируем окна информации.
@@ -204,7 +202,6 @@
 				);
 				
 				$(".tagSlider").slider();
-				$(".tagSlider").data("state").loop = true;
 				
 				$("#objectTagsSlider").data("state").listener = function(index, element) {
 					var tagId = element.attr("_id");
@@ -266,6 +263,13 @@
 					$( "#objectSlideTemplate" ).render(objects)
 				);
 				$("#objectsMapSlider").data("state").reset();
+				
+				// Вешает обработсчики событий на каждый слайд
+				$("#objectsMapSlider .slide").touchclick( function (event) {
+					var objectId = $(event.target).parent().attr("_id");
+					var object = applicationData.getObjectById(objectId);
+					PermGuide.ApplicationData.selectObject(object);
+				});
 			});
 			
 			// При включении/отключении тэгов, формируем 
@@ -326,10 +330,11 @@
 			$("#switchObjectMode").toggleButton({
 				on: function() {
 					$("#objectsCatalog").css("display", "none");
-					$("#objectsMap").css("display", "block");
+					$("#objectsMapContainer").css("display", "block");
+					$("#objectsMapSlider").data("state").resize();
 				},
 				off: function() {
-					$("#objectsMap").css("display", "none");
+					$("#objectsMapContainer").css("display", "none");
 					$("#objectsCatalog").css("display", "block");
 				},
 				state: true
@@ -384,7 +389,11 @@
 		mapInit = function() {
 			////
 			// Инициализация карты.
-			objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0], "objects");
+			var objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0], "objects");
+			objectsMapManager.attachListener("mapObjectSelected", function (object){
+				$("#objectsMapSlider").data("state").selectByAttr("_id", object.id);
+			});
+
 			routesMapManager = new PermGuide.MapManager(jQuery("#routesMap")[0], "routes");
 			
 			// Обработаем события загрузчика карты.
@@ -559,6 +568,7 @@
 		<script id="tagSlideTemplate" type="text/x-jsrender">
 			<div class="slide tagSlide" _id="{{:id}}" style="display: table;">
 				<div style="display: table-cell; vertical-align: middle;">{{:name}}</div>
+				<div class="foground"></div>
 			</div>
 		</script>
 
@@ -567,7 +577,7 @@
 		-->
 		<script id="objectSlideTemplate" type="text/x-jsrender">
 			<div class="slide objectSlide" _id="{{:id}}" style="display: table;">
-				<div style="display: table-cell; vertical-align: middle; padding-left: 2em; padding-right: 2em;">{{:name}}</div>
+				<div style="display: table-cell; vertical-align: middle; padding-left: 2em; padding-right: 2em; cursor: pointer;">{{:name}}</div>
 			</div>
 		</script>
 	</head>
@@ -663,7 +673,7 @@
 							<div class="toggleButton">
 								<div class="arrowLeft"></div>
 								<div class="tagSliderBg">
-									<div id="objectTagsSlider" class="slider tagSlider">
+									<div id="objectTagsSlider" class="slider tagSlider" loop="true">
 										<!--  Заполняется шаблонизатором, см. код -->
 									</div>
 								</div>
@@ -682,28 +692,30 @@
 							<!--canvas class="canvasLayer">
 								Браузер не поддерживает Canvas.
 							</canvas-->
-							<div id="objectsMap" class="map">
-								<div class="wrapper">
-									<div class="cell">
-										<div class="mapLoading">
-											<div class="title">Идет загрузка карты</div>
-										</div>
-										<div class="mapLoadFail">
-											<div class="title">Карта не была загружена</div>
-											<div>Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите "обновить".</div>
-											<div class="loadMap">Обновить</div>
+							<div id="objectsMapContainer" class="mapContainer">
+								<div id="objectsMap" class="map">
+									<div class="wrapper">
+										<div class="cell">
+											<div class="mapLoading">
+												<div class="title">Идет загрузка карты</div>
+											</div>
+											<div class="mapLoadFail">
+												<div class="title">Карта не была загружена</div>
+												<div>Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите "обновить".</div>
+												<div class="loadMap">Обновить</div>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="mapSliderPlace">
-								<div class="arrowLeft"></div>
-								<div class="mapSliderContainer">
-									<div id="objectsMapSlider" class="slider mapSlider">
-										<!-- Пусто, заполняется динамически-->
+								<div class="mapSliderPlace">
+									<div class="arrowLeft"></div>
+									<div class="mapSliderContainer">
+										<div id="objectsMapSlider" class="slider mapSlider" loop="true">
+											<!-- Пусто, заполняется динамически-->
+										</div>
 									</div>
+									<div class="arrowRight"></div>
 								</div>
-								<div class="arrowRight"></div>
 							</div>
 							<div id="objectsCatalog" class="catalog vScrollerBg">
 								<div class="vScroller" stopPropagation="true"> 
@@ -728,7 +740,7 @@
 							<div class="toggleButton">
 								<div class="arrowLeft"></div>
 								<div class="tagSliderBg">
-									<div id="routeTagsSlider" class="slider tagSlider">
+									<div id="routeTagsSlider" class="slider tagSlider" loop="true">
 										<!--  Заполняется шаблонизатором, см. код -->
 									</div>
 								</div>

@@ -41,6 +41,9 @@ if(typeof PermGuide == "undefined")
 				init: function(containerElement) { 
 					var self = this;
 					
+					if ($(containerElement).attr("loop"))
+						this.loop = true;
+					
 					this.containerElement = containerElement;
 					$(this.containerElement).offset({});
 					

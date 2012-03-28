@@ -256,6 +256,9 @@ $.extend(PermGuide.LoadMapManager, PermGuide.Observable);
  */
 PermGuide.MapManager = function (yMapElement, mode){
 	
+	//Расширим до Observable.
+	$.extend(this, PermGuide.Observable);
+	
 	this.yMapElement = yMapElement;
 	this.mode = mode;
 	
@@ -348,19 +351,19 @@ PermGuide.MapManager = function (yMapElement, mode){
 				PermGuide.ApplicationData.selectObject(placemark.permGuideObject);
 			});	
 			*/
+			var overlayState = {
+					object: object,
+					onmap: false,
+					overlay: null
+				}
 			
 			var placemark = new PermGuide.Overlay(
 				new YMaps.GeoPoint(object.point.lng, object.point.lat),
-				function () {
-					PermGuide.ApplicationData.selectObject(object);
-				}
+				$.proxy(function () {
+					this._selectObject(overlayState);
+				}, this)
 			);
-			
-			var overlayState = {
-				object: object,
-				onmap: false,
-				overlay: placemark
-			}
+			overlayState.overlay = placemark;
 			
 			this.overlayStates.push(overlayState);
 			// Скроем и сразу же добавим на карту.
@@ -450,4 +453,12 @@ PermGuide.MapManager = function (yMapElement, mode){
 			}, this));
 		}
 	};
+	
+	/**
+	 * Внутренний метод, вызывается при выборе объекта на карте.
+	 */
+	this._selectObject = function(overlayState) {
+		var object = overlayState.object;
+		this.notify("mapObjectSelected", object);
+	}
 };
