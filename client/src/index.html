@@ -69,6 +69,14 @@
 			// Инициализируем слайдер страниц.
 			//PermGuide.PageSlider.init($("#slideContainer"));
 			$("#slideContainer").slider();
+			
+			////
+			// 
+			$("#objectsMapSlider").slider();
+			// Просто перехватим все события.
+			$(".mapSliderPlace").touchclick( function (event){
+			
+			}, true);
 
 			////
 			// Инициализируем окна информации.
@@ -196,6 +204,7 @@
 				);
 				
 				$(".tagSlider").slider();
+				$(".tagSlider").data("state").loop = true;
 				
 				$("#objectTagsSlider").data("state").listener = function(index, element) {
 					var tagId = element.attr("_id");
@@ -234,9 +243,11 @@
 				$("#objectTagsSlider").data("state").selectByAttr("_id", objectTag.id);
 				
 				////
+				// Сбросим позицию каталога.
+				$("#objectsCatalog .vScroller").data("state").resetPosition();
+				////
 				// Перерендарим каталоги.
-				var objects; 
-				objects = applicationData.getVisibleObjects("objects");
+				var objects = applicationData.getVisibleObjects("objects");
 				$("#objectsCatalog .vScroller").html(
 					$( "#objectsCatalogItemTemplate" ).render(objects)
 				);
@@ -248,6 +259,13 @@
 					var object = applicationData.getObjectById(objectId);
 					PermGuide.ApplicationData.selectObject(object);
 				});
+				
+				////
+				// Перерерандарим слайдер объектов.
+				$("#objectsMapSlider").html(
+					$( "#objectSlideTemplate" ).render(objects)
+				);
+				$("#objectsMapSlider").data("state").reset();
 			});
 			
 			// При включении/отключении тэгов, формируем 
@@ -269,6 +287,9 @@
 				var routeTag = applicationData.getVisibleRouteTags()[0];
 				$("#routeTagsSlider").data("state").selectByAttr("_id", routeTag.id);
 				
+				////
+				// Сбросим позицию каталога.
+				$("#routesCatalog .vScroller").data("state").resetPosition();
 				////
 				// Перерендарим каталоги.
 				var objects = applicationData.getVisibleObjects("routes");
@@ -330,7 +351,7 @@
 			
 			////
 			// При изменении позиции устройства, поменяем указатели растояния.
-			PermGuide.Geolocation.attachListener("newPosition", function (){
+			PermGuide.Geolocation.attachListener("rateRefreshed", function (){
 				$(".distance").each(function (){
 					var objectId = $(this).attr("_id");
 					if (!objectId)
@@ -432,6 +453,7 @@
 		////
 		// Сформируем правила загрузки приложения.
 		$(document).ready(function() {
+			
 			// Перечисляются этапы загрузки приложения.
 			PermGuide.Scheduler.addTask("SplashInit",{
 				activateFn: splashInit,
@@ -466,6 +488,7 @@
 			});
 
 			PermGuide.Scheduler.start();
+			// */
 		});
 
 		</script>
@@ -536,6 +559,15 @@
 		<script id="tagSlideTemplate" type="text/x-jsrender">
 			<div class="slide tagSlide" _id="{{:id}}" style="display: table;">
 				<div style="display: table-cell; vertical-align: middle;">{{:name}}</div>
+			</div>
+		</script>
+
+		<!-- 
+			Шаблон слайда объекта (на карте).
+		-->
+		<script id="objectSlideTemplate" type="text/x-jsrender">
+			<div class="slide objectSlide" _id="{{:id}}" style="display: table;">
+				<div style="display: table-cell; vertical-align: middle; padding-left: 2em; padding-right: 2em;">{{:name}}</div>
 			</div>
 		</script>
 	</head>
@@ -664,7 +696,15 @@
 									</div>
 								</div>
 							</div>
-							
+							<div class="mapSliderPlace">
+								<div class="arrowLeft"></div>
+								<div class="mapSliderContainer">
+									<div id="objectsMapSlider" class="slider mapSlider">
+										<!-- Пусто, заполняется динамически-->
+									</div>
+								</div>
+								<div class="arrowRight"></div>
+							</div>
 							<div id="objectsCatalog" class="catalog vScrollerBg">
 								<div class="vScroller" stopPropagation="true"> 
 									Каталог пуст.

@@ -292,7 +292,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 	
 		////
 		// Повешаем обработчики событий на обновление координат девайса. 
-		PermGuide.Geolocation.attachListener("newPosition", $.proxy(this.newPosition, this));
+		PermGuide.Geolocation.attachListener("refreshed", $.proxy(this.newPosition, this));
 	};
 	
 	/**

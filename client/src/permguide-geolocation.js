@@ -12,6 +12,15 @@ PermGuide.Geolocation = {
 	 * Последние координаты полученные устройством.
 	 */
 	lastPosition: null,
+	/**
+	 * Время последнего "редкого" обновления.
+	 */
+	time: null,
+	
+	/**
+	 * Частота редкого обновления.
+	 */
+	rateFrequency: 20000,
 	
 	/**
 	 * Инициализация.
@@ -47,8 +56,22 @@ PermGuide.Geolocation = {
 	},
 	
 	onSuccess: function(position){
+		
 		this.lastPosition = position;
-		this.notify("newPosition", position);
+		this.notify("refreshed", position);
+		
+		if (!this.time)
+		{
+			this.time = new Date();
+			this.notify("rateRefreshed", position);
+		}
+		
+		var newTime = new Date();
+		if (newTime.getTime() - this.time.getTime() > this.rateFrequency)
+		{
+			this.time = newTime;
+			this.notify("rateRefreshed", position);
+		}
 	},
 	
 	onError: function(){

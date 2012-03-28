@@ -33,16 +33,19 @@ if(typeof PermGuide == "undefined")
 				 */
 				listener: null,
 				
+				/**
+				 * Данный флаг говорит о том что сладер надо зациклить.
+				 */
+				loop: false,
+				
 				init: function(containerElement) { 
 					var self = this;
 					
 					this.containerElement = containerElement;
-					// 
 					$(this.containerElement).offset({});
 					
-					this.slideCount = $(this.containerElement).children(".slide").length;
-					this.resize();
-
+					this.reset();
+					
 					$(this.containerElement).touchstart( function(event) {
 						self.down(event);
 					});
@@ -56,9 +59,25 @@ if(typeof PermGuide == "undefined")
 
 					$(window).resize(function() {
 						self.resize();
-						self.refresh();
+						self.refresh(true);
 					});
 				},
+				
+				_callListener: function() {
+					if (this.listener != null)
+						this.listener(this.index, $(this.containerElement).children(".slide").slice(this.index));
+				},
+				
+				/**
+				 * Сбрасывает состояние слайдера.
+				 */
+				reset: function() {
+					this.index = 0;
+					this.slideCount = $(this.containerElement).children(".slide").length;
+					this.resize();
+					$(this.containerElement).css("left", 0);
+				},
+				
 				/**
 				 * Изменяет размеры контейнера и сладов.
 				 */
@@ -82,8 +101,9 @@ if(typeof PermGuide == "undefined")
 						this.index = 0;
 					if (this.index == this.slideCount)
 						this.index =  this.slideCount-1;
-					if (this.listener != null)
-						this.listener(this.index, $(this.containerElement).children(".slide").slice(this.index));
+					
+					this._callListener();
+					
 					this.refresh();
 				},
 				
@@ -130,6 +150,52 @@ if(typeof PermGuide == "undefined")
 					});
 				},
 					
+				up: function(event) {
+					
+					if (!this.draged)
+						return;
+					this.draged = false;
+					
+					if (!this.moved)
+						return;
+					this.moved = false;
+					
+					var tX = event.changedTouches[0].clientX;
+					var tY = event.changedTouches[0].clientY;
+
+					if (Math.abs(tX - this.x) > this.slideWidth/4)
+					{
+						if ((tX - this.x) < 0)
+						{
+							if (this.index < this.slideCount-1)
+							{
+								this.index ++;
+								this._callListener();
+							}
+							else if(this.loop)
+							{
+								this.index = 0;
+								this._callListener();
+							}
+						}
+						else
+						{
+							if (this.index > 0)
+							{
+								this.index --;
+								this._callListener();
+							}
+							else if(this.loop)
+							{
+								this.index = this.slideCount-1;
+								this._callListener();
+							}
+						}
+					}
+					//alert(this.index);
+					this.refresh();
+				},
+				
 				next: function() {
 					if (this.index == this.slideCount-1)
 						return;
@@ -150,7 +216,9 @@ if(typeof PermGuide == "undefined")
 					this.refresh();
 				},
 					
-				refresh: function() {
+				refresh: function(fast) {
+					if (this.slideCount == 0)
+						return;
 					if (this.index < 0)
 						this.index = 0;
 					if (this.index == this.slideCount)
@@ -160,45 +228,17 @@ if(typeof PermGuide == "undefined")
 					
 					var self = this;
 					this.canDraged = false;
-					$(this.containerElement).animate({
-						left: -position
-					}, 500, function() {
-						self.canDraged = true;
-					});
-					
-				},
-					
-				up: function(event) {
-					
-					if (!this.draged)
-						return;
-					this.draged = false;
-					
-					if (!this.moved)
-						return;
-					this.moved = false;
-					
-					var tX = event.changedTouches[0].clientX;
-					var tY = event.changedTouches[0].clientY;
-
-					if (Math.abs(tX - this.x) > this.slideWidth/4)
-					{
-						if ((tX - this.x) < 0)
-						{
-							this.index ++;
-							if (this.listener != null && this.index < this.slideCount)
-								this.listener(this.index, $(this.containerElement).children(".slide").slice(this.index));
-						}
-						else
-						{
-							this.index --;
-							if (this.listener != null && this.index >= 0)
-								this.listener(this.index, $(this.containerElement).children(".slide").slice(this.index));
-						}
+					if (fast) {
+						$(this.containerElement).css("left", -position);
+					} else {
+						$(this.containerElement).animate({
+							left: -position
+						}, 500, function() {
+							self.canDraged = true;
+						});
 					}
-					//alert(this.index);
-					this.refresh();
 				}
+				
 			};
 			
 			// Сохраним состояние внутри элемента.

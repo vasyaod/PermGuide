@@ -43,10 +43,15 @@ PermGuide.ApplicationData = {
 	loaded: false,
 	
 	/**
-	 * Список доступных тегов, в виде ассоциативного массива.
+	 * Список доступных тегов, в виде ассоциативного массива где ключ это ID.
 	 */
 	tags: {},
 	
+	/**
+	 * Список объектов, в виде ассоциативного массива где ключ это ID.
+	 */
+	objects: {},
+
 	/**
 	 * Собственно сами данные. 
 	 */
@@ -133,7 +138,7 @@ PermGuide.ApplicationData = {
 		var self = this;
 		// Очистим массивы тагов.
 		this.tags = {};
-		this.tagsAsArray = [];
+		this.objects = {};
 		
 		// Обработаем тэги заменим поля в соответствии с выбранным языком.
 		$.each(this.data.tags, function(index, tag) {	
@@ -405,6 +410,11 @@ PermGuide.ApplicationData = {
 	 * Метод возвращает объект по его id.
 	 */
 	getObjectById: function (id) {
+		
+		// Ищем тэги в кэше.
+		if (this.objects[id] != null)
+			return this.objects[id]
+		
 		var res = null;
 		
 		$.each(this.data.objects, $.proxy(function(index, object) {	
@@ -412,6 +422,9 @@ PermGuide.ApplicationData = {
 				res = object;
 		}, this));
 		
+		if (res)
+			this.objects[id] = res; 
+				
 		return res;
 	},
 	
