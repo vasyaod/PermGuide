@@ -4,21 +4,30 @@ if(typeof PermGuide == "undefined")
 	PermGuide = {};
 
 //Класс пользовательского оверлея, реализующего класс YMaps.IOverlay
-PermGuide.Overlay = function (geoPoint, fn) {
+PermGuide.BoxOverlay = function (geoPoint, fn) {
 	
 	var map;
-	var offset = new YMaps.Point(-11, -13);
-	var element = $('<div class="overlay"/>');
+	var parentContainer;
+//	var offset = new YMaps.Point(-11, -13);
+	var element = $(
+	'	<div class="overlay">'+
+	'		<div class="overlayContainer">'+
+	'			<div class="glow"></div>'+
+	'			<div class="box"></div>'+
+	'		</div>'+
+	'	</div>'
+	);
 	
 	// Устанавливаем z-index как у метки
 	element.css("z-index", YMaps.ZIndex.Overlay);
 	
 	if (fn != null)
-		element.touchclick(fn);
+		element.find(".box").touchclick(fn);
 
 	// Вызывается при добавления оверлея на карту 
-	this.onAddToMap = function (pMap, parentContainer) {
-		map = pMap;
+	this.onAddToMap = function (_map, _parentContainer) {
+		map = _map;
+		parentContainer = _parentContainer;
 		element.appendTo(parentContainer);
 		this.onMapUpdate();
 	};
@@ -33,7 +42,8 @@ PermGuide.Overlay = function (geoPoint, fn) {
 	// Вызывается при обновлении карты
 	this.onMapUpdate = function () {
 		// Смена позиции оверлея
-		var position = map.converter.coordinatesToMapPixels(geoPoint).moveBy(offset);
+//		var position = map.converter.coordinatesToMapPixels(geoPoint).moveBy(offset);
+		var position = map.converter.coordinatesToMapPixels(geoPoint);
 		element.css({
 			left: position.x,
 			top:  position.y
@@ -41,7 +51,8 @@ PermGuide.Overlay = function (geoPoint, fn) {
 	};
 	
 	this.refreshImage = function (img) {
-		element.css("background", "url("+img+")");
+		element.find(".box").css("background", "url("+img+")");
+		this.hideGlow();
 	}
 	
 	this.hide = function () {
@@ -51,6 +62,14 @@ PermGuide.Overlay = function (geoPoint, fn) {
 	this.show = function () {
 		element.css("display", "block");
 	}
+	
+	this.hideGlow = function () {
+		element.find(".glow").css("display", "none");
+	}
+
+	this.showGlow = function () {
+		element.find(".glow").css("display", "block");
+	}	
 }
 
 PermGuide.CanvasLayer = function (element) {
@@ -357,7 +376,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 					overlay: null
 				}
 			
-			var placemark = new PermGuide.Overlay(
+			var placemark = new PermGuide.BoxOverlay(
 				new YMaps.GeoPoint(object.point.lng, object.point.lat),
 				$.proxy(function () {
 					this._selectObject(overlayState);
@@ -421,12 +440,15 @@ PermGuide.MapManager = function (yMapElement, mode){
 					overlayState.overlay.refreshImage(overlayState.object.objectImg);
 				if (this.mode == "routes")
 					overlayState.overlay.refreshImage(overlayState.object.routeImg);
-				
 				if (!overlayState.onmap)
 				{
 					overlayState.onmap = true;
 					overlayState.overlay.show();
 				}
+				// Если данный объект является выделленным, то подсветим его.
+				if (overlayState == this.selectedOverlayState)
+					overlayState.overlay.showGlow();
+
 				//this.yMap.addOverlay(overlayState.overlay);
 			}
 			else if (!objectIsVisible && overlayState.onmap)
@@ -455,9 +477,56 @@ PermGuide.MapManager = function (yMapElement, mode){
 	};
 	
 	/**
+	 * Выбирает объект на карте. 
+	 */
+	this.selectObject = function(object) {
+		if (!this.yMap)		// Если карта не создана безполезно что либо переключать.
+			return; 
+
+		if (!object)
+			return;
+		// Для начала найдем оверлей с данным объектом.
+		var overlayState;
+		$.each(this.overlayStates, function(index, _overlayState) {	
+			if (_overlayState.object == object)
+				overlayState = _overlayState;
+		});
+		// Если оверлай найден, то выделим его.
+		if (overlayState)
+			this._selectObject(overlayState);
+	}
+	
+	/**
+	 * Выбирает объект на карте по его id.
+	 */
+	this.selectObjectById = function(objectId) {
+		if (!this.yMap)		// Если карта не создана безполезно что либо переключать.
+			return; 
+
+		if (!objectId)
+			return;
+		// Для начала найдем оверлей с данным объектом.
+		var overlayState;
+		$.each(this.overlayStates, function(index, _overlayState) {	
+			if (_overlayState.object.id == objectId)
+				overlayState = _overlayState;
+		});
+		// Если оверлай найден, то выделим его.
+		if (overlayState)
+			this._selectObject(overlayState);
+	}
+	
+	/**
 	 * Внутренний метод, вызывается при выборе объекта на карте.
 	 */
 	this._selectObject = function(overlayState) {
+		if (this.selectedOverlayState) {
+			this.selectedOverlayState.overlay.hideGlow(); 
+		}
+		
+		this.selectedOverlayState = overlayState;
+		this.selectedOverlayState.overlay.showGlow(); 
+			
 		var object = overlayState.object;
 		this.notify("mapObjectSelected", object);
 	}

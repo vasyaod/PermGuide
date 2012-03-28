@@ -147,8 +147,37 @@ div {
 	z-index: 1;
 	width: 23px;
 	height: 27px;
+}
+
+.overlay .overlayContainer {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.overlay .box{
+	position: absolute;
+	left: -11px;
+	top: -13px;
+	width: 23px;
+	height: 27px;
 	background: url(img/box_990000.png);
 	cursor: pointer;
+}
+
+.overlay .glow{
+	position: absolute;
+	left: -13px;
+	top: -15px;
+	width: 27px;
+	height: 31px;
+	background: url(img/box_glow.png);
+	cursor: pointer;
+	display: none;
+}
+
+.overlay .overlayContainer:HOVER .glow{
+	display: block;
 }
 
 .canvasLayer {
@@ -576,16 +605,36 @@ div {
 	color: #fff;
 }
 
-.mapSliderPlace .mapSliderContainer{
+.mapSliderContainer{
 	width: 96%;
 	height: 100%;
 	position: relative;
 	overflow: hidden;
 	float: left;
 }
-.mapSliderPlace .mapSliderContainer .objectSlide {
-	height: 100%;
+
+.mapSliderContainer .slide .nameBlock {
+	position: absolute;
+	left: 0;
+	right: 3em;
+	top: 0;
+	bottom: 0;
 }
+
+.mapSliderContainer .slide .nameBlock .name{
+	padding-left: 1em; 
+	padding-right: 1em;
+}
+
+.mapSliderContainer .slide .distanceBlock {
+	position: absolute;
+	width: 3em;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	font-weight: bold;
+}
+
 /**
  * Стили титульной страницы.
  */
