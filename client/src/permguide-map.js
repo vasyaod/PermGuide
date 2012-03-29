@@ -158,8 +158,8 @@ PermGuide.CanvasLayer = function (element) {
 	 * Удаляет маршрут с карты.
 	 */
 	this.removeRoute = function (route) {
-		routes = $(this.routes).filter(function(item){ return item != route; } )
 		
+		routes = $(routes).filter(function(item){ return this != route; } )
 		if (map != null)
 		{
 			this.reposition();
@@ -176,13 +176,13 @@ PermGuide.CanvasLayer = function (element) {
 	};
 
 	// Вызывается при добавления оверлея на карту 
-	this.onAddToMap = function (pMap, pPrentContainer) {
+	this.onAddToMap = function (pMap, _parentContainer) {
 		map = pMap;
-		prentContainer = $(pPrentContainer);
+		parentContainer = $(_parentContainer);
 		
-		element.appendTo(prentContainer);
-		element.attr("width", prentContainer.width());
-		element.attr("height", prentContainer.height());
+		element.appendTo(parentContainer);
+		element.attr("width", parentContainer.width());
+		element.attr("height", parentContainer.height());
 		
 		this.onMapUpdate();
 	};
@@ -195,7 +195,7 @@ PermGuide.CanvasLayer = function (element) {
 	};
 	
 	this.repaint = function () {
-		context.clearRect(0, 0, prentContainer.width(), prentContainer.height());
+		context.clearRect(0, 0, parentContainer.width(), parentContainer.height());
 		
 		var i = 0;
 		

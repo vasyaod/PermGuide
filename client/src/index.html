@@ -310,7 +310,7 @@
 		mapInit = function() {
 			////
 			// Инициализация карты объектов.
-			var objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0], "objects");
+			objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0], "objects");
 			// Создаем слайдер для карты объектов.
 			PermGuide.Interface.makeMapSlider(objectsMapManager, "objects", $("#objectsMapSlider"));
 			
@@ -689,10 +689,10 @@
 						</div>
 						
 						<div class="pageContent">
-							<canvas class="canvasLayer">
-								Браузер не поддерживает Canvas.
-							</canvas>
 							<div id="routesMapContainer" class="mapContainer">
+								<canvas class="canvasLayer">
+									Браузер не поддерживает Canvas.
+								</canvas>
 								<div id="routesMap" class="map">
 									<div class="wrapper">
 										<div class="cell">

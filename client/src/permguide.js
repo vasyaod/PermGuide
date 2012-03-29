@@ -51,6 +51,12 @@ PermGuide.ApplicationData = {
 	 * Список объектов, в виде ассоциативного массива где ключ это ID.
 	 */
 	objects: {},
+	
+	
+	/**
+	 * Список маршрутов, в виде ассоциативного массива где ключ это ID.
+	 */
+	routes: {},
 
 	/**
 	 * Собственно сами данные. 
@@ -139,6 +145,7 @@ PermGuide.ApplicationData = {
 		// Очистим массивы тагов.
 		this.tags = {};
 		this.objects = {};
+		this.routes = {};
 		
 		// Обработаем тэги заменим поля в соответствии с выбранным языком.
 		$.each(this.data.tags, function(index, tag) {	
@@ -412,7 +419,7 @@ PermGuide.ApplicationData = {
 	getObjectById: function (id) {
 		
 		// Ищем тэги в кэше.
-		if (this.objects[id] != null)
+		if (this.objects[id])
 			return this.objects[id]
 		
 		var res = null;
@@ -441,6 +448,28 @@ PermGuide.ApplicationData = {
 			object = this.getRandomObject();
 		return object;
 	},	
+	
+	/**
+	 * Метод возвращает маршрут по его id.
+	 */
+	getRouteById: function (id) {
+		
+		// Ищем тэги в кэше.
+		if (this.routes[id])
+			return this.routes[id];
+		
+		var res = null;
+		$.each(this.data.routes, function(index, route) {	
+			if (route.id == id)
+				res = route;
+		});
+		
+		if (res)
+			this.routes[id] = res; 
+				
+		return res;
+	},
+
 	/**
 	 * Метод выделяет объект делая его текущим. 
 	 */
@@ -578,11 +607,16 @@ PermGuide.Interface.makePopularObjectsAndRoutes = function(
 		);
 		
 		////
-		// Повешаем на вубор объекта из каталога обработчик.
+		// Повешаем обработчик на выбор популярного объекта.
 		$(popularObjectItemContainer).find(".catalogItem").touchclick( function (event) {
 			var objectId = $(event.target).parent().attr("_id");
 			var object = applicationData.getObjectById(objectId);
-			PermGuide.ApplicationData.selectObject(object);
+			var tag = object.tags[0];
+			tag.activate();
+			objectsMapManager.selectObject(object);
+			
+			var pageSlider = $("#slideContainer").data("state");
+			pageSlider.select(1);
 		});
 
 		////
@@ -593,7 +627,7 @@ PermGuide.Interface.makePopularObjectsAndRoutes = function(
 			var tag = route.tags[0];
 			
 			objectItems.push({
-				id: route.id,
+				id: tag.id,
 				name: route.description,
 				tagName: tag.name,
 				distance: false,
@@ -605,6 +639,16 @@ PermGuide.Interface.makePopularObjectsAndRoutes = function(
 			$( "#catalogItemTemplate" ).render(objectItems)
 		);
 		
+		////
+		// Повешаем обработчик на выбор популярного объекта.
+		$(popularRouteItemContainer).find(".catalogItem").touchclick( function (event) {
+			var tagId = $(event.target).parent().attr("_id");
+			var tag = applicationData.getTagById(tagId);
+			tag.activate();
+			
+			var pageSlider = $("#slideContainer").data("state");
+			pageSlider.select(2);
+		});
 	});
 
 }
