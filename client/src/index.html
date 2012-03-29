@@ -29,7 +29,7 @@
 		splashInit = function() {
 			// Отобразим splash-экран.
 			$("#splashScreen").css("visibility", "visible");
-			$("#pageSlider").css("visibility", "hidden");
+			$("#mainScreen").css("visibility", "hidden");
 
 			// При включении/отключении тэгов, формируем 
 			PermGuide.Scheduler.attachListener("started", function (){
@@ -65,11 +65,6 @@
 			//PermGuide.DropDownWindow.init($("#tagsMenu"));
 			$(".dropDownMenu").dropdownmenu();
 
-			////
-			// Инициализируем слайдер страниц.
-			//PermGuide.PageSlider.init($("#slideContainer"));
-			$("#slideContainer").slider();
-			
 			// Просто перехватим все события, что бы они не попадали на карту.
 			$(".mapSliderPlace").touchclick( function (){}, true);
 
@@ -344,7 +339,7 @@
 
 			// Закроем splash-screen
 			$("#splashScreen").css("visibility", "hidden");
-			$("#pageSlider").css("visibility", "visible");
+			$("#mainScreen").css("visibility", "visible");
 		};
 		
 		////
@@ -505,8 +500,8 @@
 				<!-- Данный фон служит чтобы при клике мимо меню сворачивать его.-->
 			</div>
 			
-			<div id="pageSlider">
-				<div id="slideContainer" class="slider page">
+			<div id="mainScreen" class="screen">
+				<div id="slideContainer" class="slider page pageSlider">
 					<!-- 
 						Для для программы сладера страниц, ваден только элемент с
 						классом "slide", который и является страницей.
@@ -717,27 +712,27 @@
 						</div>
 					</div>
 				</div>
-				<div id="pageScroller" class="pageBottom">
+				<div id="pageScroller" class="pageScroller pageBottom">
 					<div id="pMain" _id="0" class="pageIndicator">
 							
 								<div class="pagePicture"></div>
 								<div class="pageCaption">Пермский гид</div>
-								<div class="pageIndicatorFoground"></div>
+								<div class="foground"></div>
 					</div>
 					<div id="pObjects" _id="1" class="pageIndicator">
 								<div class="pagePicture"></div>
 								<div class="pageCaption">Места</div>
-								<div class="pageIndicatorFoground"></div>
+								<div class="foground"></div>
 					</div>
 					<div id="pWays" _id="2" class="pageIndicator">
 								<div class="pagePicture"></div>
 								<div class="pageCaption">Маршруты</div>
-								<div class="pageIndicatorFoground"></div>
+								<div class="foground"></div>
 					</div>
 					<div id="pInfo" _id="3" class="pageIndicator">
 								<div class="pagePicture"></div>
 								<div class="pageCaption">О Перми</div>
-								<div class="pageIndicatorFoground"></div>
+								<div class="foground"></div>
 					</div>
 				</div>			
 			</div>

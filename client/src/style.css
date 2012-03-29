@@ -56,6 +56,57 @@ div {
 	min-height: 100%;
 }
 
+
+/**
+* Стили содержимого общей разметки страниц
+*/
+
+.page {
+	height: 92%;
+	background-color: #e5e5e5;
+}
+
+.pageBottom {
+	height: 8%;
+	border-top: 2px #ff0000 solid;
+}
+
+.pageHeader {
+	width: 100%;
+	height: 7%;
+	background-color: #333333;
+}
+
+.pageHeaderText {
+	font-size: 1.7em;
+	color: #fff;
+	text-align: center;
+}
+
+.pageContent {
+	height: 93%;
+	position: relative;
+}
+
+/**
+ * Общие стили экранов.
+ */
+.screen {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	visibility: hidden;
+}
+
+.pageSlide {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
 /**
  * Стиль splash-экрана.
  */
@@ -86,37 +137,6 @@ div {
 }
 
 /**
-* Стили содержимого общей разметки страниц
-*/
-
-.page {
-	height: 93%;
-	background-color: #e5e5e5;
-}
-
-.pageBottom {
-	height: 7%;
-	border-top: 2px #ff0000 solid;
-}
-
-.pageHeader {
-	width: 100%;
-	height: 7%;
-	background-color: #333333;
-}
-
-.pageHeaderText {
-	font-size: 1.7em;
-	color: #fff;
-	text-align: center;
-}
-
-.pageContent {
-	height: 93%;
-	position: relative;
-}
-
-/**
  * Экран выбора языка.
  */
 #langSelectScreen {
@@ -137,6 +157,76 @@ div {
 	margin: 10%;
 	background-color: #eeeeee;
 	cursor: pointer;
+}
+/**
+ * Общие стили скроллера страниц.
+ */
+
+.pageScroller .pageIndicator {
+	height: 100%;
+	position: relative;
+	float: left;
+	text-align: center;
+}
+
+.pageScroller .active {
+	border-top: 2px solid #F00;
+}
+
+/**
+ * Стили скроллера страниц главного экрана.
+ */
+
+#mainScreen .pageScroller .pageIndicator {
+	width: 25%;
+	
+	vertical-align: bottom;
+	padding-bottom: 2px;
+	font-size: 0.8em;
+}
+
+#mainScreen .pageScroller .pageIndicator .pagePicture{
+	width: 100%;
+	height: 44px;
+	background-position: center top;
+	background-repeat: no-repeat;
+}
+
+#mainScreen .pageScroller #pMain.pageIndicator .pagePicture{
+	background-image: url('img/perm2.png');
+}
+
+#mainScreen .pageScroller #pObjects.pageIndicator .pagePicture{
+	background-image: url('img/map2.png');
+}
+
+#mainScreen .pageScroller #pWays.pageIndicator .pagePicture{
+	background-image: url('img/way2.png');
+}
+
+#mainScreen .pageScroller #pInfo.pageIndicator .pagePicture{
+	background-image: url('img/about2.png');
+	background-position: center -2px;
+}
+
+#mainScreen .pageScroller #pMain.pageIndicator.active .pagePicture{
+	background-image: url('img/perm1.png');
+	background-position: center -2px;
+}
+
+#mainScreen .pageScroller #pObjects.pageIndicator.active .pagePicture{
+	background-image: url('img/map1.png');
+	background-position: center -2px;
+}
+
+#mainScreen .pageScroller #pWays.pageIndicator.active .pagePicture{
+	background-image: url('img/way1.png');
+	background-position: center -2px;
+}
+
+#mainScreen .pageScroller #pInfo.pageIndicator.active .pagePicture{
+	background-image: url('img/about1.png');
+	background-position: center -2px;
 }
 
 /**
@@ -320,7 +410,8 @@ div {
 
 .catalogItem .tagName {
 	font-size: 0.8em;
-	padding-top: 0.2em; 
+	padding-top: 0.2em; 	
+	
 }
 
 .catalogItem .distanceBlock {
@@ -332,106 +423,7 @@ div {
 	font-weight: bold;
 }
 
-/**
- * Стили скроллера страниц.
- */
 
-#pageScroller .pageIndicator {
-	width: 25%;
-	height: 100%;
-	position: relative;
-	float: left;
-	text-align: center;
-	
-	vertical-align: bottom;
-	padding-bottom: 2px;
-	font-size: 0.8em;
-}
-
-#pageScroller .pageIndicator .pageIndicatorFoground{
-	top: 0px;
-	left: 0px;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	cursor: pointer;
-}
-
-#pageScroller .active {
-	border-top: 2px solid #F00;
-}
-#pageScroller .pageIndicator .pagePicture{
-	width: 100%;
-	height: 44px;
-	background-position: center top;
-	background-repeat: no-repeat;
-}
-
-#pageScroller #pMain.pageIndicator .pagePicture{
-	background-image: url('img/perm2.png');
-}
-
-#pageScroller #pObjects.pageIndicator .pagePicture{
-	background-image: url('img/map2.png');
-}
-
-#pageScroller #pWays.pageIndicator .pagePicture{
-	background-image: url('img/way2.png');
-}
-
-#pageScroller #pInfo.pageIndicator .pagePicture{
-	background-image: url('img/about2.png');
-	background-position: center -2px;
-}
-
-#pageScroller #pMain.pageIndicator.active .pagePicture{
-	background-image: url('img/perm1.png');
-	background-position: center -2px;
-}
-
-#pageScroller #pObjects.pageIndicator.active .pagePicture{
-	background-image: url('img/map1.png');
-	background-position: center -2px;
-}
-
-#pageScroller #pWays.pageIndicator.active .pagePicture{
-	background-image: url('img/way1.png');
-	background-position: center -2px;
-}
-
-#pageScroller #pInfo.pageIndicator.active .pagePicture{
-	background-image: url('img/about1.png');
-	background-position: center -2px;
-}
-
-/**
- * Стили сладера страниц.
- */ 
-#pageSlider {
-	top: 0px;
-	left: 0px;
-	width: 100%;
-	height: 100%;
-	
-	overflow: hidden;
-	border: 0px;
-	margin: 0 auto;
-	visibility: hidden;
-	position: absolute;
-	position: relative;
-}
-
-#slideContainer {
-	width: 100%;
-	height: 92%;
-}
-
-.pageSlide {
-	width: 100%;
-	height: 100%;
-	float: left;
-	position: relative;
-}
 /**
  * Стили сладера тэгов.
  */ 

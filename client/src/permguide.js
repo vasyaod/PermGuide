@@ -252,11 +252,13 @@ PermGuide.ApplicationData = {
 			route.objects = [];
 			// Переберем все точки маршрута, дабы востаноить связь объект->маршрут.
 			$.each(route.points, $.proxy(function(index, point) {	
-				if (point.id != null) {
+				if (point.id) {
 					
 					var object = this.getObjectById(point.id);
 					if (object.routes == null)
 						object.routes = [];
+					else
+						alert("Отсутствует объект с id:"+point.id)
 					object.routes.push(route);
 					route.objects.push(object);
 				}
@@ -655,7 +657,12 @@ PermGuide.Interface.makePopularObjectsAndRoutes = function(
 
 PermGuide.Interface.makeScreen = function(screenElement) {
 
-	var pageSlider = $("#slideContainer").data("state");
+	////
+	// Инициализируем слайдер страниц.
+	//PermGuide.PageSlider.init($("#slideContainer"));
+	$(screenElement).find(".pageSlider").slider();
+	
+	var pageSlider = $(screenElement).find(".pageSlider").data("state");
 	
 	// Устанавливает обработчик переключения страниц.
 	pageSlider.listener = function(index) {
