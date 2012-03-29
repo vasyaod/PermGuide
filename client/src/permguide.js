@@ -464,3 +464,73 @@ PermGuide.ApplicationData = {
 // Расширим до Observable.
 $.extend(PermGuide.ApplicationData, new PermGuide.Observable());
 
+
+PermGuide.Interface = {};
+
+/**
+ * Метод инициализирует и создает слайдер объектов на карте.
+ */
+PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
+	
+	$(sliderElement).slider();
+	
+	mapManager.attachListener("mapObjectSelected", function (object){
+		$(sliderElement).data("state").selectByAttr("_id", object.id);
+	});
+	// Перерерандарим слайдер объектов.
+	PermGuide.ApplicationData.attachListener(mode+"VisibleChanged", function (applicationData){
+		////
+		// Перерерандарим слайдер объектов.
+		var objects = applicationData.getVisibleObjects(mode);
+		$(sliderElement).html(
+			$( "#objectSlideTemplate" ).render(objects)
+		);
+		$(sliderElement).data("state").reset();
+		
+		// Вешает обработсчики событий на каждый слайд.
+		$(sliderElement).children(".slide").touchclick( function (event) {
+			var objectId = $(event.target).parent().attr("_id");
+			var object = applicationData.getObjectById(objectId);
+			applicationData.selectObject(object);
+		});
+		mapManager.selectObjectById(objects[0].id);
+	});
+	
+	// Обработает события на переключение слайдера объектов.
+	$(sliderElement).data("state").listener = function(index, element) {
+		var objectId = element.attr("_id");
+		mapManager.selectObjectById(objectId);
+	};
+};
+PermGuide.Interface.makeCatalog = function(mode, catalogElement) {
+
+	PermGuide.ApplicationData.attachListener("routesVisibleChanged", function (applicationData){
+		////
+		// Сбросим позицию каталога.
+		$(catalogElement).find(".vScroller").data("state").resetPosition();
+		////
+		// Перерендарим каталоги.
+		var objects = applicationData.getVisibleObjects(mode);
+		var objectItems = [];
+		
+		$.each(objects, function(index, object) {
+			objectItems.push({
+				id: object.id,
+				name: object.name,
+				color: (mode=="objects") ? object.objectColor : object.routeColor
+			});
+		});
+		
+		$(catalogElement).find(".vScroller").html(
+			$( "#catalogItemTemplate" ).render(objectItems)
+		);
+		
+		////
+		// Повешаем на вубор объекта из каталога, событие.
+		$(catalogElement).find(".catalogItem").touchclick( function (event) {
+			var objectId = $(event.target).parent().attr("_id");
+			var object = applicationData.getObjectById(objectId);
+			PermGuide.ApplicationData.selectObject(object);
+		});
+	});
+}

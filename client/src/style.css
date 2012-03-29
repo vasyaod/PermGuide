@@ -291,9 +291,6 @@ div {
  * Стили пункта катлога.
  */
 .catalog {
-	position: relative;
-	background-color: #e5e5e5;
-	overflow: hidden;
 	display: none;
 	height: 100%; 
 }

@@ -109,6 +109,14 @@
 			////
 			// Инициализация скроленга страниц.
 			$(".vScroller").scrollable();
+
+			////
+			// Инициализация каталога объектов на карте объектов.
+			PermGuide.Interface.makeCatalog("objects", $("#objectsCatalog"));
+			
+			////
+			// Инициализация каталога объектов на карте маршрутов.
+			PermGuide.Interface.makeCatalog("routes", $("#routesCatalog"));
 			
 			////
 			// Обработчик события загрузки данных 
@@ -236,24 +244,6 @@
 				var objectTag = applicationData.getVisibleObjectTags()[0];
 				$("#objectTagsSlider").data("state").selectByAttr("_id", objectTag.id);
 				
-				////
-				// Сбросим позицию каталога.
-				$("#objectsCatalog .vScroller").data("state").resetPosition();
-				////
-				// Перерендарим каталоги.
-				var objects = applicationData.getVisibleObjects("objects");
-				$("#objectsCatalog .vScroller").html(
-					$( "#objectsCatalogItemTemplate" ).render(objects)
-				);
-				
-				////
-				// Повешаем на вубор объекта из каталога, событие.
-				$("#objectsCatalog .catalogItem").touchclick( function (event) {
-					var objectId = $(event.target).parent().attr("_id");
-					var object = applicationData.getObjectById(objectId);
-					PermGuide.ApplicationData.selectObject(object);
-				});
-				
 			});
 			
 			// При включении/отключении тэгов, формируем 
@@ -275,23 +265,6 @@
 				var routeTag = applicationData.getVisibleRouteTags()[0];
 				$("#routeTagsSlider").data("state").selectByAttr("_id", routeTag.id);
 				
-				////
-				// Сбросим позицию каталога.
-				$("#routesCatalog .vScroller").data("state").resetPosition();
-				////
-				// Перерендарим каталоги.
-				var objects = applicationData.getVisibleObjects("routes");
-				$("#routesCatalog .vScroller").html(
-					$( "#routesCatalogItemTemplate" ).render(objects)
-				);
-				
-				////
-				// Повешаем на вубор объекта из каталога, событие.
-				$("#routesCatalog .catalogItem").touchclick( function (event) {
-					var objectId = $(event.target).parent().attr("_id");
-					var object = applicationData.getObjectById(objectId);
-					PermGuide.ApplicationData.selectObject(object);
-				});
 			});
 			
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
@@ -368,40 +341,6 @@
 			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
 				PermGuide.Scheduler.finished("DataLoad");
 			});
-		};
-		PermGuide.Interface = {};
-		
-		PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
-			
-			$(sliderElement).slider();
-			
-			mapManager.attachListener("mapObjectSelected", function (object){
-				$(sliderElement).data("state").selectByAttr("_id", object.id);
-			});
-			// Перерерандарим слайдер объектов.
-			PermGuide.ApplicationData.attachListener(mode+"VisibleChanged", function (applicationData){
-				////
-				// Перерерандарим слайдер объектов.
-				var objects = applicationData.getVisibleObjects(mode);
-				$(sliderElement).html(
-					$( "#objectSlideTemplate" ).render(objects)
-				);
-				$(sliderElement).data("state").reset();
-				
-				// Вешает обработсчики событий на каждый слайд.
-				$(sliderElement).children(".slide").touchclick( function (event) {
-					var objectId = $(event.target).parent().attr("_id");
-					var object = applicationData.getObjectById(objectId);
-					applicationData.selectObject(object);
-				});
-				mapManager.selectObjectById(objects[0].id);
-			});
-			
-			// Обработает события на переключение слайдера объектов.
-			$(sliderElement).data("state").listener = function(index, element) {
-				var objectId = element.attr("_id");
-				mapManager.selectObjectById(objectId);
-			};
 		};
 		
 		mapInit = function() {
@@ -540,9 +479,9 @@
 		<!-- 
 			Шаблон пункта в каталоге.
 		-->
-		<script id="objectsCatalogItemTemplate" type="text/x-jsrender">
+		<script id="catalogItemTemplate" type="text/x-jsrender">
 			<div class="catalogItem" _id="{{:id}}">
-				<div class="name" style="border-left-color: {{:objectColor}};">{{:name}}</div>
+				<div class="name" style="border-left-color: {{:color}};">{{:name}}</div>
 				<div class="distanceBlock">
 					<div class="wrapper">
 						<div _id="{{:id}}" class="cell distance"></div>
@@ -550,26 +489,6 @@
 				</div>
 				<div class="foground"></div>
 			</div>
-		</script>
-
-		<script id="routesCatalogItemTemplate" type="text/x-jsrender">
-			<div class="catalogItem" _id="{{:id}}">
-				<div class="name" style="border-left-color: {{:routeColor}};">{{:name}}</div>
-				<div class="distanceBlock">
-					<div class="wrapper">
-						<div _id="{{:id}}" class="cell distance"></div>
-					</div>
-				</div>
-				<div class="foground"></div>
-			</div>
-		</script>
-
-		<!-- 
-			Шаблон информации об объекте.
-		-->
-		<script id="objectInfoTemplate" type="text/x-jsrender">
-			<div>{{:name}}</div>
-			<div>{{:description}}</div>
 		</script>
 		
 		<!-- 
@@ -581,6 +500,14 @@
 				<div class="tagName">{{:tagName}}</div>
 				{{if objectId}}<div _id="{{:objectId}}" class="distance"></div>{{/if}}
 			</div>
+		</script>
+
+		<!-- 
+			Шаблон информации об объекте.
+		-->
+		<script id="objectInfoTemplate" type="text/x-jsrender">
+			<div>{{:name}}</div>
+			<div>{{:description}}</div>
 		</script>
 		
 		<!-- 
