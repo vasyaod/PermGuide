@@ -233,6 +233,7 @@ if(typeof PermGuide == "undefined")
 					this.canDraged = false;
 					if (fast) {
 						$(this.containerElement).css("left", -position);
+						self.canDraged = true;
 					} else {
 						$(this.containerElement).animate({
 							left: -position
