@@ -3,41 +3,49 @@
  */
 (function ($) {
 	
-	$.fn.toggleButton = function(_props) {
+	$.fn.toggleButton = function(_state) {
 			
-		var props = {
-			on: function (){},
-			off: function (){},
-			state: false,
-			stopPropagation: true
-		};
-		if (props) { 
-			$.extend( props, _props );
-		}
-		
-		var self = this;
-		var redraw = function()
-		{
-			if(props.state)
-			{
-				self.children(".off").css("display", "none");
-				self.children(".on").css("display", "block");
-			} else {
+		this.each( function() {
+			var self = this;
+	
+			var state = {
+				on: function (){},
+				off: function (){},
+				state: false,
+				stopPropagation: true,
 				
-				self.children(".on").css("display", "none");
-				self.children(".off").css("display", "block");
+				redraw: function() {
+					if(this.state)
+					{
+						$(self).children(".off").css("display", "none");
+						$(self).children(".on").css("display", "block");
+					} else {
+						
+						$(self).children(".on").css("display", "none");
+						$(self).children(".off").css("display", "block");
+					}
+				},
+				toggle: function() {
+					this.state = !this.state;
+					this.redraw();
+					if (this.state)
+						this.on();
+					else
+						this.off();
+				}
+				
+			};
+			
+			if (_state) { 
+				$.extend( state, _state );
 			}
-		};
-		redraw();
-		
-		this.touchclick(function(){
-			props.state = !props.state;
-			redraw();
-			if (props.state)
-				props.on();
-			else
-				props.off();
-		}, props.stopPropagation);
+			
+			state.redraw();
+			$(this).touchclick(function(){
+				state.toggle();
+			}, state.stopPropagation);
+			$(this).data("state", state);
+		});
 	};
 	
 })(jQuery);

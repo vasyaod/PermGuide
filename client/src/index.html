@@ -59,6 +59,10 @@
 			$(".loadMap").touchclick( function () {
 				PermGuide.LoadMapManager.load();
 			});
+			// Кнопка переключения в список в случаи отсутствия карты.
+			$(".toggleMode").touchclick( function (event) {
+				$(event.target).parents(".pageSlide").find(".switchMode").data("state").toggle();
+			});
 			
 			////
 			// Инициализируем выпадаущее окно со списком меток.
@@ -249,6 +253,8 @@
 			////
 			// При изменении позиции устройства, поменяем указатели растояния.
 			PermGuide.Geolocation.attachListener("rateRefreshed", function (){
+				var meters = PermGuide.Language.getInterfaceString("meters");
+				var kilometers = PermGuide.Language.getInterfaceString("kilometers");
 				$(".distance").each(function (){
 					var objectId = $(this).attr("_id");
 					if (!objectId)
@@ -259,9 +265,9 @@
 
 					var distance = PermGuide.Geolocation.relativeDistance(object.point.lat, object.point.lng);
 					if (distance > 1000)
-						distance = Math.round(distance/1000)+"km";
+						distance = Math.round(distance/1000)+kilometers;
 					else
-						distance = distance + "m";
+						distance = distance + meters;
 					$(this).text(distance);
 				});
 			});
@@ -329,10 +335,7 @@
 
 		closeSplash = function() {
 			// Перед тем как скрыть splash интернацианализируем интерфейс.
-			$(".i18n").each(function(index){
-				var text = PermGuide.Language.getInterfaceString($(this).text());
-				$(this).text(text);
-			});
+			$(".i18n").i18n();
 		
 			////
 			// Включим тестовую геолокацию.
@@ -471,7 +474,7 @@
 					<div class="wrapper">
 						<div class="cell name">
 							{{:name}} 
-							<div class="more">подробнее</div>
+							<div class="more i18n">подробнее</div>
 						</div>
 					</div>
 				</div>
@@ -511,9 +514,7 @@
 						<div class="pageHeader">
 							<div class="pageHeaderText">
 								<div class="wrapper">
-									<div class="cell">
-										Пермский гид
-									</div>
+									<div class="cell i18n">Пермский гид</div>
 								</div>
 							</div> 
 						</div>
@@ -525,9 +526,7 @@
 									</div>
 								</div>
 								<div id="popularPlaces" class="popular">
-									<div class="title">
-										Популярные места
-									</div>
+									<div class="title i18n">Популярные места</div>
 									<div id="popularPlacesContent" class="popularContent">
 										<!--
 										Здесь располагаются плашки с маршрутами. 
@@ -535,9 +534,7 @@
 									</div>
 								</div>
 								<div id="popularRoutes" class="popular">
-									<div class="title">
-										Популярные маршруты
-									</div>
+									<div class="title i18n">Популярные маршруты</div>
 									<div id="popularRoutesContent" class="popularContent">
 										<!--
 											Здесь располагаются плашки с маршрутами. 
@@ -587,12 +584,18 @@
 									<div class="wrapper">
 										<div class="cell">
 											<div class="mapLoading">
-												<div class="title">Идет загрузка карты</div>
+												<div class="title i18n">MapLoadingTitle</div>
 											</div>
 											<div class="mapLoadFail">
-												<div class="title">Карта не была загружена</div>
-												<div>Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите "обновить".</div>
-												<div class="loadMap">Обновить</div>
+												<div class="title i18n">MapLoadFailTitle</div>
+												<div class="text">
+													<span class="i18n">MapLoadFailText1</span>
+													<span class="loadMap button i18n">MapLoadFailText2</span>
+													<span class="i18n">MapLoadFailText3</span>
+													<span class="toggleMode button i18n">MapLoadFailText4</span>
+													<span class="i18n">MapLoadFailText5</span>
+												</div>
+												
 											</div>
 										</div>
 									</div>
@@ -609,7 +612,7 @@
 							</div>
 							<div id="objectsCatalog" class="catalog vScrollerBg">
 								<div class="vScroller" stopPropagation="true"> 
-									Каталог пуст.
+									<!-- Пусто, заполняется динамически -->
 								</div>
 							</div>
 						</div>
@@ -649,18 +652,23 @@
 						<div class="pageContent">
 							<div id="routesMapContainer" class="mapContainer">
 								<canvas class="canvasLayer">
-									Браузер не поддерживает Canvas.
+									Your browser does not support Canvas.
 								</canvas>
 								<div id="routesMap" class="map">
 									<div class="wrapper">
 										<div class="cell">
 											<div class="mapLoading">
-												<div class="title">Идет загрузка карты</div>
+												<div class="title i18n">MapLoadingTitle</div>
 											</div>
 											<div class="mapLoadFail">
-												<div class="title">Карта не была загружена</div>
-												<div>Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите "обновить".</div>
-												<div class="loadMap">Обновить</div>
+												<div class="title i18n">MapLoadFailTitle</div>
+												<div class="text">
+													<span class="i18n">MapLoadFailText1</span>
+													<span class="loadMap button i18n">MapLoadFailText2</span>
+													<span class="i18n">MapLoadFailText3</span>
+													<span class="toggleMode button i18n">MapLoadFailText4</span>
+													<span class="i18n">MapLoadFailText5</span>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -678,7 +686,7 @@
 							
 							<div id="routesCatalog" class="catalog vScrollerBg">
 								<div class="vScroller" stopPropagation="true"> 
-									Каталог пуст.
+									<!-- Заполняются динамически -->
 								</div>
 							</div>
 						</div>
@@ -687,9 +695,7 @@
 						<div class="pageHeader">
 							<div class="pageHeaderText">
 								<div class="wrapper">
-									<div class="cell">
-										О Перми
-									</div> 
+									<div class="cell i18n">О Перми</div> 
 								</div> 
 							</div> 
 						</div>
@@ -704,22 +710,22 @@
 					<div id="pMain" _id="0" class="pageIndicator">
 							
 								<div class="pagePicture"></div>
-								<div class="pageCaption">Пермский гид</div>
+								<div class="pageCaption i18n">Пермский гид</div>
 								<div class="foground"></div>
 					</div>
 					<div id="pObjects" _id="1" class="pageIndicator">
 								<div class="pagePicture"></div>
-								<div class="pageCaption">Места</div>
+								<div class="pageCaption i18n">Места</div>
 								<div class="foground"></div>
 					</div>
 					<div id="pWays" _id="2" class="pageIndicator">
 								<div class="pagePicture"></div>
-								<div class="pageCaption">Маршруты</div>
+								<div class="pageCaption i18n">Маршруты</div>
 								<div class="foground"></div>
 					</div>
 					<div id="pInfo" _id="3" class="pageIndicator">
 								<div class="pagePicture"></div>
-								<div class="pageCaption">О Перми</div>
+								<div class="pageCaption i18n">О Перми</div>
 								<div class="foground"></div>
 					</div>
 				</div>			
@@ -740,7 +746,7 @@
 						</div>
 						<div class="pageContent vScrollerBg background">
 							<div class="vScroller objectDescription">
-								Информации нет!
+								
 							</div>
 						</div>
 					</div>
@@ -753,7 +759,7 @@
 						</div>
 						<div class="pageContent vScrollerBg background">
 							<div class="vScroller">
-								Контактная информация!
+								
 							</div>
 						</div>
 					</div>
@@ -766,22 +772,22 @@
 						</div>
 						<div class="pageContent vScrollerBg background">
 							<div class="vScroller">
-								Фото!
+								
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="pageScroller pageBottom" > 
 					<div _id="0" class="active pageIndicator">
-						Описание
+						<div class="i18n">Описание</div>
 						<div class="foground"></div>
 					</div>
 					<div _id="1" class="pageIndicator">
-						Контактная информация
+						<div class="i18n">Контактная информация</div>
 						<div class="foground"></div>
 					</div>
 					<div _id="2" class="pageIndicator">
-						Фото
+						<div class="i18n">Фото</div>
 						<div class="foground"></div>
 					</div>
 				</div>

@@ -8,25 +8,96 @@ if(typeof PermGuide == "undefined")
  */
 PermGuide.lr = {
 	
-	"PrevButton": {
-		ru: "влево",
-		en: "to left"
+	"Пермский гид": {
+		ru: "Пермский гид",
+		en: "Perm guide"
+	},
+	"Места": {
+		ru: "Места",
+		en: "Places"
+	},
+	"Маршруты": {
+		ru: "Маршруты",
+		en: "Routes"
+	},
+	"О Перми": {
+		ru: "О Перми",
+		en: "About Perm"
 	},
 	
-	"NextButton": {
-		ru: "влево",
-		en: "to right"
+	"Описание": {
+		ru: "Описание",
+		en: "Description"
 	},
-	"ТoggleButton": {
-		ru: "Жми сюда, здесь метки",
-		en: "Click here"
+	"Контактная информация": {
+		ru: "Контактная информация",
+		en: "Contacts"
 	},
-	"Intro": {
-		ru: "Красивая картинка и менюшка!",
-		en: "Beautiful picture and menus!"
+	"Фото": {
+		ru: "Фото",
+		en: "Photo"
+	},
+	"Популярные места": {
+		ru: "Популярные места",
+		en: "Popular places"
+	},
+	"Популярные маршруты": {
+		ru: "Популярные маршруты",
+		en: "Popular routes"
+	},
+	"подробнее": {
+		ru: "подробнее",
+		en: "more"
+	},
+	
+	"MapLoadFailTitle": {
+		ru: "Карта не была загружена",
+		en: "Карта не была загружена"
+	},
+	// Все строки MapLoadFailText1..5 следует читать сплошным текстом.
+	"MapLoadFailText1": {
+		ru: "Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите",
+		en: "Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите"
+	},
+	"MapLoadFailText2": {
+		ru: "обновить",
+		en: "обновить"
+	},	
+	"MapLoadFailText3": {
+		ru: ". В случаи отсутствия связи, Вы можете ",
+		en: ". В случаи отсутствия связи, Вы можете "
+	},	
+	"MapLoadFailText4": {
+		ru: "перейти",
+		en: "перейти"
+	},	
+	"MapLoadFailText5": {
+		ru: "в режим списка.",
+		en: "в режим списка."
+	},
+	"MapLoadingTitle": {
+		ru: "Идет загрузка карты",
+		en: "Идет загрузка карты"
+	},
+	
+	"meters": {
+		ru: "м",
+		en: "m"
+	},
+	"kilometers": {
+		ru: "км",
+		en: "km"
 	}
-	
 }
+/**
+ * Небольшой плагин для интернационазизации интерфейса.
+ */
+$.fn.i18n = function(props) {
+	this.each(function(index){
+		var text = PermGuide.Language.getInterfaceString($(this).text());
+		$(this).text(text);
+	});
+};
 
 /**
  * Объект отвечает за работу с мультиизычностью.

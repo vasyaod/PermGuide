@@ -554,14 +554,31 @@ div {
 	position: relative;
 }
 
-.map .title {
+.map .mapLoading .title{
+	text-align: center;
 	font-size: 1.2em;
 	color: #000;
 	margin: 1em;
 }
 
-.map .loadMap {
+.map .mapLoadFail {
+	text-align: center;
+}
+
+.map .mapLoadFail .title {
+	font-size: 1.2em;
+	color: #000;
 	margin: 1em;
+}
+
+.map .mapLoadFail .text {
+	margin: 1em;
+	line-height: 1.7em
+}
+
+.map .mapLoadFail .button {
+	padding-left: 0.3em;
+	padding-right: 0.3em;
 	font-size: 1.2em;
 	background-color: #333333;
 	color: #fff;

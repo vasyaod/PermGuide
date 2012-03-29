@@ -503,9 +503,7 @@ PermGuide.ApplicationData = {
 // Расширим до Observable.
 $.extend(PermGuide.ApplicationData, new PermGuide.Observable());
 
-
 PermGuide.Interface = {};
-
 /**
  * Метод инициализирует и создает слайдер объектов на карте.
  */
@@ -524,6 +522,7 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 		$(sliderElement).html(
 			$( "#objectSlideTemplate" ).render(objects)
 		);
+		$(sliderElement).find(".i18n").i18n();	// нужно чтобы перевести надпись "подробнее"
 		$(sliderElement).data("state").reset();
 		
 		// Вешает обработсчики событий на каждый слайд.
