@@ -62,12 +62,18 @@ div {
 */
 
 .page {
-	height: 92%;
+	position:absolute;
+	width: 100%;
+	top: 0px;
+	bottom: 66px;
 	background-color: #e5e5e5;
 }
 
 .pageBottom {
-	height: 8%;
+	position:absolute;
+	width: 100%;
+	height: 64px;
+	bottom: 0px;
 	border-top: 2px #ff0000 solid;
 }
 
@@ -84,6 +90,8 @@ div {
 }
 
 .pageContent {
+	position:absolute;
+	width: 100%;
 	height: 93%;
 	position: relative;
 }
