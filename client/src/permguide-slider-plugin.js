@@ -38,6 +38,12 @@ if(typeof PermGuide == "undefined")
 				 */
 				loop: false,
 				
+				/**
+				 * Флаг, говорит о том что слайдер нужно сделать не чуствительным 
+				 * к перемещинию тачем.
+				 */
+				touchInsensitive: false,
+
 				init: function(containerElement) { 
 					var self = this;
 					
@@ -50,14 +56,17 @@ if(typeof PermGuide == "undefined")
 					this.reset();
 					
 					$(this.containerElement).touchstart( function(event) {
-						self.down(event);
+						if (!self.touchInsensitive)
+							self.down(event);
 					});
 					
 					$(this.containerElement).touchmove( function(event) {
-						self.move(event);
+						if (!self.touchInsensitive)
+							self.move(event);
 					});
 					$(this.containerElement).touchend( function(event) {
-						self.up(event);
+						if (!self.touchInsensitive)
+							self.up(event);
 					});
 
 					$(window).resize(function() {

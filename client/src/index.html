@@ -70,11 +70,12 @@
 
 			////
 			// Инициализируем окна информации.
-			PermGuide.ObjectInfoWindow.init($("#objectInfo"));
+			PermGuide.ObjectInfoWindow.init($("#objectScreen"));
 
 			////
 			// Инициализация экранов.
 			PermGuide.Interface.makeScreen($("#mainScreen"));
+			PermGuide.Interface.makeScreen($("#objectScreen"));
 
 			////
 			// Инициализация скроленга страниц.
@@ -204,15 +205,15 @@
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
 				
 				// Сбросим позицию дива.
-				$("#objectInfo .vScroller").data("state").resetPosition();
+				$("#objectScreen .vScroller").data("state").resetPosition();
 				/*
 				// Сгенерируем из шаблона новую информацию об объекте.
 				$("#objectInfo .vScroller").html(
 					$( "#objectInfoTemplate" ).render([object])
 				);
 				*/
-				$("#objectInfo .objectName").text(object.name);
-				$("#objectInfo .vScroller").text(object.description);
+				$("#objectScreen .objectName").text(object.name);
+				$("#objectScreen .objectDescription").text(object.description);
 				PermGuide.ObjectInfoWindow.toggle();
 			});
 			
@@ -530,11 +531,6 @@
 									<div id="popularPlacesContent" class="popularContent">
 										<!--
 										Здесь располагаются плашки с маршрутами. 
-										<div class="popularPlace">
-											<div class="name">Место 1</div>
-											<div class="tagName">Храмы</div>
-										</div>
-										<div style="clear: both;"></div>
 										-->
 									</div>
 								</div>
@@ -544,15 +540,7 @@
 									</div>
 									<div id="popularRoutesContent" class="popularContent">
 										<!--
-										<div class="popularPlace">
-											<div class="name">Зеленая линия</div>
-											<div class="tagName"></div>
-										</div>
-										<div class="popularPlace">
-											<div class="name">Красная линия</div>
-											<div class="tagName"></div>
-										</div>
-										<div style="clear: both;"></div>
+											Здесь располагаются плашки с маршрутами. 
 										-->
 									</div>
 								</div>
@@ -712,7 +700,7 @@
 						</div>
 					</div>
 				</div>
-				<div id="pageScroller" class="pageScroller pageBottom">
+				<div class="pageScroller pageBottom">
 					<div id="pMain" _id="0" class="pageIndicator">
 							
 								<div class="pagePicture"></div>
@@ -737,31 +725,64 @@
 				</div>			
 			</div>
 	
-			<div id="objectInfo"> 
-				<div class="page">
-					<div class="pageHeader">
-						<div class="objectName">
-							
+			<div id="objectScreen" class="screen"> 
+				<div class="slider page pageSlider">
+					<!-- 
+						Для для программы сладера страниц, ваден только элемент с
+						классом "slide", который и является страницей.
+					 -->
+					<div class="slide pageSlide">
+						<div class="pageHeader">
+							<div class="objectName">
+								
+							</div>
+							<div class="backButton"></div>
 						</div>
-						<div class="backButton">
-							
+						<div class="pageContent vScrollerBg background">
+							<div class="vScroller objectDescription">
+								Информации нет!
+							</div>
 						</div>
 					</div>
-					<div class="pageContent vScrollerBg background">
-						<div class="vScroller">
-							Информации нет!
+					<div class="slide pageSlide">
+						<div class="pageHeader">
+							<div class="objectName">
+								
+							</div>
+							<div class="backButton"></div>
+						</div>
+						<div class="pageContent vScrollerBg background">
+							<div class="vScroller">
+								Контактная информация!
+							</div>
+						</div>
+					</div>
+					<div class="slide pageSlide">
+						<div class="pageHeader">
+							<div class="objectName">
+								
+							</div>
+							<div class="backButton"></div>
+						</div>
+						<div class="pageContent vScrollerBg background">
+							<div class="vScroller">
+								Фото!
+							</div>
 						</div>
 					</div>
 				</div>
-				<div id="objectInfoTabs" class="pageBottom" > 
+				<div class="pageScroller pageBottom" > 
 					<div _id="0" class="active pageIndicator">
-								Описание
+						Описание
+						<div class="foground"></div>
 					</div>
 					<div _id="1" class="pageIndicator">
-								Контактная информация
+						Контактная информация
+						<div class="foground"></div>
 					</div>
 					<div _id="2" class="pageIndicator">
-								Фото
+						Фото
+						<div class="foground"></div>
 					</div>
 				</div>
 			</div>

@@ -667,34 +667,34 @@ PermGuide.Interface.makeScreen = function(screenElement) {
 
 	////
 	// Инициализируем слайдер страниц.
-	//PermGuide.PageSlider.init($("#slideContainer"));
 	$(screenElement).find(".pageSlider").slider();
 	
 	var pageSlider = $(screenElement).find(".pageSlider").data("state");
+	pageSlider.touchInsensitive = true;
 	
 	// Устанавливает обработчик переключения страниц.
 	pageSlider.listener = function(index) {
 		//alert("listener: "+index);
-		$("#pageScroller .pageIndicator").removeClass("active");
-		$("#pageScroller .pageIndicator").slice(index, index+1).addClass("active");
+		$(screenElement).find(".pageScroller .pageIndicator").removeClass("active");
+		$(screenElement).find(".pageScroller .pageIndicator").slice(index, index+1).addClass("active");
 	};
 	pageSlider.listener(0); // Подсветим сразуже первую страницу.
 	
-	$("#pageScroller .pageIndicator").touchclick( function(event) {
+	$(screenElement).find(".pageScroller .pageIndicator").touchclick( function(event) {
 		var pageId = parseInt($(event.target).parent().attr("_id"));
 		pageSlider.select(pageId);
 	});
 	
 	// Вешаем на скроллер события тача.
-	$("#pageScroller").touchstart( function(event) {
+	$(screenElement).find(".pageScroller").touchstart( function(event) {
 		pageSlider.down(event);
 	});
 	
-	$("#pageScroller").touchmove( function(event) {
+	$(screenElement).find(".pageScroller").touchmove( function(event) {
 		pageSlider.move(event);
 	});
 
-	$("#pageScroller").touchend( function(event) {
+	$(screenElement).find(".pageScroller").touchend( function(event) {
 		pageSlider.up(event);
 	});
 	////

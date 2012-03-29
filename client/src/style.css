@@ -496,24 +496,14 @@ div {
 /**
  * Стили элементов информации об объекте.
  */ 
-#objectInfo {
+#objectScreen {
 	background-color: #fff;
 	z-index: 1200;
-	width: 100%;
-	height: 100%;
-	overflow: hidden; 
-	position: absolute;
 	top: 100%;
-	left: 0px;
+	visibility: visible;
 }
 
-#objectInfo .background
-{
-	overflow: hidden;
-	background-color: #e5e5e5;
-}
-	
-#objectInfo .objectName{
+#objectScreen .objectName{
 	width: 85%;
 	height: 100%;
 	font-size: 1.2em;
@@ -521,7 +511,7 @@ div {
 	float: left;
 }
 
-#objectInfo .backButton{
+#objectScreen .backButton{
 	width: 15%;
 	height: 100%;
 	background-position: center center;
@@ -531,7 +521,7 @@ div {
 	cursor: pointer;
 }
 
-#objectInfo .vScroller {
+#objectScreen .vScroller {
 	padding-left: 2em;
 	padding-right: 2em;
 }
@@ -539,27 +529,14 @@ div {
 /**
  * Стили переключателя страниц информации об объекте.
  */
-#objectInfoTabs {
+#objectScreen .pageScroller{
 	display: table;
 	width: 100%;
 }
-#objectInfoTabs .pageIndicator {
-	width: 33.3%;
-	height: 100%;
-	position: relative;
-	float: left;
-	text-align: center;
-	
-	vertical-align: middle;
-	display: table-cell;
-	
-	padding-bottom: 2px;
-	font-size: 1.2em;
-	cursor: pointer;
-}
 
-#objectInfoTabs .active {
-	border-top: 2px solid #F00;
+#objectScreen .pageScroller .pageIndicator {
+	width: 33.3%;
+	font-size: 1.2em;
 }
 
 /**
@@ -681,26 +658,4 @@ div {
 	font-size: 1.2em;
 	margin: 1.2em;
 }
-	
-.popularPlace{
-	font-size: 1em;
-	width: 47%;
-	float: left;
-	background-color: #ccc;
-	border-left: 0.5em #000 solid;
-	margin-right: 1%;
-	margin-bottom: 0.8%;
-	cursor: pointer;
-}
 
-.popularPlace .name{
-	font-size: 1em;
-	margin: 0.2em;
-	margin-left: 1em;
-}
-
-.popularPlace .tagName{
-	font-size: 0.8em;
-	margin: 0.2em;
-	margin-left: 1.3em;
-}
