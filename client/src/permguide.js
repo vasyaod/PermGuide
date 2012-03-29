@@ -502,9 +502,13 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 		mapManager.selectObjectById(objectId);
 	};
 };
+
+/**
+ * Метод инициализирует и создает интерфейс списка объектов.
+ */
 PermGuide.Interface.makeCatalog = function(mode, catalogElement) {
 
-	PermGuide.ApplicationData.attachListener("routesVisibleChanged", function (applicationData){
+	PermGuide.ApplicationData.attachListener(mode+"VisibleChanged", function (applicationData){
 		////
 		// Сбросим позицию каталога.
 		$(catalogElement).find(".vScroller").data("state").resetPosition();
@@ -517,6 +521,7 @@ PermGuide.Interface.makeCatalog = function(mode, catalogElement) {
 			objectItems.push({
 				id: object.id,
 				name: object.name,
+				distance: true,
 				color: (mode=="objects") ? object.objectColor : object.routeColor
 			});
 		});
@@ -533,4 +538,73 @@ PermGuide.Interface.makeCatalog = function(mode, catalogElement) {
 			PermGuide.ApplicationData.selectObject(object);
 		});
 	});
+}
+
+
+/**
+ * Метод инициализирует и создает список случайных объектов на первой странице.
+ */
+PermGuide.Interface.makePopularObjectsAndRoutes = function(
+		popularObjectItemContainer, popularRouteItemContainer) {
+
+	////
+	// Обработчик события загрузки данных 
+	PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
+		////
+		// Формирование первой страницы со случайными объектами.
+		var objects = [];
+		//var popularObjects = [];
+		objects.push(PermGuide.ApplicationData.getRandomObject());
+		objects.push(PermGuide.ApplicationData.getRandomObject());
+		objects.push(PermGuide.ApplicationData.getRandomObject());
+		objects.push(PermGuide.ApplicationData.getRandomObject());
+
+		var objectItems = [];
+		
+		$.each(objects, function(index, object) {
+			var tag = object.tags[0];
+
+			objectItems.push({
+				id: object.id,
+				name: object.name,
+				tagName: tag.name,
+				distance: true,
+				color: tag.color
+			});
+		});
+		
+		$(popularObjectItemContainer).html(
+			$( "#catalogItemTemplate" ).render(objectItems)
+		);
+		
+		////
+		// Повешаем на вубор объекта из каталога обработчик.
+		$(popularObjectItemContainer).find(".catalogItem").touchclick( function (event) {
+			var objectId = $(event.target).parent().attr("_id");
+			var object = applicationData.getObjectById(objectId);
+			PermGuide.ApplicationData.selectObject(object);
+		});
+
+		////
+		// Формирование первой страницы со случайными маршрутами.
+		objectItems = [];
+		var routes = PermGuide.ApplicationData.data.routes;
+		$.each(routes, function(index, route) { 
+			var tag = route.tags[0];
+			
+			objectItems.push({
+				id: route.id,
+				name: route.description,
+				tagName: tag.name,
+				distance: false,
+				color: tag.color
+			});
+		});
+		
+		$(popularRouteItemContainer).html(
+			$( "#catalogItemTemplate" ).render(objectItems)
+		);
+		
+	});
+
 }

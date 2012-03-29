@@ -117,53 +117,17 @@
 			////
 			// Инициализация каталога объектов на карте маршрутов.
 			PermGuide.Interface.makeCatalog("routes", $("#routesCatalog"));
+
+			////
+			// Инициализация списка популярных объектов и маршрутов.
+			PermGuide.Interface.makePopularObjectsAndRoutes(
+				$("#popularPlacesContent"), $("#popularRoutesContent")
+			);
 			
 			////
 			// Обработчик события загрузки данных 
 			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
-				////
-				// Формирование первой страницы со случайными объектами.
-				var objects = [];
-				//var popularObjects = [];
-				objects.push(PermGuide.ApplicationData.getRandomObject());
-				objects.push(PermGuide.ApplicationData.getRandomObject());
-				objects.push(PermGuide.ApplicationData.getRandomObject());
-				objects.push(PermGuide.ApplicationData.getRandomObject());
 
-				var html = "";
-				$.each(objects, function(index, object) { 
-					var tag = object.tags[0];
-					
-					html += $("#popularPlaceTemplate" ).render([{
-						objectId: object.id,
-						name: object.name,
-						tagName: tag.name,
-						color: tag.color
-					}]);
-					if (index%2 == 1)
-						html += '<div style="clear: both;"></div>';
-				});
-				html += '<div style="clear: both;"></div>';
-				$("#popularPlacesContent").html(html);
-
-				////
-				// Формирование первой страницы со случайными маршрутами.
-				var html = "";
-				var routes = PermGuide.ApplicationData.data.routes;
-				$.each(routes, function(index, route) { 
-					var tag = route.tags[0];
-					
-					html += $("#popularPlaceTemplate" ).render([{
-						name: route.description,
-						tagName: tag.name,
-						color: tag.color
-					}]);
-					if (index%2 == 1)
-						html += '<div style="clear: both;"></div>';
-				});
-				html += '<div style="clear: both;"></div>';
-				$("#popularRoutesContent").html(html);
-				
 				////
 				// Формирование выподающего окна со списком тэгов.
 				$("#objectTags .vScroller").html(
@@ -481,12 +445,19 @@
 		-->
 		<script id="catalogItemTemplate" type="text/x-jsrender">
 			<div class="catalogItem" _id="{{:id}}">
-				<div class="name" style="border-left-color: {{:color}};">{{:name}}</div>
-				<div class="distanceBlock">
-					<div class="wrapper">
-						<div _id="{{:id}}" class="cell distance"></div>
-					</div>
+				<div class="name" style="border-left-color: {{:color}};">
+					{{:name}}
+					{{if tagName}}
+						<div class="tagName">{{:tagName}}</div>
+					{{/if}}
 				</div>
+				{{if distance}}
+					<div class="distanceBlock">
+						<div class="wrapper">
+							<div _id="{{:id}}" class="cell distance"></div>
+						</div>
+					</div>
+				{{/if}}
 				<div class="foground"></div>
 			</div>
 		</script>

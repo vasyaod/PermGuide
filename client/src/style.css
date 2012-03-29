@@ -321,6 +321,11 @@ div {
 	min-height: 2em;
 }
 
+.catalogItem .tagName {
+	font-size: 0.8em;
+	padding-top: 0.2em; 
+}
+
 .catalogItem .distanceBlock {
 	position: absolute;	
 	left: 90%;
