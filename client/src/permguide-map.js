@@ -97,26 +97,27 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 		})
 	};
 	
+
 	this.refreshImage = function (img) {
 		element.find(".box").css("background", "url("+img+")");
 		this.hideGlow();
-	}
+	};
 	
 	this.hide = function () {
 		element.css("display", "none");
-	}
+	};
 
 	this.show = function () {
 		element.css("display", "block");
-	}
+	};
 	
 	this.hideGlow = function () {
 		element.find(".glow").css("display", "none");
-	}
+	};
 
 	this.showGlow = function () {
 		element.find(".glow").css("display", "block");
-	}	
+	};
 }
 
 PermGuide.CanvasLayer = function (element) {
@@ -570,8 +571,15 @@ PermGuide.MapManager = function (yMapElement, mode){
 		
 		this.selectedOverlayState = overlayState;
 		this.selectedOverlayState.overlay.showGlow(); 
-			
+		
 		var object = overlayState.object;
+
+		// Если объект находится за пределами карты, то центрируем по нему.
+		var coordBounds = this.yMap.getBounds();
+		var point = new YMaps.GeoPoint(object.point.lng, object.point.lat)
+		if (!coordBounds.contains(point))
+			this.yMap.setCenter(point)
+
 		this.notify("mapObjectSelected", object);
 	}
 };
