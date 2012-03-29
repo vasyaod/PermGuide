@@ -487,9 +487,6 @@ PermGuide.MapManager = function (yMapElement, mode){
 					overlayState.onmap = true;
 					overlayState.overlay.show();
 				}
-				// Если данный объект является выделленным, то подсветим его.
-				if (overlayState == this.selectedOverlayState)
-					overlayState.overlay.showGlow();
 
 				//this.yMap.addOverlay(overlayState.overlay);
 			}
@@ -499,6 +496,11 @@ PermGuide.MapManager = function (yMapElement, mode){
 				overlayState.overlay.hide();
 				//this.yMap.removeOverlay(overlayState.overlay);
 			}
+
+			// Если данный объект является выделленным, то подсветим его.
+			if (overlayState == this.selectedOverlayState)
+				overlayState.overlay.showGlow();
+			
 		}, this));
 
 		if (this.canvasLayer) {

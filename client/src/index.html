@@ -70,10 +70,6 @@
 			//PermGuide.PageSlider.init($("#slideContainer"));
 			$("#slideContainer").slider();
 			
-			////
-			// 
-			$("#objectsMapSlider").slider();
-
 			// Просто перехватим все события, что бы они не попадали на карту.
 			$(".mapSliderPlace").touchclick( function (){}, true);
 
@@ -333,10 +329,10 @@
 			$("#switchRouteMode").toggleButton({
 				on: function() {
 					$("#routesCatalog").css("display", "none");
-					$("#routesMap").css("display", "block");
+					$("#routesMapContainer").css("display", "block");
 				},
 				off: function() {
-					$("#routesMap").css("display", "none");
+					$("#routesMapContainer").css("display", "none");
 					$("#routesCatalog").css("display", "block");
 				},
 				state: true
@@ -373,43 +369,54 @@
 				PermGuide.Scheduler.finished("DataLoad");
 			});
 		};
+		PermGuide.Interface = {};
+		
+		PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
+			
+			$(sliderElement).slider();
+			
+			mapManager.attachListener("mapObjectSelected", function (object){
+				$(sliderElement).data("state").selectByAttr("_id", object.id);
+			});
+			// Перерерандарим слайдер объектов.
+			PermGuide.ApplicationData.attachListener(mode+"VisibleChanged", function (applicationData){
+				////
+				// Перерерандарим слайдер объектов.
+				var objects = applicationData.getVisibleObjects(mode);
+				$(sliderElement).html(
+					$( "#objectSlideTemplate" ).render(objects)
+				);
+				$(sliderElement).data("state").reset();
+				
+				// Вешает обработсчики событий на каждый слайд.
+				$(sliderElement).children(".slide").touchclick( function (event) {
+					var objectId = $(event.target).parent().attr("_id");
+					var object = applicationData.getObjectById(objectId);
+					applicationData.selectObject(object);
+				});
+				mapManager.selectObjectById(objects[0].id);
+			});
+			
+			// Обработает события на переключение слайдера объектов.
+			$(sliderElement).data("state").listener = function(index, element) {
+				var objectId = element.attr("_id");
+				mapManager.selectObjectById(objectId);
+			};
+		};
 		
 		mapInit = function() {
 			////
 			// Инициализация карты объектов.
 			var objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0], "objects");
-			objectsMapManager.attachListener("mapObjectSelected", function (object){
-				$("#objectsMapSlider").data("state").selectByAttr("_id", object.id);
-			});
-			// Перерерандарим слайдер объектов.
-			PermGuide.ApplicationData.attachListener("objectsVisibleChanged", function (applicationData){
-				////
-				// Перерерандарим слайдер объектов.
-				var objects = applicationData.getVisibleObjects("objects");
-				$("#objectsMapSlider").html(
-					$( "#objectSlideTemplate" ).render(objects)
-				);
-				$("#objectsMapSlider").data("state").reset();
-				
-				// Вешает обработсчики событий на каждый слайд.
-				$("#objectsMapSlider .slide").touchclick( function (event) {
-					var objectId = $(event.target).parent().attr("_id");
-					var object = applicationData.getObjectById(objectId);
-					PermGuide.ApplicationData.selectObject(object);
-				});
-				objectsMapManager.selectObjectById(objects[0].id);
-			});
-			
-			// Обработает события на переключение слайдера объектов.
-			$("#objectsMapSlider").data("state").listener = function(index, element) {
-				var objectId = element.attr("_id");
-				objectsMapManager.selectObjectById(objectId);
-			};
+			// Создаем слайдер для карты объектов.
+			PermGuide.Interface.makeMapSlider(objectsMapManager, "objects", $("#objectsMapSlider"));
 			
 			////
 			// Инициализация карты маршрутов.
 			routesMapManager = new PermGuide.MapManager(jQuery("#routesMap")[0], "routes");
-			
+			// Создаем слайдер для карты маршрутов.
+			PermGuide.Interface.makeMapSlider(routesMapManager, "routes", $("#routesMapSlider"));
+
 			// Обработаем события загрузчика карты.
 			PermGuide.LoadMapManager.attachListener("mapLoading", function() {
 				$(".map .mapLoading").css("display", "block");
@@ -593,7 +600,10 @@
 			<div class="slide" _id="{{:id}}" style="height: 100%; width: 100%; position: relative;">
 				<div class="nameBlock">
 					<div class="wrapper">
-						<div class="cell name">{{:name}}</div>
+						<div class="cell name">
+							{{:name}} 
+							<div class="more">подробнее</div>
+						</div>
 					</div>
 				</div>
 				<div class="distanceBlock">
@@ -784,18 +794,29 @@
 							<canvas class="canvasLayer">
 								Браузер не поддерживает Canvas.
 							</canvas>
-							<div id="routesMap" class="map">
-								<div class="wrapper">
-									<div class="cell">
-										<div class="mapLoading">
-											<div class="title">Идет загрузка карты</div>
-										</div>
-										<div class="mapLoadFail">
-											<div class="title">Карта не была загружена</div>
-											<div>Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите "обновить".</div>
-											<div class="loadMap">Обновить</div>
+							<div id="routesMapContainer" class="mapContainer">
+								<div id="routesMap" class="map">
+									<div class="wrapper">
+										<div class="cell">
+											<div class="mapLoading">
+												<div class="title">Идет загрузка карты</div>
+											</div>
+											<div class="mapLoadFail">
+												<div class="title">Карта не была загружена</div>
+												<div>Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите "обновить".</div>
+												<div class="loadMap">Обновить</div>
+											</div>
 										</div>
 									</div>
+								</div>
+								<div class="mapSliderPlace">
+									<div class="arrowLeft"></div>
+									<div class="mapSliderContainer">
+										<div id="routesMapSlider" class="slider mapSlider" loop="true">
+											<!-- Пусто, заполняется динамически-->
+										</div>
+									</div>
+									<div class="arrowRight"></div>
 								</div>
 							</div>
 							

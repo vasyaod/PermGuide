@@ -610,7 +610,7 @@ div {
 	height: 3em;
 	left: 0px;
 	bottom: 0px;
-	opacity: 0.6;
+	opacity: 0.7;
 	background-color: #000;
 	color: #fff;
 }
@@ -644,6 +644,13 @@ div {
 	bottom: 0;
 	font-weight: bold;
 }
+
+.mapSliderContainer .slide .more{
+	display: inline;
+	font-size: 0.8em;
+	color: #66f;
+}
+
 
 /**
  * Стили титульной страницы.
