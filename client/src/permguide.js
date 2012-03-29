@@ -486,9 +486,17 @@ PermGuide.ApplicationData = {
 	load: function () {
 		
 		var self = this;
-		$.getJSON('data.json', function(data) {
-			self.data = data;
-			self.processing();
+		$.ajax({
+			url: 'data.json',
+			cache: false,
+			dataType: 'json',
+			success: function(data) {
+				self.data = data;
+				self.processing();
+			},
+			error:function() {
+				alert("Ошибка загрузки данных.");
+			}
 		});
 	}
 }

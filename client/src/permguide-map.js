@@ -354,7 +354,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		if (PermGuide.ApplicationData.loaded)
 			this.dataLoaded(PermGuide.ApplicationData);
 		else
-			PermGuide.ApplicationData.attachListener("loaded", this.dataLoaded);
+			PermGuide.ApplicationData.attachListener("loaded", $.proxy(this.dataLoaded, this));
 		////
 		// Повешаем обработчики событий на обновление видимости объектов. 
 		PermGuide.ApplicationData.attachListener("objectsVisibleChanged", $.proxy(this.visibleChanged, this));
@@ -380,9 +380,10 @@ PermGuide.MapManager = function (yMapElement, mode){
 	};
 	
 	this.dataLoaded = function(applicationData) {
+		
 		if (this.yMap == null)
 			return;	           // Если карта еще не загружена, то нам здесь делать нечего. 
-		
+
 		var data = applicationData.data;
 		var map = this.yMap;
 		
