@@ -622,7 +622,7 @@ PermGuide.Interface.makePopularObjectsAndRoutes = function(
 			var object = applicationData.getObjectById(objectId);
 			var tag = object.tags[0];
 			tag.activate();
-			objectsMapManager.selectObject(object);
+			objectsMapManager.selectObject(object, true);
 			
 			var pageSlider = $("#slideContainer").data("state");
 			pageSlider.select(1);

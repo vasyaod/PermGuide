@@ -45,6 +45,12 @@ div {
 	vertical-align: middle;
 }
 
+.relative {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
 /**
  * Стили дива, в созможностью скролинга.
  */
@@ -90,8 +96,6 @@ div {
 }
 
 .pageContent {
-	position:absolute;
-	width: 100%;
 	height: 93%;
 	position: relative;
 }

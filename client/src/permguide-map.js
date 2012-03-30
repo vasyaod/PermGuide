@@ -69,7 +69,7 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 	element.css("z-index", YMaps.ZIndex.Overlay);
 	
 	if (fn != null)
-		element.find(".box").touchclick(fn);
+		element.find(".box").touchclick(fn, true);
 
 	// Вызывается при добавления оверлея на карту 
 	this.onAddToMap = function (_map, _parentContainer) {
@@ -525,7 +525,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 	/**
 	 * Выбирает объект на карте. 
 	 */
-	this.selectObject = function(object) {
+	this.selectObject = function(object, centred) {
 		if (!this.yMap)		// Если карта не создана безполезно что либо переключать.
 			return; 
 
@@ -539,13 +539,13 @@ PermGuide.MapManager = function (yMapElement, mode){
 		});
 		// Если оверлай найден, то выделим его.
 		if (overlayState)
-			this._selectObject(overlayState);
+			this._selectObject(overlayState, centred);
 	}
 	
 	/**
 	 * Выбирает объект на карте по его id.
 	 */
-	this.selectObjectById = function(objectId) {
+	this.selectObjectById = function(objectId, centred) {
 		if (!this.yMap)		// Если карта не создана безполезно что либо переключать.
 			return; 
 
@@ -559,13 +559,13 @@ PermGuide.MapManager = function (yMapElement, mode){
 		});
 		// Если оверлай найден, то выделим его.
 		if (overlayState)
-			this._selectObject(overlayState);
+			this._selectObject(overlayState, centred);
 	}
 	
 	/**
 	 * Внутренний метод, вызывается при выборе объекта на карте.
 	 */
-	this._selectObject = function(overlayState) {
+	this._selectObject = function(overlayState, centred) {
 		if (this.selectedOverlayState) {
 			this.selectedOverlayState.overlay.hideGlow(); 
 		}
@@ -578,7 +578,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		// Если объект находится за пределами карты, то центрируем по нему.
 		var coordBounds = this.yMap.getBounds();
 		var point = new YMaps.GeoPoint(object.point.lng, object.point.lat)
-		if (!coordBounds.contains(point))
+		if (centred || !coordBounds.contains(point))
 			this.yMap.setCenter(point)
 
 		this.notify("mapObjectSelected", object);
