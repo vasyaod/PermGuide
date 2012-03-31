@@ -210,8 +210,11 @@
 				
 				var pageSlider = $("#objectScreenSlider").data("state");
 				pageSlider.select(0, true);
-				// Сбросим позицию дива.
-				$("#objectScreen .vScroller").data("state").resetPosition();
+				// Сбросим позицию скроллеков.
+				$("#objectScreen .objectDescription").data("state").resetPosition();
+				$("#objectScreen .objectContacts").data("state").resetPosition();
+				$("#objectScreen .objectPhoto").data("state").resetPosition();
+				
 				/*
 				// Сгенерируем из шаблона новую информацию об объекте.
 				$("#objectInfo .vScroller").html(
@@ -219,8 +222,30 @@
 				);
 				*/
 				$("#objectScreen .objectName").text(object.name);
-				$("#objectScreen .objectDescription").text(object.description);
 				
+				$("#objectScreen .objectDescription").html(
+					$("#objectInfoDescriptionTemplate" ).render([object])
+				);
+				$("#objectScreen .objectContacts").html(
+					$("#objectInfoContactsTemplate" ).render([{
+						address: object.contacts.address,
+						phone: object.contacts.phoneNumber
+					}])
+				);
+				if (object.pictures && object.pictures.length > 0)
+				{
+					var photo = [];
+					$.each(object.pictures, function(index, picture) {	
+						photo.push({
+							photoURL: picture
+						});
+					});
+					
+					$("#objectScreen .objectPhoto").html(
+						$("#objectInfoPhotoTemplate" ).render(photo)
+					);
+				}
+				$("#objectScreen .vScroller .i18n").i18n();
 				PermGuide.ObjectInfoWindow.toggle();
 			});
 			
@@ -451,13 +476,44 @@
 		</script>
 
 		<!-- 
-			Шаблон информации об объекте.
+			Шаблон информации об объекте (описание).
 		-->
-		<script id="objectInfoTemplate" type="text/x-jsrender">
-			<div>{{:name}}</div>
-			<div>{{:description}}</div>
+		<script id="objectInfoDescriptionTemplate" type="text/x-jsrender">
+			<div>
+				{{if mainPicture}}
+					<img src="{{:mainPicture}}" class="mainPicture" alt="{{:name}}">
+				{{/if}}
+				<div class="text">{{:description}}</div>
+			</div>
 		</script>
 		
+		<!-- 
+			Шаблон информации об объекте (контактная информация).
+		-->
+		<script id="objectInfoContactsTemplate" type="text/x-jsrender">
+			<div>
+				{{if address}}
+					<div class="address">
+						<span class="title i18n">Address</span><span class="text">{{:address}}</span>
+					</div>
+				{{/if}}
+				{{if phone}}
+					<div class="phone">
+						<span class="title i18n">Phone</span><span class="text">{{:phone}}</span>
+					</div>
+				{{/if}}
+				
+			</div>
+		</script>
+		
+		<!-- 
+			Шаблон информации об объекте (фото).
+		-->
+		<script id="objectInfoPhotoTemplate" type="text/x-jsrender">
+			<div>
+				<img src="{{:photoURL}}" class="photo">
+			</div>
+		</script>
 		<!-- 
 			Шаблон слайда тэга.
 		-->
@@ -763,7 +819,7 @@
 							<div class="backButton"></div>
 						</div>
 						<div class="pageContent vScrollerBg background">
-							<div class="vScroller">
+							<div class="vScroller objectContacts">
 								
 							</div>
 						</div>
@@ -776,7 +832,7 @@
 							<div class="backButton"></div>
 						</div>
 						<div class="pageContent vScrollerBg background">
-							<div class="vScroller">
+							<div class="vScroller objectPhoto">
 								
 							</div>
 						</div>

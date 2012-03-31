@@ -207,8 +207,11 @@ PermGuide.ApplicationData = {
 			object.description = PermGuide.Language.getString(object.description);
 
 			// Если имеется контактная информация, то её надо тоже обработать.
-			if (object.contacts != null)
-				object.contacts.address = PermGuide.Language.getString(object.contacts.address);
+			if (object.contacts)
+			{
+				if (object.contacts.address)
+					object.contacts.address = PermGuide.Language.getString(object.contacts.address);
+			}
 			
 			var newTags = [];
 			$.each(object.tags, $.proxy(function(index, tagId) {	

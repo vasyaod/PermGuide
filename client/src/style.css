@@ -457,7 +457,7 @@ div {
 	position: absolute;
 	left: 0px; 
 	width: 10px; 
-	height: 100%; 
+	height: 100%;
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-image: url('img/arr_l.png');
@@ -495,6 +495,7 @@ div {
 .tagSlide {
 	width: 100%;
 	height: 100%;
+	padding-left: 30px;
 	text-align: center;
 	vertical-align: middle;
 	position: relative;
@@ -560,9 +561,19 @@ div {
 	cursor: pointer;
 }
 
-#objectScreen .vScroller {
-	padding-left: 2em;
-	padding-right: 2em;
+#objectScreen .objectDescription .mainPicture {
+	width: 100%;
+	border-bottom: 2px #f00 solid;
+}
+
+#objectScreen .objectDescription .text {
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+#objectScreen .objectPhoto .photo {
+	width: 100%;
+	margin-top: 0.2em;
 }
 
 /**

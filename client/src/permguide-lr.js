@@ -79,6 +79,15 @@ PermGuide.lr = {
 		ru: "Идет загрузка карты",
 		en: "Идет загрузка карты"
 	},
+
+	"Address": {
+		ru: "Адрес: ",
+		en: "Address: "
+	},
+	"Phone": {
+		ru: "Телефон: ",
+		en: "Phone: "
+	},
 	
 	"meters": {
 		ru: "м",
