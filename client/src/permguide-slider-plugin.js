@@ -104,7 +104,7 @@ if(typeof PermGuide == "undefined")
 				/**
 				 * Устанавливает текущий слайд по его индексу.
 				 */
-				select: function(index) {
+				select: function(index, fast) {
 					if (this.index == index)
 						return;
 					this.index = index;
@@ -116,13 +116,13 @@ if(typeof PermGuide == "undefined")
 					
 					this._callListener();
 					
-					this.refresh();
+					this.refresh(fast);
 				},
 				
 				/**
 				 * Устанавливает текущий слайд по его атрибуту и значению.
 				 */
-				selectByAttr: function(attr, value) {
+				selectByAttr: function(attr, value, fast) {
 					var index = -1;
 					$(this.containerElement).children(".slide").each(function(i){
 						if ($(this).attr(attr) == value)
@@ -130,7 +130,7 @@ if(typeof PermGuide == "undefined")
 					})
 					
 					if (index != -1)
-						this.select(index);
+						this.select(index, fast);
 				},
 				
 				down: function(event) {

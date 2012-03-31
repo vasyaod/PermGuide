@@ -624,7 +624,7 @@ PermGuide.Interface.makePopularObjectsAndRoutes = function(
 			tag.activate();
 			objectsMapManager.selectObject(object, true);
 			
-			var pageSlider = $("#slideContainer").data("state");
+			var pageSlider = $("#mainScreenSlider").data("state");
 			pageSlider.select(1);
 		});
 
@@ -655,7 +655,7 @@ PermGuide.Interface.makePopularObjectsAndRoutes = function(
 			var tag = applicationData.getTagById(tagId);
 			tag.activate();
 			
-			var pageSlider = $("#slideContainer").data("state");
+			var pageSlider = $("#mainScreenSlider").data("state");
 			pageSlider.select(2);
 		});
 	});

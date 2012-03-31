@@ -208,6 +208,8 @@
 			
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
 				
+				var pageSlider = $("#objectScreenSlider").data("state");
+				pageSlider.select(0, true);
 				// Сбросим позицию дива.
 				$("#objectScreen .vScroller").data("state").resetPosition();
 				/*
@@ -218,6 +220,7 @@
 				*/
 				$("#objectScreen .objectName").text(object.name);
 				$("#objectScreen .objectDescription").text(object.description);
+				
 				PermGuide.ObjectInfoWindow.toggle();
 			});
 			
@@ -505,7 +508,7 @@
 			</div>
 			
 			<div id="mainScreen" class="screen" >
-				<div id="slideContainer" class="slider page pageSlider">
+				<div id="mainScreenSlider" class="slider page pageSlider">
 					<!-- 
 						Для для программы сладера страниц, ваден только элемент с
 						классом "slide", который и является страницей.
@@ -569,6 +572,7 @@
 									<div class="on"></div>
 									<div class="off"></div>
 								</div>
+								<div class="arrowDown"></div>
 							</div>
 						</div>
 						<div class="pageHeader dropDownMenuSeparator">
@@ -642,6 +646,7 @@
 									<div class="on"></div>
 									<div class="off"></div>
 								</div>
+								<div class="arrowDown"></div>
 							</div>
 						</div>
 
@@ -732,7 +737,7 @@
 			</div>
 	
 			<div id="objectScreen" class="screen"> 
-				<div class="slider page pageSlider">
+				<div id="objectScreenSlider" class="slider page pageSlider">
 					<!-- 
 						Для для программы сладера страниц, ваден только элемент с
 						классом "slide", который и является страницей.

@@ -306,7 +306,6 @@ div {
  * Стили выподающего окна и его элементов.
  */
 .dropDownMenuSeparator {
-	height: 7%;
 	z-index: 1000;
 }
 
@@ -472,6 +471,22 @@ div {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-image: url('img/arr_r.png');
+}
+
+.toggleButton .arrowDown {
+	position: absolute;
+	left: 40%;
+	top: 100%;
+	width: 20%;
+	height: 15px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-top-left-radius: -5px;
+	border-top-right-radius: -5px;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/arr_d.png');
+	background-color: #333333;
 }
 
 .tagSlider {
