@@ -23,13 +23,13 @@
 		<script type="text/javascript" src="permguide-slider-plugin.js"></script>
 		<script type="text/javascript" src="permguide-map.js"></script>
 		<script type="text/javascript" src="permguide-geolocation.js"></script>
+		<script type="text/javascript" src="permguide-screenmanager.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
 		splashInit = function() {
 			// Отобразим splash-экран.
 			$("#splashScreen").css("visibility", "visible");
-			$("#mainScreen").css("visibility", "hidden");
 
 			// При включении/отключении тэгов, формируем 
 			PermGuide.Scheduler.attachListener("started", function (){
@@ -51,7 +51,7 @@
 			////
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
 			$(".backButton").touchclick( function () {
-				PermGuide.ObjectInfoWindow.toggle();
+				PermGuide.ScreenManager.activateScreen("mainScreen");
 			});
 			
 			////
@@ -73,13 +73,38 @@
 			$(".mapSliderPlace").touchclick( function (){}, true);
 
 			////
-			// Инициализируем окна информации.
-			PermGuide.ObjectInfoWindow.init($("#objectScreen"));
-
-			////
 			// Инициализация экранов.
-			PermGuide.Interface.makeScreen($("#mainScreen"));
-			PermGuide.Interface.makeScreen($("#objectScreen"));
+			//PermGuide.Interface.makeScreen($("#mainScreen"));
+			//PermGuide.Interface.makeScreen($("#objectScreen"));
+			PermGuide.ScreenManager.addScreen({
+				name: "mainScreen",
+				screenElement: $("#mainScreen"),
+				show: function (screenElement){
+					$(screenElement).css("visibility", "visible");
+				},
+				hide: function (screenElement){
+					//$(screenElement).css("visibility", "hidden");
+				}
+			});
+			
+			PermGuide.ScreenManager.addScreen({
+				name: "objectScreen",
+				screenElement: $("#objectScreen"),
+				show: function (screenElement){
+					$(screenElement).css("visibility", "visible");
+					$(screenElement).animate({
+						top: 0
+					}, 500);
+				},
+				hide: function (screenElement){
+					//alert("hide");
+					$(screenElement).animate({
+						top: $(window).height()
+					}, 500, function() {
+						$(screenElement).css("top", "100%");
+					});
+				}
+			});
 
 			////
 			// Инициализация скроленга страниц.
@@ -260,7 +285,7 @@
 					$("#objectScreen .objectPhoto").html("");
 				}
 				$("#objectScreen .vScroller .i18n").i18n();
-				PermGuide.ObjectInfoWindow.toggle();
+				PermGuide.ScreenManager.activateScreenByName("objectScreen");
 			});
 			
 			////
@@ -385,7 +410,7 @@
 
 			// Закроем splash-screen
 			$("#splashScreen").css("visibility", "hidden");
-			$("#mainScreen").css("visibility", "visible");
+			PermGuide.ScreenManager.activateScreenByName("mainScreen");
 		};
 		
 		////

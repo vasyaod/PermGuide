@@ -61,9 +61,7 @@
             },
             "mainPicture": "objphotos/1.jpg",
             "pictures": [
-                "objphotos/1_1.jpg",
-                "objphotos/1_2.jpg",
-                "objphotos/1_3.jpg"
+                "objphotos/1_1.jpg"
             ],
             "tags": [
                 3
@@ -215,7 +213,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/6.jpg"
         },
         {
             "id": 7,
@@ -244,7 +243,8 @@
             "pictures": [],
             "tags": [
                 5
-            ]
+            ],
+            "mainPicture": "objphotos/7.jpg"
         },
         {
             "id": 8,
@@ -273,7 +273,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/8.jpg"
         },
         {
             "id": 9,
@@ -302,7 +303,8 @@
             "pictures": [],
             "tags": [
                 8
-            ]
+            ],
+            "mainPicture": "objphotos/9.jpg"
         },
         {
             "id": 10,
@@ -331,7 +333,8 @@
             "pictures": [],
             "tags": [
                 7
-            ]
+            ],
+            "mainPicture": "objphotos/10.jpg"
         },
         {
             "id": 11,
@@ -360,7 +363,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/11.jpg"
         },
         {
             "id": 12,
@@ -386,10 +390,13 @@
                 },
                 "phoneNumber": ""
             },
-            "pictures": [],
+            "pictures": [
+                "objphotos/12_1.jpg"
+            ],
             "tags": [
                 3
-            ]
+            ],
+            "mainPicture": "objphotos/12.jpg"
         },
         {
             "id": 13,
@@ -419,7 +426,8 @@
             "tags": [
                 4,
                 7
-            ]
+            ],
+            "mainPicture": "objphotos/13.jpg"
         },
         {
             "id": 14,
@@ -448,7 +456,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/14.jpg"
         },
         {
             "id": 15,
@@ -477,7 +486,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/15.jpg"
         },
         {
             "id": 16,
@@ -503,10 +513,13 @@
                 },
                 "phoneNumber": ""
             },
-            "pictures": [],
+            "pictures": [
+                "objphotos/16_1.jpg"
+            ],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/16.jpg"
         },
         {
             "id": 17,
@@ -535,7 +548,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/17.jpg"
         },
         {
             "id": 18,
@@ -561,10 +575,13 @@
                 },
                 "phoneNumber": ""
             },
-            "pictures": [],
+            "pictures": [
+                "objphotos/18_1.jpg"
+            ],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/18.jpg"
         },
         {
             "id": 19,
@@ -593,7 +610,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/19.jpg"
         },
         {
             "id": 20,
@@ -622,7 +640,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/20.jpg"
         },
         {
             "id": 21,
@@ -651,7 +670,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/21.jpg"
         },
         {
             "id": 22,
@@ -677,11 +697,14 @@
                 },
                 "phoneNumber": ""
             },
-            "pictures": [],
+            "pictures": [
+                "objphotos/22_1.jpg"
+            ],
             "tags": [
                 3,
                 8
-            ]
+            ],
+            "mainPicture": "objphotos/22.jpg"
         },
         {
             "id": 23,
@@ -711,7 +734,8 @@
             "tags": [
                 4,
                 9
-            ]
+            ],
+            "mainPicture": "objphotos/23.jpg"
         },
         {
             "id": 24,
@@ -740,7 +764,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/24.jpg"
         },
         {
             "id": 25,
@@ -769,7 +794,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/25.jpg"
         },
         {
             "id": 26,
@@ -798,7 +824,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/26.jpg"
         },
         {
             "id": 27,
@@ -827,7 +854,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/27.jpg"
         },
         {
             "id": 28,
@@ -856,7 +884,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/28.jpg"
         },
         {
             "id": 29,
@@ -885,7 +914,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/29.jpg"
         },
         {
             "id": 30,
@@ -914,7 +944,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/30.jpg"
         },
         {
             "id": 31,
@@ -940,10 +971,13 @@
                 },
                 "phoneNumber": ""
             },
-            "pictures": [],
+            "pictures": [
+                "objphotos/31_1.jpg"
+            ],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/31.jpg"
         },
         {
             "id": 32,
@@ -972,7 +1006,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/32.jpg"
         },
         {
             "id": 33,
@@ -1001,7 +1036,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/33.jpg"
         },
         {
             "id": 34,
@@ -1030,7 +1066,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/34.jpg"
         },
         {
             "id": 35,
@@ -1059,7 +1096,8 @@
             "pictures": [],
             "tags": [
                 5
-            ]
+            ],
+            "mainPicture": "objphotos/35.jpg"
         },
         {
             "id": 36,
@@ -1088,7 +1126,8 @@
             "pictures": [],
             "tags": [
                 4
-            ]
+            ],
+            "mainPicture": "objphotos/36.jpg"
         },
         {
             "id": 37,
@@ -1114,10 +1153,13 @@
                 },
                 "phoneNumber": ""
             },
-            "pictures": [],
+            "pictures": [
+                "objphotos/37_1.jpg"
+            ],
             "tags": [
                 3
-            ]
+            ],
+            "mainPicture": "objphotos/37.jpg"
         },
         {
             "id": 38,
@@ -1144,7 +1186,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/38.jpg"
         },
         {
             "id": 39,
@@ -1171,7 +1214,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/39.jpg"
         },
         {
             "id": 40,
@@ -1198,7 +1242,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/40.jpg"
         },
         {
             "id": 41,
@@ -1225,7 +1270,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/41.jpg"
         },
         {
             "id": 42,
@@ -1252,7 +1298,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/42.jpg"
         },
         {
             "id": 43,
@@ -1279,7 +1326,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/43.jpg"
         },
         {
             "id": 44,
@@ -1306,7 +1354,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/44.jpg"
         },
         {
             "id": 45,
@@ -1333,7 +1382,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/45.jpg"
         },
         {
             "id": 46,
@@ -1360,7 +1410,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/46.jpg"
         },
         {
             "id": 47,
@@ -1387,7 +1438,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/47.jpg"
         },
         {
             "id": 48,
@@ -1414,7 +1466,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/48.jpg"
         },
         {
             "id": 49,
@@ -1441,7 +1494,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/49.jpg"
         },
         {
             "id": 50,
@@ -1468,7 +1522,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/50.jpg"
         },
         {
             "id": 51,
@@ -1495,7 +1550,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/51.jpg"
         },
         {
             "id": 52,
@@ -1522,7 +1578,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/52.jpg"
         },
         {
             "id": 53,
@@ -1549,7 +1606,91 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": []
+            "tags": [],
+            "mainPicture": "objphotos/53.jpg"
+        }
+    ],
+    "tags": [
+        {
+            "id": 1,
+            "name": {
+                "ru": "зеленая линия",
+                "en": "зеленая линия"
+            },
+            "picture": "img/box_33cc33.png",
+            "color": "#33cc33"
+        },
+        {
+            "id": 2,
+            "name": {
+                "ru": "красная линия",
+                "en": "красная линия"
+            },
+            "picture": "img/box_ff0000.png",
+            "color": "#ff0000"
+        },
+        {
+            "id": 3,
+            "name": {
+                "ru": "памятники",
+                "en": "памятники"
+            },
+            "picture": "img/box_4c00fe.png",
+            "color": "#4c00fe"
+        },
+        {
+            "id": 4,
+            "name": {
+                "ru": "архитектура",
+                "en": "архитектура"
+            },
+            "picture": "img/box_663333.png",
+            "color": "#663333"
+        },
+        {
+            "id": 5,
+            "name": {
+                "ru": "храмы",
+                "en": "храмы"
+            },
+            "picture": "img/box_6699ff.png",
+            "color": "#6699ff"
+        },
+        {
+            "id": 6,
+            "name": {
+                "ru": "галереи",
+                "en": "галереи"
+            },
+            "picture": "img/box_66ffcc.png",
+            "color": "#66ffcc"
+        },
+        {
+            "id": 7,
+            "name": {
+                "ru": "музеи",
+                "en": "музеи"
+            },
+            "picture": "img/box_990000.png",
+            "color": "#990000"
+        },
+        {
+            "id": 8,
+            "name": {
+                "ru": "парки",
+                "en": "парки"
+            },
+            "picture": "img/box_9900cc.png",
+            "color": "#9900cc"
+        },
+        {
+            "id": 9,
+            "name": {
+                "ru": "театры",
+                "en": "театры"
+            },
+            "picture": "img/box_cccc33.png",
+            "color": "#cccc33"
         }
     ],
     "routes": [
@@ -2074,89 +2215,6 @@
                     "lng": 56.24312214553357
                 }
             ]
-        }
-    ],
-    "tags": [
-        {
-            "id": 1,
-            "name": {
-                "ru": "зеленая линия",
-                "en": "зеленая линия"
-            },
-            "picture": "img/box_33cc33.png",
-            "color": "#33cc33"
-        },
-        {
-            "id": 2,
-            "name": {
-                "ru": "красная линия",
-                "en": "красная линия"
-            },
-            "picture": "img/box_ff0000.png",
-            "color": "#ff0000"
-        },
-        {
-            "id": 3,
-            "name": {
-                "ru": "памятники",
-                "en": "памятники"
-            },
-            "picture": "img/box_4c00fe.png",
-            "color": "#4c00fe"
-        },
-        {
-            "id": 4,
-            "name": {
-                "ru": "архитектура",
-                "en": "архитектура"
-            },
-            "picture": "img/box_663333.png",
-            "color": "#663333"
-        },
-        {
-            "id": 5,
-            "name": {
-                "ru": "храмы",
-                "en": "храмы"
-            },
-            "picture": "img/box_6699ff.png",
-            "color": "#6699ff"
-        },
-        {
-            "id": 6,
-            "name": {
-                "ru": "галереи",
-                "en": "галереи"
-            },
-            "picture": "img/box_66ffcc.png",
-            "color": "#66ffcc"
-        },
-        {
-            "id": 7,
-            "name": {
-                "ru": "музеи",
-                "en": "музеи"
-            },
-            "picture": "img/box_990000.png",
-            "color": "#990000"
-        },
-        {
-            "id": 8,
-            "name": {
-                "ru": "парки",
-                "en": "парки"
-            },
-            "picture": "img/box_9900cc.png",
-            "color": "#9900cc"
-        },
-        {
-            "id": 9,
-            "name": {
-                "ru": "театры",
-                "en": "театры"
-            },
-            "picture": "img/box_cccc33.png",
-            "color": "#cccc33"
         }
     ]
 }
