@@ -544,8 +544,10 @@
 			Шаблон слайда тэга.
 		-->
 		<script id="tagSlideTemplate" type="text/x-jsrender">
-			<div class="slide tagSlide" _id="{{:id}}" style="display: table;">
-				<div style="display: table-cell; vertical-align: middle;">{{:name}}</div>
+			<div class="slide tagSlide" _id="{{:id}}">
+				<div class="wrapper">
+					<div class="cell">{{:name}}</div>
+				</div>
 				<div class="foground"></div>
 			</div>
 		</script>

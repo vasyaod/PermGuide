@@ -495,13 +495,16 @@ div {
 .tagSlide {
 	width: 100%;
 	height: 100%;
-	padding-left: 30px;
 	text-align: center;
 	vertical-align: middle;
 	position: relative;
 	font-size: 1.7em;
 	color: #fff;
 } 
+.tagSlide .wrapper{
+	margin-left: 30px;
+} 
+
 /**
  * Стили кнопки переключения режимов.
  */

@@ -94,8 +94,21 @@ if(typeof PermGuide == "undefined")
 				 * Изменяет размеры контейнера и сладов.
 				 */
 				resize: function() {
-					this.slideWidth = $(this.containerElement).parent().width();
+					var slideWidth = $(this.containerElement).parent().width();
+					this.slideWidth = slideWidth;
 					$(this.containerElement).css("width", (this.slideWidth*this.slideCount));
+					/*
+					$(this.containerElement).children(".slide").css("position", "absolute");
+					$(this.containerElement).children(".slide").each(function(index){
+						//alert(index);
+						$(this).css("left", slideWidth*index);
+						$(this).css("right", slideWidth*index+1);
+						//$(this).css("width", slideWidth);
+						
+						$(this).css("top", 0);
+						$(this).css("bottom", 0);
+					})
+					*/
 					$(this.containerElement).children(".slide").css("width", this.slideWidth);
 					
 					this.containerPosition = $(this.containerElement).position();
@@ -130,7 +143,9 @@ if(typeof PermGuide == "undefined")
 					})
 					
 					if (index != -1)
+					{
 						this.select(index, fast);
+					}
 				},
 				
 				down: function(event) {
@@ -236,7 +251,7 @@ if(typeof PermGuide == "undefined")
 					if (this.index == this.slideCount)
 						this.index =  this.slideCount-1;
 					
-					var position = $(this.containerElement).children(".slide").slice(this.index).position().left
+					var position = $(this.containerElement).children(".slide").slice(this.index, this.index+1).position().left
 					
 					var self = this;
 					this.canDraged = false;
