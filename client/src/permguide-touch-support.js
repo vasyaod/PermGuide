@@ -64,28 +64,48 @@ PermGuide.deadRadius = 15;
 		};
 		
 		$.fn.touchend = function(fn, stopPropagation) {
-			var newFn = function (event)
-			{
-				if (stopPropagation)
-					event.stopPropagation();
-				event.preventDefault();
-				fn({
-					type: "touchend",
-					target: event.target,
-					changedTouches: 
-					[
-						{
-							clientX: event.clientX,
-							clientY: event.clientY,
-							screenX: event.screenX,
-							screenY: event.screenY,
-							pageX: event.pageX,
-							pageY: event.pageY
-						}
-					]
-				});
-			}
-			$(this).on("mouseup", newFn);
+			$(this).each( function () {
+				var down = false;
+				var downHandler = function (event) {
+					down = true;
+				}
+				
+				var upHandler = function (event) {
+					if (!down)
+						return;
+					down = false;
+
+					if (stopPropagation)
+						event.stopPropagation();
+					event.preventDefault();
+					fn({
+						type: "touchend",
+						target: event.target,
+						changedTouches: 
+						[
+							{
+								clientX: event.clientX,
+								clientY: event.clientY,
+								screenX: event.screenX,
+								screenY: event.screenY,
+								pageX: event.pageX,
+								pageY: event.pageY
+							}
+						]
+					});
+				}
+				var outHandler = function (event) {
+					if (!down)
+						return;
+					upHandler(event);
+				}
+				//this.addEventListener("mousedown", downHandler);
+				//this.addEventListener("mouseup", upHandler);
+				//this.addEventListener("mouseout", outHandler, false);
+				$(this).on("mousedown", downHandler);
+				$(this).on("mouseup", upHandler);
+				$(this).on("mouseleave", outHandler);
+			});
 		};
 		
 		$.fn.touchclick = function(fn, stopPropagation) {
