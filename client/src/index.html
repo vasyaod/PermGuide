@@ -161,6 +161,11 @@
 						return;
 					tag.activate();
 				};
+				////
+				// Заполним страницу с информацией о перми.
+				$("#aboutPerm").html(
+					$( "#aboutPermSectionTemplate" ).render(applicationData.data.info)
+				);
 			});
 			
 			// При включении/отключении тэгов, формируем 
@@ -226,14 +231,19 @@
 				$("#objectScreen .objectDescription").html(
 					$("#objectInfoDescriptionTemplate" ).render([object])
 				);
-				$("#objectScreen .objectContacts").html(
-					$("#objectInfoContactsTemplate" ).render([{
-						address: object.contacts.address,
-						phone: object.contacts.phoneNumber
-					}])
-				);
-				if (object.pictures && object.pictures.length > 0)
-				{
+				if (object.contacts) {
+					$("#objectScreen .objectContacts").html(
+						$("#objectInfoContactsTemplate" ).render([{
+							address: object.contacts.address,
+							phone: object.contacts.phoneNumber
+						}])
+					);
+				} else {
+					$("#objectScreen .objectContacts").html("");
+					
+				};
+				
+				if (object.pictures && object.pictures.length > 0) {
 					var photo = [];
 					$.each(object.pictures, function(index, picture) {	
 						photo.push({
@@ -244,6 +254,8 @@
 					$("#objectScreen .objectPhoto").html(
 						$("#objectInfoPhotoTemplate" ).render(photo)
 					);
+				} else {
+					$("#objectScreen .objectPhoto").html("");
 				}
 				$("#objectScreen .vScroller .i18n").i18n();
 				PermGuide.ObjectInfoWindow.toggle();
@@ -514,6 +526,7 @@
 				<img src="{{:photoURL}}" class="photo">
 			</div>
 		</script>
+
 		<!-- 
 			Шаблон слайда тэга.
 		-->
@@ -543,6 +556,17 @@
 					</div>
 				</div>
 				<div class="foground"></div>
+			</div>
+
+		</script>
+
+		<!-- 
+			Шаблон раздела с информацией о Перми.
+		-->
+		<script id="aboutPermSectionTemplate" type="text/x-jsrender">
+			<div class="aboutPermSection">
+				<div class="caption">{{:caption}}</div>
+				<div class="text">{{:text}}</div>
 			</div>
 		</script>
 	</head>
@@ -760,10 +784,10 @@
 								</div> 
 							</div> 
 						</div>
-						<div class="pageContent">
-							<div style="height: 100%;">
-								<div class="i18n" style="padding-top: 30%">Заполнить фигней!!!!</div>
-							</div> 
+						<div class="pageContent vScrollerBg">
+							<div id="aboutPerm" class="vScroller" stopPropagation="true"> 
+								<!-- Заполняются динамически -->
+							</div>
 						</div>
 					</div>
 				</div>

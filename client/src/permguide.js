@@ -231,7 +231,7 @@ PermGuide.ApplicationData = {
 			object.tagIds = object.tags;
 			object.tags = newTags;
 		}, this));
-
+		
 		// Делае тоже самое но с маршрутами.
 		$.each(this.data.routes, $.proxy(function(index, route) {	
 			
@@ -271,6 +271,12 @@ PermGuide.ApplicationData = {
 		}, this));
 		
 		
+		// Интернацианализируем информацию о перми.
+		$.each(this.data.info, function(index, info) {	
+			info.caption = PermGuide.Language.getString(info.caption);
+			info.text = PermGuide.Language.getString(info.text);
+		});
+
 		this.loaded = true;
 		// Генирируем событие, о том что данные загружены и готовы к использованию.
 		this.notify("loaded", this);

@@ -567,8 +567,8 @@ div {
 }
 
 #objectScreen .objectDescription .text {
-	padding-left: 1em;
-	padding-right: 1em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
 }
 
 #objectScreen .objectPhoto .photo {
@@ -745,3 +745,17 @@ div {
 	margin: 1.2em;
 }
 
+
+/**
+ * Стили раздела "Информация о перми"
+ */
+.aboutPermSection .caption {
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0.8em;
+}
+
+.aboutPermSection .text {
+	margin: 0.8em;
+}
+ 
