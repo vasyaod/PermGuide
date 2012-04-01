@@ -94,10 +94,12 @@
 			PermGuide.Interface.makeCatalog("routes", $("#routesCatalog"));
 
 			////
+			// Инициализация случайной картинки на первой странице.
+			PermGuide.Interface.makeRandomObject($("#randomObjectContainer"));
+			
+			////
 			// Инициализация списка популярных объектов и маршрутов.
-			PermGuide.Interface.makePopularObjectsAndRoutes(
-				$("#popularPlacesContent"), $("#popularRoutesContent")
-			);
+			PermGuide.Interface.makePopularObjectsAndRoutes($("#popularPlacesContent"), $("#popularRoutesContent"));
 			
 			////
 			// Обработчик события загрузки данных 
@@ -486,6 +488,17 @@
 				{{if objectId}}<div _id="{{:objectId}}" class="distance"></div>{{/if}}
 			</div>
 		</script>
+		
+		<!--
+			Шаблон случайной картинки на первой странице.
+		-->
+		<script id="randomObjectTemplate" type="text/x-jsrender">
+			<div class="randomObject" _id="{{:id}}">
+				<img src="{{:mainPicture}}" class="picture" alt="{{:name}}">
+				<div class="title">{{:name}}</div>
+				<div class="foground"></div>
+			</div>
+		</script>
 
 		<!-- 
 			Шаблон информации об объекте (описание).
@@ -603,10 +616,8 @@
 						</div>
 						<div class="pageContent vScrollerBg">
 							<div class="vScroller" stopPropagation="true">
-								<div id="randomObject">
-									<div class="title">
-										Пермский академический театр
-									</div>
+								<div id="randomObjectContainer">
+									<!-- Заполняется шаблонизатором -->
 								</div>
 								<div id="popularPlaces" class="popular">
 									<div class="title i18n">Популярные места</div>

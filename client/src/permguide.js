@@ -458,7 +458,21 @@ PermGuide.ApplicationData = {
 		if (object.tags.length == 0)
 			object = this.getRandomObject();
 		return object;
-	},	
+	},
+	
+	/**
+	 * Метод возвращает случайный объект у которго есть основная картинка.
+	 */
+	getRandomObjectWithPicture: function () {
+		var objects = $(this.data.objects).filter(function(item){ return this.mainPicture && this.tags && this.tags.length > 0; } )
+
+		var i = objects.length;
+		//return a random integer between 0 and 10
+		var index = Math.floor(Math.random()*i);
+		
+		var object = objects[index];
+		return object;
+	},
 	
 	/**
 	 * Метод возвращает маршрут по его id.
@@ -671,6 +685,9 @@ PermGuide.Interface.makePopularObjectsAndRoutes = function(
 
 };
 
+/**
+ * Создает и инициализирует "экран" в приложении.
+ */
 PermGuide.Interface.makeScreen = function(screenElement) {
 
 	////
@@ -708,3 +725,32 @@ PermGuide.Interface.makeScreen = function(screenElement) {
 	////
 
 }
+/**
+ * Метод инициализирует и создает члучайную картинку на первой странице.
+ */
+PermGuide.Interface.makeRandomObject = function(container) {
+
+	////
+	// Обработчик события загрузки данных 
+	PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
+		
+		var object = PermGuide.ApplicationData.getRandomObjectWithPicture();
+		
+		$(container).html(
+			$( "#randomObjectTemplate" ).render([object])
+		);
+
+		////
+		// Повешаем обработчик на выбор популярного объекта.
+		$(container).find(".randomObject").touchclick( function (event) {
+			var objectId = $(event.target).parent().attr("_id");
+			var object = applicationData.getObjectById(objectId);
+			var tag = object.tags[0];
+			tag.activate();
+			objectsMapManager.selectObject(object, true);
+			
+			var pageSlider = $("#mainScreenSlider").data("state");
+			pageSlider.select(1);
+		});		
+	});
+};

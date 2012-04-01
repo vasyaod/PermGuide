@@ -709,6 +709,7 @@ div {
 /**
  * Стили титульной страницы.
  */
+/*
 #randomObject {
 	position: relative;
 	width: 100%;
@@ -720,8 +721,17 @@ div {
 	background-repeat: no-repeat;
 	border-bottom: 2px #f00 solid
 }
+*/
 
-#randomObject .title
+.randomObject{
+	width: 100%;
+	position: relative;
+}
+.randomObject .picture{
+	width: 100%;
+}
+
+.randomObject .title
 {
 	width: 100%;
 	height: 1.2em;
