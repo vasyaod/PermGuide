@@ -29,7 +29,6 @@ PermGuide.ScreenManager = {
 		$(window).keypress($.proxy(function(event) {
 			if (!this.activeScreen)
 				return;
-			alert(event.keyCode);
 
 			if(event.keyCode == 39 ) {
 				var pageSlider = $(this.activeScreen.screenElement).find(".pageSlider").data("state");
@@ -82,6 +81,10 @@ PermGuide.ScreenManager = {
 	 * Метод активирует экран.
 	 */
 	activateScreen: function(screen, skipStack){
+		
+		if (this.activeScreen == screen)
+			return;
+		
 		if (this.activeScreen && this.activeScreen.hide) {
 			this.activeScreen.hide(this.activeScreen.screenElement);
 			
