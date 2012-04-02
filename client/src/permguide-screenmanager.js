@@ -15,6 +15,47 @@ PermGuide.ScreenManager = {
 	 */
 	screens: [],
 	
+	/**
+	 * Флаг того что фонегап инициализирован.
+	 */
+	phonegapInited: false,
+	
+	/**
+	 * Стэк экранов, для работы кнопки назад.
+	 */
+	screenStack: [],
+	
+	init: function(){
+		$(window).keypress($.proxy(function(event) {
+			if (!this.activeScreen)
+				return;
+			alert(event.keyCode);
+
+			if(event.keyCode == 39 ) {
+				var pageSlider = $(this.activeScreen.screenElement).find(".pageSlider").data("state");
+				pageSlider.next();
+				event.preventDefault();
+			}
+			if(event.keyCode == 37 ) {
+				var pageSlider = $(this.activeScreen.screenElement).find(".pageSlider").data("state");
+				pageSlider.prev();
+				event.preventDefault();
+			}
+		}, this));
+	},
+	
+	initPhonegap: function(){
+		this.phonegapInited = true;
+		this.backHandler = $.proxy( this.back, this);
+		/*
+		var backHandler = $.proxy(function(event) {
+			alert("!!!!");
+		}, this);
+		document.addEventListener("backbutton", backHandler, false);
+		*/
+	},
+
+	
 	getScreenByName: function(name){
 		var res;
 		$.each(this.screens, function(index, screen) {	
@@ -36,17 +77,38 @@ PermGuide.ScreenManager = {
 		}
 		this.activateScreen(screen);
 	},
-	
+		
 	/**
 	 * Метод активирует экран.
 	 */
-	activateScreen: function(screen){
+	activateScreen: function(screen, skipStack){
 		if (this.activeScreen && this.activeScreen.hide) {
 			this.activeScreen.hide(this.activeScreen.screenElement);
+			
+			if (!skipStack)
+			{
+				this.screenStack.push(this.activeScreen);
+				if (this.screenStack.length == 1 && this.backHandler){
+					document.addEventListener("backbutton", this.backHandler, false);
+				}
+			}
 		}
+		
 		this.activeScreen = screen;
 		if (screen.show) {
 			screen.show(screen.screenElement);
+		}
+	},
+	
+	back: function(){
+		if (this.screenStack.length > 0) {
+			var screen = this.screenStack[this.screenStack.length-1];
+			this.screenStack.length --;
+			this.activateScreen(screen, true);
+
+			if (this.screenStack.length == 0 && this.backHandler) {
+				document.removeEventListener("backbutton", this.backHandler, false);
+			}
 		}
 	},
 	

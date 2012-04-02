@@ -51,7 +51,7 @@
 			////
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
 			$(".backButton").touchclick( function () {
-				PermGuide.ScreenManager.activateScreen("mainScreen");
+				PermGuide.ScreenManager.back();
 			});
 			
 			////
@@ -105,7 +105,8 @@
 					});
 				}
 			});
-
+			PermGuide.ScreenManager.init();
+			
 			////
 			// Инициализация скроленга страниц.
 			$(".vScroller").scrollable();
@@ -420,7 +421,7 @@
 			////
 			// Включим тестовую геолокацию.
 			//PermGuide.Geolocation.init();
-			
+			PermGuide.ScreenManager.initPhonegap();
 			PermGuide.Scheduler.finished("PhonegapReady");
 		}
 		
