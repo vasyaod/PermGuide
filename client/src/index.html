@@ -254,7 +254,7 @@
 					$( "#objectInfoTemplate" ).render([object])
 				);
 				*/
-				$("#objectScreen .objectName").text(object.name);
+				$("#objectScreen .objectName span:first").text(object.name);
 				
 				$("#objectScreen .objectDescription").html(
 					$("#objectInfoDescriptionTemplate" ).render([object])
@@ -864,9 +864,9 @@
 					<div class="slide pageSlide">
 						<div class="pageHeader">
 							<div class="objectName">
-								
+								<span></span>
 							</div>
-							<div class="backButton"></div>
+							<div class="backButton"><span><span class="i18n">Back</span></span></div>
 						</div>
 						<div class="pageContent vScrollerBg background">
 							<div class="vScroller objectDescription">
@@ -877,9 +877,9 @@
 					<div class="slide pageSlide">
 						<div class="pageHeader">
 							<div class="objectName">
-								
+								<span></span>
 							</div>
-							<div class="backButton"></div>
+							<div class="backButton"><span><span class="i18n">Back</span></span></div>
 						</div>
 						<div class="pageContent vScrollerBg background">
 							<div class="vScroller objectContacts">
@@ -890,9 +890,9 @@
 					<div class="slide pageSlide">
 						<div class="pageHeader">
 							<div class="objectName">
-								
+								<span></span>
 							</div>
-							<div class="backButton"></div>
+							<div class="backButton"><span><span class="i18n">Back</span></span></div>
 						</div>
 						<div class="pageContent vScrollerBg background">
 							<div class="vScroller objectPhoto">

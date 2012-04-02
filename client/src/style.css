@@ -40,6 +40,7 @@ div {
 	width: 100%;
 	height: 100%;
 }
+
 .cell{
 	display: table-cell;
 	vertical-align: middle;
@@ -58,6 +59,7 @@ div {
 	overflow: hidden;
 	position: relative;
 }
+
 .vScrollerBg .vScroller {
 	min-height: 100%;
 }
@@ -78,7 +80,7 @@ div {
 .pageBottom {
 	position:absolute;
 	width: 100%;
-	height: 64px;
+	height: 64px; /*resolution depending*/
 	bottom: 0px;
 	border-top: 2px #ff0000 solid;
 }
@@ -87,7 +89,7 @@ div {
 	position: absolute;
 	width: 100%;
 	top: 0;
-	height: 3em;
+	height: 48px;
 	background-color: #333333;
 	overflow: hidden;
 }
@@ -101,7 +103,7 @@ div {
 .pageContent {
 	position: absolute;
 	width: 100%;
-	top: 3em;
+	top: 48px;
 	bottom: 0;
 }
 
@@ -135,7 +137,7 @@ div {
 	height: 100%;
 	text-align: center;
 	background-image: url('img/splash.png');
-	background-size: contain;
+	background-size: cover;
 	background-color: #f00;
 	background-position: center center;
 	background-repeat: no-repeat;	
@@ -223,7 +225,6 @@ div {
 
 #mainScreen .pageScroller #pInfo.pageIndicator .pagePicture{
 	background-image: url('img/about2.png');
-	background-position: center -2px;
 }
 
 #mainScreen .pageScroller #pMain.pageIndicator.active .pagePicture{
@@ -328,7 +329,8 @@ div {
 }
 
 .dropDownMenu .toggleButton {
-	height: 10%;
+	/*height: 10%;*/
+	height: 48px;
 	text-align: center;
 	background-color: #333333;
 	position: relative;
@@ -397,6 +399,10 @@ div {
 .catalog {
 	display: none;
 	height: 100%; 
+}
+
+.catalog .vScroller {
+	padding-top: 1em;
 }
 
 .catalogItem {
@@ -533,6 +539,15 @@ div {
 	background-repeat: no-repeat;
 	background-image: url('img/btn_map.png');
 }
+
+.v_al {
+	width: 1px; 
+	vertical-align: middle; 
+	height: 100%; 
+	display: inline-block;
+	font-size: 0;
+}
+
 /**
  * Стили элементов информации об объекте.
  */ 
@@ -545,24 +560,51 @@ div {
 
 #objectScreen .objectName{
 	position: absolute;
-	left:0px;
+	left: 0px;
 	right: 100px;
 	height: 100%;
 	overflow:hidden;
 	padding-left: 1em;
-	font-size: 1.2em;
+	font-size: 1em;
 	color: #fff;
+	display: table;
+}
+
+#objectScreen .objectName span{
+	display: table-cell;
+	vertical-align: middle;
 }
 
 #objectScreen .backButton{
 	position: absolute;
 	right: 0px;
-	width: 100px;
-	height: 100%;
-	background-position: center center;
+	width: 80px;
+	height: 25px; /* resolution depending*/
+	background-position: left center;
 	background-repeat: no-repeat;
-	background-image: url('img/btn_back.png');
+	background-image: url('img/btn1.png');
 	cursor: pointer;
+	padding: 0 5px 0 0;
+	margin: 10px 15px;
+}
+
+#objectScreen .backButton > span {
+	margin-right: -5px;
+	margin-left: 10px;
+	width: 100%;
+	height: 100%;
+	background-position: right center;
+	background-repeat: no-repeat;
+	background-image: url('img/btn1.png');
+	display: table;
+	text-align: center;
+}
+
+#objectScreen .backButton > span > span{
+	padding-right: 10px;
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle;
 }
 
 #objectScreen .objectDescription .mainPicture {
@@ -571,8 +613,8 @@ div {
 }
 
 #objectScreen .objectDescription .text {
-	padding-left: 0.5em;
-	padding-right: 0.5em;
+	padding-left: 0.8em;
+	padding-right: 0.8em;
 }
 
 #objectScreen .objectPhoto .photo {
@@ -757,9 +799,8 @@ div {
 
 .popular .title {
 	font-size: 1.2em;
-	margin: 1.2em;
+	margin: 1.2em 1.2em 0.5em;
 }
-
 
 /**
  * Стили раздела "Информация о перми"
@@ -773,4 +814,136 @@ div {
 .aboutPermSection .text {
 	margin: 0.8em;
 }
- 
+
+/* Hi-res display */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+       only screen and (min--moz-device-pixel-ratio: 1.5),
+       only screen and (min-resolution: 240dpi)
+{ 
+	.pageBottom {
+		border-top: 4px solid #FF0000;
+		height: 124px;
+	}
+
+	.page {
+		bottom: 128px;
+	}
+
+	.pageHeader {
+		height: 80px;
+	}
+
+	.pageContent {
+		top: 80px;
+	}
+
+	.pageScroller .active {
+		border-top: 4px solid #F00;
+	}
+
+	.catalogItem {
+		font-size: 1.2em;
+	}
+
+	.popular .title {
+		font-size: 1.4em;
+	}
+
+	#mainScreen .pageScroller .pageIndicator {
+		padding-bottom: 4px;
+		font-size: 1.1em;
+	}
+
+	#mainScreen .pageScroller .pageIndicator.active .pageCaption{
+		margin-top: -4px;
+	}
+
+	#mainScreen .pageScroller .pageIndicator .pagePicture{
+		height: 92px;
+		background-position: center 4px;
+	}      	
+
+	#mainScreen .pageScroller #pMain.pageIndicator .pagePicture{
+		background-image: url('img/perm2b.png');
+	}
+
+	#mainScreen .pageScroller #pObjects.pageIndicator .pagePicture{
+		background-image: url('img/map2b.png');
+	}
+
+	#mainScreen .pageScroller #pWays.pageIndicator .pagePicture{
+		background-image: url('img/way2b.png');
+	}
+
+	#mainScreen .pageScroller #pInfo.pageIndicator .pagePicture{
+		background-image: url('img/about2b.png');
+	}
+
+	#mainScreen .pageScroller #pMain.pageIndicator.active .pagePicture{
+		background-image: url('img/perm1b.png');
+		background-position: center 0px;
+	}
+
+	#mainScreen .pageScroller #pObjects.pageIndicator.active .pagePicture{
+		background-image: url('img/map1b.png');
+		background-position: center 0px;
+	}
+
+	#mainScreen .pageScroller #pWays.pageIndicator.active .pagePicture{
+		background-image: url('img/way1b.png');
+		background-position: center 0px;
+	}
+
+	#mainScreen .pageScroller #pInfo.pageIndicator.active .pagePicture{
+		background-image: url('img/about1b.png');
+		background-position: center 0px;
+	}
+
+	.switchMode .on{
+		background-image: url('img/btn_list2.png');
+	}
+
+	.switchMode .off{
+		background-image: url('img/btn_map2.png');
+	}
+
+	.tagSliderBg {
+		right: 90px;
+	}
+
+	.toggleButton .arrowRight {
+		right: 80px;
+	}
+
+	.toggleButton .arrowRight {
+		right: 90px;
+	}
+
+	.switchMode {
+		width: 80px;
+	}
+
+	#objectScreen .backButton{
+		width: 80px;
+		height: 50px; /* resolution depending*/
+		background-image: url('img/btn2.png');
+		padding: 0 10px 0 0;
+		margin: 10px 15px;
+	}
+
+	#objectScreen .backButton > span {
+		margin-right: -10px;
+		margin-left: 20px;
+		background-image: url('img/btn2.png');
+	}
+	
+	#objectScreen .backButton > span > span{
+		margin-right: 20px;
+		/*display: block;*/
+	}
+	
+	#objectScreen .backButton > span > span:after{
+		font-size: 50px;
+	}
+	
+}
