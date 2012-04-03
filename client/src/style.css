@@ -146,36 +146,47 @@ div {
 #splashScreen .statusLine
 {
 	width: 100%;
-	height: 1.5em;
+	height: 1.2em;
 	left: 0px;
 	bottom: 0em;
 	position: absolute;
 	text-align: center;
-	opacity: 0.5;
-	background-color: #fff
+	opacity: 0.7;
+	background-color: #000;
+	color: #fff;
 }
 
 /**
  * Экран выбора языка.
  */
 #langSelectScreen {
-	position: absolute;
 	visibility: hidden;
+	position: absolute;
 	top: 0px;
 	left: 0px;
 	width: 100%;
 	height: 100%;
-	
 	text-align: center;
-	background-color: #ffffff;
+	background-image: url('img/splash.png');
+	background-size: cover;
+	background-color: #f00;
+	background-position: center center;
+	background-repeat: no-repeat;
 }
 
 #langSelectScreen .langSelectItem{
 	
-	height: 30%;
-	margin: 10%;
+	height: 3em;
+	line-height: 3em;
+	
 	background-color: #eeeeee;
 	cursor: pointer;
+	margin: 10%;
+	
+	opacity: 0.7;
+	background-color: #000;
+	color: #fff;
+	font-size: 1.5em;
 }
 /**
  * Общие стили скроллера страниц.
@@ -567,49 +578,53 @@ div {
 	padding-left: 1em;
 	font-size: 1em;
 	color: #fff;
-	display: table;
-}
-
-#objectScreen .objectName span{
-	display: table-cell;
-	vertical-align: middle;
 }
 
 #objectScreen .backButton{
 	position: absolute;
-	right: 0px;
+	right: 15px;
 	width: 80px;
-	height: 25px; /* resolution depending*/
+	height: 100%; /* resolution depending*/
 	background-position: left center;
 	background-repeat: no-repeat;
 	background-image: url('img/btn1.png');
 	cursor: pointer;
+	text-align: center;
 	padding: 0 5px 0 0;
-	margin: 10px 15px;
+//	margin: 10px 15px;
 }
 
 #objectScreen .backButton > span {
 	margin-right: -5px;
 	margin-left: 10px;
-	width: 100%;
-	height: 100%;
 	background-position: right center;
 	background-repeat: no-repeat;
 	background-image: url('img/btn1.png');
-	display: table;
-	text-align: center;
+	cursor: pointer;
 }
 
 #objectScreen .backButton > span > span{
 	padding-right: 10px;
-	height: 100%;
-	display: table-cell;
-	vertical-align: middle;
 }
 
 #objectScreen .objectDescription .mainPicture {
 	width: 100%;
 	border-bottom: 2px #f00 solid;
+}
+
+#objectScreen .objectDescription .contacts {
+	padding-left: 0.8em;
+	padding-right: 0.8em;
+	margin-top: 1em;
+
+	font-size: 0.8em;
+}
+
+#objectScreen .objectDescription .findOnMap {
+	color: #fff;
+	background-color: #4c4c4c;
+	padding: 0.8em;
+	cursor: pointer;
 }
 
 #objectScreen .objectDescription .text {
@@ -631,7 +646,7 @@ div {
 }
 
 #objectScreen .pageScroller .pageIndicator {
-	width: 33.3%;
+	width: 50%;
 	font-size: 1.2em;
 }
 
@@ -688,7 +703,7 @@ div {
 	z-index: 500;
 	position: absolute;
 	width: 100%;
-	height: 3em;
+	height: 3.75em;
 	left: 0px;
 	bottom: 0px;
 	opacity: 0.7;
@@ -815,6 +830,14 @@ div {
 	margin: 0.8em;
 }
 
+@media only screen and (max-width: 480px)
+{ 
+	.page {
+		font-size: 0.8em;
+	}
+	
+}
+
 /* Hi-res display */
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (min--moz-device-pixel-ratio: 1.5),
@@ -925,10 +948,9 @@ div {
 
 	#objectScreen .backButton{
 		width: 80px;
-		height: 50px; /* resolution depending*/
+		height: 100%; /* resolution depending*/
 		background-image: url('img/btn2.png');
 		padding: 0 10px 0 0;
-		margin: 10px 15px;
 	}
 
 	#objectScreen .backButton > span {
@@ -938,12 +960,10 @@ div {
 	}
 	
 	#objectScreen .backButton > span > span{
-		margin-right: 20px;
-		/*display: block;*/
-	}
-	
-	#objectScreen .backButton > span > span:after{
 		font-size: 50px;
 	}
 	
+	.mapSliderPlace {
+		height: 5em;
+	}
 }

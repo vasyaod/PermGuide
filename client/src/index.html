@@ -245,7 +245,6 @@
 				pageSlider.select(0, true);
 				// Сбросим позицию скроллеков.
 				$("#objectScreen .objectDescription").data("state").resetPosition();
-				$("#objectScreen .objectContacts").data("state").resetPosition();
 				$("#objectScreen .objectPhoto").data("state").resetPosition();
 				
 				/*
@@ -254,22 +253,11 @@
 					$( "#objectInfoTemplate" ).render([object])
 				);
 				*/
-				$("#objectScreen .objectName span:first").text(object.name);
+				$("#objectScreen .objectName .cell").text(object.name);
 				
 				$("#objectScreen .objectDescription").html(
 					$("#objectInfoDescriptionTemplate" ).render([object])
 				);
-				if (object.contacts) {
-					$("#objectScreen .objectContacts").html(
-						$("#objectInfoContactsTemplate" ).render([{
-							address: object.contacts.address,
-							phone: object.contacts.phoneNumber
-						}])
-					);
-				} else {
-					$("#objectScreen .objectContacts").html("");
-					
-				};
 				
 				if (object.pictures && object.pictures.length > 0) {
 					var photo = [];
@@ -536,24 +524,19 @@
 				{{/if}}
 				<div class="text">{{:description}}</div>
 			</div>
-		</script>
-		
-		<!-- 
-			Шаблон информации об объекте (контактная информация).
-		-->
-		<script id="objectInfoContactsTemplate" type="text/x-jsrender">
-			<div>
-				{{if address}}
-					<div class="address">
-						<span class="title i18n">Address</span><span class="text">{{:address}}</span>
-					</div>
-				{{/if}}
-				{{if phone}}
-					<div class="phone">
-						<span class="title i18n">Phone</span><span class="text">{{:phone}}</span>
-					</div>
-				{{/if}}
+			<div class="contacts">
 				
+				{{if contacts.address}}
+					<span class="address">
+						<span class="title i18n">Address</span><span class="text">{{:contacts.address}}</span>
+					</span>
+				{{/if}}
+				<span class="findOnMap">Найти на карте</span>
+				{{if contacts.phoneNumber}}
+					<div class="phone">
+						<span class="title i18n">Phone</span><span class="text">{{:contacts.phoneNumber}}</span>
+					</div>
+				{{/if}}
 			</div>
 		</script>
 		
@@ -619,9 +602,11 @@
 				<div class="statusLine">0/0</div>
 			</div>
 	
-			<div id="langSelectScreen">
-				<div class="langSelectItem" _lang="ru">Русский</div>
-				<div class="langSelectItem" _lang="en">English</div>
+			<div id="langSelectScreen" class="wrapper">
+				<div class="cell">
+					<div class="langSelectItem" _lang="ru" >Русский</div>
+					<div class="langSelectItem" _lang="en">English</div>
+				</div>
 			</div>
 			
 			<div class="dropDownMenuBg">
@@ -864,9 +849,13 @@
 					<div class="slide pageSlide">
 						<div class="pageHeader">
 							<div class="objectName">
-								<span></span>
+								<span class="wrapper">
+									<span class="cell">
+										
+									</span>
+								</span>
 							</div>
-							<div class="backButton"><span><span class="i18n">Back</span></span></div>
+							<div class="backButton"><span class="wrapper"><span class="cell i18n">Back</span></span></div>
 						</div>
 						<div class="pageContent vScrollerBg background">
 							<div class="vScroller objectDescription">
@@ -877,22 +866,13 @@
 					<div class="slide pageSlide">
 						<div class="pageHeader">
 							<div class="objectName">
-								<span></span>
+								<span class="wrapper">
+									<span class="cell">
+										
+									</span>
+								</span>
 							</div>
-							<div class="backButton"><span><span class="i18n">Back</span></span></div>
-						</div>
-						<div class="pageContent vScrollerBg background">
-							<div class="vScroller objectContacts">
-								
-							</div>
-						</div>
-					</div>
-					<div class="slide pageSlide">
-						<div class="pageHeader">
-							<div class="objectName">
-								<span></span>
-							</div>
-							<div class="backButton"><span><span class="i18n">Back</span></span></div>
+							<div class="backButton"><span class="wrapper"><span class="cell i18n">Back</span></span></div>
 						</div>
 						<div class="pageContent vScrollerBg background">
 							<div class="vScroller objectPhoto">
@@ -907,10 +887,6 @@
 						<div class="foground"></div>
 					</div>
 					<div _id="1" class="pageIndicator">
-						<div class="i18n">Контактная информация</div>
-						<div class="foground"></div>
-					</div>
-					<div _id="2" class="pageIndicator">
 						<div class="i18n">Фото</div>
 						<div class="foground"></div>
 					</div>
