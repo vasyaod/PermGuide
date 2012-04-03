@@ -721,6 +721,6 @@ PermGuide.Interface.makeRandomObject = function(container) {
 			
 			var pageSlider = $("#mainScreenSlider").data("state");
 			pageSlider.select(1);
-		});		
+		});
 	});
 };

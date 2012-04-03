@@ -274,6 +274,24 @@
 					$("#objectScreen .objectPhoto").html("");
 				}
 				$("#objectScreen .vScroller .i18n").i18n();
+
+				////
+				// Вешаем обработчик события на кнопку "найти на карте".
+				$("#objectScreen .findOnMap").touchclick( function (event) {
+					var objectId = $(event.target).attr("_id");
+					var object = PermGuide.ApplicationData.getObjectById(objectId);
+					if (!object)
+						return;
+					var tag = object.tags[0];
+					if (!tag)
+						return;
+					tag.activate();
+					objectsMapManager.selectObject(object, true);
+					
+					var pageSlider = $("#mainScreenSlider").data("state");
+					pageSlider.select(1);
+					PermGuide.ScreenManager.back();
+				});
 				PermGuide.ScreenManager.activateScreenByName("objectScreen");
 			});
 			
@@ -531,7 +549,9 @@
 						<span class="title i18n">Address</span><span class="text">{{:contacts.address}}</span>
 					</span>
 				{{/if}}
-				<span class="findOnMap">Найти на карте</span>
+				{{if tags.length}}
+					<span _id="{{:id}}" class="findOnMap i18n">Найти на карте</span>
+				{{/if}}
 				{{if contacts.phoneNumber}}
 					<div class="phone">
 						<span class="title i18n">Phone</span><span class="text">{{:contacts.phoneNumber}}</span>
@@ -641,7 +661,7 @@
 									</div>
 								</div>
 								<div id="popularRoutes" class="popular">
-									<div class="title i18n">Популярные маршруты</div>
+									<div class="title i18n">Интересные маршруты</div>
 									<div id="popularRoutesContent" class="popularContent">
 										<!--
 											Здесь располагаются плашки с маршрутами. 
