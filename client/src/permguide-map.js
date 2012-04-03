@@ -3,6 +3,38 @@
 if(typeof PermGuide == "undefined")
 	PermGuide = {};
 
+PermGuide.ZoomControl = function () {
+	
+	var map;
+	var element = $(
+			'<div class="zoomControl">'+
+			'	<div class="plus">+</div>'+
+			'	<div class="minus">-</div>'+
+			'</div>'
+			);
+	// Устанавливаем z-index как у метки
+	element.css("z-index", YMaps.ZIndex.CONTROL);
+	
+	this.onAddToMap = function (_map, _controlPosition) {
+		map = _map;
+		element.appendTo(map.getContainer());
+		
+		$(element).find(".plus").touchclick( function () {
+			map.setZoom(map.getZoom()+1);
+		});
+		$(element).find(".minus").touchclick( function () {
+			map.setZoom(map.getZoom()-1);
+		});
+		
+	};
+
+	this.onRemoveFromMap = function () {
+		if (element.parent()) {
+			element.remove();
+		}
+	};
+	
+}
 /**
  * Оверлей карты для отображения объекто (мест).
  */
@@ -342,6 +374,9 @@ PermGuide.MapManager = function (yMapElement, mode){
 		// Создает экземпляр карты и привязывает его к созданному контейнеру
 		this.yMap = new YMaps.Map(this.yMapElement);
 		this.yMap.enableScrollZoom();
+		
+		this.zoomControl = new PermGuide.ZoomControl();
+		this.yMap.addControl(this.zoomControl);
 		
 		// Инициализируем собственный слой. 
 		if ($(this.yMapElement).parent().children("canvas").length) {

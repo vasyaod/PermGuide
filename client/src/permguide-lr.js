@@ -9,12 +9,12 @@ if(typeof PermGuide == "undefined")
 PermGuide.lr = {
 	
 	"Пермский гид": {
-		ru: "Пермский гид",
+		ru: "Гид Перми",
 		en: "Perm guide"
 	},
 	"Места": {
 		ru: "Места",
-		en: "Places"
+		en: "Sights"
 	},
 	"Маршруты": {
 		ru: "Маршруты",
@@ -22,7 +22,7 @@ PermGuide.lr = {
 	},
 	"О Перми": {
 		ru: "О Перми",
-		en: "About Perm"
+		en: "About city Perm"
 	},
 	
 	"Описание": {
@@ -31,7 +31,7 @@ PermGuide.lr = {
 	},
 	"Фото": {
 		ru: "Фото",
-		en: "Photo"
+		en: "Photos"
 	},
 	"Back": {
 		ru: "Назад",
@@ -39,53 +39,53 @@ PermGuide.lr = {
 	},
 	"Популярные места": {
 		ru: "Популярные места",
-		en: "Popular places"
+		en: "Featured"
 	},
 	"Ближайшие места": {
 		ru: "Ближайшие места",
-		en: "Places near"
+		en: "Nearest"
 	},
 	"Интересные маршруты": {
 		ru: "Интересные маршруты",
-		en: "Интересные маршруты"
+		en: "Intrested routes"
 	},
 	"Найти на карте": {
 		ru: "Найти на карте",
-		en: "Find on map"
+		en: "See on the map"
 	},	
 	"подробнее": {
 		ru: "подробнее",
-		en: "more"
+		en: "more information"
 	},
 	
 	"MapLoadFailTitle": {
 		ru: "Карта не была загружена",
-		en: "Карта не была загружена"
+		en: "The map has not been loaded"
 	},
 	// Все строки MapLoadFailText1..5 следует читать сплошным текстом.
 	"MapLoadFailText1": {
-		ru: "Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите",
-		en: "Возможно у вас отсутствует соединение с интернетом, установите соединение и нажмите"
+		ru: "Возможно у вас отсутствует соединение с интернетом, проверьте соединение и попробуйте",
+		en: "There may be connection problems. Please check the connection and try"
 	},
 	"MapLoadFailText2": {
 		ru: "обновить",
-		en: "обновить"
+		en: "again"
 	},	
 	"MapLoadFailText3": {
 		ru: ". В случаи отсутствия связи, Вы можете ",
-		en: ". В случаи отсутствия связи, Вы можете "
+		en: ". If you don not have Internet connection , you can "
 	},	
 	"MapLoadFailText4": {
 		ru: "перейти",
-		en: "перейти"
+		en: "go to"
 	},	
 	"MapLoadFailText5": {
 		ru: "в режим списка.",
-		en: "в режим списка."
+		en: "the list."
 	},
 	"MapLoadingTitle": {
 		ru: "Идет загрузка карты",
-		en: "Идет загрузка карты"
+		en: "Loading..."
 	},
 
 	"Address": {
