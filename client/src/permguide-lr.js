@@ -130,6 +130,14 @@ PermGuide.Language = {
 	
 	// Пока язык задан статично.
 	currentLanguage: "ru",
+
+	init: function () {
+		var res = $.url.parse(document.URL);
+		if (res.params && res.params.lang) {
+			this.languageSelected = true;
+			this.currentLanguage = res.params.lang;
+		}
+	},
 	
 	/**
 	 * Возвращает строку на основании текущего(выбранного) языка.

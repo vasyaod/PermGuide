@@ -11,6 +11,7 @@
 		<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="browserTouchSupport.js"></script>
 		<script type="text/javascript" src="jsrender.js"></script>
+		<script type="text/javascript" src="jquery.urldecoder.js"></script>
 
 		<!-- Загрузка основного кода. -->
 		<script type="text/javascript" src="permguide-observable.js"></script>
@@ -386,6 +387,8 @@
 		};
 
 		languageSelectInit = function() {
+			PermGuide.Language.init();
+			
 			if (PermGuide.Language.languageSelected)
 			{
 				PermGuide.Scheduler.finished("LanguageSelect");
