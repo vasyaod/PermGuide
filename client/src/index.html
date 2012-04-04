@@ -343,23 +343,7 @@
 			////
 			// При изменении позиции устройства, поменяем указатели растояния.
 			PermGuide.Geolocation.attachListener("rateRefreshed", function (){
-				var meters = PermGuide.Language.getInterfaceString("meters");
-				var kilometers = PermGuide.Language.getInterfaceString("kilometers");
-				$(".distance").each(function (){
-					var objectId = $(this).attr("_id");
-					if (!objectId)
-						return;
-					var object = PermGuide.ApplicationData.getObjectById(objectId);
-					if (!object)
-						return;
-
-					var distance = PermGuide.Geolocation.relativeDistance(object.point.lat, object.point.lng);
-					if (distance > 1000)
-						distance = Math.round(distance/1000)+kilometers;
-					else
-						distance = distance + meters;
-					$(this).text(distance);
-				});
+				$(".distance").distanceRefresh();
 			});
 
 //*/

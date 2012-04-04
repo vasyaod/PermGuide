@@ -278,6 +278,8 @@ div {
 	width: 23px;
 	height: 27px;
 	background: url(img/box_990000.png);
+	background-size: cover;
+	background-position: center center;
 	cursor: pointer;
 }
 
@@ -288,6 +290,9 @@ div {
 	width: 27px;
 	height: 31px;
 	background: url(img/box_glow.png);
+	background-size: cover;
+	background-position: center center;
+	
 	cursor: pointer;
 	display: none;
 }
@@ -1036,4 +1041,19 @@ div {
 		height: 60px;
 		border-radius: 7px;	
 	}
+/*	
+	.boxOverlay .box{
+		left: -16px;
+		top: -19px;
+		width: 34px;
+		height: 40px;
+	}
+	
+	.boxOverlay .glow{
+		left: -19px;
+		top: -22px;
+		width: 40px;
+		height: 46px;
+	}
+*/
 }

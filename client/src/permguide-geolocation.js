@@ -2,7 +2,33 @@
 // Проверка существования неймспейса.
 if(typeof PermGuide == "undefined")
 	PermGuide = {};
+/**
+ * Небольной плагин для обновления растояний в вёрстке.
+ */
+$.fn.distanceRefresh = function () {
+	var meters = PermGuide.Language.getInterfaceString("meters");
+	var kilometers = PermGuide.Language.getInterfaceString("kilometers");
 
+	this.each(function (){
+		
+		if (!PermGuide.Geolocation.lastPosition)
+			return;
+		
+		var objectId = $(this).attr("_id");
+		if (!objectId)
+			return;
+		var object = PermGuide.ApplicationData.getObjectById(objectId);
+		if (!object)
+			return;
+	
+		var distance = PermGuide.Geolocation.relativeDistance(object.point.lat, object.point.lng);
+		if (distance > 1000)
+			distance = Math.round(distance/1000)+kilometers;
+		else
+			distance = distance + meters;
+		$(this).text(distance);
+	});
+};
 /**
  * Сервис геолокации.
  */

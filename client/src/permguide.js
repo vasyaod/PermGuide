@@ -362,12 +362,12 @@ PermGuide.ApplicationData = {
 	/**
 	 * Метод возвращает список объектов принадлежащих данному тэгу. 
 	 */
-	getObjectsByTags: function (tag) {
+	getObjectsByTags: function (tag, sorted) {
 		
 		var res = [];
 		if (tag.isObjectTag) {
 			$.each(this.data.objects, $.proxy(function(index, object) {	
-				if ($.inArray(object.tags, tag)) {
+				if ($.inArray(tag, object.tags) >= 0 ) {
 					res.push(object);
 				}
 			}, this));
@@ -375,10 +375,59 @@ PermGuide.ApplicationData = {
 		
 		if (tag.isRouteTag) {
 			$.each(this.data.routes, $.proxy(function(index, route) {	
-				if ($.inArray(route.tags, tag)) {
+				if ($.inArray(tag, route.tags) >= 0) {
 					res = res.concat(route.objects);
 				}
 			}, this));
+		}
+
+		if (sorted && PermGuide.Geolocation.lastPosition) {
+			res.sort(function sortFunction(a, b){
+				var distanceA = PermGuide.Geolocation.relativeDistance(a.point.lat, a.point.lng);
+				var distanceB = PermGuide.Geolocation.relativeDistance(b.point.lat, b.point.lng);
+				if(distanceA < distanceB)
+					return -1;
+				if(distanceA > distanceB)
+					return 1;
+				return 0;
+			});
+		}
+		
+		return res;
+	},
+	
+	/**
+	 * Метод возвращает список объектов у которых первый тэг соответствует указанному. 
+	 */
+	getObjectsByFirstTag: function (tag, sorted) {
+		
+		var res = [];
+		if (tag.isObjectTag) {
+			$.each(this.data.objects, $.proxy(function(index, object) {	
+				if (object.tags && object.tags[0] == tag) {
+					res.push(object);
+				}
+			}, this));
+		}
+		
+		if (tag.isRouteTag) {
+			$.each(this.data.routes, $.proxy(function(index, route) {	
+				if (route.tags && route.tags[0] == tag) {
+					res = res.concat(route.objects);
+				}
+			}, this));
+		}
+
+		if (sorted && PermGuide.Geolocation.lastPosition) {
+			res.sort(function sortFunction(a, b){
+				var distanceA = PermGuide.Geolocation.relativeDistance(a.point.lat, a.point.lng);
+				var distanceB = PermGuide.Geolocation.relativeDistance(b.point.lat, b.point.lng);
+				if(distanceA < distanceB)
+					return -1;
+				if(distanceA > distanceB)
+					return 1;
+				return 0;
+			});
 		}
 		
 		return res;
@@ -430,15 +479,17 @@ PermGuide.ApplicationData = {
 	/**
 	 * Метод возвращает случайный объект.
 	 */
-	getRandomObject: function () {
-		var i = this.data.objects.length;
-		//return a random integer between 0 and 10
-		var index = Math.floor(Math.random()*i);
+	getRandomObject: function (tag) {
+		var objects = [];
+		if (tag)
+			objects = $(this.data.objects).filter(function(item){ return this.tags && this.tags[0] == tag && this.tags.length > 0; } )
+		else
+			objects = $(this.data.objects).filter(function(item){ return this.tags && this.tags.length > 0; } )
 		
-		var object = this.data.objects[index];
-		if (object.tags.length == 0)
-			object = this.getRandomObject();
-		return object;
+		var i = objects.length;
+		var index = Math.floor(Math.random()*i);
+
+		return objects[index];
 	},
 	
 	/**
@@ -446,13 +497,34 @@ PermGuide.ApplicationData = {
 	 */
 	getRandomObjectWithPicture: function () {
 		var objects = $(this.data.objects).filter(function(item){ return this.mainPicture && this.tags && this.tags.length > 0; } )
-
+		
 		var i = objects.length;
-		//return a random integer between 0 and 10
 		var index = Math.floor(Math.random()*i);
 		
-		var object = objects[index];
-		return object;
+		return objects[index];
+	},
+
+	/**
+	 * Метод возвращает указанное количество рандомных тэгов.
+	 */
+	getRandomTags: function (count) {
+//		var tags 
+//		if (excludeTags)
+//			tags = $(this.data.tags).filter(function(item){ return this.; } )
+//		else
+//			tags = $(this.data.tags).filter(function(item){ return this.; } )
+		
+		var res = [];
+		while (res.length != count)
+		{
+			var i = this.data.tags.length;
+			var index = Math.floor(Math.random()*i);
+			var tag = this.data.tags[index];
+			
+			if (tag.isObjectTag && $.inArray(tag, res) == -1)
+				res.push(tag);
+		}
+		return res;
 	},
 	
 	/**
@@ -528,6 +600,7 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 			$( "#objectSlideTemplate" ).render(objects)
 		);
 		$(sliderElement).find(".i18n").i18n();	// нужно чтобы перевести надпись "подробнее"
+		$(sliderElement).find(".distance").distanceRefresh();
 		$(sliderElement).data("state").reset();
 		
 		// Вешает обработсчики событий на каждый слайд.
@@ -588,6 +661,7 @@ PermGuide.Interface.makeCatalog = function(mode, catalogElement) {
 		$(catalogElement).find(".vScroller").html(
 			$( "#catalogItemTemplate" ).render(objectItems)
 		);
+		$(catalogElement).find(".distance").distanceRefresh();
 		
 		////
 		// Повешаем на вубор объекта из каталога, событие.
@@ -620,22 +694,39 @@ PermGuide.Interface.makeCatalog = function(mode, catalogElement) {
  */
 PermGuide.Interface.makePopularObjectsAndRoutes = function(
 		popularObjectItemContainer, popularRouteItemContainer) {
+	
+	// Возвращает 4 штуки случаных объектов.
+	var randomObjects = function (){
+		var objects = [];
+		var tags = PermGuide.ApplicationData.getRandomTags(4);
 
-	////
-	// Обработчик события загрузки данных 
-	PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
+		objects.push(PermGuide.ApplicationData.getRandomObject(tags[0]));
+		objects.push(PermGuide.ApplicationData.getRandomObject(tags[1]));
+		objects.push(PermGuide.ApplicationData.getRandomObject(tags[2]));
+		objects.push(PermGuide.ApplicationData.getRandomObject(tags[3]));
+		
+		return objects;
+	}
+	
+	// Возвращает 4 штуки ближайших объектов.
+	var nearObjects = function(){
+		var objects = [];
+		var tags = PermGuide.ApplicationData.getRandomTags(4);
+
+		objects.push(PermGuide.ApplicationData.getObjectsByFirstTag(tags[0], true)[0]);
+		objects.push(PermGuide.ApplicationData.getObjectsByFirstTag(tags[1], true)[0]);
+		objects.push(PermGuide.ApplicationData.getObjectsByFirstTag(tags[2], true)[0]);
+		objects.push(PermGuide.ApplicationData.getObjectsByFirstTag(tags[3], true)[0]);
+		return objects;
+	};
+	// Рендарит список объектов на первую страницу.
+	var renderObjects = function (objects){
+		
 		////
 		// Формирование первой страницы со случайными объектами.
-		var objects = [];
-		//var popularObjects = [];
-		objects.push(PermGuide.ApplicationData.getRandomObject());
-		objects.push(PermGuide.ApplicationData.getRandomObject());
-		objects.push(PermGuide.ApplicationData.getRandomObject());
-		objects.push(PermGuide.ApplicationData.getRandomObject());
-
 		var objectItems = [];
 		
-		$.each(objects, function(index, object) {
+		$.each(objects(), function(index, object) {
 			var tag = object.tags[0];
 
 			objectItems.push({
@@ -650,23 +741,25 @@ PermGuide.Interface.makePopularObjectsAndRoutes = function(
 		$(popularObjectItemContainer).html(
 			$( "#catalogItemTemplate" ).render(objectItems)
 		);
-		
+		$(popularObjectItemContainer).find(".distance").distanceRefresh();
 		////
 		// Повешаем обработчик на выбор популярного объекта.
 		$(popularObjectItemContainer).find(".catalogItem").touchclick( function (event) {
 			var objectId = $(event.target).parent().attr("_id");
-			var object = applicationData.getObjectById(objectId);
+			var object = PermGuide.ApplicationData.getObjectById(objectId);
 			var tag = object.tags[0];
 			tag.activate();
 			objectsMapManager.selectObject(object, true);
 			
-			var pageSlider = $("#mainScreenSlider").data("state");
-			pageSlider.select(1);
+			PermGuide.ScreenManager.goToPage(1);
 		});
+	};
+
+	var renderRandomRoutes = function (){
 
 		////
 		// Формирование первой страницы со случайными маршрутами.
-		objectItems = [];
+		var objectItems = [];
 		var routes = PermGuide.ApplicationData.data.routes;
 		$.each(routes, function(index, route) { 
 			var tag = route.tags[0];
@@ -688,14 +781,42 @@ PermGuide.Interface.makePopularObjectsAndRoutes = function(
 		// Повешаем обработчик на выбор популярного объекта.
 		$(popularRouteItemContainer).find(".catalogItem").touchclick( function (event) {
 			var tagId = $(event.target).parent().attr("_id");
-			var tag = applicationData.getTagById(tagId);
+			var tag = PermGuide.ApplicationData.getTagById(tagId);
 			tag.activate();
 			
-			var pageSlider = $("#mainScreenSlider").data("state");
-			pageSlider.select(2);
+			PermGuide.ScreenManager.goToPage(2);
 		});
-	});
+	};
+	
+	// Раз в пару минут буде меререндаривать 
+	var timeoutId = setTimeout(function() {
+		//if (PermGuide.Geolocation.lastPosition) {
+		//	renderObjects(nearObjects);
+		//} else {
+			renderObjects(randomObjects);
+		//}
+	}, 180*1000);
+	
+	var cRendered = false;
+	PermGuide.ApplicationData.attachListener("loaded", function() {
+		
+		//if (PermGuide.Geolocation.lastPosition) {
+		//	renderObjects(nearObjects);
+		//} else {
+			renderObjects(randomObjects);
 
+			// При первом поступлении координат отрендарим его ещё раз.
+		//	PermGuide.Geolocation.attachListener("rateRefreshed", function (){
+		//		if (cRendered)
+		//			return;
+		//		cRendered = true;
+		//		renderObjects(nearObjects);
+		//		
+		//	});
+		//}
+	});
+	
+	PermGuide.ApplicationData.attachListener("loaded", renderRandomRoutes);
 };
 
 /**
@@ -762,8 +883,7 @@ PermGuide.Interface.makeRandomObject = function(container) {
 			tag.activate();
 			objectsMapManager.selectObject(object, true);
 			
-			var pageSlider = $("#mainScreenSlider").data("state");
-			pageSlider.select(1);
+			PermGuide.ScreenManager.goToPage(1);
 		});
 	});
 };
