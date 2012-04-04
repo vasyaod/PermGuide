@@ -332,7 +332,7 @@ PermGuide.ApplicationData = {
 	/**
 	 * Метод возвращает список видимых объектов. 
 	 */
-	getVisibleObjects: function (mode) {
+	getVisibleObjects: function (mode, sorted) {
 		
 		var res = [];
 		if (!mode) {
@@ -345,6 +345,17 @@ PermGuide.ApplicationData = {
 				res.push(object);
 		}, this));
 		
+		if (sorted && PermGuide.Geolocation.lastPosition) {
+			res.sort(function sortFunction(a, b){
+				var distanceA = PermGuide.Geolocation.relativeDistance(a.point.lat, a.point.lng);
+				var distanceB = PermGuide.Geolocation.relativeDistance(b.point.lat, b.point.lng);
+				if(distanceA < distanceB)
+					return -1;
+				if(distanceA > distanceB)
+					return 1;
+				return 0;
+			});
+		}
 		return res;
 	},
 	
@@ -507,11 +518,12 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 	mapManager.attachListener("mapObjectSelected", function (object){
 		$(sliderElement).data("state").selectByAttr("_id", object.id);
 	});
-	// Перерерандарим слайдер объектов.
-	PermGuide.ApplicationData.attachListener(mode+"VisibleChanged", function (applicationData){
+
+	// Рендер слайдера объектов на карте.
+	var renderSlider = function (applicationData){
 		////
 		// Перерерандарим слайдер объектов.
-		var objects = applicationData.getVisibleObjects(mode);
+		var objects = PermGuide.ApplicationData.getVisibleObjects(mode, true);
 		$(sliderElement).html(
 			$( "#objectSlideTemplate" ).render(objects)
 		);
@@ -521,31 +533,47 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 		// Вешает обработсчики событий на каждый слайд.
 		$(sliderElement).children(".slide").touchclick( function (event) {
 			var objectId = $(event.target).parent().attr("_id");
-			var object = applicationData.getObjectById(objectId);
-			applicationData.selectObject(object);
+			var object = PermGuide.ApplicationData.getObjectById(objectId);
+			PermGuide.ApplicationData.selectObject(object);
 		});
 		mapManager.selectObjectById(objects[0].id);
-	});
+	}
 	
 	// Обработает события на переключение слайдера объектов.
 	$(sliderElement).data("state").listener = function(index, element) {
 		var objectId = element.attr("_id");
 		mapManager.selectObjectById(objectId);
 	};
+
+	// Перерерандарим слайдер объектов.
+	PermGuide.ApplicationData.attachListener(mode+"VisibleChanged", renderSlider);
+	
+	var cRendered = false;
+	PermGuide.ApplicationData.attachListener("loaded", function () {
+		// При первом поступлении координат отрендарим его ещё раз.
+		PermGuide.Geolocation.attachListener("rateRefreshed", function (){
+			if (cRendered)
+				return;
+			cRendered = true;
+			
+			renderSlider();
+		});
+	});
+	
 };
 
 /**
  * Метод инициализирует и создает интерфейс списка объектов.
  */
 PermGuide.Interface.makeCatalog = function(mode, catalogElement) {
-
-	PermGuide.ApplicationData.attachListener(mode+"VisibleChanged", function (applicationData){
+	
+	var renderCatalog = function () {
 		////
 		// Сбросим позицию каталога.
 		$(catalogElement).find(".vScroller").data("state").resetPosition();
 		////
-		// Перерендарим каталоги.
-		var objects = applicationData.getVisibleObjects(mode);
+		// Перерендарим каталоги, при этом сортируем оп растоянию.
+		var objects = PermGuide.ApplicationData.getVisibleObjects(mode, true);
 		var objectItems = [];
 		
 		$.each(objects, function(index, object) {
@@ -565,8 +593,23 @@ PermGuide.Interface.makeCatalog = function(mode, catalogElement) {
 		// Повешаем на вубор объекта из каталога, событие.
 		$(catalogElement).find(".catalogItem").touchclick( function (event) {
 			var objectId = $(event.target).parent().attr("_id");
-			var object = applicationData.getObjectById(objectId);
+			var object = PermGuide.ApplicationData.getObjectById(objectId);
 			PermGuide.ApplicationData.selectObject(object);
+		});
+	};
+	
+	
+	PermGuide.ApplicationData.attachListener(mode+"VisibleChanged", renderCatalog);
+		
+	var cRendered = false;
+	PermGuide.ApplicationData.attachListener("loaded", function () {
+		// При первом поступлении координат отрендарим его ещё раз.
+		PermGuide.Geolocation.attachListener("rateRefreshed", function (){
+			if (cRendered)
+				return;
+			cRendered = true;
+			
+			renderCatalog();
 		});
 	});
 }

@@ -429,7 +429,7 @@
 		
 			////
 			// Включим тестовую геолокацию.
-			//PermGuide.Geolocation.initTest();
+			PermGuide.Geolocation.initTest();
 
 			// Закроем splash-screen
 			$("#splashScreen").css("visibility", "hidden");
@@ -442,7 +442,7 @@
 		function onDeviceReady() {
 			////
 			// Включим тестовую геолокацию.
-			PermGuide.Geolocation.init();
+			//PermGuide.Geolocation.init();
 			PermGuide.ScreenManager.initPhonegap();
 			PermGuide.Scheduler.finished("PhonegapReady");
 		}

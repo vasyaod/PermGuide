@@ -427,7 +427,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		this.routeStates = [];
 		
 		// Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
-		map.setCenter(new YMaps.GeoPoint(data.centerLat, data.centerLng), data.zoom);
+		map.setCenter(new YMaps.GeoPoint(data.centerLng, data.centerLat), data.zoom);
 		
 		// Генерируем дотопримечательности (метки) на карте.
 		$.each(applicationData.getAllObjects(this.mode), $.proxy(function(index, object) {	
