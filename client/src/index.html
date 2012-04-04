@@ -29,6 +29,7 @@
 
 		<script type="text/javascript">
 		splashInit = function() {
+
 			// Отобразим splash-экран.
 			$("#splashScreen").css("visibility", "visible");
 
@@ -397,7 +398,7 @@
 			// Повешаем на кнопки выбора языка обработчики.
 			$(".langSelectItem").touchclick( function(event) {
 				var lang = $(event.target).attr("_lang");
-				PermGuide.Language.currentLanguage = lang;
+				PermGuide.Language.setCurrentLanguage(lang);
 				
 				$("#langSelectScreen").css("visibility", "hidden");
 				$("#splashScreen").css("visibility", "visible");

@@ -154,7 +154,7 @@ PermGuide.ScreenManager = {
 		
 		$(screenElement).find(".pageScroller .pageIndicator").touchclick( function(event) {
 			var pageId = parseInt($(event.target).parent().attr("_id"));
-			pageSlider.select(pageId);
+			PermGuide.ScreenManager.goToPage(pageId);
 		});
 		
 		// Вешаем на скроллер события тача.

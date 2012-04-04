@@ -63,7 +63,7 @@ if(typeof PermGuide == "undefined")
 				var tX = event.changedTouches[0].clientX;
 				var tY = event.changedTouches[0].clientY;
 				$(this.containerElement).offset({ 
-					top:  this.containerPosition.top + (tY - this.y), 
+					top:  this.containerPosition.top + (tY - this.y)
 //					left: this.containerPosition.left, 
 				});
 				

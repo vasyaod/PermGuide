@@ -140,6 +140,20 @@ PermGuide.Language = {
 	},
 	
 	/**
+	 * Метод устанавливает текущий язык.
+	 */
+	setCurrentLanguage: function (currentLanguage) {
+		this.currentLanguage = currentLanguage;
+		
+		//var res = $.url.parse(document.URL);
+		//res.source = null;
+		//if (!res.params)
+		//	res.params = {};
+		//res.params.lang = currentLanguage;
+		//window.location.href = $.url.build(res);
+	},
+	
+	/**
 	 * Возвращает строку на основании текущего(выбранного) языка.
 	 */
 	getString: function(object)

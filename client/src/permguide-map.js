@@ -317,7 +317,7 @@ PermGuide.LoadMapManager = {
 			success: function() {
 				self.scriptLoaded = true;
 				YMaps.load($.proxy(self.yMapsLoaded, self));
-			},
+			}
 		});
 		
 		this.timeoutId = setTimeout($.proxy( function() {
