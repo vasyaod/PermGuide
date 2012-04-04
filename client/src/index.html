@@ -259,22 +259,38 @@
 					$("#objectInfoDescriptionTemplate" ).render([object])
 				);
 				
-				if (object.pictures && object.pictures.length > 0) {
+				if (object.pictures || object.mainPicture) {
 					var photo = [];
-					$.each(object.pictures, function(index, picture) {	
+					if (object.mainPicture) {
 						photo.push({
-							photoURL: picture
+							photoURL: object.mainPicture
 						});
-					});
+					}
+					if(object.pictures) {
+						$.each(object.pictures, function(index, picture) {	
+							photo.push({
+								photoURL: picture
+							});
+						});
+					};
 					
 					$("#objectScreen .objectPhoto").html(
 						$("#objectInfoPhotoTemplate" ).render(photo)
 					);
+					$("#objectScreen .photoCount").text("("+photo.length+")");
+					
 				} else {
 					$("#objectScreen .objectPhoto").html("");
+					$("#objectScreen .photoCount").text("");
 				}
 				$("#objectScreen .vScroller .i18n").i18n();
 
+				////
+				// Вешаем обработчик "на главную картинку".
+				$("#objectScreen .randomObject").touchclick( function (event) {
+					PermGuide.ScreenManager.goToPage(1);
+				});
+				
 				////
 				// Вешаем обработчик события на кнопку "найти на карте".
 				$("#objectScreen .findOnMap").touchclick( function (event) {
@@ -288,9 +304,8 @@
 					tag.activate();
 					objectsMapManager.selectObject(object, true);
 					
-					var pageSlider = $("#mainScreenSlider").data("state");
-					pageSlider.select(1);
 					PermGuide.ScreenManager.back();
+					PermGuide.ScreenManager.goToPage(1);
 				});
 				PermGuide.ScreenManager.activateScreenByName("objectScreen");
 			});
@@ -316,6 +331,7 @@
 				on: function() {
 					$("#routesCatalog").css("display", "none");
 					$("#routesMapContainer").css("display", "block");
+					$("#routesMapSlider").data("state").resize();
 				},
 				off: function() {
 					$("#routesMapContainer").css("display", "none");
@@ -413,7 +429,7 @@
 		
 			////
 			// Включим тестовую геолокацию.
-			PermGuide.Geolocation.initTest();
+			//PermGuide.Geolocation.initTest();
 
 			// Закроем splash-screen
 			$("#splashScreen").css("visibility", "hidden");
@@ -426,7 +442,7 @@
 		function onDeviceReady() {
 			////
 			// Включим тестовую геолокацию.
-			//PermGuide.Geolocation.init();
+			PermGuide.Geolocation.init();
 			PermGuide.ScreenManager.initPhonegap();
 			PermGuide.Scheduler.finished("PhonegapReady");
 		}
@@ -525,8 +541,8 @@
 			Шаблон случайной картинки на первой странице.
 		-->
 		<script id="randomObjectTemplate" type="text/x-jsrender">
-			<div class="randomObject" _id="{{:id}}">
-				<img src="{{:mainPicture}}" class="picture" alt="{{:name}}">
+			<div class="randomObject" style="background-image: url('{{:mainPicture}}');" _id="{{:id}}">
+				<!--img src="{{:mainPicture}}" class="picture" alt="{{:name}}"-->
 				<div class="title">{{:name}}</div>
 				<div class="foground"></div>
 			</div>
@@ -538,7 +554,11 @@
 		<script id="objectInfoDescriptionTemplate" type="text/x-jsrender">
 			<div>
 				{{if mainPicture}}
-					<img src="{{:mainPicture}}" class="mainPicture" alt="{{:name}}">
+					<div class="randomObject" style="background-image: url('{{:mainPicture}}');">
+						<div class="title"><span class="i18n">Посмотреть все фото</span> <span class="photoCount"></span></div>
+						<div class="foground"></div>
+					</div>
+					<!--img src="{{:mainPicture}}" class="mainPicture" alt="{{:name}}"-->
 				{{/if}}
 				<div class="text">{{:description}}</div>
 			</div>
@@ -907,7 +927,7 @@
 						<div class="foground"></div>
 					</div>
 					<div _id="1" class="pageIndicator">
-						<div class="i18n">Фото</div>
+						<div><span class="i18n">Фото</span> <span class="photoCount"></span></div>
 						<div class="foground"></div>
 					</div>
 				</div>

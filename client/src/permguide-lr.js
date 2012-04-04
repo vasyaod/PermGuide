@@ -22,7 +22,7 @@ PermGuide.lr = {
 	},
 	"О Перми": {
 		ru: "О Перми",
-		en: "About city Perm"
+		en: "About Perm"
 	},
 	
 	"Описание": {
@@ -32,6 +32,10 @@ PermGuide.lr = {
 	"Фото": {
 		ru: "Фото",
 		en: "Photos"
+	},
+	"Посмотреть все фото": {
+		ru: "Посмотреть все фото",
+		en: "Show all photos"
 	},
 	"Back": {
 		ru: "Назад",

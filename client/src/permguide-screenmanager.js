@@ -54,7 +54,9 @@ PermGuide.ScreenManager = {
 		*/
 	},
 
-	
+	/**
+	 * Возвращает экран по кго имени.
+	 */
 	getScreenByName: function(name){
 		var res;
 		$.each(this.screens, function(index, screen) {	
@@ -103,6 +105,9 @@ PermGuide.ScreenManager = {
 		}
 	},
 	
+	/**
+	 * Переходит к пердидущему экрану сохраненному в стеке.
+	 */
 	back: function(){
 		if (this.screenStack.length > 0) {
 			var screen = this.screenStack[this.screenStack.length-1];
@@ -114,6 +119,15 @@ PermGuide.ScreenManager = {
 			}
 		}
 	},
+	
+	/**
+	 * Переходит на указанную страницу у текущего экрана.
+	 */
+	goToPage: function(index) {
+		var pageSlider = $(this.activeScreen.screenElement).find(".pageSlider").data("state");
+		pageSlider.select(index);
+	},
+	
 	
 	/**
 	 * Метод добавлет экран в менеджер, при этом происходит инициализация экрана.
