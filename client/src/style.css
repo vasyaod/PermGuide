@@ -15,11 +15,11 @@ div {
 }
 
 .YMaps-logo {
-	display: none;
+	user-select: none;
 }
 
 .YMaps-copyrights {
-	display: none;
+	user-select: none;
 }
 
 #body {

@@ -201,7 +201,7 @@ PermGuide.CanvasLayer = function (element) {
 	};
 
 	this.getCopyright = function (bounds, zoom) {
-		return "Мобильный актив!"
+		return null;
 	};
 
 	this.getZoomRange = function (bounds) {
@@ -444,9 +444,22 @@ PermGuide.MapManager = function (yMapElement, mode){
 
 		// Удалим лого и copyright у карт.
 		this.interval = setInterval( $.proxy(function() {
-			if ($(this.yMapElement).find(".YMaps-logo").length > 0) {
-				$(this.yMapElement).find(".YMaps-logo").remove();
-				$(this.yMapElement).find(".YMaps-copyrights").remove();
+			if ($(this.yMapElement).find(".YMaps-logo").length > 0 && 
+				$(this.yMapElement).find(".YMaps-copyrights").length > 0) {
+				
+				//$(this.yMapElement).find(".YMaps-logo")[0].onclick(null);
+				//$(this.yMapElement).find(".YMaps-copyrights")[0].onclick(null);
+				
+				$(this.yMapElement).find(".YMaps-logo").on("mouseclick", function(event) {
+					event.stopPropagation();
+					event.preventDefault();
+				});
+				
+				$(this.yMapElement).find(".YMaps-copyrights").on("mouseclick", function(event) {
+					event.stopPropagation();
+					event.preventDefault();
+				});
+				
 				clearInterval(this.interval);
 			}
 		}, this), 1*1000);

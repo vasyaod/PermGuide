@@ -99,7 +99,7 @@
 					var tX = event.changedTouches[0].clientX;
 					var tY = event.changedTouches[0].clientY;
 					// Если сдвиг не очень большой, то стоим на месте.
-					if (!this.moved && Math.abs(tY - this.y) < PermGuide.deadRadius)
+					if (!this.moved && Math.abs(tY - this.y) < PermGuide.deadRadius/2)
 						return;
 					this.moved = true;
 					var top = this.containerPosition.top + (tY - this.y);
