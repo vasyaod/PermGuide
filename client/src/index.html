@@ -417,7 +417,7 @@
 		
 			////
 			// Включим тестовую геолокацию.
-			PermGuide.Geolocation.initTest();
+			PermGuide.Geolocation.init();
 
 			// Закроем splash-screen
 			$("#splashScreen").css("visibility", "hidden");
@@ -430,7 +430,7 @@
 		function onDeviceReady() {
 			////
 			// Включим тестовую геолокацию.
-			//PermGuide.Geolocation.init();
+			PermGuide.Geolocation.initPhonegap();
 			PermGuide.ScreenManager.initPhonegap();
 			PermGuide.Scheduler.finished("PhonegapReady");
 		}
@@ -595,10 +595,12 @@
 		<script id="objectSlideTemplate" type="text/x-jsrender">
 			<div class="slide" _id="{{:id}}" style="height: 100%; width: 100%; position: relative;">
 				<div class="nameBlock">
-					<div class="wrapper">
-						<div class="cell name">
-							{{:name}} 
-							<div class="more i18n">подробнее</div>
+					<div class="relative">
+						<div class="wrapper">
+							<div class="cell name">
+								{{:name}} 
+								<div class="more i18n">подробнее</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -712,9 +714,9 @@
 						</div>
 						
 						<div class="pageContent">
-							<!--canvas class="canvasLayer">
+							<canvas class="canvasLayer">
 								Браузер не поддерживает Canvas.
-							</canvas-->
+							</canvas>
 							<div id="objectsMapContainer" class="mapContainer">
 								<div id="objectsMap" class="map">
 									<div class="wrapper">

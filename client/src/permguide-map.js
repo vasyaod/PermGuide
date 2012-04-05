@@ -217,6 +217,70 @@ PermGuide.CanvasLayer = function (element) {
 		element.attr("width", parentContainer.width());
 		element.attr("height", parentContainer.height());
 		
+		if (typeof device != "undefined" && device.platform == "iPhone") {
+			
+			$(element).on("mousedown", function(event) {
+				event.stopPropagation();
+				event.preventDefault();
+			});
+			$(element).on("mouseup", function(event) {
+				event.stopPropagation();
+				event.preventDefault();
+			});
+			$(element).on("mousemove", function(event) {
+				event.stopPropagation();
+				event.preventDefault();
+			});
+			
+			$(element).on("mouseclick", function(event) {
+				event.stopPropagation();
+				event.preventDefault();
+			});
+/*			
+ 			Не стирать! Возможно пригодится.
+ 			
+			var touchHandler = function (event)
+			{
+				var touches = event.changedTouches,
+					first = touches[0],
+					type = "";
+
+				switch(event.type)
+				{
+					case "touchstart": type = "mousedown"; break;
+					case "touchmove":  type="mousemove"; break;
+					case "touchend":   type="mouseup"; break;
+					default: return;
+				}
+				var simulatedEvent = document.createEvent("MouseEvent");
+				simulatedEvent.initMouseEvent(type, true, true, window, 1,
+				                      first.screenX, first.screenY,
+				                      first.clientX, first.clientY, false,
+				                      false, false, false, 0, null);
+
+				parentContainer.dispatchEvent(simulatedEvent);
+				event.preventDefault();
+			};
+			$(element).touchstart(touchHandler, true);
+			$(element).touchmove(touchHandler, true);
+			$(element).touchend(touchHandler, true);
+*/		
+			var position = {};
+			$(element).touchstart(function(event) {
+				position.x = event.changedTouches[0].clientX;
+				position.y = event.changedTouches[0].clientY;
+			}, true);
+			
+			$(element).touchmove(function(event) {
+				var _x = event.changedTouches[0].clientX;
+				var _y = event.changedTouches[0].clientY;
+				
+				map.moveBy(new YMaps.Point(position.x-_x, position.y-_y));
+				
+				position.x = _x;
+				position.y = _y;
+			}, true);
+		}
 		this.onMapUpdate();
 	};
 
@@ -377,7 +441,16 @@ PermGuide.MapManager = function (yMapElement, mode){
 		
 		this.zoomControl = new PermGuide.ZoomControl();
 		this.yMap.addControl(this.zoomControl);
-		
+
+		// Удалим лого и copyright у карт.
+		this.interval = setInterval( $.proxy(function() {
+			if ($(this.yMapElement).find(".YMaps-logo").length > 0) {
+				$(this.yMapElement).find(".YMaps-logo").remove();
+				$(this.yMapElement).find(".YMaps-copyrights").remove();
+				clearInterval(this.interval);
+			}
+		}, this), 1*1000);
+
 		// Инициализируем собственный слой. 
 		if ($(this.yMapElement).parent().children("canvas").length) {
 			this.canvasLayer = new PermGuide.CanvasLayer(

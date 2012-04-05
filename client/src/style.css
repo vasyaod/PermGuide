@@ -14,6 +14,14 @@ div {
 	padding: 0px;
 }
 
+.YMaps-logo {
+	display: none;
+}
+
+.YMaps-copyrights {
+	display: none;
+}
+
 #body {
 	position: absolute;
 	top: 0px;
@@ -513,6 +521,7 @@ div {
 }
 
 .tagSlider {
+	height: 100%;
 }
 
 .tagSlide {
@@ -584,6 +593,7 @@ div {
 	padding-left: 1em;
 	font-size: 1em;
 	color: #fff;
+	font-size: 0.8em;
 }
 
 #objectScreen .backButton{
@@ -636,8 +646,6 @@ div {
 }
 
 #objectScreen .objectDescription .text {
-//	padding-left: 0.8em;
-//	padding-right: 0.8em;
 	padding: 0.8em;
 }
 
@@ -792,7 +800,9 @@ div {
 	height: 100%;
 	overflow: hidden;
 }
-
+.mapSliderContainer .mapSlider{
+	height: 100%;
+}
 .mapSliderContainer .slide .nameBlock {
 	position: absolute;
 	left: 0;
@@ -896,6 +906,9 @@ div {
 		font-size: 0.8em;
 	}
 	
+	#objectScreen .objectName {
+		font-size: 1em;
+	}
 }
 
 /* Hi-res display */
@@ -1006,6 +1019,10 @@ div {
 		width: 80px;
 	}
 
+	#objectScreen .objectName {
+		font-size: 1em;
+	}
+	
 	#objectScreen .backButton{
 		width: 80px;
 		height: 100%; /* resolution depending*/

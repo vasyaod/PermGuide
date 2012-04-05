@@ -51,7 +51,7 @@ PermGuide.Geolocation = {
 	/**
 	 * Инициализация.
 	 */
-	init: function(){
+	initPhonegap: function(){
 		
 		var options = { frequency: 3000 };
 		this.watchID = navigator.geolocation.watchPosition(
@@ -62,8 +62,11 @@ PermGuide.Geolocation = {
 		
 	},
 
-	initTest: function(){
-		this.timeoutId = setInterval($.proxy( this.random, this), 3000);
+	init: function(){
+		var res = $.url.parse(document.URL);
+		if (res.params && res.params.geolocation == "test") {
+			this.timeoutId = setInterval($.proxy( this.random, this), 3000);
+		}
 	},
 	
 	random: function(){

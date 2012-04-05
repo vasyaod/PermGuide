@@ -10,7 +10,6 @@ PermGuide.deadRadius = 15;
  */
 (function ($) {
 	
-	$.support.touch = typeof Touch === 'object';
 	if (!$.fn.browserTouchSupport.touches) {
 		// Если тач не поддерживается, то используем события мыши.
 		$.fn.touchstart = function(fn, stopPropagation) {
