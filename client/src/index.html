@@ -133,6 +133,16 @@
 			PermGuide.Interface.makeDropDownMenu("objects", $("#objectTags"));
 			PermGuide.Interface.makeDropDownMenu("routes", $("#routeTags"));
 
+			////
+			// Обработчик события загрузки данных 
+			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
+				////
+				// Заполним страницу с информацией о перми.
+				$("#aboutPerm").html(
+					$( "#aboutPermSectionTemplate" ).render(applicationData.data.info)
+				);
+			});
+
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
 				
 				var pageSlider = $("#objectScreenSlider").data("state");
