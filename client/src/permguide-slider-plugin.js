@@ -224,22 +224,31 @@ if(typeof PermGuide == "undefined")
 				},
 				
 				next: function() {
-					if (this.index == this.slideCount-1)
-						return;
-					
-					this.index ++;
-					if (this.listener != null)
-						this.listener(this.index, $(this.containerElement).children(".slide").slice(this.index));
+					if (this.index < this.slideCount-1)
+					{
+						this.index ++;
+						this._callListener();
+					}
+					else if(this.loop)
+					{
+						this.index = 0;
+						this._callListener();
+					}
 					this.refresh();
 				},
 					
 				prev: function() {
-					if (this.index == 0)
-						return;
-					
-					this.index --;
-					if (this.listener != null)
-						this.listener(this.index, $(this.containerElement).children(".slide").slice(this.index));
+
+					if (this.index > 0)
+					{
+						this.index --;
+						this._callListener();
+					}
+					else if(this.loop)
+					{
+						this.index = this.slideCount-1;
+						this._callListener();
+					}
 					this.refresh();
 				},
 					

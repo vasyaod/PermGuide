@@ -25,6 +25,7 @@
 		<script type="text/javascript" src="permguide-map.js"></script>
 		<script type="text/javascript" src="permguide-geolocation.js"></script>
 		<script type="text/javascript" src="permguide-screenmanager.js"></script>
+		<script type="text/javascript" src="permguide-interface.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
@@ -76,8 +77,6 @@
 
 			////
 			// Инициализация экранов.
-			//PermGuide.Interface.makeScreen($("#mainScreen"));
-			//PermGuide.Interface.makeScreen($("#objectScreen"));
 			PermGuide.ScreenManager.addScreen({
 				name: "mainScreen",
 				screenElement: $("#mainScreen"),
@@ -130,117 +129,10 @@
 			PermGuide.Interface.makePopularObjectsAndRoutes($("#popularPlacesContent"), $("#popularRoutesContent"));
 			
 			////
-			// Обработчик события загрузки данных 
-			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
+			// Инициализация списка популярных объектов и маршрутов.
+			PermGuide.Interface.makeDropDownMenu("objects", $("#objectTags"));
+			PermGuide.Interface.makeDropDownMenu("routes", $("#routeTags"));
 
-				////
-				// Формирование выподающего окна со списком тэгов.
-				$("#objectTags .vScroller").html(
-					$( "#tagTemplate" ).render(applicationData.getObjectTags())
-				);
-				$("#objectTags").data("state").resize();   // Обновим размеры.
-				
-				$("#objectTags .tag").touchclick( function (event) {
-					var tagId = $(event.target).parent().attr("_id");
-					var tag = applicationData.getTagById(tagId);
-					if (tag == null)
-						return;
-					tag.activate();
-					// Закрываем выподающее окне при выборе тэга.
-					$("#objectTags").data("state").close();
-				});
-
-				$("#routeTags .vScroller").html(
-					$( "#tagTemplate" ).render(applicationData.getRouteTags())
-				);
-				$("#routeTags").data("state").resize();   // Обновим размеры.
-				
-				$("#routeTags .tag").touchclick( function (event) {
-					var tagId = $(event.target).parent().attr("_id");
-					var tag = applicationData.getTagById(tagId);
-					if (tag == null)
-						return;
-					tag.activate();
-					// Закрываем выподающее окне при выборе тэга.
-					$("#routeTags").data("state").close();
-				});
-				
-				////
-				// Заполнение слайдера тэгов.
-				$("#objectTagsSlider").html(
-					$( "#tagSlideTemplate" ).render(applicationData.getObjectTags())
-				);
-				
-				$("#routeTagsSlider").html(
-					$( "#tagSlideTemplate" ).render(applicationData.getRouteTags())
-				);
-				
-				$(".tagSlider").slider();
-				
-				$("#objectTagsSlider").data("state").listener = function(index, element) {
-					var tagId = element.attr("_id");
-					var tag = PermGuide.ApplicationData.getTagById(tagId);
-					if (tag == null)
-						return;
-					tag.activate();
-				};
-				$("#routeTagsSlider").data("state").listener = function(index, element) {
-					var tagId = element.attr("_id");
-					var tag = PermGuide.ApplicationData.getTagById(tagId);
-					if (tag == null)
-						return;
-					tag.activate();
-				};
-				////
-				// Заполним страницу с информацией о перми.
-				$("#aboutPerm").html(
-					$( "#aboutPermSectionTemplate" ).render(applicationData.data.info)
-				);
-			});
-			
-			// При включении/отключении тэгов, формируем 
-			PermGuide.ApplicationData.attachListener("objectsVisibleChanged", function (applicationData){
-				
-				// Переберем все тэги, и раставим классы в зависимости виден данный
-				// тэг или нет.
-				$("#objectTags .tag").each( function() {
-					var tagId = $(this).attr("_id");
-					var tag = applicationData.getTagById(tagId);
-					if (tag == null)
-						return;
-					if (tag.visible)
-						$(this).addClass("visibledTag");
-					else
-						$(this).removeClass("visibledTag");
-				});
-				
-				// Спозиционируем слайдеры.
-				var objectTag = applicationData.getVisibleObjectTags()[0];
-				$("#objectTagsSlider").data("state").selectByAttr("_id", objectTag.id);
-				
-			});
-			
-			// При включении/отключении тэгов, формируем 
-			PermGuide.ApplicationData.attachListener("routesVisibleChanged", function (applicationData){
-				
-				// Переберем все тэги, и раставим классы в зависимости виден данный
-				// тэг или нет.
-				$("#routeTags .tag").each( function() {
-					var tagId = $(this).attr("_id");
-					var tag = applicationData.getTagById(tagId);
-					if (tag == null)
-						return;
-					if (tag.visible)
-						$(this).addClass("visibledTag");
-					else
-						$(this).removeClass("visibledTag");
-				});
-				
-				var routeTag = applicationData.getVisibleRouteTags()[0];
-				$("#routeTagsSlider").data("state").selectByAttr("_id", routeTag.id);
-				
-			});
-			
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
 				
 				var pageSlider = $("#objectScreenSlider").data("state");
@@ -309,6 +201,12 @@
 					PermGuide.ScreenManager.back();
 					PermGuide.ScreenManager.goToPage(1);
 				});
+				
+				$("#objectScreen .social .vk").touchclick( function (event) {
+					$("#objectScreen .social .buttons").css("display", "none");
+					$("#objectScreen .social .container").html("<iframe src='http://permguide.ru/test/vk.html'></iframe>");
+				});
+				
 				PermGuide.ScreenManager.activateScreenByName("objectScreen");
 			});
 			
@@ -566,6 +464,17 @@
 					</div>
 				{{/if}}
 			</div>
+			<!--div class="social">
+				<div class="buttons">
+					<div>
+						<img src="img/vkontakte.png" class="vk"/>
+						<img src="img/facebook.png" class="fb"/>
+					</div>
+					Выбери свою социальную сеть
+				</div>
+				<div class="container">
+				</div>
+			</div-->
 		</script>
 		
 		<!-- 

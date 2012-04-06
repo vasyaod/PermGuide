@@ -658,6 +658,17 @@ div {
 	font-size: 0.8em;
 }
 
+#objectScreen .social .buttons {
+	text-align: center;
+	font-size: 0.8em;
+}
+
+#objectScreen iframe {
+	border: 0px; 
+	width: 100%;
+	height: 2em; 
+}
+
 /**
  * Стили переключателя страниц информации об объекте.
  */
