@@ -13,12 +13,39 @@ div {
 }
 
 #body {
-	width: 800px;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	height: 100%;
+	width: 500px;
 	text-align: left;
 }
 
 iframe {
-	width: 800px;
+	width: 500px;
 	height: 100%;
 	border: 0px;
+}
+
+#links {
+	position: absolute; 
+	top: 0px; 
+	height: 140px; 
+	width: 100%;
+}
+
+#links .section {	
+	padding: 10px;
+	
+}
+
+#links .section img{	
+	float: left;
+	margin-right: 10px;
+}
+
+#application {
+	position: absolute; 
+	top: 140px; 
+	bottom: 20px;
 }
