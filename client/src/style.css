@@ -663,10 +663,9 @@ div {
 	font-size: 0.8em;
 }
 
-#objectScreen iframe {
-	border: 0px; 
-	width: 100%;
-	height: 2em; 
+#objectScreen .social .buttons img{
+	padding: 5px;
+	cursor: pointer; 
 }
 
 /**

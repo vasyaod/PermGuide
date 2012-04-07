@@ -26,6 +26,7 @@
 		<script type="text/javascript" src="permguide-geolocation.js"></script>
 		<script type="text/javascript" src="permguide-screenmanager.js"></script>
 		<script type="text/javascript" src="permguide-interface.js"></script>
+		<script type="text/javascript" src="permguide-social.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
@@ -214,9 +215,11 @@
 					PermGuide.ScreenManager.goToPage(1);
 				});
 				
-				$("#objectScreen .social .vk").touchclick( function (event) {
-					$("#objectScreen .social .buttons").css("display", "none");
-					$("#objectScreen .social .container").html("<iframe src='http://permguide.ru/test/vk.html'></iframe>");
+				$("#objectScreen .social img").touchclick( function (event) {
+					var socilaNetwork =$(event.target).attr("class");
+					PermGuide.showShareWindow(socilaNetwork, PermGuide.ApplicationData.selectedObject);
+					//$("#objectScreen .social .buttons").css("display", "none");
+					//$("#objectScreen .social .container").html("<iframe src='http://permguide.ru/test/vk.html'></iframe>");
 				});
 				
 				PermGuide.ScreenManager.activateScreenByName("objectScreen");
@@ -485,17 +488,13 @@
 					</div>
 				{{/if}}
 			</div>
-			<!--div class="social">
+			<div class="social">
 				<div class="buttons">
-					<div>
-						<img src="img/vkontakte.png" class="vk"/>
-						<img src="img/facebook.png" class="fb"/>
-					</div>
-					Выбери свою социальную сеть
+					<img src="img/vkontakte.png" class="vk"/>
+					<img src="img/twitter.png" class="tw"/>
+					<img src="img/odnoklassniki.png" class="od"/>
 				</div>
-				<div class="container">
-				</div>
-			</div-->
+			</div>
 		</script>
 		
 		<!-- 
