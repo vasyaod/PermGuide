@@ -11,18 +11,22 @@
 		<script type="text/javascript">
 			$(document).ready(function() {
 				var url = 'http://permguide.ru/app';
+				var defaultParams = {
+					lang: "ru"
+				};
+				
+				var urlObject= $.url.parse(url);
+				if (!urlObject.params)
+					urlObject.params = {};
+				// Если параметров нет, то создадим объект с параметрами.
+				urlObject.source = null;
+				$.extend(urlObject.params, defaultParams);
+
 				var res = $.url.parse(document.URL);
 				if (res.params) {
-					var urlObject= $.url.parse(url);
-					// Если параметров нет, то создадим объект с параметрами.
-					urlObject.source = null;
-					if (!urlObject.params)
-						urlObject.params = {};
 					$.extend(urlObject.params, res.params);
-					
-					url = $.url.build(urlObject);
 				}
-				
+				url = $.url.build(urlObject);
 				$("#application").html('<iframe src="'+url+'"></iframe>');
 			});
 		</script>
@@ -52,6 +56,10 @@
 								<a href="http://vk.com/app2883907">Приложение в ВКонтакте</a>
 							</div>
 						</div>
+					</div>
+					<div id="languages">
+						<a href="?lang=ru">Русский</a>
+						<a href="?lang=en">English</a>
 					</div>
 					<div id="application">
 						
