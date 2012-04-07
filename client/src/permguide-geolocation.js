@@ -55,6 +55,7 @@ PermGuide.Geolocation = {
 		
 		var options = { 
 			frequency: 3000,
+			maximumAge: 30000,
 			enableHighAccuracy: true
 		};
 		this.watchID = navigator.geolocation.watchPosition(
