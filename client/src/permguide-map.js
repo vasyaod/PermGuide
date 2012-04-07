@@ -217,7 +217,7 @@ PermGuide.CanvasLayer = function (element) {
 		element.attr("width", parentContainer.width());
 		element.attr("height", parentContainer.height());
 		
-		if (!$.fn.browserTouchSupport.touches) {
+		if ($.fn.browserTouchSupport.touches) {
 //		if (typeof device != "undefined" && device.platform == "iPhone") {
 			
 			$(element).on("mousedown", function(event) {
@@ -552,8 +552,8 @@ PermGuide.MapManager = function (yMapElement, mode){
 			
 			this.overlayStates.push(overlayState);
 			// Скроем и сразу же добавим на карту.
-			placemark.hide();
-			this.yMap.addOverlay(placemark);
+			//placemark.hide();
+			//this.yMap.addOverlay(placemark);
 		}, this));
 		
 		
@@ -610,15 +610,15 @@ PermGuide.MapManager = function (yMapElement, mode){
 				{
 					overlayState.onmap = true;
 					overlayState.overlay.show();
+					this.yMap.addOverlay(overlayState.overlay);
 				}
 
-				//this.yMap.addOverlay(overlayState.overlay);
 			}
 			else if (!objectIsVisible && overlayState.onmap)
 			{
 				overlayState.onmap = false;
-				overlayState.overlay.hide();
-				//this.yMap.removeOverlay(overlayState.overlay);
+				//overlayState.overlay.hide();
+				this.yMap.removeOverlay(overlayState.overlay);
 			}
 
 			// Если данный объект является выделленным, то подсветим его.

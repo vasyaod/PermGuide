@@ -34,7 +34,11 @@ PermGuide.deadRadius = 15;
 					]
 				});
 			}
-			$(this).on("mousedown", newFn);
+			//$(this).on("mousedown", newFn);
+			$(this).each( function () {
+				this.addEventListener("mousedown", newFn);
+			});
+			
 		};
 		
 		$.fn.touchmove = function(fn, stopPropagation) {
@@ -59,7 +63,11 @@ PermGuide.deadRadius = 15;
 					]
 				});
 			}
-			$(this).on("mousemove", newFn);
+			//$(this).on("mousemove", newFn);
+			$(this).each( function () {
+				this.addEventListener("mousemove", newFn);
+			});
+			
 		};
 		
 		$.fn.touchend = function(fn, stopPropagation) {
@@ -98,12 +106,12 @@ PermGuide.deadRadius = 15;
 						return;
 					upHandler(event);
 				}
-				//this.addEventListener("mousedown", downHandler);
-				//this.addEventListener("mouseup", upHandler);
-				//this.addEventListener("mouseout", outHandler, false);
-				$(this).on("mousedown", downHandler);
-				$(this).on("mouseup", upHandler);
-				$(this).on("mouseleave", outHandler);
+				//$(this).on("mousedown", downHandler);
+				//$(this).on("mouseup", upHandler);
+				//$(this).on("mouseleave", outHandler);
+				this.addEventListener("mousedown", downHandler);
+				this.addEventListener("mouseup", upHandler);
+				this.addEventListener("mouseout", outHandler);
 			});
 		};
 		
@@ -153,8 +161,12 @@ PermGuide.deadRadius = 15;
 				}
 			};
 			
-			$(this).on("mousedown", downHandler);
-			$(this).on("mouseup", upHandler);
+//			$(this).on("mousedown", downHandler);
+//			$(this).on("mouseup", upHandler);
+			$(this).each( function () {
+				this.addEventListener("mousedown", downHandler);
+				this.addEventListener("mouseup", upHandler);
+			});
 		};
 	} else {
 		// Если тач поддерживается, то используем нужные события.
@@ -194,7 +206,7 @@ PermGuide.deadRadius = 15;
 			}
 			$(this).each( function () {
 				this.addEventListener("touchend", newFn);
-			});		
+			});
 		};	
 
 		$.fn.touchclick = function(fn, stopPropagation) {
