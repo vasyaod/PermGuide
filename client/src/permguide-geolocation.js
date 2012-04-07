@@ -22,8 +22,9 @@ $.fn.distanceRefresh = function () {
 			return;
 	
 		var distance = PermGuide.Geolocation.relativeDistance(object.point.lat, object.point.lng);
-		if (distance > 1000)
-			distance = Math.round(distance/1000)+kilometers;
+		if (distance > 1000){
+			distance = Math.round(distance/100)/10+kilometers;
+		}
 		else
 			distance = distance + meters;
 		$(this).text(distance);

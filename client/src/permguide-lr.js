@@ -8,6 +8,10 @@ if(typeof PermGuide == "undefined")
  */
 PermGuide.lr = {
 	
+	"Loading": {
+		ru: "Загрузка приложения",
+		en: "Loading"
+	},
 	"Пермский гид": {
 		ru: "Гид Перми",
 		en: "Perm guide"

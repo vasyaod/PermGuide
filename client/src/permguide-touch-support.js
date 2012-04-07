@@ -111,7 +111,7 @@ PermGuide.deadRadius = 15;
 				//$(this).on("mouseleave", outHandler);
 				this.addEventListener("mousedown", downHandler);
 				this.addEventListener("mouseup", upHandler);
-				this.addEventListener("mouseout", outHandler);
+				this.addEventListener("mouseleave", outHandler);
 			});
 		};
 		

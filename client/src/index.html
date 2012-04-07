@@ -36,9 +36,11 @@
 
 			// При включении/отключении тэгов, формируем 
 			PermGuide.Scheduler.attachListener("started", function (){
-				var tasksCount = PermGuide.Scheduler.tasksCount();
-				var finishedTasksCount = PermGuide.Scheduler.finishedTasksCount();
-				$("#splashScreen .statusLine").text(""+finishedTasksCount+"/"+tasksCount);
+				var strStutus = PermGuide.Language.getInterfaceString("Loading");
+				$("#splashScreen .statusLine").text(strStutus);
+				//var tasksCount = PermGuide.Scheduler.tasksCount();
+				//var finishedTasksCount = PermGuide.Scheduler.finishedTasksCount();
+				//$("#splashScreen .statusLine").text(""+finishedTasksCount+"/"+tasksCount);
 			});
 			
 			// Завершим этот этап загрузки приложения.
