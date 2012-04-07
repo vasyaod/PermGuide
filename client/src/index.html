@@ -331,7 +331,16 @@
 
 			// Закроем splash-screen
 			$("#splashScreen").css("visibility", "hidden");
+			
 			PermGuide.ScreenManager.activateScreenByName("mainScreen");
+			// Обрабатываем параметры запуска приложения.
+			var res = $.url.parse(document.URL);
+			if (res.params && res.params.objectId) {
+				var object = PermGuide.ApplicationData.getObjectById(res.params.objectId);
+				if (object)
+					PermGuide.ApplicationData.selectObject(object);
+			}
+			
 		};
 		
 		////

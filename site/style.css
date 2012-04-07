@@ -1,0 +1,24 @@
+@CHARSET "UTF-8";
+
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: sans-serif;
+	width: 100%;
+}
+
+div {
+	margin: 0px;
+	padding: 0px;
+}
+
+#body {
+	width: 800px;
+	text-align: left;
+}
+
+iframe {
+	width: 800px;
+	height: 100%;
+	border: 0px;
+}
