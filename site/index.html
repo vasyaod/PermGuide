@@ -2,8 +2,30 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Гид Перми</title>
-		
+
 		<link rel="stylesheet" type="text/css" href="style.css" />
+
+		<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="jquery.urldecoder.js"></script>
+		
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var url = 'http://permguide.ru/app';
+				var res = $.url.parse(document.URL);
+				if (res.params) {
+					var urlObject= $.url.parse(url);
+					// Если параметров нет, то создадим объект с параметрами.
+					urlObject.source = null;
+					if (!urlObject.params)
+						urlObject.params = {};
+					$.extend(urlObject.params, res.params);
+					
+					url = $.url.build(urlObject);
+				}
+				
+				$("#application").html('<iframe src="'+url+'"></iframe>');
+			});
+		</script>
 	</head>
 	<body>
 		<table style="width: 100%; height: 100%"> 
@@ -32,7 +54,7 @@
 						</div>
 					</div>
 					<div id="application">
-						<iframe src="http://permguide.ru/app"></iframe>
+						
 					</div>
 				</td>
 				<td></td>
