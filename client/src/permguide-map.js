@@ -217,7 +217,8 @@ PermGuide.CanvasLayer = function (element) {
 		element.attr("width", parentContainer.width());
 		element.attr("height", parentContainer.height());
 		
-		if (typeof device != "undefined" && device.platform == "iPhone") {
+		if (!$.fn.browserTouchSupport.touches) {
+//		if (typeof device != "undefined" && device.platform == "iPhone") {
 			
 			$(element).on("mousedown", function(event) {
 				event.stopPropagation();
@@ -557,7 +558,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		
 		
 		// Генерируем маршруты (линии) на карте.
-		if (this.canvasLayer) {
+		if (this.canvasLayer && this.mode == "routes") {
 			$.each(data.routes, $.proxy(function(index, route) {	
 	
 				/*
@@ -626,7 +627,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 			
 		}, this));
 
-		if (this.canvasLayer) {
+		if (this.canvasLayer && this.mode == "routes") {
 			$.each(this.routeStates, $.proxy(function(index, routeState) {	
 				var routeIsVisible = PermGuide.ApplicationData.routeIsVisible(routeState.object);
 				if (routeIsVisible && !routeState.onmap)

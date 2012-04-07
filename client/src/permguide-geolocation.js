@@ -53,7 +53,10 @@ PermGuide.Geolocation = {
 	 */
 	initPhonegap: function(){
 		
-		var options = { frequency: 3000 };
+		var options = { 
+			frequency: 3000,
+			enableHighAccuracy: true
+		};
 		this.watchID = navigator.geolocation.watchPosition(
 			$.proxy(this.onSuccess, this), 
 			$.proxy(this.onError, this), 
