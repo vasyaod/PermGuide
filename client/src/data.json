@@ -73,6 +73,7 @@
             "pictures": [
                 "objphotos/1_1.jpg"
             ],
+			"audio": "GreenLine1.mp3",
             "tags": [
                 3
             ]
@@ -103,6 +104,7 @@
             },
             "mainPicture": "objphotos/2.jpg",
             "pictures": [],
+			"audio": "GreenLine2.mp3",
             "tags": [
                 4
             ]
@@ -133,6 +135,7 @@
             },
             "mainPicture": "objphotos/3.jpg",
             "pictures": [],
+			"audio": "GreenLine3.mp3",
             "tags": [
                 5
             ]
@@ -163,7 +166,8 @@
             },
             "mainPicture": "objphotos/4.jpg",
             "pictures": [],
-            "tags": [
+ 			"audio": "GreenLine4.mp3",
+           "tags": [
                 4
             ]
         },
@@ -193,6 +197,7 @@
             },
             "mainPicture": "objphotos/5.jpg",
             "pictures": [],
+ 			"audio": "GreenLine5.mp3",
             "tags": [
                 6,
                 7
@@ -223,7 +228,8 @@
                 "phoneNumber": ""
             },
             "pictures": [],
-            "tags": [
+ 			"audio": "GreenLine6.mp3",
+			"tags": [
                 4
             ],
             "mainPicture": "objphotos/6.jpg"
@@ -253,6 +259,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine7.mp3",
             "tags": [
                 5
             ],
@@ -283,6 +290,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine8.mp3",
             "tags": [
                 4
             ],
@@ -313,6 +321,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine9.mp3",
             "tags": [
                 8
             ],
@@ -343,6 +352,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine10.mp3",
             "tags": [
                 7
             ],
@@ -373,6 +383,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine11.mp3",
             "tags": [
                 4
             ],
@@ -405,6 +416,7 @@
             "pictures": [
                 "objphotos/12_1.jpg"
             ],
+ 			"audio": "GreenLine12.mp3",
             "tags": [
                 3
             ],
@@ -435,6 +447,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine13.mp3",
             "tags": [
                 4,
                 7
@@ -466,6 +479,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine14.mp3",
             "tags": [
                 4
             ],
@@ -496,6 +510,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine15.mp3",
             "tags": [
                 4
             ],
@@ -528,6 +543,7 @@
             "pictures": [
                 "objphotos/16_1.jpg"
             ],
+ 			"audio": "GreenLine16.mp3",
             "tags": [
                 4
             ],
@@ -558,6 +574,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine17.mp3",
             "tags": [
                 4
             ],
@@ -590,6 +607,7 @@
             "pictures": [
                 "objphotos/18_1.jpg"
             ],
+ 			"audio": "GreenLine18.mp3",
             "tags": [
                 4
             ],
@@ -620,6 +638,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine19.mp3",
             "tags": [
                 4
             ],
@@ -650,6 +669,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine20.mp3",
             "tags": [
                 4
             ],
@@ -680,6 +700,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine21.mp3",
             "tags": [
                 4
             ],
@@ -712,6 +733,7 @@
             "pictures": [
                 "objphotos/22_1.jpg"
             ],
+ 			"audio": "GreenLine22.mp3",
             "tags": [
                 3,
                 8
@@ -743,6 +765,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine23.mp3",
             "tags": [
                 4,
                 9
@@ -774,6 +797,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine24.mp3",
             "tags": [
                 4
             ],
@@ -804,6 +828,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine25.mp3",
             "tags": [
                 4
             ],
@@ -834,6 +859,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine26.mp3",
             "tags": [
                 4
             ],
@@ -864,6 +890,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine27.mp3",
             "tags": [
                 4
             ],
@@ -894,6 +921,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine28.mp3",
             "tags": [
                 4
             ],
@@ -924,6 +952,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine29.mp3",
             "tags": [
                 4
             ],
@@ -954,6 +983,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine30.mp3",
             "tags": [
                 4
             ],
@@ -986,6 +1016,7 @@
             "pictures": [
                 "objphotos/31_1.jpg"
             ],
+ 			"audio": "GreenLine31.mp3",
             "tags": [
                 4
             ],
@@ -1016,6 +1047,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine32.mp3",
             "tags": [
                 4
             ],
@@ -1046,6 +1078,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine33.mp3",
             "tags": [
                 4
             ],
@@ -1076,6 +1109,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine34.mp3",
             "tags": [
                 4
             ],
@@ -1106,6 +1140,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine35.mp3",
             "tags": [
                 5
             ],
@@ -1136,6 +1171,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+ 			"audio": "GreenLine36.mp3",
             "tags": [
                 4
             ],
@@ -1168,6 +1204,7 @@
             "pictures": [
                 "objphotos/37_1.jpg"
             ],
+ 			"audio": "GreenLine37.mp3",
             "tags": [
                 3
             ],
@@ -1198,6 +1235,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine1.mp3",
             "tags": [],
             "mainPicture": "objphotos/38.jpg"
         },
@@ -1226,6 +1264,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine2.mp3",
             "tags": [],
             "mainPicture": "objphotos/39.jpg"
         },
@@ -1254,6 +1293,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine3.mp3",
             "tags": [],
             "mainPicture": "objphotos/40.jpg"
         },
@@ -1282,6 +1322,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine4.mp3",
             "tags": [],
             "mainPicture": "objphotos/41.jpg"
         },
@@ -1310,6 +1351,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine5.mp3",
             "tags": [],
             "mainPicture": "objphotos/42.jpg"
         },
@@ -1338,6 +1380,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine6.mp3",
             "tags": [],
             "mainPicture": "objphotos/43.jpg"
         },
@@ -1366,6 +1409,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine7.mp3",
             "tags": [],
             "mainPicture": "objphotos/44.jpg"
         },
@@ -1394,6 +1438,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine8.mp3",
             "tags": [],
             "mainPicture": "objphotos/45.jpg"
         },
@@ -1422,6 +1467,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine9.mp3",
             "tags": [],
             "mainPicture": "objphotos/46.jpg"
         },
@@ -1450,6 +1496,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine10.mp3",
             "tags": [],
             "mainPicture": "objphotos/47.jpg"
         },
@@ -1478,6 +1525,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine11.mp3",
             "tags": [],
             "mainPicture": "objphotos/48.jpg"
         },
@@ -1506,6 +1554,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine12.mp3",
             "tags": [],
             "mainPicture": "objphotos/49.jpg"
         },
@@ -1534,6 +1583,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine13.mp3",
             "tags": [],
             "mainPicture": "objphotos/50.jpg"
         },
@@ -1562,6 +1612,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine14.mp3",
             "tags": [],
             "mainPicture": "objphotos/51.jpg"
         },
@@ -1590,6 +1641,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine15.mp3",
             "tags": [],
             "mainPicture": "objphotos/52.jpg"
         },
@@ -1618,6 +1670,7 @@
                 "phoneNumber": ""
             },
             "pictures": [],
+			"audio": "RedLine16.mp3",
             "tags": [],
             "mainPicture": "objphotos/53.jpg"
         },
