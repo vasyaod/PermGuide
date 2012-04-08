@@ -352,6 +352,9 @@
 		// Перехватим событие о готовности phonegap к работе.
 		document.addEventListener("deviceready", onDeviceReady, false);
 		function onDeviceReady() {
+			
+			PermGuide.isPhonegap = true;
+
 			////
 			// Включим тестовую геолокацию.
 			PermGuide.Geolocation.initPhonegap();

@@ -1093,6 +1093,38 @@ div {
 		background-image: url('img/btn2.png');
 	}
 	
+	#objectScreen .pageScroller .pageIndicator {
+		padding-bottom: 4px;
+		font-size: 1.1em;
+	}
+
+	#objectScreen .pageScroller .pageIndicator.active .pageCaption{
+		margin-top: -4px;
+	}
+
+	#objectScreen .pageScroller .pageIndicator .pagePicture{
+		height: 92px;
+		background-position: center 4px;
+	}	
+
+	#objectScreen .pageScroller #pDesc.pageIndicator .pagePicture{
+		background-image: url('img/hires/desc2.png');
+	}
+	
+	#objectScreen .pageScroller #pPhoto.pageIndicator .pagePicture{
+		background-image: url('img/hires/photo2.png');
+	}
+	
+	#objectScreen .pageScroller #pDesc.pageIndicator.active .pagePicture{
+		background-image: url('img/hires/desc1.png');
+		background-position: center 0px;
+	}
+	
+	#objectScreen .pageScroller #pPhoto.pageIndicator.active .pagePicture{
+		background-image: url('img/hires/photo1.png');
+		background-position: center 0px;
+	}
+	
 	.mapSliderPlace {
 		height: 5em;
 	}
