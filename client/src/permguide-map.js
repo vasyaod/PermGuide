@@ -90,10 +90,8 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 //	var offset = new YMaps.Point(-11, -13);
 	var element = $(
 	'	<div class="boxOverlay">'+
-	'		<div class="overlayContainer">'+
-	'			<div class="glow"></div>'+
-	'			<div class="box"></div>'+
-	'		</div>'+
+'			<div class="glow"></div>'+
+'			<div class="box"></div>'+
 	'	</div>'
 	);
 	
@@ -130,8 +128,10 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 	};
 	
 
-	this.refreshImage = function (img) {
-		element.find(".box").css("background", "url("+img+")");
+	this.refreshImage = function (color) {
+		color = color.substr(1);
+		element.find(".box").attr("class", "box color"+color);
+		//element.find(".box").css("background", "url("+img+")");
 		this.hideGlow();
 	};
 	
@@ -604,10 +604,12 @@ PermGuide.MapManager = function (yMapElement, mode){
 
 			if ( objectIsVisible )
 			{
+				
 				if (this.mode == "objects")
-					overlayState.overlay.refreshImage(overlayState.object.objectImg);
+					overlayState.overlay.refreshImage(overlayState.object.objectColor);
 				if (this.mode == "routes")
-					overlayState.overlay.refreshImage(overlayState.object.routeImg);
+					overlayState.overlay.refreshImage(overlayState.object.routeColor);
+				
 				if (!overlayState.onmap)
 				{
 					overlayState.onmap = true;

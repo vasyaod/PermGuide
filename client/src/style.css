@@ -275,10 +275,6 @@ div {
 	z-index: 1;
 }
 
-.boxOverlay .overlayContainer {
-	position: relative;
-}
-
 .boxOverlay .box{
 	position: absolute;
 	left: -11px;
@@ -289,6 +285,49 @@ div {
 	background-size: cover;
 	background-position: center center;
 	cursor: pointer;
+}
+
+.boxOverlay .box.color00ccff {
+	background: url(img/box_00ccff.png);
+}
+.boxOverlay .box.color33cc33 {
+	background: url(img/box_33cc33.png);
+}
+.boxOverlay .box.color4c00fe {
+	background: url(img/box_4c00fe.png);
+}
+.boxOverlay .box.color663333 {
+	background: url(img/box_663333.png);
+}
+.boxOverlay .box.color6699ff {
+	background: url(img/box_6699ff.png);
+}
+.boxOverlay .box.color66ffcc {
+	background: url(img/box_66ffcc.png);
+}
+.boxOverlay .box.color990000 {
+	background: url(img/box_990000.png);
+}
+.boxOverlay .box.color9900cc {
+	background: url(img/box_9900cc.png);
+}
+.boxOverlay .box.colorcccc33 {
+	background: url(img/box_cccc33.png);
+}
+.boxOverlay .box.colordc00b7 {
+	background: url(img/box_dc00b7.png);
+}
+.boxOverlay .box.colorff0000 {
+	background: url(img/box_ff0000.png);
+}
+.boxOverlay .box.colorff6600 {
+	background: url(img/box_ff6600.png);
+}
+.boxOverlay .box.colorff6699 {
+	background: url(img/box_ff6699.png);
+}
+.boxOverlay .box.colorffcc00 {
+	background: url(img/box_ffcc00.png);
 }
 
 .boxOverlay .glow{
@@ -1147,19 +1186,65 @@ div {
 		height: 60px;
 		border-radius: 7px;	
 	}
-/*	
+
 	.boxOverlay .box{
-		left: -16px;
-		top: -19px;
-		width: 34px;
-		height: 40px;
+		position: absolute;
+		left: -24px;
+		top: -27px;
+		width: 47px;
+		height: 54px;
+		background: url(img/hires/box_990000.png);
+	}
+	
+	.boxOverlay .box.color00ccff {
+		background: url(img/hires/box_00ccff.png);
+	}
+	.boxOverlay .box.color33cc33 {
+		background: url(img/hires/box_33cc33.png);
+	}
+	.boxOverlay .box.color4c00fe {
+		background: url(img/hires/box_4c00fe.png);
+	}
+	.boxOverlay .box.color663333 {
+		background: url(img/hires/box_663333.png);
+	}
+	.boxOverlay .box.color6699ff {
+		background: url(img/hires/box_6699ff.png);
+	}
+	.boxOverlay .box.color66ffcc {
+		background: url(img/hires/box_66ffcc.png);
+	}
+	.boxOverlay .box.color990000 {
+		background: url(img/hires/box_990000.png);
+	}
+	.boxOverlay .box.color9900cc {
+		background: url(img/hires/box_9900cc.png);
+	}
+	.boxOverlay .box.colorcccc33 {
+		background: url(img/hires/box_cccc33.png);
+	}
+	.boxOverlay .box.colordc00b7 {
+		background: url(img/hires/box_dc00b7.png);
+	}
+	.boxOverlay .box.colorff0000 {
+		background: url(img/hires/box_ff0000.png);
+	}
+	.boxOverlay .box.colorff6600 {
+		background: url(img/hires/box_ff6600.png);
+	}
+	.boxOverlay .box.colorff6699 {
+		background: url(img/hires/box_ff6699.png);
+	}
+	.boxOverlay .box.colorffcc00 {
+		background: url(img/hires/box_ffcc00.png);
 	}
 	
 	.boxOverlay .glow{
-		left: -19px;
-		top: -22px;
-		width: 40px;
-		height: 46px;
+		left: -26px;
+		top: -29px;
+		width: 51px;
+		height: 58px;
+		background: url(img/hires/box_glow.png);
 	}
-*/
+
 }
