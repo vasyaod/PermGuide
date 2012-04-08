@@ -162,8 +162,7 @@ PermGuide.CanvasLayer = function (element) {
 	// Устанавливаем z-index как у метки
 	element.css("z-index", YMaps.ZIndex.MAP_LAYER+1);
 	// Получим контекст канвы.
-	context = element[0].getContext('2d');
-	
+	var context = element[0].getContext('2d');
 	//// 
 	// При ресазе страницы изменим размеры канвы. 
 	$(window).resize(function() {
@@ -217,8 +216,8 @@ PermGuide.CanvasLayer = function (element) {
 		element.attr("width", parentContainer.width());
 		element.attr("height", parentContainer.height());
 		
-		if ($.fn.browserTouchSupport.touches) {
-//		if (typeof device != "undefined" && device.platform == "iPhone") {
+//		if ($.fn.browserTouchSupport.touches) {
+		if (typeof device != "undefined" && device.platform == "iPhone") {
 			
 			$(element).on("mousedown", function(event) {
 				event.stopPropagation();
@@ -293,6 +292,7 @@ PermGuide.CanvasLayer = function (element) {
 	};
 	
 	this.repaint = function () {
+		//alert($(element).attr("id"));
 		context.clearRect(0, 0, parentContainer.width(), parentContainer.height());
 		
 		var i = 0;
@@ -444,6 +444,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		this.yMap.addControl(this.zoomControl);
 
 		// Удалим лого и copyright у карт.
+		/*
 		this.interval = setInterval( $.proxy(function() {
 			if ($(this.yMapElement).find(".YMaps-logo").length > 0 && 
 				$(this.yMapElement).find(".YMaps-copyrights").length > 0) {
@@ -464,6 +465,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 				clearInterval(this.interval);
 			}
 		}, this), 1*1000);
+		*/
 
 		// Инициализируем собственный слой. 
 		if ($(this.yMapElement).parent().children("canvas").length) {

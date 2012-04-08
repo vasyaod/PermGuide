@@ -233,9 +233,10 @@ PermGuide.deadRadius = 15;
 					return;
 				var touchclickStateTmp = touchclickState;
 				touchclickState = null;
-				if (Math.abs(event.changedTouches[0].clientX - touchclickStateTmp.x) < 10 &&
-					Math.abs(event.changedTouches[0].clientY - touchclickStateTmp.y) < 10)
+				if (Math.abs(event.changedTouches[0].clientX - touchclickStateTmp.x) < PermGuide.deadRadius &&
+					Math.abs(event.changedTouches[0].clientY - touchclickStateTmp.y) < PermGuide.deadRadius) {
 					fn(event);
+				}
 			}
 			
 			$(this).each( function () {

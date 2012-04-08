@@ -12,6 +12,7 @@
 		<script type="text/javascript" src="browserTouchSupport.js"></script>
 		<script type="text/javascript" src="jsrender.js"></script>
 		<script type="text/javascript" src="jquery.urldecoder.js"></script>
+		<!-- script type="text/javascript" src="buzz.js"></script -->
 
 		<!-- Загрузка основного кода. -->
 		<script type="text/javascript" src="permguide-observable.js"></script>
@@ -27,6 +28,7 @@
 		<script type="text/javascript" src="permguide-screenmanager.js"></script>
 		<script type="text/javascript" src="permguide-interface.js"></script>
 		<script type="text/javascript" src="permguide-social.js"></script>
+		<script type="text/javascript" src="permguide-audio.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
@@ -533,12 +535,21 @@
 						</div>
 					</div>
 				</div>
-				<div class="distanceBlock">
-					<div class="wrapper">
-						<div _id="{{:id}}" class="cell distance"></div>
+				
+				{{if audio}}
+					<div class="foground"></div>
+					<div class="audioButton" _id="{{:id}}"></div>
+					<div class="distanceBlockShort">
+						<div _id="{{:id}}" class="distance"></div>
 					</div>
-				</div>
-				<div class="foground"></div>
+				{{else}}
+					<div class="distanceBlock">
+						<div class="wrapper">
+							<div _id="{{:id}}" class="cell distance"></div>
+						</div>
+					</div>
+					<div class="foground"></div>
+				{{/if}}
 			</div>
 
 		</script>
@@ -644,7 +655,7 @@
 						
 						<div class="pageContent">
 							<div id="objectsMapContainer" class="mapContainer">
-								<canvas class="canvasLayer">
+								<canvas class="canvasLayer" id="test1">
 									Your browser does not support Canvas.
 								</canvas>
 								<div id="objectsMap" class="map">
@@ -719,7 +730,7 @@
 						
 						<div class="pageContent">
 							<div id="routesMapContainer" class="mapContainer">
-								<canvas class="canvasLayer">
+								<canvas class="canvasLayer" id="test2">
 									Your browser does not support Canvas.
 								</canvas>
 								<div id="routesMap" class="map">

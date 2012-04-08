@@ -70,8 +70,8 @@ div {
 
 .vScrollerBg .vScroller {
 	min-height: 100%;
+	
 }
-
 
 /**
 * Стили содержимого общей разметки страниц
@@ -492,6 +492,8 @@ div {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-image: url('img/arr_l.png');
+	cursor: pointer;
+	
 }
 
 .toggleButton .arrowRight {
@@ -502,6 +504,7 @@ div {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-image: url('img/arr_r.png');
+	cursor: pointer;
 }
 
 .toggleButton .arrowDown {
@@ -791,6 +794,7 @@ div {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-image: url('img/arr_l.png');
+	cursor: pointer;
 }
 
 .mapSliderPlace .arrowRight {
@@ -801,6 +805,7 @@ div {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-image: url('img/arr_r.png');
+	cursor: pointer;
 }
 
 .mapSliderContainer{
@@ -816,7 +821,7 @@ div {
 .mapSliderContainer .slide .nameBlock {
 	position: absolute;
 	left: 0;
-	right: 3em;
+	right: 3.5em;
 	top: 0;
 	bottom: 0;
 }
@@ -828,11 +833,39 @@ div {
 
 .mapSliderContainer .slide .distanceBlock {
 	position: absolute;
-	width: 3em;
+	width: 3.5em;
 	right: 0;
 	top: 0;
 	bottom: 0;
 	font-weight: bold;
+	text-align: center;
+}
+
+.mapSliderContainer .slide .distanceBlockShort {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 3.5em;
+	height: 1.2em;
+	font-weight: bold;
+	text-align: center;
+}
+
+.mapSliderContainer .slide .audioButton {
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 1.2em;
+	width: 3.5em;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/snd_play.png');
+}
+
+.mapSliderContainer .slide .audioButton.sndPlay {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/snd_stop.png');
 }
 
 .mapSliderContainer .slide .more{

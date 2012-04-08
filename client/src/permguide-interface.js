@@ -28,11 +28,31 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 		$(sliderElement).data("state").reset();
 		
 		// Вешает обработсчики событий на каждый слайд.
-		$(sliderElement).children(".slide").touchclick( function (event) {
+		$(sliderElement).find(".slide").touchclick( function (event) {
 			var objectId = $(event.target).parent().attr("_id");
 			var object = PermGuide.ApplicationData.getObjectById(objectId);
-			PermGuide.ApplicationData.selectObject(object);
+			
+			if (object)
+				PermGuide.ApplicationData.selectObject(object);
 		});
+
+		// Вешает обработсчики событий на проигрывание аудио файлов.
+		$(sliderElement).find(".slide .audioButton").touchclick( function (event) {
+			
+			if ($(event.target).hasClass("sndPlay")) {
+				PermGuide.Audio.stop();
+			} else {
+				var objectId = $(event.target).attr("_id");
+				var object = PermGuide.ApplicationData.getObjectById(objectId);
+				
+				if (object)
+				{
+					if (PermGuide.Audio.play(object))
+						$(event.target).addClass("sndPlay");
+				}
+			}
+			
+		}, true);
 		
 		mapManager.selectObjectById(objects[0].id);
 	}
