@@ -681,7 +681,34 @@ div {
 
 #objectScreen .pageScroller .pageIndicator {
 	width: 50%;
-	font-size: 1.2em;
+	vertical-align: bottom;
+	font-size: 0.8em;
+	padding-bottom: 2px;
+}
+
+#objectScreen .pageScroller .pageIndicator .pagePicture{
+	width: 100%;
+	height: 44px;
+	background-position: center top;
+	background-repeat: no-repeat;
+}
+
+#objectScreen .pageScroller #pDesc.pageIndicator .pagePicture{
+	background-image: url('img/desc2.png');
+}
+
+#objectScreen .pageScroller #pPhoto.pageIndicator .pagePicture{
+	background-image: url('img/photo2.png');
+}
+
+#objectScreen .pageScroller #pDesc.pageIndicator.active .pagePicture{
+	background-image: url('img/desc1.png');
+	background-position: center -2px;
+}
+
+#objectScreen .pageScroller #pPhoto.pageIndicator.active .pagePicture{
+	background-image: url('img/photo1.png');
+	background-position: center -2px;
 }
 
 /**
@@ -877,19 +904,6 @@ div {
 /**
  * Стили титульной страницы.
  */
-/*
-#randomObject {
-	position: relative;
-	width: 100%;
-	height: 134px;
-	background-image: url('img/theater.png');
-	background-size: contain;
-	background-color: #f00;
-	background-position: center center;
-	background-repeat: no-repeat;
-	border-bottom: 2px #f00 solid
-}
-*/
 
 .randomObject{
 	width: 100%;
@@ -1003,47 +1017,47 @@ div {
 	}	
 
 	#mainScreen .pageScroller #pMain.pageIndicator .pagePicture{
-		background-image: url('img/perm2b.png');
+		background-image: url('img/hires/perm2.png');
 	}
 
 	#mainScreen .pageScroller #pObjects.pageIndicator .pagePicture{
-		background-image: url('img/map2b.png');
+		background-image: url('img/hires/map2.png');
 	}
 
 	#mainScreen .pageScroller #pWays.pageIndicator .pagePicture{
-		background-image: url('img/way2b.png');
+		background-image: url('img/hires/way2.png');
 	}
 
 	#mainScreen .pageScroller #pInfo.pageIndicator .pagePicture{
-		background-image: url('img/about2b.png');
+		background-image: url('img/hires/about2.png');
 	}
 
 	#mainScreen .pageScroller #pMain.pageIndicator.active .pagePicture{
-		background-image: url('img/perm1b.png');
+		background-image: url('img/hires/perm1.png');
 		background-position: center 0px;
 	}
 
 	#mainScreen .pageScroller #pObjects.pageIndicator.active .pagePicture{
-		background-image: url('img/map1b.png');
+		background-image: url('img/hires/map1.png');
 		background-position: center 0px;
 	}
 
 	#mainScreen .pageScroller #pWays.pageIndicator.active .pagePicture{
-		background-image: url('img/way1b.png');
+		background-image: url('img/hires/way1.png');
 		background-position: center 0px;
 	}
 
 	#mainScreen .pageScroller #pInfo.pageIndicator.active .pagePicture{
-		background-image: url('img/about1b.png');
+		background-image: url('img/hires/about1.png');
 		background-position: center 0px;
 	}
 
 	.switchMode .on{
-		background-image: url('img/btn_list2.png');
+		background-image: url('img/hires/btn_list.png');
 	}
 
 	.switchMode .off{
-		background-image: url('img/btn_map2.png');
+		background-image: url('img/hires/btn_map.png');
 	}
 
 	.tagSliderBg {
