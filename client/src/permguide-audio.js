@@ -7,8 +7,17 @@ PermGuide.HTMLAudio = {
 	
 	_init: function() {
 		this.audioElement = document.createElement('audio');
+		
+		this.audioElement.onplaying = $.proxy(function (){
+			this._onplay();
+		}, this);
+
+		this.audioElement.onended = $.proxy(function (){
+			this._onstop();
+		}, this);
+
 		this.audioElement.onerror = $.proxy(function (){
-			this.stop();
+			this._onerror();
 			alert("HTML5 audio error: "+this.audioElement.error.code);
 		}, this);
 	},
@@ -35,7 +44,17 @@ PermGuide.HTMLAudio = {
 	_stop: function() {
 		if (this.audioElement)
 			this.audioElement.pause();
+	},
+	
+	_onerror: function() {
+	},
+
+	_onplay: function() {
+	},
+
+	_onstop: function() {
 	}
+	
 };
 
 PermGuide.PhonegapAudio = {
@@ -48,8 +67,23 @@ PermGuide.PhonegapAudio = {
 	},
 			
 	_play: function(url) {
-		this.media = new Media(url);
+		this.media = new Media(
+			url,
+			$.proxy(function() {
+				//if(this.media._duration == this.media._position) {
+				//	this._onstop();
+				//} else {
+				//	alert("_onplay");
+				//	this._onplay();
+				//}
+			}, this),
+			$.proxy(function(err) {
+				this._onerror();
+				alert("Phonegap audio error: "+err.code);
+			}, this)
+		);
 		this.media.play();
+		this._onplay();
 	},
 		
 	_stop: function() {
@@ -58,6 +92,15 @@ PermGuide.PhonegapAudio = {
 			this.media.stop();
 			this.media.release();
 		}
+	},
+
+	_onerror: function() {
+	},
+
+	_onplay: function() {
+	},
+
+	_onstop: function() {
 	}
 };
 
@@ -75,7 +118,22 @@ PermGuide.Audio = {
 			$.extend(this, PermGuide.PhonegapAudio);
 		} else {
 			$.extend(this, PermGuide.HTMLAudio);
-		}
+		};
+
+		this._onplay = function() {
+			$(".sndWait").removeClass("sndWait").addClass("sndPlay");
+		};
+		
+		this._onstop = function() {
+			$(".sndWait").removeClass("sndWait");
+			$(".sndPlay").removeClass("sndPlay");
+		};
+		
+		this._onerror = function() {
+			$(".sndWait").removeClass("sndWait");
+			$(".sndPlay").removeClass("sndPlay");
+		};
+
 		this._init();
 	},
 
@@ -86,9 +144,13 @@ PermGuide.Audio = {
 
 		if (supportedFormat && object.audio) {
 			var fileName = object.audio;
-			var url = 'http://permguide.ru/audio/'+fileName+supportedFormat;
+			var path = "http://permguide.ru/audio/";
+
+			// Если это фонегап, то качество файлов должно быть низкое.
+			if (PermGuide.isPhonegap)	
+				path += "lowquality/";
 			
-			this._play(url);
+			this._play(path+fileName+supportedFormat);
 			return true;
 		}
 		return false;
@@ -96,6 +158,7 @@ PermGuide.Audio = {
 	
 	stop: function() {
 		this.init();
+		$(".sndWait").removeClass("sndWait");
 		$(".sndPlay").removeClass("sndPlay");
 		this._stop();
 	}

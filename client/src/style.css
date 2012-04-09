@@ -949,6 +949,12 @@ div {
 	background-image: url('img/snd_play.png');
 }
 
+.mapSliderContainer .slide .audioButton.sndWait {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/snd_wait.gif');
+}
+
 .mapSliderContainer .slide .audioButton.sndPlay {
 	background-position: center center;
 	background-repeat: no-repeat;

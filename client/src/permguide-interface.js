@@ -39,7 +39,7 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 		// Вешает обработсчики событий на проигрывание аудио файлов.
 		$(sliderElement).find(".slide .audioButton").touchclick( function (event) {
 			
-			if ($(event.target).hasClass("sndPlay")) {
+			if ($(event.target).hasClass("sndPlay") || $(event.target).hasClass("sndWait")) {
 				PermGuide.Audio.stop();
 			} else {
 				var objectId = $(event.target).attr("_id");
@@ -48,7 +48,7 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 				if (object)
 				{
 					if (PermGuide.Audio.play(object))
-						$(event.target).addClass("sndPlay");
+						$(event.target).addClass("sndWait");
 				}
 			}
 			
