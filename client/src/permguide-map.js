@@ -93,7 +93,7 @@ PermGuide.SimpleOverlay = function (geoPoint) {
 PermGuide.BoxOverlay = function (geoPoint, fn) {
 	
 	var map, parentContainer, element;
-	
+
 	var getElement = function () {
 		if (element)
 			return element;
@@ -173,6 +173,7 @@ PermGuide.CanvasLayer = function (element) {
 	var routes = [];
 	var position = null;
 	var parentContainer = null;
+	var smoothZoom = false;
 	
 	// Устанавливаем z-index как у метки
 	element.css("z-index", YMaps.ZIndex.MAP_LAYER+1);
@@ -310,8 +311,10 @@ PermGuide.CanvasLayer = function (element) {
 		//alert($(element).attr("id"));
 		context.clearRect(0, 0, parentContainer.width(), parentContainer.height());
 		
-		var i = 0;
+		if (smoothZoom)
+			return;
 		
+		var i = 0;
 		$.each(routes, $.proxy(function(index, route) {
 			var i = 0;
 			context.beginPath();
@@ -361,9 +364,13 @@ PermGuide.CanvasLayer = function (element) {
 	};
 	
 	this.onSmoothZoomEnd = function () {
+		smoothZoom = false;
+		this.repaint();
 	};
 	
 	this.onSmoothZoomStart = function () {
+		smoothZoom = true;
+		this.repaint();
 	};
 
 	this.onSmoothZoomTick = function (params) {
