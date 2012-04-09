@@ -4,8 +4,9 @@ for FILE in *.mp3
 do
 rm raw
 mpg321 ${FILE} -w raw
-oggenc --downmix -q 1 raw -o out/${FILE%mp3}ogg
-lame --preset voice raw out/${FILE%mp3}mp3
+oggenc -q 2 raw -o ${FILE%mp3}ogg
+oggenc --downmix -q 1 raw -o lowquality/${FILE%mp3}ogg
+lame --preset voice raw lowquality/${FILE%mp3}mp3
 rm raw
 done
 
