@@ -3,11 +3,12 @@
 if(typeof PermGuide == "undefined")
 	PermGuide = {};
 
-PermGuide.ZoomControl = function () {
+PermGuide.MapControl = function (events) {
 	
 	var map;
 	var element = $(
-			'<div class="zoomControl">'+
+			'<div class="mapControl">'+
+			'	<div class="auto"></div>'+
 			'	<div class="plus">+</div>'+
 			'	<div class="minus">-</div>'+
 			'</div>'
@@ -20,12 +21,14 @@ PermGuide.ZoomControl = function () {
 		element.appendTo(map.getContainer());
 		
 		$(element).find(".plus").touchclick( function () {
-			map.setZoom(map.getZoom()+1);
+			events.plus();
 		});
 		$(element).find(".minus").touchclick( function () {
-			map.setZoom(map.getZoom()-1);
+			events.minus();
 		});
-		
+		$(element).find(".auto").touchclick( function () {
+			events.auto();
+		});
 	};
 
 	this.onRemoveFromMap = function () {
@@ -77,6 +80,10 @@ PermGuide.SimpleOverlay = function (geoPoint) {
 	this.setGeoPoint = function (_geoPoint) {
 		geoPoint = _geoPoint
 		this.onMapUpdate();
+	};	
+	
+	this.getGeoPoint = function () {
+		return geoPoint;
 	};	
 }
 
@@ -433,6 +440,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 	
 	this.yMapElement = yMapElement;
 	this.mode = mode;
+	this.autoEnabled = false;
 	
 	// Вешаем обработчик события на загрузку скрипта сайта.
 	PermGuide.LoadMapManager.attachListener("mapLoadSuccess", $.proxy(function(object) {
@@ -447,9 +455,20 @@ PermGuide.MapManager = function (yMapElement, mode){
 		// Создает экземпляр карты и привязывает его к созданному контейнеру
 		this.yMap = new YMaps.Map(this.yMapElement);
 		this.yMap.enableScrollZoom();
-		
-		this.zoomControl = new PermGuide.ZoomControl();
-		this.yMap.addControl(this.zoomControl);
+		var map = this.yMap;
+
+		this.mapControl = new PermGuide.MapControl({
+			plus: $.proxy(function() {
+				this.yMap.setZoom(map.getZoom()+1);
+			},this),
+			minus: $.proxy(function() {
+				this.yMap.setZoom(map.getZoom()-1);
+			},this),
+			auto: $.proxy(function() {
+				this.autoToggle();
+			},this)
+		});
+		this.yMap.addControl(this.mapControl);
 
 		// Удалим лого и copyright у карт.
 		/*
@@ -496,19 +515,65 @@ PermGuide.MapManager = function (yMapElement, mode){
 		// Повешаем обработчики событий на обновление координат девайса. 
 		PermGuide.Geolocation.attachListener("refreshed", $.proxy(this.newPosition, this));
 	};
+
+	/**
+	 * Метод включает/выключает режим "слежение".
+	 */
+	this.autoToggle = function() {
+		if (this.autoEnabled)
+			this.autoDisable();
+		else
+			this.autoEnable();
+		
+	},
+
+	this.autoEnable = function() {
+		if (this.autoEnabled)
+			return
+		this.autoEnabled = true;
+		
+		$(this.yMapElement).find(".mapControl .auto").addClass("active");
+		// Если указатель положения пользователя уже существует, то позиционируем на него.
+		if (this.placemark) {
+			var point = this.placemark.getGeoPoint();
+			this.yMap.panTo(point);
+		}
+	},
+
+	this.autoDisable = function() {
+		if (!this.autoEnabled)
+			return
+		this.autoEnabled = false;
+			
+		$(this.yMapElement).find(".mapControl .auto").removeClass("active");
+	},
 	
 	/**
 	 * Обработчик события обновления координат дивайса.
 	 */
 	this.newPosition = function(position) {
+		if (!this.yMap)
+			return;
+		
 		var lng = position.coords.longitude;
 		var lat = position.coords.latitude;
+		var point = new YMaps.GeoPoint(lng, lat);
+		
 		if (!this.placemark)
 		{
-			this.placemark = new PermGuide.SimpleOverlay(new YMaps.GeoPoint(lng, lat));
+			this.placemark = new PermGuide.SimpleOverlay(point);
 			this.yMap.addOverlay(this.placemark);
 		}
-		this.placemark.setGeoPoint(new YMaps.GeoPoint(lng, lat));
+		this.placemark.setGeoPoint(point);
+		
+		if (!this.autoVisible) {
+			this.autoVisible = true;
+			$(this.yMapElement).find(".mapControl .auto").css("visibility","visible");
+		}
+		// Если включен режим слежения, то позиционируем центр карты по полученным координатам.
+		if (this.autoEnabled) {
+			this.yMap.panTo(point);
+		}
 	};
 	
 	this.dataLoaded = function(applicationData) {

@@ -799,7 +799,7 @@ div {
 /**
  * Кнопки +/- на карте.
  */
-.zoomControl {
+.mapControl {
 	position: absolute;
 	left: 0;
 	bottom: 3.3em;
@@ -809,7 +809,7 @@ div {
 	font-size: 20px;
 }
 
-.zoomControl .minus {
+.mapControl .minus {
 	position: absolute;
 	bottom: 0px;
 	left: 10px;
@@ -823,7 +823,7 @@ div {
 	border-radius: 5px;	
 }
 
-.zoomControl .plus {
+.mapControl .plus {
 	position: absolute;
 	bottom: 50px;
 	left: 10px;
@@ -835,6 +835,27 @@ div {
 	cursor: pointer;
 	opacity: 0.7;
 	border-radius: 5px;	
+}
+
+.mapControl .auto {
+	position: absolute;
+	bottom: 100px;
+	left: 10px;
+	width: 40px;
+	height: 40px;
+	background-color: #000;
+	cursor: pointer;
+	opacity: 0.7;
+	border-radius: 5px;
+	visibility: hidden;
+	
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/i_search.png');
+	
+}
+.mapControl .auto.active {
+	background-color: #333;
 }
 
 /**
@@ -1168,24 +1189,32 @@ div {
 		height: 5em;
 	}
 	
-	.zoomControl {
+	.mapControl {
 		bottom: 5.2em;
 	}
 
-	.zoomControl .minus {
+	.mapControl .minus {
 		width: 60px;
 		line-height: 60px;
 		height: 60px;
 		border-radius: 7px;	
 	}
 
-	.zoomControl .plus {
+	.mapControl .plus {
 		bottom: 75px;
 		width: 60px;
 		line-height: 60px;
 		height: 60px;
 		border-radius: 7px;	
 	}
+	
+	.mapControl .auto {
+		bottom: 150px;
+		width: 60px;
+		height: 60px;
+		border-radius: 7px;
+	}
+	
 /*
 	.boxOverlay .box{
 		position: absolute;
