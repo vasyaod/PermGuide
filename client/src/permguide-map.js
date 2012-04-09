@@ -85,34 +85,42 @@ PermGuide.SimpleOverlay = function (geoPoint) {
  */
 PermGuide.BoxOverlay = function (geoPoint, fn) {
 	
-	var map;
-	var parentContainer;
-//	var offset = new YMaps.Point(-11, -13);
-	var element = $(
-	'	<div class="boxOverlay">'+
-'			<div class="glow"></div>'+
-'			<div class="box"></div>'+
-	'	</div>'
-	);
+	var map, parentContainer, element;
 	
-	// Устанавливаем z-index как у метки
-	element.css("z-index", YMaps.ZIndex.Overlay);
+	var getElement = function () {
+		if (element)
+			return element;
+		
+		element = $(
+			'	<div class="boxOverlay">'+
+			'			<div class="glow"></div>'+
+			'			<div class="box"></div>'+
+			'	</div>'
+		);
+				
+		// Устанавливаем z-index как у метки
+		element.css("z-index", YMaps.ZIndex.Overlay);
+				
+		if (fn != null)
+			element.find(".box").touchclick(fn, true);
+		
+		return element;
+	};
 	
-	if (fn != null)
-		element.find(".box").touchclick(fn, true);
 
+	
 	// Вызывается при добавления оверлея на карту 
 	this.onAddToMap = function (_map, _parentContainer) {
 		map = _map;
 		parentContainer = _parentContainer;
-		element.appendTo(parentContainer);
+		getElement().appendTo(parentContainer);
 		this.onMapUpdate();
 	};
 
 	// Вызывается при удаление оверлея с карты
 	this.onRemoveFromMap = function () {
-		if (element.parent()) {
-			element.remove();
+		if (getElement().parent()) {
+			getElement().remove();
 		}
 	};
 
@@ -121,7 +129,7 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 		// Смена позиции оверлея
 //		var position = map.converter.coordinatesToMapPixels(geoPoint).moveBy(offset);
 		var position = map.converter.coordinatesToMapPixels(geoPoint);
-		element.css({
+		getElement().css({
 			left: position.x,
 			top:  position.y
 		})
@@ -130,25 +138,25 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 
 	this.refreshImage = function (color) {
 		color = color.substr(1);
-		element.find(".box").attr("class", "box color"+color);
+		getElement().find(".box").attr("class", "box color"+color);
 		//element.find(".box").css("background", "url("+img+")");
 		this.hideGlow();
 	};
 	
 	this.hide = function () {
-		element.css("display", "none");
+		getElement().css("display", "none");
 	};
 
 	this.show = function () {
-		element.css("display", "block");
+		getElement().css("display", "block");
 	};
 	
 	this.hideGlow = function () {
-		element.find(".glow").css("display", "none");
+		getElement().find(".glow").css("display", "none");
 	};
 
 	this.showGlow = function () {
-		element.find(".glow").css("display", "block");
+		getElement().find(".glow").css("display", "block");
 	};
 }
 
