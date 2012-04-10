@@ -34,5 +34,5 @@ PermGuide.showShareWindow = function(socialNetwork, object) {
 		url += '&st.comments=' + encodeURIComponent(title);
 		url += '&st._surl=' + encodeURIComponent(documentUrl);
 	}
-	window.open(url); 
+	window.open(url, '_blank'); 
 }

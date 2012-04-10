@@ -192,6 +192,10 @@
 					$("#objectScreen .objectPhoto").html("");
 					$("#objectScreen .photoCount").text("");
 				}
+				
+				if (PermGuide.isPhonegap)
+					$("#objectScreen .social").css("display", "none");
+				
 				$("#objectScreen .vScroller .i18n").i18n();
 
 				////
@@ -346,7 +350,8 @@
 			PermGuide.Geolocation.init();
 
 			// Закроем splash-screen
-			$("#splashScreen").css("visibility", "hidden");
+			$("#splashScreen").css("display", "none");
+			$("#langSelectScreen").css("display", "none");
 			
 			PermGuide.ScreenManager.activateScreenByName("mainScreen");
 			// Обрабатываем параметры запуска приложения.

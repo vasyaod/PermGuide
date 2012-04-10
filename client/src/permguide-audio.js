@@ -70,25 +70,41 @@ PermGuide.PhonegapAudio = {
 		this.media = new Media(
 			url,
 			$.proxy(function() {
-				//if(this.media._duration == this.media._position) {
-				//	this._onstop();
-				//} else {
-				//	alert("_onplay");
-				//	this._onplay();
-				//}
+				//this._onstop();
 			}, this),
 			$.proxy(function(err) {
 				this._onerror();
 				alert("Phonegap audio error: "+err.code);
 			}, this)
 		);
+		
+		var media = this.media;
+		var self = this;
+		this.mediaTimer = setInterval(function() {
+			// get my_media position
+			self.media.getCurrentPosition(
+				// success callback
+				function(position) {
+					if (position > -1) {
+						self._onplay();
+						clearInterval(self.mediaTimer);
+					}
+				},
+				// error callback
+				function(e) {
+					//alert("error");
+				}
+			);
+		}, 1000);
+		
 		this.media.play();
-		this._onplay();
+		
 	},
 		
 	_stop: function() {
 		if (this.media)
 		{
+			clearInterval(this.mediaTimer);
 			this.media.stop();
 			this.media.release();
 		}
