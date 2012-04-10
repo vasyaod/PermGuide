@@ -68,7 +68,25 @@ if(typeof PermGuide == "undefined")
 						if (!self.touchInsensitive)
 							self.up(event);
 					});
+					
+					this.containerElement.addEventListener("DOMMouseScroll", function (event) {
+						if (!self.touchInsensitive) {
+							if (event.detail < 0)
+								self.prev();
+							if (event.detail > 0)
+								self.next();
+						}
+					});
 
+					this.containerElement.addEventListener("mousewheel", function (event) {
+						if (!self.touchInsensitive) {
+							if (event.wheelDelta > 0)
+								self.prev();
+							if (event.wheelDelta < 0)
+								self.next();
+						}
+					});
+					
 					$(window).resize(function() {
 						self.resize();
 						self.refresh(true);

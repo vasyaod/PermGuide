@@ -686,12 +686,12 @@ div {
 	color: #fff;
 	background-color: #4c4c4c;
 	font-size: 0.8em;
-	height: 2.5em;
+	height: 3em;
 	cursor: pointer;
 	width: 25%;
 	color: #fff;
 	display: inline-block;
-	line-height: 2.5em;
+	line-height: 3em;
 	min-height: 28px;
 	margin-right: 10px;
 	min-width: 10em;
@@ -983,6 +983,7 @@ div {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-image: url('img/snd_play.png');
+	cursor: pointer;
 }
 
 .mapSliderContainer .slide .audioButton.sndWait {
