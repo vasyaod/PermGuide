@@ -671,20 +671,56 @@ div {
 }
 
 #objectScreen .objectDescription .contacts {
-	padding-left: 0.8em;
-	padding-right: 0.8em;
-	margin-top: 1.5em;
-	margin-bottom: 2em;
-	
+	margin-left: 1em;
+	margin-right: 1em;
+	margin-bottom: 1em;
 	font-size: 0.8em;
 }
 
-#objectScreen .objectDescription .findOnMap {
+#objectScreen .objectDescription .contors {
+	text-align: center;
+	margin: 1em;
+}
+
+#objectScreen .objectDescription .button {
 	color: #fff;
 	background-color: #4c4c4c;
-	padding: 0.8em;
-	line-height: 2.6em;
+	font-size: 0.8em;
+	height: 2.5em;
 	cursor: pointer;
+	width: 25%;
+	color: #fff;
+	display: inline-block;
+	line-height: 2.5em;
+	min-height: 28px;
+	margin-right: 10px;
+	min-width: 10em;
+}
+
+#objectScreen .objectDescription .findOnMap {
+
+}
+
+#objectScreen .objectDescription .audioButton .img{
+	height: 100%;
+	width: 24px;
+	display: inline-block;
+	padding-right: 5px;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/snd_play.png');
+}
+
+#objectScreen .objectDescription .audioButton.sndWait .img{
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/snd_wait.gif');
+}
+
+#objectScreen .objectDescription .audioButton.sndPlay .img{
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url('img/snd_stop.png');
 }
 
 #objectScreen .objectDescription .text {

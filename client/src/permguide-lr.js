@@ -3,6 +3,10 @@
 if(typeof PermGuide == "undefined")
 	PermGuide = {};
 
+String.prototype.trim = function () {
+	return this.replace(/^\s*/, "").replace(/\s*$/, "");
+}
+
 /**
  * Файл с языковыми ресурсами.
  */
@@ -45,6 +49,7 @@ PermGuide.lr = {
 		ru: "Назад",
 		en: "Back"
 	},
+	
 	"Популярные места": {
 		ru: "Популярные места",
 		en: "Featured"
@@ -57,10 +62,16 @@ PermGuide.lr = {
 		ru: "Интересные маршруты",
 		en: "Intrested routes"
 	},
+	
 	"Найти на карте": {
 		ru: "Найти на карте",
 		en: "See on the map"
-	},	
+	},
+	"Послушать": {
+		ru: "Послушать",
+		en: "Play"
+	},
+	
 	"подробнее": {
 		ru: "подробнее",
 		en: "more information"
@@ -181,7 +192,7 @@ PermGuide.Language = {
 	 */
 	getInterfaceString: function(key)
 	{
-		var object = PermGuide.lr[key];
+		var object = PermGuide.lr[key.trim()];
 		if (object == null)
 			return key;
 		

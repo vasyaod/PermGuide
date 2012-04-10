@@ -8,15 +8,15 @@ PermGuide.HTMLAudio = {
 	_init: function() {
 		this.audioElement = document.createElement('audio');
 		
-		this.audioElement.onplaying = $.proxy(function (){
+		this.audioElement.addEventListener("playing", $.proxy(function (){
 			this._onplay();
-		}, this);
+		}, this));
 
-		this.audioElement.onended = $.proxy(function (){
+		this.audioElement.addEventListener("ended",function (){
 			this._onstop();
 		}, this);
-
-		this.audioElement.onerror = $.proxy(function (){
+		
+		this.audioElement.addEventListener("error",function (){
 			this._onerror();
 			alert("HTML5 audio error: "+this.audioElement.error.code);
 		}, this);

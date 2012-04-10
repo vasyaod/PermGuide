@@ -203,10 +203,7 @@
 				////
 				// Вешаем обработчик события на кнопку "найти на карте".
 				$("#objectScreen .findOnMap").touchclick( function (event) {
-					var objectId = $(event.target).attr("_id");
-					var object = PermGuide.ApplicationData.getObjectById(objectId);
-					if (!object)
-						return;
+					var object = PermGuide.ApplicationData.selectedObject;
 					var tag = object.tags[0];
 					if (!tag)
 						return;
@@ -217,6 +214,20 @@
 					PermGuide.ScreenManager.goToPage(1);
 				});
 				
+				////
+				// Вешаем обработчик события на кнопку "послушать".
+				var buttonElement = $("#objectScreen .audioButton");
+				buttonElement.touchclick( function (event) {
+					if (buttonElement.hasClass("sndPlay") || buttonElement.hasClass("sndWait")) {
+						PermGuide.Audio.stop();
+					} else {
+						if (PermGuide.Audio.play(PermGuide.ApplicationData.selectedObject))
+							buttonElement.addClass("sndWait");
+					}
+				});
+
+				////
+				// Вешаем обработчики событий на "социальные кнопки".
 				$("#objectScreen .social img").touchclick( function (event) {
 					var socilaNetwork =$(event.target).attr("class");
 					PermGuide.showShareWindow(socilaNetwork, PermGuide.ApplicationData.selectedObject);
@@ -477,21 +488,31 @@
 				{{/if}}
 				<div class="text">{{:description}}</div>
 			</div>
+			{{if contacts}}
 			<div class="contacts">
-				
 				{{if contacts.address}}
 					<span class="address">
 						<span class="title i18n">Address</span><span class="text">{{:contacts.address}}</span>
 					</span>
-				{{/if}}
-				{{if tags.length}}
-					<span _id="{{:id}}" class="findOnMap i18n">Найти на карте</span>
 				{{/if}}
 				{{if contacts.phoneNumber}}
 					<div class="phone">
 						<span class="title i18n">Phone</span><span class="text">{{:contacts.phoneNumber}}</span>
 					</div>
 				{{/if}}
+			</div>
+			{{/if}}
+			<div class="contors">
+				{{if audio}}
+					<div class="button audioButton">
+						<div class="img">&nbsp;</div>
+						<span class="i18n">Послушать<span>
+					</div>
+				{{/if}}
+				{{if tags.length}}
+					<div class="button findOnMap i18n">Найти на карте</div>
+				{{/if}}
+				<div style="clear:both;"></div>
 			</div>
 			<div class="social">
 				<div class="buttons">
@@ -572,7 +593,7 @@
 		
 			<div id="splashScreen" style="">
 				<!-- div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div--> 
-				<div class="statusLine">0/0</div>
+				<div class="statusLine">&nbsp;</div>
 			</div>
 	
 			<div id="langSelectScreen" class="wrapper">
