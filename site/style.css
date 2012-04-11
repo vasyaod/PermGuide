@@ -5,6 +5,7 @@ body {
 	padding: 0px;
 	font-family: sans-serif;
 	width: 100%;
+	text-align: center;
 }
 
 div {
@@ -18,6 +19,13 @@ div {
 	right: 0px;
 	height: 100%;
 	width: 500px;
+	text-align: left;
+}
+
+.relative {
+	height: 100%;
+	width: 500px;
+	display: inline-block;
 	text-align: left;
 }
 
