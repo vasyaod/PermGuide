@@ -144,7 +144,7 @@ div {
 	width: 100%;
 	height: 100%;
 	text-align: center;
-	background-image: url('img/splash.png');
+	background-image: url('img/s768.png');
 	background-size: cover;
 	background-color: #f00;
 	background-position: center center;
@@ -175,7 +175,7 @@ div {
 	width: 100%;
 	height: 100%;
 	text-align: center;
-	background-image: url('img/splash.png');
+	background-image: url('img/s768.png');
 	background-size: cover;
 	background-color: #f00;
 	background-position: center center;
@@ -1320,3 +1320,24 @@ div {
 	}
 */
 }
+
+@media only screen and (max-width: 640px)
+{ 
+	#splashScreen {
+		background-image: url('img/s640.png');
+	}
+	#langSelectScreen {
+		background-image: url('img/s640.png');
+	}	
+}
+
+@media only screen and (max-width: 320px)
+{ 
+	#splashScreen {
+		background-image: url('img/s320.png');
+	}
+	#langSelectScreen {
+		background-image: url('img/s320.png');
+	}	
+}
+
