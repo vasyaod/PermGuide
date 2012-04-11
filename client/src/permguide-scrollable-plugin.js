@@ -134,10 +134,14 @@ if(typeof PermGuide == "undefined")
 			
 			this.addEventListener("DOMMouseScroll", $.proxy(function (event) {
 				this.offset(event.detail);
+				event.stopPropagation();
+				event.preventDefault();
 			}, state));
 			
 			this.addEventListener("mousewheel", $.proxy(function (event) {
 				this.offset(-event.wheelDelta);
+				event.stopPropagation();
+				event.preventDefault();
 			}, state));
 			
 			//this.onmousewheel =  $.proxy(function (event) {

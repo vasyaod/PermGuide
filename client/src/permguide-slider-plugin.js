@@ -76,6 +76,8 @@ if(typeof PermGuide == "undefined")
 							if (event.detail > 0)
 								self.next();
 						}
+						event.stopPropagation();
+						event.preventDefault();
 					});
 
 					this.containerElement.addEventListener("mousewheel", function (event) {
@@ -85,6 +87,8 @@ if(typeof PermGuide == "undefined")
 							if (event.wheelDelta < 0)
 								self.next();
 						}
+						event.stopPropagation();
+						event.preventDefault();
 					});
 					
 					$(window).resize(function() {
