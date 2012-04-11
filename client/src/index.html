@@ -370,7 +370,7 @@
 		function onDeviceReady() {
 			
 			PermGuide.isPhonegap = true;
-
+			PermGuide.isIPhone = (device.platform.indexOf("iPhone") != -1 || device.platform.indexOf("iPad") != -1);
 			////
 			// Включим тестовую геолокацию.
 			PermGuide.Geolocation.initPhonegap();

@@ -233,8 +233,7 @@ PermGuide.CanvasLayer = function (element) {
 		element.attr("height", parentContainer.height());
 		
 //		if ($.fn.browserTouchSupport.touches) {
-		if (typeof device != "undefined" && 
-			(device.platform.indexOf("iPhone") != -1 || device.platform.indexOf("iPad") != -1)) {
+		if (PermGuide.isIPhone) {
 			
 			$(element).on("mousedown", function(event) {
 				event.stopPropagation();
