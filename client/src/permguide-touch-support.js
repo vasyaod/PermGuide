@@ -18,7 +18,7 @@ PermGuide.deadRadius = 15;
 				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
-				fn({
+				return fn({
 					type: "touchstart",
 					target: event.target,
 					changedTouches: 
@@ -47,7 +47,7 @@ PermGuide.deadRadius = 15;
 				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
-				fn({
+				return fn({
 					type: "touchmove",
 					target: event.target,
 					changedTouches: 
@@ -75,6 +75,7 @@ PermGuide.deadRadius = 15;
 				var down = false;
 				var downHandler = function (event) {
 					down = true;
+					return true;
 				}
 				
 				var upHandler = function (event) {
@@ -85,7 +86,7 @@ PermGuide.deadRadius = 15;
 					if (stopPropagation)
 						event.stopPropagation();
 					event.preventDefault();
-					fn({
+					return fn({
 						type: "touchend",
 						target: event.target,
 						changedTouches: 
@@ -128,6 +129,7 @@ PermGuide.deadRadius = 15;
 					x: event.clientX,
 					y: event.clientY
 				}
+				return true;
 			};
 			
 			var upHandler = function (event)
@@ -136,14 +138,14 @@ PermGuide.deadRadius = 15;
 					event.stopPropagation();
 				event.preventDefault();
 				if (touchclickState == null)
-					return;
+					return true;
 				
 				var touchclickStateTmp = touchclickState;
 				touchclickState = null;
 				if (Math.abs(event.clientX - touchclickStateTmp.x) < PermGuide.deadRadius &&
 					Math.abs(event.clientY - touchclickStateTmp.y) < PermGuide.deadRadius)
 				{
-					fn({
+					return fn({
 						type: "touchclick",
 						target: event.target,
 						changedTouches: 
@@ -176,7 +178,7 @@ PermGuide.deadRadius = 15;
 				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
-				fn(event);
+				return fn(event);
 			}
 			$(this).each( function () {
 				this.addEventListener("touchstart", newFn);
@@ -189,7 +191,7 @@ PermGuide.deadRadius = 15;
 				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
-				fn(event);
+				return fn(event);
 			}
 			$(this).each( function () {
 				this.addEventListener("touchmove", newFn);
@@ -202,7 +204,7 @@ PermGuide.deadRadius = 15;
 				if (stopPropagation)
 					event.stopPropagation();
 				event.preventDefault();
-				fn(event);
+				return fn(event);
 			}
 			$(this).each( function () {
 				this.addEventListener("touchend", newFn);
@@ -222,6 +224,8 @@ PermGuide.deadRadius = 15;
 					x: event.changedTouches[0].clientX,
 					y: event.changedTouches[0].clientY
 				}
+				
+				return true;
 			}
 			
 			var upHandler = function (event)
@@ -235,14 +239,16 @@ PermGuide.deadRadius = 15;
 				touchclickState = null;
 				if (Math.abs(event.changedTouches[0].clientX - touchclickStateTmp.x) < PermGuide.deadRadius &&
 					Math.abs(event.changedTouches[0].clientY - touchclickStateTmp.y) < PermGuide.deadRadius) {
-					fn(event);
+					return fn(event);
 				}
+				
+				return true;
 			}
 			
 			$(this).each( function () {
 				this.addEventListener("touchstart", downHandler);
 				this.addEventListener("touchend", upHandler);
-			});		
+			});
 		};	
 	}
 	

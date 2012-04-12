@@ -108,6 +108,7 @@
 						top: $(window).height()
 					}, 500, function() {
 						$(screenElement).css("top", "100%");
+						$(screenElement).css("visibility", "hidden");
 					});
 				}
 			});
@@ -808,7 +809,7 @@
 							</div> 
 						</div>
 						<div class="pageContent vScrollerBg">
-							<div id="aboutPerm" class="vScroller" stopPropagation="true"> 
+							<div id="aboutPerm" class="vScroller"> 
 								<!-- Заполняются динамически -->
 							</div>
 						</div>

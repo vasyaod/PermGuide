@@ -39,6 +39,7 @@ div {
 	position: absolute;
 	cursor: pointer;
 }
+
 .slide {
 	float: left;
 }
@@ -70,7 +71,26 @@ div {
 
 .vScrollerBg .vScroller {
 	min-height: 100%;
-	
+}
+
+.vScrollerBg .scroller {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	width: 10px;
+	right: 0px;
+	background-color: #333;
+	opacity: 0.5;
+	border-radius: 3px;
+}
+
+.vScrollerBg .scroller .scrollerIndicator{
+	position: absolute;
+	top: 0px;
+	left: 1px;
+	width: 8px;
+	background-color: #fff;
+	border-radius: 3px;
 }
 
 /**
@@ -623,7 +643,7 @@ div {
 	background-color: #fff;
 	z-index: 1200;
 	top: 100%;
-	visibility: visible;
+	visibility: hidden;
 }
 
 #objectScreen .objectName{
