@@ -19,10 +19,13 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 	var renderSlider = function (applicationData){
 		////
 		// Перерерандарим слайдер объектов.
-		var objects = PermGuide.ApplicationData.getVisibleObjects(mode, true);
+		
+		// Сортировка нужна только на карте "мест".
+		var objects = PermGuide.ApplicationData.getVisibleObjects(mode, mode == "objects");
 		$(sliderElement).html(
 			$( "#objectSlideTemplate" ).render(objects)
 		);
+		
 		$(sliderElement).find(".i18n").i18n();	// нужно чтобы перевести надпись "подробнее"
 		$(sliderElement).find(".distance").distanceRefresh();
 		$(sliderElement).data("state").reset();
@@ -84,7 +87,8 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 				return;
 			cRendered = true;
 			
-			renderSlider();
+			if (mode == "objects")	// Перерандарим если это карта "мест".
+				renderSlider();
 		});
 	});
 	
@@ -101,7 +105,7 @@ PermGuide.Interface.makeCatalog = function(mode, catalogElement) {
 		$(catalogElement).find(".vScroller").data("state").resetPosition();
 		////
 		// Перерендарим каталоги, при этом сортируем оп растоянию.
-		var objects = PermGuide.ApplicationData.getVisibleObjects(mode, true);
+		var objects = PermGuide.ApplicationData.getVisibleObjects(mode, mode == "objects");
 		var objectItems = [];
 		
 		$.each(objects, function(index, object) {
@@ -138,7 +142,8 @@ PermGuide.Interface.makeCatalog = function(mode, catalogElement) {
 				return;
 			cRendered = true;
 			
-			renderCatalog();
+			if (mode == "objects")
+				renderCatalog();
 		});
 	});
 }
