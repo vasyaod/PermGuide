@@ -580,14 +580,13 @@ PermGuide.ApplicationData = {
 		this.notify("objectSelected", object);
 	},
 	
-	/**
-	 * Загрузка данных из различных источников. 
-	 */
-	load: function () {
+	_load: function (urlList) {
+		
+		var url = urlList.pop();
 		
 		var self = this;
 		$.ajax({
-			url: 'data.json',
+			url: url,
 			cache: false,
 			dataType: 'json',
 			success: function(data) {
@@ -595,9 +594,27 @@ PermGuide.ApplicationData = {
 				self.processing();
 			},
 			error:function() {
-				alert("Ошибка загрузки данных.");
+				if (url.length > 0)
+					this._load(urlList);
+				else
+					alert("Ошибка загрузки данных.");
 			}
 		});
+	},
+	
+	/**
+	 * Загрузка данных из различных источников. 
+	 */
+	load: function () {
+		
+		// Перечислим список мест откуда загружать данные.
+		// Сделано это потому, что видете ли Андпройд 4 не захотел загружать
+		// данные с простого урла "data.json", что ему не понравилось, я не знаю.
+
+		// Внимание, урлы применются с конца массива.
+		this._load(["http://permguide.ru/data.json",
+		            "file://data.json",
+		            "data.json"]);
 	}
 }
 // Расширим до Observable.
