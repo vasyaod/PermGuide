@@ -100,16 +100,18 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 		
 		element = $(
 			'	<div class="boxOverlay">'+
-			'			<div class="glow"></div>'+
 			'			<div class="box"></div>'+
+			'			<div class="glow"></div>'+
 			'	</div>'
 		);
 				
 		// Устанавливаем z-index как у метки
 		element.css("z-index", YMaps.ZIndex.Overlay);
 				
-		if (fn != null)
+		if (fn != null) {
 			element.find(".box").touchclick(fn, true);
+		//	element.find(".glow").touchclick(fn, true);
+		}
 		
 		return element;
 	};
@@ -619,6 +621,10 @@ PermGuide.MapManager = function (yMapElement, mode){
 			// если самый близкий черпоинт находится ближе 30 метров, то активирем его.
 			if (minDistance != -1 && minDistance < 30) {
 				//alert(minCheckPoint.id);
+				
+				//if (PermGuide.isPhonegap)
+				//	navigator.notification.beep(1);
+				
 				this.selectObjectById(minCheckPoint.id);
 			}
 		}
