@@ -36,7 +36,6 @@ PermGuide.showShareWindow = function(socialNetwork, object) {
 	}
 	
 	if (PermGuide.isAndroid) {
-		alert(url);
 		window.plugins.childBrowser.openExternal(url);
 	} else {
 		window.open(url, '_blank');
