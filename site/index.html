@@ -1,9 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Гид Перми</title>
+<head>
+ <title>Мобильный гид Перми</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-		<link rel="stylesheet" type="text/css" href="style.css" />
+ <link rel="icon" href="/favicon.ico" type="image/x-icon">
+ <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> 
+
+ <link rel="stylesheet" type="text/css" href="style.css" />
+
+ <style type="text/css">
+
+   /* ================================================ */
+
+ </style>
 
 		<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="jquery.urldecoder.js"></script>
@@ -28,40 +38,86 @@
 				}
 				url = $.url.build(urlObject);
 				//$("#application").html('<iframe src="'+url+'"></iframe>');
-				$("#application iframe").attr("src", url);
+				$("#phone iframe").attr("src", url);
 			});
 		</script>
-	</head>
-	<body>
-					<div class="relative">
+
+</head>
+<body>
+	<div id="page-all">
+		<div class="w1">
+      			<!-- ========================= All content here ============================= -->
+			<div id="header"><div id="logo"><img src="img/logo.png" align="left"><span>Мобильный<br/>гид Перми</span></div></div>
+			<div id="content">
+				<div id="phone"><iframe></iframe></div>
+				<div class="info">
+					<p>Приложение помогает жителям и&nbsp;гостям города сориентироваться в&nbsp;многообразии культурных и&nbsp;исторических мест города. Наш гид расскажет вам о&nbsp;множестве достопримечательностей, проводит по&nbsp;интересным экскурсионным маршрутам. Вы&nbsp;можете не&nbsp;только читать текст и&nbsp;смотреть фотографии, но&nbsp;и&nbsp;слушать аудиогида. Программа может работать как при наличии соединения с&nbsp;интернетом, так и&nbsp;при его отсутствии. В&nbsp;данный момент информация предоставляется на&nbsp;русском и&nbsp;английском языке.</p>
+					<p>
 					<div id="links">
 						<div class="section">
 							<img src="img/android-market-2-icon-48.png"/>
 							<div>
-								<a href="https://play.google.com/store/apps/details?id=ru.mobak.permguide">Приложение в Google Play</a>
+								<a href="https://play.google.com/store/apps/details?id=ru.mobak.permguide" target="_blank">Приложение в Google Play</a>
 							</div>
 							<div>
-								<a href="PermGuide.apk">Скачать приложение под Android</a>
+								<a href="PermGuide.apk">Скачать приложение под Android с этого сайта</a>
 							</div>
 						</div>
 						<div style="clear: both;"></div>
 						<div class="section">
 							<img src="img/vkontakte-48.png"/>
 							<div>
-								<a href="http://vk.com/permguide">Группа в ВКонтакте</a>
+								<a href="http://vk.com/permguide" target="_blank">Группа в ВКонтакте</a>
 							</div>
 							<div>
-								<a href="http://vk.com/app2883907">Приложение в ВКонтакте</a>
+								<a href="http://vk.com/app2883907" target="_blank">Приложение в ВКонтакте</a>
+							</div>
+						</div>
+						<div style="clear: both;"></div>
+						<div class="section">
+							<img src="img/facebook48.png"/>
+							<div>
+								<a href="http://facebook.com/permguide" target="_blank">Страница в facebook</a>
 							</div>
 						</div>
 					</div>
-					<div id="languages">
-						<a href="?lang=ru">Русский</a>
-						<a href="?lang=en">English</a>
-					</div>
-					<div id="application">
-						<iframe></iframe>
-					</div>
-					</div>
-	</body>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div id="page-empty"></div>
+	</div>
+	<div id="page-footer">
+		<div class="w1">
+			<!-- ======================= Footer content here ============================ -->
+			<div id="footer">
+<script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
+<div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="none" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,gplus"></div> 
+			<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter13865326 = new Ya.Metrika({id:13865326, enableAll: true});
+        } catch(e) {}
+    });
+    
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/13865326" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+			</div>
+		</div>
+	</div>
+</body>
 </html>
