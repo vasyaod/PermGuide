@@ -7,6 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="style.css" />
 
 		<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+		<script type="text/javascript" charset="utf-8" src="childbrowser.js"></script>
 
 		<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="browserTouchSupport.js"></script>
@@ -195,8 +196,8 @@
 					$("#objectScreen .photoCount").text("");
 				}
 				
-				if (PermGuide.isPhonegap)
-					$("#objectScreen .social").css("display", "none");
+				//if (PermGuide.isPhonegap)
+				//	$("#objectScreen .social").css("display", "none");
 				
 				$("#objectScreen .vScroller .i18n").i18n();
 
@@ -377,6 +378,7 @@
 			
 			PermGuide.isPhonegap = true;
 			PermGuide.isIPhone = (device.platform.indexOf("iPhone") != -1 || device.platform.indexOf("iPad") != -1);
+			PermGuide.isAndroid = (device.platform.indexOf("Android") != -1);
 			////
 			// Включим тестовую геолокацию.
 			PermGuide.Geolocation.initPhonegap();

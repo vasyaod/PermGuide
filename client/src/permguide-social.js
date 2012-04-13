@@ -34,5 +34,11 @@ PermGuide.showShareWindow = function(socialNetwork, object) {
 		url += '&st.comments=' + encodeURIComponent(title);
 		url += '&st._surl=' + encodeURIComponent(documentUrl);
 	}
-	window.open(url, '_blank'); 
+	
+	if (PermGuide.isAndroid) {
+		alert(url);
+		window.plugins.childBrowser.openExternal(url);
+	} else {
+		window.open(url, '_blank');
+	}
 }
