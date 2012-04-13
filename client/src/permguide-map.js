@@ -520,7 +520,9 @@ PermGuide.MapManager = function (yMapElement, mode){
 	
 		////
 		// Повешаем обработчики событий на обновление координат девайса. 
-		PermGuide.Geolocation.attachListener("refreshed", $.proxy(this.newPosition, this));
+		PermGuide.Geolocation.attachListener("refreshed", $.proxy(this.positionRefreshed, this));
+		PermGuide.Geolocation.attachListener("rateRefreshed", $.proxy(this.ratePositionRefreshed, this));
+		
 	};
 
 	/**
@@ -558,7 +560,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 	/**
 	 * Обработчик события обновления координат дивайса.
 	 */
-	this.newPosition = function(position) {
+	this.positionRefreshed = function(position) {
 		if (!this.yMap)
 			return;
 		
@@ -577,12 +579,51 @@ PermGuide.MapManager = function (yMapElement, mode){
 			this.autoVisible = true;
 			$(this.yMapElement).find(".mapControl .auto").css("visibility","visible");
 		}
+		
 		// Если включен режим слежения, то позиционируем центр карты по полученным координатам.
 		if (this.autoEnabled) {
 			this.yMap.panTo(point);
 		}
 	};
 	
+	/**
+	 * Обработчик события обновления координат дивайса.
+	 */
+	this.ratePositionRefreshed = function(position) {
+		if (!this.yMap)
+			return;
+		
+		// 
+		if (this.autoEnabled && this.mode == "routes") {
+
+			var visibleCheckPoints = [];
+			$.each(PermGuide.ApplicationData.data.routes, function(index, route) {	
+				var routeIsVisible = PermGuide.ApplicationData.routeIsVisible(route);
+				if (routeIsVisible) {
+					visibleCheckPoints = visibleCheckPoints.concat(route.checkPoints);
+				}
+			});
+			
+			// Находим самый минимальный близкий к пользователю чекпоинт.
+			var minDistance = -1;
+			var minCheckPoint;
+			$.each(visibleCheckPoints, $.proxy(function(index, checkPoint) {
+				var distance = PermGuide.Geolocation.relativeDistance(checkPoint.lat, checkPoint.lng);
+				if (minDistance == -1 || distance < minDistance) {
+					minCheckPoint = checkPoint;
+					minDistance = distance;
+				}
+			}, this));
+			
+			//alert(minCheckPoint.id);
+			// если самый близкий черпоинт находится ближе 30 метров, то активирем его.
+			if (minDistance != -1 && minDistance < 30) {
+				//alert(minCheckPoint.id);
+				this.selectObjectById(minCheckPoint.id);
+			}
+		}
+	};
+
 	this.dataLoaded = function(applicationData) {
 		
 		if (this.yMap == null)
@@ -752,7 +793,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 	 * Выбирает объект на карте по его id.
 	 */
 	this.selectObjectById = function(objectId, centred) {
-		if (!this.yMap)		// Если карта не создана безполезно что либо переключать.
+		if (!this.yMap) // Если карта не создана безполезно что либо переключать.
 			return; 
 
 		if (!objectId)
@@ -772,6 +813,10 @@ PermGuide.MapManager = function (yMapElement, mode){
 	 * Внутренний метод, вызывается при выборе объекта на карте.
 	 */
 	this._selectObject = function(overlayState, centred) {
+		// Если этот объект уже выделен, то выходим из метода.
+		if (this.selectedOverlayState == overlayState)
+			return;
+		
 		if (this.selectedOverlayState) {
 			this.selectedOverlayState.overlay.hideGlow(); 
 		}

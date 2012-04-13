@@ -246,6 +246,9 @@ PermGuide.ApplicationData = {
 			
 			// Пускай маршрут знает о своих объектах.
 			route.objects = [];
+			// и о checkPoint, пускай чекпоинт - это точка на маршруте связаная с
+			// объектом.
+			route.checkPoints = [];
 			// Переберем все точки маршрута, дабы востаноить связь объект->маршрут.
 			$.each(route.points, $.proxy(function(index, point) {	
 				if (point.id) {
@@ -257,6 +260,7 @@ PermGuide.ApplicationData = {
 						alert("Отсутствует объект с id:"+point.id)
 					object.routes.push(route);
 					route.objects.push(object);
+					route.checkPoints.push(point);
 				}
 				
 			}, this));

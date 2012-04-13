@@ -30,6 +30,29 @@ $.fn.distanceRefresh = function () {
 		$(this).text(distance);
 	});
 };
+
+/**
+ * Дефолтный генератор координат для тестирования.
+ */
+PermGuide.RandomCoordinatesGenerator = {
+	
+	getCoordinate: function() {
+		
+		var lat = 58.009654;
+		var lng = 56.238867;
+		
+		lat += Math.random()*0.001;
+		lng += Math.random()*0.001;
+		
+		var position = {};
+		position.coords = {
+			latitude: lat,
+			longitude: lng
+		};
+		return position;
+	}
+}
+
 /**
  * Сервис геолокации.
  */
@@ -50,6 +73,11 @@ PermGuide.Geolocation = {
 	rateFrequency: 20000,
 	
 	/**
+	 * Гкнератор фэйковых координат, нужен для проверки и тестирования маршрутов.
+	 */
+	coordinatesGenerator: PermGuide.RandomCoordinatesGenerator,
+	
+	/**
 	 * Инициализация.
 	 */
 	initPhonegap: function(){
@@ -67,26 +95,19 @@ PermGuide.Geolocation = {
 		
 	},
 
-	init: function(){
+	init: function() {
 		var res = $.url.parse(document.URL);
 		if (res.params && res.params.geolocation == "test") {
 			this.timeoutId = setInterval($.proxy( this.random, this), 3000);
 		}
 	},
 	
-	random: function(){
-		var lat = 58.009654;
-		var lng = 56.238867;
-		
-		lat += Math.random()*0.001;
-		lng += Math.random()*0.001;
-		
-		var position = {};
-		position.coords = {
-			latitude: lat,
-			longitude: lng
-		};
-		this.onSuccess(position);
+	random: function() {
+		// Если не задан генератор координат, то генерируем рандомные координаты. 
+		if (this.coordinatesGenerator) {
+			position = this.coordinatesGenerator.getCoordinate();
+			this.onSuccess(position);
+		}
 	},
 	
 	onSuccess: function(position){
@@ -94,15 +115,23 @@ PermGuide.Geolocation = {
 		this.lastPosition = position;
 		this.notify("refreshed", position);
 		
-		if (!this.time)
-		{
+		if (!this.time) {
 			this.time = new Date();
+			this.lastRatePosition = position;
 			this.notify("rateRefreshed", position);
 		}
 		
 		var newTime = new Date();
-		if (newTime.getTime() - this.time.getTime() > this.rateFrequency)
+		var distance = this._distance(
+			this.lastRatePosition.coords.latitude,
+			this.lastRatePosition.coords.longitude,
+			position.coords.latitude,
+			position.coords.longitude
+		);
+
+		if (newTime.getTime() - this.time.getTime() > this.rateFrequency || distance >= 30)
 		{
+			this.lastRatePosition = position;
 			this.time = newTime;
 			this.notify("rateRefreshed", position);
 		}
@@ -127,8 +156,13 @@ PermGuide.Geolocation = {
 		var lng = this.lastPosition.coords.longitude;
 		var lat = this.lastPosition.coords.latitude;
 		
-		lat1=this.deg2rad(lat);
-		lng1=this.deg2rad(lng);
+		return this._distance(lat, lng, lat2, lng2);
+	},
+
+	_distance: function(lat1, lng1, lat2, lng2){
+		
+		lat1=this.deg2rad(lat1);
+		lng1=this.deg2rad(lng1);
 		
 		lat2=this.deg2rad(lat2);
 		lng2=this.deg2rad(lng2);

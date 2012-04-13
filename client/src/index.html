@@ -29,6 +29,7 @@
 		<script type="text/javascript" src="permguide-interface.js"></script>
 		<script type="text/javascript" src="permguide-social.js"></script>
 		<script type="text/javascript" src="permguide-audio.js"></script>
+		<script type="text/javascript" src="permguide-routecoordinatesgenerator.js"></script>
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
@@ -347,8 +348,12 @@
 			$(".i18n").i18n();
 		
 			////
-			// Включим тестовую геолокацию.
+			// Инициализируем геолокацию.
 			PermGuide.Geolocation.init();
+			// Инициализируем генератор координат для тестирования сервиса
+			// хождения по маршруту.
+			PermGuide.Geolocation.coordinatesGenerator = PermGuide.RouteCoordinatesGenerator;
+			PermGuide.RouteCoordinatesGenerator.init();
 
 			// Закроем splash-screen
 			$("#splashScreen").css("display", "none");
