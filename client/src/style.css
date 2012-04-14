@@ -14,12 +14,13 @@ div {
 	padding: 0px;
 }
 
-.YMaps-logo {
-	user-select: none;
-}
-
-.YMaps-copyrights {
-	user-select: none;
+#dpi {
+	height: 1in;
+	left: -100%;
+	position: absolute;
+	top: -100%;
+	width: 1in;
+	visibility: hidden;
 }
 
 #body {
@@ -292,7 +293,18 @@ div {
  */
 .boxOverlay {
 	position: absolute;
-	z-index: 1;
+	//z-index: 1;
+}
+
+.boxOverlay .bg{
+	position: absolute;
+	left: -20px;
+	top: -20px;
+	width: 40px;
+	height: 40px;
+	
+	cursor: pointer;
+	display: none;
 }
 
 .boxOverlay .box{
@@ -809,6 +821,14 @@ div {
 /**
  * Стили карты.
  */
+.YMaps-logo {
+	user-select: none;
+}
+
+.YMaps-copyrights {
+	user-select: none;
+}
+
 .mapContainer {
 	width: 100%;
 	height: 100%;
@@ -1276,6 +1296,14 @@ div {
 		width: 60px;
 		height: 60px;
 		border-radius: 7px;
+	}
+	
+
+	.boxOverlay .bg{
+		left: -30px;
+		top: -30px;
+		width: 60px;
+		height: 60px;
 	}
 	
 /*

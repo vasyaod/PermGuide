@@ -53,10 +53,17 @@
 		};
 		
 		interfaceInit = function() {
+			////
+			// Расчитываем радиу клика в зависимости от pdi экрана.
+			var dpi = $("#dpi").height();
+			$("#dpi").css("display", "none");
 			
-			// Зададим мертвый радиус для клика в процентах экрана.
-			//PermGuide.deadRadius = $(window).width()*0.04;
-			PermGuide.deadRadius = 20;
+			if (!dpi)
+				dpi = 96;
+			
+			PermGuide.deadRadius = Math.round(dpi*0.1);
+			if (PermGuide.deadRadius < 15)
+				PermGuide.deadRadius = 15;
 			
 			////
 			// Вешаем событие на кнопку "Нажми, что бы закрыть"
@@ -603,7 +610,11 @@
 	</head>
 	<body>
 		<div id="body">
-		
+			
+			<div id="dpi">
+				<!-- Данный тэг нужен что бы узнать dpi экрана. -->
+			</div>
+			
 			<div id="splashScreen" style="">
 				<!-- div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div--> 
 				<div class="statusLine">&nbsp;</div>

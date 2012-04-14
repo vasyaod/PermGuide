@@ -587,19 +587,22 @@ PermGuide.ApplicationData = {
 	_load: function (urlList) {
 		
 		var url = urlList.pop();
-		
 		var self = this;
+
+		var cache = PermGuide.isPhonegap;
+		
 		$.ajax({
 			url: url,
-			cache: false,
+			cache: cache,
 			dataType: 'json',
 			success: function(data) {
 				self.data = data;
 				self.processing();
 			},
-			error:function() {
-				if (url.length > 0)
-					this._load(urlList);
+			error:function(jqXHR, textStatus, errorThrown) {
+				if (url.length > 0) {
+					self._load(urlList);
+				}
 				else
 					alert("Ошибка загрузки данных.");
 			}
@@ -617,7 +620,6 @@ PermGuide.ApplicationData = {
 
 		// Внимание, урлы применются с конца массива.
 		this._load(["http://permguide.ru/data.json",
-		            "file://data.json",
 		            "data.json"]);
 	}
 }

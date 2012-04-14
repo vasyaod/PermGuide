@@ -52,7 +52,7 @@ PermGuide.SimpleOverlay = function (geoPoint) {
 			'	</div>'
 			);	
 	// Устанавливаем z-index как у метки
-	element.css("z-index", YMaps.ZIndex.Overlay);
+	element.css("z-index", YMaps.ZIndex.OVERLAY);
 	
 	// Вызывается при добавления оверлея на карту 
 	this.onAddToMap = function (_map, _parentContainer) {
@@ -100,15 +100,23 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 		
 		element = $(
 			'	<div class="boxOverlay">'+
+			'			<div class="bg" style="display:none;"></div>'+
 			'			<div class="box"></div>'+
 			'			<div class="glow"></div>'+
 			'	</div>'
 		);
 				
 		// Устанавливаем z-index как у метки
-		element.css("z-index", YMaps.ZIndex.Overlay);
-				
+		//element.css("z-index", YMaps.ZIndex.OVERLAY);
+		element.find(".bg").css("z-index", YMaps.ZIndex.OVERLAY+1);
+		element.find(".box").css("z-index", YMaps.ZIndex.OVERLAY+10);
+		element.find(".glow").css("z-index", YMaps.ZIndex.OVERLAY+10);
+		
+		//if (PermGuide.isPhonegap)
+			element.find(".bg").css("display", "block");
+		
 		if (fn != null) {
+			element.find(".bg").touchclick(fn, true);
 			element.find(".box").touchclick(fn, true);
 		//	element.find(".glow").touchclick(fn, true);
 		}
