@@ -242,7 +242,7 @@
 
 				////
 				// Вешаем обработчики событий на "социальные кнопки".
-				$("#objectScreen .social img").touchclick( function (event) {
+				$("#objectScreen .social div").touchclick( function (event) {
 					var socilaNetwork =$(event.target).attr("class");
 					PermGuide.showShareWindow(socilaNetwork, PermGuide.ApplicationData.selectedObject);
 					//$("#objectScreen .social .buttons").css("display", "none");
@@ -536,9 +536,10 @@
 			</div>
 			<div class="social">
 				<div class="buttons">
-					<img src="img/vkontakte.png" class="vk"/>
-					<img src="img/twitter.png" class="tw"/>
-					<img src="img/odnoklassniki.png" class="od"/>
+					<div class="fb"></div>
+					<div class="vk"></div>
+					<div class="tw"></div>
+					<div class="od"></div>
 				</div>
 			</div>
 		</script>

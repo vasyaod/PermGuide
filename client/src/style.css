@@ -770,12 +770,32 @@ div {
 
 #objectScreen .social .buttons {
 	text-align: center;
-	font-size: 0.8em;
 }
 
-#objectScreen .social .buttons img{
+#objectScreen .social .buttons div{
 	padding: 5px;
 	cursor: pointer; 
+	height: 32px;
+	width: 32px;
+	display: inline-block;
+	background-position: center center;
+	background-repeat: no-repeat;	
+}
+
+#objectScreen .social .buttons div.fb{
+	background-image: url('img/facebook.png');
+}
+
+#objectScreen .social .buttons div.vk{
+	background-image: url('img/vkontakte.png');
+}
+
+#objectScreen .social .buttons div.tw{
+	background-image: url('img/twitter.png');
+}
+
+#objectScreen .social .buttons div.od{
+	background-image: url('img/odnoklassniki.png');
 }
 
 /**
@@ -1267,7 +1287,29 @@ div {
 		background-image: url('img/hires/photo1.png');
 		background-position: center 0px;
 	}
+
+	#objectScreen .social .buttons div{
+		padding: 8px;
+		height: 60px;
+		width: 60px;
+	}
 	
+	#objectScreen .social .buttons div.fb{
+		background-image: url('img/hires/facebook.png');
+	}
+	
+	#objectScreen .social .buttons div.vk{
+		background-image: url('img/hires/vkontakte.png');
+	}
+	
+	#objectScreen .social .buttons div.tw{
+		background-image: url('img/hires/twitter.png');
+	}
+	
+	#objectScreen .social .buttons div.od{
+		background-image: url('img/hires/odnoklassniki.png');
+	}	
+
 	.mapSliderPlace {
 		height: 5em;
 	}
