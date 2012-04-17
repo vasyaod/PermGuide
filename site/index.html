@@ -1,22 +1,25 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
- <title>Мобильный гид Перми</title>
- <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Мобильный гид Перми</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> 
+	
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	
+	<style type="text/css">
+	
+	/* ================================================ */
+	
+	</style>
 
- <link rel="icon" href="/favicon.ico" type="image/x-icon">
- <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> 
+		<script type="text/javascript" src="app/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="app/jquery.urldecoder.js"></script>
 
- <link rel="stylesheet" type="text/css" href="style.css" />
-
- <style type="text/css">
-
-   /* ================================================ */
-
- </style>
-
-		<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-		<script type="text/javascript" src="jquery.urldecoder.js"></script>
+		<script type="text/javascript" src="app/permguide-language.js"></script>
+		<script type="text/javascript" src="permguide-lr.js"></script>
 		
 		<script type="text/javascript">
 			$(document).ready(function() {
@@ -36,48 +39,60 @@
 				if (res.params) {
 					$.extend(urlObject.params, res.params);
 				}
+				
+				////
+				// Переведем интерфейс.
+				PermGuide.Language.init();
+				PermGuide.Language.setCurrentLanguage(urlObject.params.lang);
+				$(".i18n").i18n();	// Переведем интерфейс.
+				
+				////
+				// Загрузим iframe с приложением.
 				url = $.url.build(urlObject);
-				//$("#application").html('<iframe src="'+url+'"></iframe>');
 				$("#phone iframe").attr("src", url);
+				
+				$("#page-all").css("visibility", "visible");
+				$("#page-footer").css("visibility", "visible");
 			});
-		</script>
+	</script>
 
 </head>
 <body>
 	<div id="page-all">
 		<div class="w1">
       			<!-- ========================= All content here ============================= -->
-			<div id="header"><div id="logo"><img src="img/logo.png" align="left"><span>Мобильный<br/>гид Перми</span></div></div>
+			<div id="header"><div id="logo"><img src="img/logo.png" align="left" alt="Мобильный гид Перми" title="Мобильный гид Перми"><H1 class="i18n" >title</H1></div></div>
 			<div id="content">
 				<div id="phone"><iframe></iframe></div>
+				<div id="lang"><a href="/?lang=ru"><div id="ru"></div></a><a href="/?lang=en"><div id="en"></div></a></div>
 				<div class="info">
-					<p>Приложение помогает жителям и&nbsp;гостям города сориентироваться в&nbsp;многообразии культурных и&nbsp;исторических мест города. Наш гид расскажет вам о&nbsp;множестве достопримечательностей, проводит по&nbsp;интересным экскурсионным маршрутам. Вы&nbsp;можете не&nbsp;только читать текст и&nbsp;смотреть фотографии, но&nbsp;и&nbsp;слушать аудиогида. Программа может работать как при наличии соединения с&nbsp;интернетом, так и&nbsp;при его отсутствии. В&nbsp;данный момент информация предоставляется на&nbsp;русском и&nbsp;английском языке.</p>
+					<p class="i18n">text</p>
 					<p>
 					<div id="links">
 						<div class="section">
 							<img src="img/android-market-2-icon-48.png"/>
 							<div>
-								<a href="https://play.google.com/store/apps/details?id=ru.mobak.permguide" target="_blank">Приложение в Google Play</a>
+								<a href="https://play.google.com/store/apps/details?id=ru.mobak.permguide" target="_blank" class="i18n">Приложение в Google Play</a>
 							</div>
 							<div>
-								<a href="PermGuide.apk">Скачать приложение под Android с этого сайта</a>
+								<a href="PermGuide.apk" class="i18n">Загрузить приложение под Android с сайта</a>
 							</div>
 						</div>
 						<div style="clear: both;"></div>
 						<div class="section">
 							<img src="img/vkontakte-48.png"/>
 							<div>
-								<a href="http://vk.com/permguide" target="_blank">Группа в ВКонтакте</a>
+								<a href="http://vk.com/permguide" target="_blank" class="i18n">Группа в ВКонтакте</a>
 							</div>
 							<div>
-								<a href="http://vk.com/app2883907" target="_blank">Приложение в ВКонтакте</a>
+								<a href="http://vk.com/app2883907" target="_blank" class="i18n">Приложение в ВКонтакте</a>
 							</div>
 						</div>
 						<div style="clear: both;"></div>
 						<div class="section">
 							<img src="img/facebook48.png"/>
 							<div>
-								<a href="http://facebook.com/permguide" target="_blank">Страница в facebook</a>
+								<a href="http://facebook.com/permguide" target="_blank" class="i18n">Страница в facebook</a>
 							</div>
 						</div>
 					</div>

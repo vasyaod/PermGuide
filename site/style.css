@@ -1,62 +1,77 @@
-   html, body {height: 100%; margin: 0; padding: 0; font-family: Arial, sans-serif;}
+html,body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: Arial, sans-serif;
+}
 
-   * html #page-all {height: 100%;}
+* html #page-all {
+	height: 100%;
+}
 
-   body {
+body {
 	background: url("img/bg.gif");
-   }
+}
 
-   #page-all {
+#page-all {
 	background-color: #FFF;
 	margin: 0 auto -50px;
 	min-height: 100%;
 	width: 950px;
 	border-left: 5px solid #F00;
 	border-right: 5px solid #F00;
-   }
+	visibility: hidden;
+}
 
-   #page-empty {height: 70px; clear: both;}
+#page-empty {
+	height: 70px;
+	clear: both;
+}
 
-   #page-footer {
+#page-footer {
 	height: 50px;
 	margin: 0 auto;
 	width: 950px;
+	visibility: hidden;
 	/*background-color: #FFCC00;*/
-   }
+}
 
-   a	{
-		/* color: #00799c;*/
-	}
+a { /* color: #00799c;*/
+	
+}
 
-   #header {
+#header {
 	background: url("img/header_img.jpg");
 	background-position: center center;
 	background-repeat: no-repeat;
 	height: 200px;
 	position: relative;
-   }
+}
 
-   #footer {
+#footer {
 	text-align: center;
-   }
+}
 
-   #logo {
+#logo {
 	position: absolute;
 	bottom: -14px;
 	left: 20px;
-   }
+}
 
-   #logo span {
+#logo H1 {
 	color: #FFF;
 	font-size: 2em;
 	font-weight: bold;
-   }
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
 
-   #content {
+#content {
 	position: relative;
-   }
+}
 
-   #phone {
+#phone {
 	width: 307px;
 	height: 460px;
 	padding: 127px 26px 125px 31px;
@@ -64,32 +79,52 @@
 	right: 50px;
 	background: url("img/phone.png");
 	position: absolute;
-   }
+}
 
-   #phone iframe {
+#phone iframe {
 	width: 100%;
 	height: 100%;
 	border: 0;
 	background: #FFF;
-   }
+}
 
-   .info {
+.info {
 	padding: 20px 450px 20px 20px;
-   }
+}
 
-#links {
-	/* position: absolute; */
-	top: 0px; 
-	height: 140px; 
+#links { /* position: absolute; */
+	top: 0px;
+	height: 140px;
 	/*width: 500px;*/
 }
 
-#links .section {	
+#links .section {
 	padding: 10px;
-	
 }
 
-#links .section img{	
+#links .section img {
 	float: left;
 	margin-right: 10px;
+}
+
+#lang {
+	position: absolute;
+	top: 20px;
+	right: 10px;
+}
+
+#ru {
+	background-image: url("/img/Russia-Flag-32.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 32px;
+	height: 32px;
+}
+
+#en {
+	background-image: url("/img/United-Kingdom-flag-32.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 32px;
+	height: 32px;
 }
