@@ -18,6 +18,7 @@
 		<!-- Загрузка основного кода. -->
 		<script type="text/javascript" src="permguide-observable.js"></script>
 		<script type="text/javascript" src="permguide-lr.js"></script>
+		<script type="text/javascript" src="permguide-language.js"></script>
 		<script type="text/javascript" src="permguide-scheduler.js"></script>
 		<script type="text/javascript" src="permguide-touch-support.js"></script>
 		<script type="text/javascript" src="permguide-toggle-button.js"></script>
@@ -156,6 +157,13 @@
 				$("#aboutPerm").html(
 					$( "#aboutPermSectionTemplate" ).render(applicationData.data.info)
 				);
+				
+				$("#aboutPerm .copyright").each( function() {
+					this.addEventListener("touchstart", function(event){event.stopPropagation()});
+					this.addEventListener("touchmove", function(event){event.stopPropagation()});
+					this.addEventListener("touchend", function(event){event.stopPropagation()});
+				});
+				
 			});
 
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
