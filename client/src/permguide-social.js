@@ -4,7 +4,10 @@ if(typeof PermGuide == "undefined")
 	PermGuide = {};
 
 PermGuide.showShareWindow = function(socialNetwork, object) {
-	var documentUrl = "http://permguide.ru?objectId="+object.id;
+	
+	var documentUrl = "http://permguide.ru?" +
+	                  "lang="+PermGuide.Language.currentLanguage +  // Сохраним в урле информацию о языке.
+	                  "&objectId="+object.id;
 	var title = object.name;
 	var description = object.description;
 //	photo_image = $(window.cache[iteration]).children('img').attr('src') || '';
