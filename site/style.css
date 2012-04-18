@@ -62,7 +62,7 @@ a { /* color: #00799c;*/
 	color: #FFF;
 	font-size: 2em;
 	font-weight: bold;
-	display: inline;
+	display: inline-block;
 	margin: 0;
 	padding: 0;
 }
