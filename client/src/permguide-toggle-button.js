@@ -9,8 +9,8 @@
 			var self = this;
 	
 			var state = {
-				on: function (){},
-				off: function (){},
+				onHandler: function (){},
+				offHandler: function (){},
 				state: false,
 				stopPropagation: true,
 				
@@ -25,13 +25,32 @@
 						$(self).children(".off").css("display", "block");
 					}
 				},
+				
+				on: function() {
+					
+					if (this.state)
+						return;
+					this.state = true;
+					this.redraw();
+					this.onHandler();
+				},
+
+				off: function() {
+					
+					if (!this.state)
+						return;
+					this.state = false;
+					this.redraw();
+					this.offHandler();
+				},
+				
 				toggle: function() {
 					this.state = !this.state;
 					this.redraw();
 					if (this.state)
-						this.on();
+						this.onHandler();
 					else
-						this.off();
+						this.offHandler();
 				}
 				
 			};
@@ -44,6 +63,7 @@
 			$(this).touchclick(function(){
 				state.toggle();
 			}, state.stopPropagation);
+			
 			$(this).data("state", state);
 		});
 	};

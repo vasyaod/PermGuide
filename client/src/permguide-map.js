@@ -118,7 +118,7 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 		if (fn != null) {
 			element.find(".bg").touchclick(fn, true);
 			element.find(".box").touchclick(fn, true);
-		//	element.find(".glow").touchclick(fn, true);
+			element.find(".glow").touchclick(fn, true);
 		}
 		
 		return element;
@@ -416,9 +416,9 @@ PermGuide.LoadMapManager = {
 				YMaps.load($.proxy(self.yMapsLoaded, self));
 			}
 		});
-		
-		this.timeoutId = setTimeout($.proxy( function() {
-			clearTimeout(this.timeoutId);
+		var timeoutId;
+		timeoutId = setTimeout($.proxy( function() {
+			clearTimeout(timeoutId);
 			this.timeoutId1 = setTimeout($.proxy( this.yMapsFail, this), 1000);
 		}, this), 1000);
 		
@@ -681,8 +681,14 @@ PermGuide.MapManager = function (yMapElement, mode){
 			
 			var placemark = new PermGuide.BoxOverlay(
 				new YMaps.GeoPoint(object.point.lng, object.point.lat),
+				// Обработчик события клика на ящик на карте.
+				// При первом клике, выделяем объект.
+				// При втором клике, если он произошел, отобрадаем информацию об объекте.
 				$.proxy(function () {
-					this._selectObject(overlayState);
+					if (this.selectedOverlayState == overlayState)
+						PermGuide.ApplicationData.selectObject(overlayState.object);
+					else
+						this._selectObject(overlayState);
 				}, this)
 			);
 			overlayState.overlay = placemark;
@@ -843,8 +849,13 @@ PermGuide.MapManager = function (yMapElement, mode){
 		// Если объект находится за пределами карты, то центрируем по нему.
 		var coordBounds = this.yMap.getBounds();
 		var point = new YMaps.GeoPoint(object.point.lng, object.point.lat)
-		if (centred || !coordBounds.contains(point))
-			this.yMap.setCenter(point)
+		if (centred || !coordBounds.contains(point)) {
+			var timeoutId;
+			timeoutId = setTimeout($.proxy( function() {
+				clearTimeout(timeoutId);
+				this.yMap.setCenter(point);
+			}, this), 10);
+		}
 
 		this.notify("mapObjectSelected", object);
 	}

@@ -231,6 +231,7 @@
 						return;
 					tag.activate();
 					objectsMapManager.selectObject(object, true);
+					$("#switchObjectMode").data("state").on();
 					
 					PermGuide.ScreenManager.back();
 					PermGuide.ScreenManager.goToPage(1);
@@ -263,12 +264,12 @@
 			////
 			// Переключение между картой и списком объектов.
 			$("#switchObjectMode").toggleButton({
-				on: function() {
+				onHandler: function() {
 					$("#objectsCatalog").css("display", "none");
 					$("#objectsMapContainer").css("display", "block");
 					$("#objectsMapSlider").data("state").resize();
 				},
-				off: function() {
+				offHandler: function() {
 					$("#objectsMapContainer").css("display", "none");
 					$("#objectsCatalog").css("display", "block");
 				},
@@ -278,12 +279,12 @@
 			////
 			// Переключение между картой и списком объектов.
 			$("#switchRouteMode").toggleButton({
-				on: function() {
+				onHandler: function() {
 					$("#routesCatalog").css("display", "none");
 					$("#routesMapContainer").css("display", "block");
 					$("#routesMapSlider").data("state").resize();
 				},
-				off: function() {
+				offHandler: function() {
 					$("#routesMapContainer").css("display", "none");
 					$("#routesCatalog").css("display", "block");
 				},
