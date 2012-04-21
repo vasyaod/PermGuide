@@ -34,6 +34,12 @@ if(typeof PermGuide == "undefined")
 				listener: null,
 				
 				/**
+				 * Переключатель полсле анимации.
+				 */
+				beforeAnimationListener: null,
+				afterAnimationListener: null,
+				
+				/**
 				 * Данный флаг говорит о том что сладер надо зациклить.
 				 */
 				loop: false,
@@ -98,8 +104,13 @@ if(typeof PermGuide == "undefined")
 				},
 				
 				_callListener: function() {
-					if (this.listener != null)
+					if (this.listener)
 						this.listener(this.index, $(this.containerElement).children(".slide").slice(this.index));
+				},
+				
+				_callBeforeAnimationListener: function() {
+					if (this.beforeAnimationListener)
+						this.beforeAnimationListener(this.index);
 				},
 				
 				/**
@@ -140,6 +151,8 @@ if(typeof PermGuide == "undefined")
 				 * Устанавливает текущий слайд по его индексу.
 				 */
 				select: function(index, fast) {
+					this._callBeforeAnimationListener();
+
 					if (this.index == index)
 						return;
 					this.index = index;
@@ -175,6 +188,8 @@ if(typeof PermGuide == "undefined")
 					if (!this.canDraged)
 						return;
 					
+					this._callBeforeAnimationListener();
+
 					this.x = event.changedTouches[0].clientX;
 					this.y = event.changedTouches[0].clientY;
 					this.containerPosition = $(this.containerElement).offset();
@@ -249,11 +264,13 @@ if(typeof PermGuide == "undefined")
 					if (this.index < this.slideCount-1)
 					{
 						this.index ++;
+						this._callBeforeAnimationListener();
 						this._callListener();
 					}
 					else if(this.loop)
 					{
 						this.index = 0;
+						this._callBeforeAnimationListener();
 						this._callListener();
 					}
 					this.refresh();
@@ -264,11 +281,13 @@ if(typeof PermGuide == "undefined")
 					if (this.index > 0)
 					{
 						this.index --;
+						this._callBeforeAnimationListener();
 						this._callListener();
 					}
 					else if(this.loop)
 					{
 						this.index = this.slideCount-1;
+						this._callBeforeAnimationListener();
 						this._callListener();
 					}
 					this.refresh();
@@ -286,6 +305,7 @@ if(typeof PermGuide == "undefined")
 					
 					var self = this;
 					this.canDraged = false;
+					
 					if (fast) {
 						$(this.containerElement).css("left", -position);
 						self.canDraged = true;
@@ -294,6 +314,8 @@ if(typeof PermGuide == "undefined")
 							left: -position
 						}, 500, function() {
 							self.canDraged = true;
+							if (self.afterAnimationListener)
+								self.afterAnimationListener(self.index);
 						});
 					}
 				}

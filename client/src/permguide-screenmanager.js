@@ -150,6 +150,26 @@ PermGuide.ScreenManager = {
 			$(screenElement).find(".pageScroller .pageIndicator").removeClass("active");
 			$(screenElement).find(".pageScroller .pageIndicator").slice(index, index+1).addClass("active");
 		};
+		
+		pageSlider.beforeAnimationListener = function(index) {
+			$(screenElement).find(".pageSlide").css("visibility", "visible");
+			$(screenElement).find(".map").css("display", "block");
+		};
+
+		pageSlider.afterAnimationListener = function(index) {
+			$(screenElement).find(".pageSlide").css("visibility", "hidden");
+			$(screenElement).find(".pageSlide").slice(index, index+1).css("visibility", "visible");
+			$(screenElement).find(".map").css("display", "none");
+
+			$(screenElement).find(".map").css("display", "none");
+			if (index == 1) {
+				$(screenElement).find("#objectsMap").css("display", "block");
+			} else if(index == 2) {
+				$(screenElement).find("#routesMap").css("display", "block");
+			}
+		}
+		
+		
 		pageSlider.listener(0); // Подсветим сразуже первую страницу.
 		
 		$(screenElement).find(".pageScroller .pageIndicator").touchclick( function(event) {

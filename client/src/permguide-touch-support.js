@@ -224,7 +224,7 @@ PermGuide.deadRadius = 15;
 					x: event.changedTouches[0].clientX,
 					y: event.changedTouches[0].clientY
 				}
-				
+				//console.log("down");
 				return true;
 			}
 			
@@ -237,6 +237,7 @@ PermGuide.deadRadius = 15;
 					return;
 				var touchclickStateTmp = touchclickState;
 				touchclickState = null;
+				//console.log("up");
 				if (Math.abs(event.changedTouches[0].clientX - touchclickStateTmp.x) < PermGuide.deadRadius &&
 					Math.abs(event.changedTouches[0].clientY - touchclickStateTmp.y) < PermGuide.deadRadius) {
 					return fn(event);

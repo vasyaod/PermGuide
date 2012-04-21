@@ -61,11 +61,21 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 	}
 	
 	// Обработает события на переключение слайдера объектов.
-	$(sliderElement).data("state").listener = function(index, element) {
+	var slider = $(sliderElement).data("state");
+	slider.listener = function(index, element) {
 		var objectId = element.attr("_id");
 		mapManager.selectObjectById(objectId);
 	};
+	
+	slider.beforeAnimationListener = function(index) {
+		$(sliderElement).find(".slide").css("visibility", "visible");
+	};
 
+	slider.afterAnimationListener = function(index) {
+		$(sliderElement).find(".slide").css("visibility", "hidden");
+		$(sliderElement).find(".slide").slice(index, index+1).css("visibility", "visible");
+	};
+	
 	// Перерерандарим слайдер объектов.
 	PermGuide.ApplicationData.attachListener(mode+"VisibleChanged", renderSlider);
 	

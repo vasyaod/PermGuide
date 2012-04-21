@@ -177,7 +177,7 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 	};
 }
 
-PermGuide.CanvasLayer = function (element) {
+PermGuide.CanvasLayer = function () {
 	
 	var map = null;
 	var routes = [];
@@ -185,6 +185,8 @@ PermGuide.CanvasLayer = function (element) {
 	var parentContainer = null;
 	var smoothZoom = false;
 	
+	var element = $('<canvas class="canvasLayer"></canvas>');
+		
 	// Устанавливаем z-index как у метки
 	element.css("z-index", YMaps.ZIndex.MAP_LAYER+1);
 	// Получим контекст канвы.
@@ -318,8 +320,7 @@ PermGuide.CanvasLayer = function (element) {
 	};
 	
 	this.repaint = function () {
-		//alert($(element).attr("id"));
-		context.clearRect(0, 0, parentContainer.width(), parentContainer.height());
+		context.clearRect(0, 0, $(element).attr("width"), $(element).attr("height"));
 		
 		if (smoothZoom)
 			return;
@@ -446,7 +447,22 @@ PermGuide.LoadMapManager = {
 }
 //Расширим до Observable.
 $.extend(PermGuide.LoadMapManager, new PermGuide.Observable());
+/*
+PermGuide.Map = function (mapElement) {
+	
+	var container = $('<div style="position:"></div>');
+	var canvas = $('<canvas class="canvasLayer"></canvas>');
+	canvas.appendTo(mapElement);
+	
+	canvas.attr("width", mapElement.width());
+	canvas.attr("height", mapElement.height());
+	
+};
 
+PermGuide.Map.prototype = {
+	
+};
+*/
 /**
  * Менеджер управления картой и объектами на карте.
  */
@@ -467,8 +483,13 @@ PermGuide.MapManager = function (yMapElement, mode){
 	// Инициализируем маршруты.
 	this.overlayStates = [];
 	this.routeStates = [];
+
+	//this._map = PermGuide.Map(this.yMapElement);
+	//PermGuide.Scheduler.finished("ObjectsMapInit");
+	//PermGuide.Scheduler.finished("RoutesMapInit");
 	
 	this.yMapsLoaded = function() {
+		
 		// Создает экземпляр карты и привязывает его к созданному контейнеру
 		this.yMap = new YMaps.Map(this.yMapElement);
 		this.yMap.enableScrollZoom();
@@ -512,12 +533,8 @@ PermGuide.MapManager = function (yMapElement, mode){
 		*/
 
 		// Инициализируем собственный слой. 
-		if ($(this.yMapElement).parent().children("canvas").length) {
-			this.canvasLayer = new PermGuide.CanvasLayer(
-				$(this.yMapElement).parent().children("canvas")
-			);
-			this.yMap.addLayer(this.canvasLayer);
-		}
+		this.canvasLayer = new PermGuide.CanvasLayer();
+		this.yMap.addLayer(this.canvasLayer);
 		
 		if (PermGuide.ApplicationData.loaded)
 			this.dataLoaded(PermGuide.ApplicationData);
@@ -739,54 +756,59 @@ PermGuide.MapManager = function (yMapElement, mode){
 	this.visibleChanged = function() {
 		if (this.yMap == null)
 			return;           // Если карта еще не загружена, то нам здесь делать нечего. 
-		
-		$.each(this.overlayStates, $.proxy(function(index, overlayState) {	
-			var objectIsVisible = PermGuide.ApplicationData.objectIsVisible(overlayState.object, this.mode);
 
-			if ( objectIsVisible )
-			{
+		var timeoutId;
+		timeoutId = setTimeout($.proxy( function() {
+			clearTimeout(timeoutId);
+
+			$.each(this.overlayStates, $.proxy(function(index, overlayState) {	
+				var objectIsVisible = PermGuide.ApplicationData.objectIsVisible(overlayState.object, this.mode);
+	
+				if ( objectIsVisible )
+				{
+					
+					if (this.mode == "objects")
+						overlayState.overlay.refreshImage(overlayState.object.objectColor);
+					if (this.mode == "routes")
+						overlayState.overlay.refreshImage(overlayState.object.routeColor);
+					
+					if (!overlayState.onmap)
+					{
+						overlayState.onmap = true;
+						overlayState.overlay.show();
+						this.yMap.addOverlay(overlayState.overlay);
+					}
+	
+				}
+				else if (!objectIsVisible && overlayState.onmap)
+				{
+					overlayState.onmap = false;
+					//overlayState.overlay.hide();
+					this.yMap.removeOverlay(overlayState.overlay);
+				}
+	
+				// Если данный объект является выделленным, то подсветим его.
+				if (overlayState == this.selectedOverlayState)
+					overlayState.overlay.showGlow();
 				
-				if (this.mode == "objects")
-					overlayState.overlay.refreshImage(overlayState.object.objectColor);
-				if (this.mode == "routes")
-					overlayState.overlay.refreshImage(overlayState.object.routeColor);
-				
-				if (!overlayState.onmap)
-				{
-					overlayState.onmap = true;
-					overlayState.overlay.show();
-					this.yMap.addOverlay(overlayState.overlay);
-				}
-
-			}
-			else if (!objectIsVisible && overlayState.onmap)
-			{
-				overlayState.onmap = false;
-				//overlayState.overlay.hide();
-				this.yMap.removeOverlay(overlayState.overlay);
-			}
-
-			// Если данный объект является выделленным, то подсветим его.
-			if (overlayState == this.selectedOverlayState)
-				overlayState.overlay.showGlow();
-			
-		}, this));
-
-		if (this.canvasLayer && this.mode == "routes") {
-			$.each(this.routeStates, $.proxy(function(index, routeState) {	
-				var routeIsVisible = PermGuide.ApplicationData.routeIsVisible(routeState.object);
-				if (routeIsVisible && !routeState.onmap)
-				{
-					routeState.onmap = true;
-					this.canvasLayer.addRoute(routeState.route);
-				}
-				else if (!routeIsVisible && routeState.onmap)
-				{
-					routeState.onmap = false;
-					this.canvasLayer.removeRoute(routeState.route);
-				}
 			}, this));
-		}
+	
+			if (this.canvasLayer && this.mode == "routes") {
+				$.each(this.routeStates, $.proxy(function(index, routeState) {	
+					var routeIsVisible = PermGuide.ApplicationData.routeIsVisible(routeState.object);
+					if (routeIsVisible && !routeState.onmap)
+					{
+						routeState.onmap = true;
+						this.canvasLayer.addRoute(routeState.route);
+					}
+					else if (!routeIsVisible && routeState.onmap)
+					{
+						routeState.onmap = false;
+						this.canvasLayer.removeRoute(routeState.route);
+					}
+				}, this));
+			}
+		}, this), 600);
 	};
 	
 	/**
@@ -833,9 +855,6 @@ PermGuide.MapManager = function (yMapElement, mode){
 	 * Внутренний метод, вызывается при выборе объекта на карте.
 	 */
 	this._selectObject = function(overlayState, centred) {
-		// Если этот объект уже выделен, то выходим из метода.
-		if (this.selectedOverlayState == overlayState)
-			return;
 		
 		if (this.selectedOverlayState) {
 			this.selectedOverlayState.overlay.hideGlow(); 
@@ -854,7 +873,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 			timeoutId = setTimeout($.proxy( function() {
 				clearTimeout(timeoutId);
 				this.yMap.setCenter(point);
-			}, this), 10);
+			}, this), 500);
 		}
 
 		this.notify("mapObjectSelected", object);
