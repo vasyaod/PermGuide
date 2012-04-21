@@ -2320,6 +2320,590 @@
             "tags": [
                 10
             ]
+        },
+         {
+            "id": 75,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Храм-часовня святителя Стефана Пермского",
+                "en": "Saint Stefan Velikopermsky Chapel"
+            },
+            "point": {
+                "lat": 58.013239,
+                "lng": 56.237429
+            },
+            "description": {
+                "ru": "Часовня была заложена в память 500-летия проповеди Стефана Пермского, освящена в 1887 г. Здание было построено в русском стиле, изначально было одноэтажным. В советское время здание было перестроено. В июне 1920 г. в газете «Звезда» появилась заметка о том, что в бывшей часовне открываются курсы «Эсперо», сообщалось о значении языка эсперанто, его положении в России и о том, что будет исполнен «Интернационал» на международном языке. В 2002 году увидел свет детективный роман Леонида Юзефовича «Казароза». Некоторые события романа происходят в 1920 году в Перми в клубе «Эсперо» в бывшей часовне Стефана Пермского. Именно здесь была убита главная героиня романа певица Казароза.\nПрототипом романной Казарозы послужила двоюродная бабушка автора — Бэлла Георгиевна Шеншева, которая действительно была певицей и выступала под псевдонимом Зинаида Казароза (в переводе с испанского — «розовый домик»). Она была знакома с Александром Блоком, Михаилом Кузминым, Осипом Мандельштамом. В 1929 году она покончила с собой в Берлине.",
+                "en": "Surprisingly but Stefan Velikopermsky, a person so revered by the people of our city, had never been to Perm. To be more exact he had never visited the exact location of the modern Perm region. \nThe sanctifier Stefan is compared to Cyril and Methodius. He created the Zyryan alphabet, translated church books to the language of Komi-Zyryans, and headed the newly created Perm Eparchydiocese. All of this promoted the expansion of Christianity to the lands of Perm Velikaya. All of this served to the expansion of Christianity to the lands of Perm Velikaya. That is why Stefan the Great is considered to be the baptizer christener of this land. \nStefan’s ideas of service to people are reflected depicted in the Perm coat of arms – a silver bear wearing a golden New Testament under a cross on its back.\nA chapel of red brick under an octagonal hipped dome was constructed from donations by the citizens of Perm Orthodox Holy Brotherhood of Saint Stefan. It was sanctified on the 500th anniversary of Stefan’s ministrationministry, in 1887.\nIn 1920 the “Espero” club was opened here. The universal Esperanto language enthusiasts dreamed of the fraternal alliance with proletarians of all countries. \nThis club and mysterious events connected to it were used as the basis of the “Cazaroza” novel written by our townsman writer Leonid Uzefovich. Mysterious events connected to the club were made to be the basis of the “Cazaroza” novel written by our townsman writer Leonid Uzefovich. Similar to Stephan, the singer Zinaida Kazaroza, a real historic character, had never been to Perm. \nNow her name is forever connected to our city. Local legend has it that this “dancer with the voice of a bird of Paradise” died on July 1, 1919 in the Stephan Velikopermsky Chapel at a party, celebrating the anniversary of the liberation of the city from Kolchak. \nLater on, the chapel housed a school and then a kindergarten. Nowadays services are again held here . There is also a center of religious education in one wing."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Комсомольский проспект, 18",
+                    "en": "Komsomolsky pr., 18"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/2.jpg"
+        },
+        {
+            "id": 76,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Пермская государственная художественная галерея",
+                "en": "Perm State Art Gallery"
+            },
+            "point": {
+                "lat": 58.0164,
+                "lng": 56.234636
+            },
+            "description": {
+                "ru": "Исторический и символический центр города, бывший кафедральный собор губернской Перми. Место для городского храма лучше не придумать: на вершине горы Слудки, на изгибе Камы. Собор с колокольней на горе – первое, что видели путешественники, прибывшие в Пермь по реке. Посещение Спасо-Преображенского собора входило в обязательную программу пребывания в городе и именитых гостей, и простых путешественников. В храме стоял на праздничном богослужении император Александр I и будущий император Александр II, М.М. Сперанский, В.А. Жуковский, общественные деятели, учёные и поэты. \nВ начале 1920-х храм был закрыт, но зданию повезло: в бывшем соборе открыли художественную галерею, и здание сохранило свою роль духовно-культурного центра. Гости города по-прежнему посещают это здание: галерея обладает прекрасной коллекцией живописи, скульптуры и предметов декоративно-прикладного искусства. Жемчужин экспозиции – «пермские боги», уникальное собрание пермской деревянной скульптуры. \nОт работников галереи мы можем услышать рассказы о таинственной жизни старого собора. По вечерам оставаться в галерее страшно: слышатся шаги, скрипы, сами собой открываются двери. Бывает, неожиданно срабатывает сигнализация, но милиция, приезжающая на вызов, не обнаруживает никаких нарушений. Говорят, пермские боги по ночам ведут свою тайную жизнь и бродят по собору.",
+                "en": "The Cathedral Square reconstructed in 2009 surprisingly accumulates everything that can be associated as emblematic for Perm. There is a fabulous view of the Kama River and the Perm State Art Gallery on the one side, the lively Komsomolsky Prospekt meanders downtown. other. The statue of Nikolay the Sanctifier towers over the square where the main street begins. the Perm community in Moscow presented this monument to the city. Two buildings frame the square: the former Seminary and the former Spaso-Preobrazhensky Cathedral. \nThe strict and routine way of teaching notwithstanding, many highly educated people graduated from the Seminary, which was built in 1831. Among those who graduated from the Seminary were the radio inventor Alexandr Popov, and the writers Pavel Bazhov and Dmitry Mamin-Sibiryak. During Soviet times a Military School forair technicians worked in the building; Its most famous graduate was Alexander Pokryshkin, three times the Hero of the Soviet Union, who shot down 59 Nazi aircraft during WWII. The Perm Military Commanding Engineering Missile Academy occupied the building between 1962 and 2003.\nOpposite the former Seminary is the former Spaso-Preobrazhensky Cathedral built with the stones of the disassembled Pyskorsky Monastery. The bell-tower was 67 meters high but during the Civil War the tower was hit with a shell. The top floor was destroyed. \nNow the building of the cathedral houses the famous Perm State Gallery; and in this building one can see the unique collection of Perm wooden sculptures. \nIf cities had hearts, the heart of Perm would be here, in the Cathedral Square."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Комсомольский проспект, 4",
+                    "en": "Komsomolsky pr., 4"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/6.jpg"
+        },
+        {
+            "id": 77,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "«Садко», бизнес-центр",
+                "en": "Business center «Sadko»"
+            },
+            "point": {
+                "lat": 58.016147,
+                "lng": 56.233261
+            },
+            "description": {
+                "ru": "Глядя на это вполне современное здание, сложно представить, что построили его в первой трети 19 века. Изначально здание было трёхэтажным и располагалась в нём Пермская духовная семинария. Семинария была видным учебным заведением на Урале. Кроме богословских дисциплин в семинарии преподавали естественные и точные науки, гуманитарные науки, древние (латинский и древнегреческий) и новые (французский, немецкий) языки. Интересно, что именно в стенах этого духовного заведения возник тайный кружок революционеров-демократов. Его участники называли себя «Общество Вольнодумцев». Возглавлял его Александр Иконников, человек широко образованный, преподаватель семинарии, а затем чиновник особых поручений при губернаторе. В его доме была открыта частная библиотека, в которой имелся тайный фонд, состоящий из прокламаций. Впоследствии Иконников был арестован и сослан в Сибирь. Члены «Общества вольнодумцев» читали запрещённую литературу, распространяли прокламации на заводах Пермской губернии. В 1893-1899 гг. здесь учился уральский сказочник Павел Бажов. Во время учёбы он принимал участие в революционном движении, распространял нелегальную литературу, выполнял обязанности заведующего тайной ученической библиотекой. Семинаристы принимали участие во всех революционных событиях города в 1905 и 1917 годах.",
+                "en": ""
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Комсомольский проспект, 1",
+                    "en": "Komsomolsky pr., 1"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [
+                4
+            ]
+        },
+        {
+            "id": 78,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Сквер им. Ф.М. Решетникова",
+                "en": "Reshetnikov’s Public Garden"
+            },
+            "point": {
+                "lat": 58.01374,
+                "lng": 56.224188
+            },
+            "description": {
+                "ru": "Набережный сад, сад Багратиона, Гулянье над рекой, сквер им. Решетникова – каких только названий не носил этот липовый сквер. Но самым живучим оказалось забавное – «козий загон». Местный летописец Верхоланцев объяснял это весьма просто и скучно:\n«В 60-е годы сад был назван «садом Багратиона», в честь генерала, привезшего в Пермь весть об освобождении крестьян, но это название не прижилось и превратилось в комичное название «козьего загона», так как этих животных, мирно пощипывающих травку, можно было часто видеть в этом саду». \nОдин из путешественников, проезжающих через Пермь, записал более колоритную историю. Один из местный жителей объяснил название так: «Потому что мы наших супружниц сюда для прохлады по вечерам загоняем». \n\nВ Козьем Загоне были замечены многие известные литераторы, время от времени наезжавшие в Пермь. Владимир Короленко назначал здесь встречи политическим ссыльным. В толпе гуляющих они привлекали к себе меньше внимания. Фёдора Решетникова отпугнула цена входного билета, а когда литератор хотел с досады выпить рюмку водки, то и её цена оказалась неподъемной – 8 копеек. Плюнул да и пошёл прочь. Привлечённый ярким освещением и шумом гуляющей публики, А.П. Чехов, согласно пермскому анекдоту, тоже хотел посетить привлекательный сквер. Но в пропылённом дорожном сюртуке он не соответствовал чистой публике, фланирующей в Загоне. Поэтому в его желании ему было отказано. Тогда обиженный классик потребовал указать ему дорогу до ближайшего публичного дома, где ему в любом виде будут рады.",
+                "en": "Professor of the Perm University A.G. Genkel wrote “Perm occupies a surprisingly happy place on the Kama”. The river has always seemed to be a full participant of city life and historical events. The Reshetnikov’s Public Garden laid out on a high bank of the Kama is one of the favorite walking places of Perm citizens. Though it was commonly and unromantically called a Goat Corral, everybody fell into a poetic mood here. From this high point strollers watched passing steamboats and welcomed the break-up of the ice in spring.\n“The view of the Kama is especially good at sunset and during white nights in June, when there is almost no darkness”, wrote local historian Vladimir Verkholanzev. \nThe Garden was a place of rest and mediation for the disgraced State Council Secretary Mikhail Speransky.\n Anton Chekhov had an amusing incident here – when he wanted to enter the Garden he could not open the gate as it was blocked by a pile of snow.\nIn 1882 an orchestra began playing in the Garden; in 1907 linden treeswere planted and a a beautiful wooden fence was constructed. Then the park got the name of the Quay Garden. A bit later, an azure little cottage with beautiful little towers in the Old Russian style appeared – it was the summer premise of the Perm Exchange. The building did not survive.\nIn 1861 the Perm community tried to rename the park Bagration Garden, however the name did not stick. But every citizen of Perm knows the name of the democratic writer Fyodor Reshetnikov. The park was renamed in his honor in 1928..\nIn 1985 t a monument of the “Heroes of the Civil War” was dedicated there."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "ул. Монастырская",
+                    "en": ""
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": []
+        },
+        {
+            "id": 79,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Пермский краевой музей",
+                "en": "Meshkov’s House – The Perm Local History Museum"
+            },
+            "point": {
+                "lat": 58.018717,
+                "lng": 56.246601
+            },
+            "description": {
+                "ru": "Особняк здесь построили ещё в 1820-м. По легенде, его проект принадлежал И.И. Свиязеву. Но первоначальное здание сильно пострадало от пожара 1842 года, было заброшено прежними владельцами и 40 лет простояло в развалинах. В 1889 году руины и усадьбу приобрёл пермский богач Николай Васильевич Мешков. Для строительства нового особняка он пригласил архитектора Турчевича.\nНиколай Мешков – очень колоритная фигура в старой Перми. Удачливый предприниматель-пароходчик, миллионер, он был щедрым благотворителем, давал деньги и американским духоборам и русским революционерам всех мастей. Занятно описывал его времяпрепровождение Леонид Юзефович в романе «Казароза». Но своей паровой яхте «Олимпия» Мешков собирал, бывало, вместе большевиков, эсеров, меньшевиков, и в хорошие летние вечера плавал с ними по камее и Сылве, слушал партийные диспуты, выступая в них третейским судьёй. Кому присуждал в споре победу, того и субсидировал. Когда Мешков перестал давать деньги партийцам, революционные друзья попытались его яхту взорвать. Даже если это и художественный вымысел, то весьма колоритный, под стать герою.",
+                "en": "“The most architecturally outstanding building in the whole city” – that was the opinion of the ship owner Meshkov’s contemporaries regarding his house. Nikolay bought this plot of land in the year 1885 together along with the ruins of a mansion that burnt during the Big Fire in 1842. The building was reconstructed by architect A.B. Turchevich With a clear and bold skyline, ambitious asymmetry due to the slope of pavement and luxurious elegant molding –this house was to be the face of the city for travelers sailing along the Kama river. \nIt was Meshkov who persuaded the authorities to open a university in Perm He gave 500 thousand roubles for its establishment, and transferred 3 buildings of the House of educational institutions to the university which were built at his own expense. Thoughhe only finished elementary school, Meshkov became an honored citizen. He had the reputation of an intellectual and versatile man. Among Meshkov’s acquaintances and guests were such writers as Alexander Kuprin and Maksim Gorky, Fyodor Shalyapin, the famous opera singer and Ivan Sytin, the book publisher. Meshkov’s good friend was professor Sergey Chaplygin, Russian physicist, the founder of hydro- and aerodynamics.\nMeanwhile Nikolay lived in his house comfortably His rooms were often used for different public meetings, and the steamship line office was on the upper floor . The first art exhibition in Perm history was also held inMeshkov’s house. \nIn Soviet times,the 3rd army headquarters of the Eastern front line was there along with the Medical Faculty of the university, a restaurant, the “Ural” hotel, and the administration of the Kama inland navigation company. Only in the year 2008 did the mansion again become the centre of bright and interesting events–Perm Local History Museum was housed there."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "ул. Монастырская, 11",
+                    "en": "Monastirskaya str, 11"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/13.jpg"
+        },
+        {
+            "id": 80,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Пермская государственная сельскохозяйственная академия им. Прянишникова",
+                "en": "Mariinsky Women’s Grammar School - Perm State Agricultural Academy named after D.N. Pryanishnikov"
+            },
+            "point": {
+                "lat": 58.016252,
+                "lng": 56.249009
+            },
+            "description": {
+                "ru": "В 1860 году в Перми было открыто Мариинское женское училище, которое в 1871 году было преобразовано в гимназию. В 1883 году Дума выделила деньги на строительство нового каменного здания для гимназии и установила место, где когда-то стоял дом Елисея Леонтьевича Чадина. Злоключения последнего детально описаны Михаилом Осоргиным в рассказе «Пирог с адамовой головой»: экономный Чадин приказал рабочим использовать при постройке его дома плиты с заброшенных могил Егошихи. Возмущённые рабочие замуровали такую плиту прямо в печку, и гости Чадина чуть не отведали пирога с оттиском черепа. Чадина, который увидел на своём именинном пироге символы смерти, хватил удар от которого он так и не оправился. Дом его долго стоял заброшенным. Говорят, в нём поселилась кикимора, которая не давала строить что-либо на этом месте. Гимназию возвели с большим трудом, переломав множество инструментов",
+                "en": "The building constructed in 1896of red brick and reminding one of a medieval castle, is a cultural monument of federal significance . \nOne of the most fascinating Perm horror stories is connected with it. In the 1840-s Elisey Chadin, a rather elderly person, an imposing but very stingy nobleman built a house there. The construction seemed too expensive to him and one day he saw many overgrown cast-iron gravestones in the cemetery…and a stove was built of them in the house. \nOn his feast day Chadin invited prominent people of the city. When the cake for the party was unveiled- a skull and crossbones! - was plainly seen. The guests ran away, and the host became worried, had a stroke and passed away. \nAfter that people began to gossip about the house with an “old hag” remained standing after the Big fire in 1842. Though 300 Perm houses burned down, Chadin’s house remained standing. People found only one explanation for that miracle – the presence of the devil!!! Allegedly they saw an old hag with a white kerchief who whizzed in the window during the fire and fought back the tongues of the flame. No wonder the bad house was destroyed by the city’s decision. \nIt was on that place where the Mariinsky Women’s Grammar School was built in 1887. It was named so after the widow empress Maria Aleksandrovna who helped female education development in Russia. The author of the project of this beautiful palace in modern style was the academician of architecture Dutel. \nIn the Soviet times this building was occupied by the agronomical faculty of the Perm University, which later became the Agricultural Institute, and since 1995 – by the Perm State Agricultural Academy named after D. Pryanishnikov."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "ул. Петропавловская,23",
+                    "en": "Petropavlovskaya str., 23"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/24.jpg"
+        },
+        {
+            "id": 81,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Управление ФСБ России по Пермскому краю",
+                "en": "The Building of Federal Security Service for Perm Region"
+            },
+            "point": {
+                "lat": 58.015571,
+                "lng": 56.248299
+            },
+            "description": {
+                "ru": "В 1888 году по проекту архитектора А.Б. Турчевича для купеческой семьи Тупицыных был построен оригинальный трёхэтажный каменный особняк с фигурной кладкой и двумя башенками по углам. Основатель династии, Ефграф Козьмич Тупицын известен как химик-изобретатель, разработчик технологии изготовления фосфора. \n\nУроженец Владимирской губернии, Ефграф Козьмич, в 14 лет попал в Казань. Там устроился в аптечный магазин, где его заметил и взял к себе в лабораторию известный русский химик Н. Н. Зинин. Годы работы в химической лаборатории были превосходной школой для будущего талантливого предпринимателя. \nВ 1860 г. Тупицын переселился в Пермь. Здесь он открыл свою небольшую аптечно-химическую торговлю, а при своей домашней бане устроил химическую лабораторию. В этой импровизированной лаборатории он начал работать над технологией выработки фосфора. Получив положительные результаты и изучив технические приемы, Ефграф Козьмич в декабре 1871 г. открыл на речке Данилихе в Перми первый русский фосфорный завод. В течении 6 лет Тупицын обошел всех своих конкурентов и к 1877 г. его фосфорный завод производил 63 % используемого в России фосфора. По образцу пермского завода начали строиться фосфорные заводы по всей России.",
+                "en": "Walking along the October 25 Street, which formerly was called Obvinskaya, one can’t but notice this beautiful building. This architectural monument was erected in 1888 from the project of a well-known Perm architect Turchevich for the Tupitsyn brothers. Their father, Evgraph Kuzmich, is considered to be the pioneer of Russian phosphoric business. Tupitsyn’s phosphoric factory very soon superseded imported English phosphorus from the market and they began exporting.. Successors appeared to be people with a business grasp too. This stone house with two columns on each side became a favourable investment for them, it was rented at once by the Railway Control Department, and in June, 1912 the house was turned over to the Peasant Land Bank. After Perm had been liberated from Kolchak, the 3rd army was quartered in the building. And then up to 1938 it was known as the «House of the Unions» because the union of art workers and other trade-union organizations located here successfully. At that time during the reconstruction the house acquired a third dome. And then the house was owned by the State Security Service. Now the FSS Regional Direction for the Perm Region is situated here."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "ул. 25 Октября, 12",
+                    "en": "25 Octyabrya str., 12"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/25.jpg"
+        },
+        {
+            "id": 82,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Памятник В.И. Ленину",
+                "en": "Monument to V.I.Lenin"
+            },
+            "point": {
+                "lat": 58.01523406399893,
+                "lng": 56.24651731923225
+            },
+            "description": {
+                "ru": "Массивный памятник Владимиру Ильичу Ленину появился в театральном сквере в 1954 году. Автор – известнейший советский скульптор Георгий Нерода, специалист по изображению вождя. Но с Пермью Ленина связывает не только памятник. В Перми некоторое время жил и работал дед будущего вождя Александр Бланк с дочкой Машей, будущей мамой В.И. Ленина. Дед Ленина работал в мужской гимназии прямо напротив Театрального сквера по улице Сибирской. \nС этим памятником связаны 2 городские легенды. Первая повествует о том, что когда монумент был установлен, обнаружилось, что у вождя две кепки: одна в руке, другая на голове – скульптор вроде бы недосмотрел. Чтобы исправить оплошность скульптора в ночь перед самым открытием отрядили двух отважных и надёжных рабочих верхолазов: один стёсывал зубилом кепку, другой полировал голову, заглаживая царапины. Вторая история рассказывает о снайпере, который накануне следования через Пермь Л.И. Брежнева отстреливал голубей, непочтительно пачкавших статую. Голубей отвадили, но памятник всё равно пришлось мыть, потому что он оказался в пятнах птичьей крови.",
+                "en": ""
+            },
+            "contacts": {
+                "address": {
+                    "ru": "ул. Петропавловская, 25а",
+                    "en": "Petropavlovskaya str., 25a"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": []
+        },
+        {
+            "id": 83,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Гостиница «Центральная»",
+                "en": "The Central Hotel"
+            },
+            "point": {
+                "lat": 58.016023,
+                "lng": 56.243367
+            },
+            "description": {
+                "ru": "Здание с использованием элементов конструктивизма по улице Сибирской, 9 построено в 1930 - 1933 годы по проекту архитектора Ф. Е. Морогова. Почти вся гостиница-семиэтажка была освобождена от жильцов, когда в августе 1941 года к станции Перми II подошёл эшелон из Ленинграда с актерами театра оперы и балета им. С.М.Кирова. Вместе с актёрами театра в годы войны в гостинице жили известные деятели культуры: композиторы и писатели. Все стены здесь дышат живой легендой. Здесь в годы войны Сергей Прокофьев сочинял балет «Золушка», Мариан Коваль - оперу «Севастопольцы», Арам Хачатурян - балет «Гаянэ», Вениамин Каверин - роман «Два капитана». \nС Кавериным здесь произошла удивительна история. Во время войны он был специальным корреспондентом «Известий» и, находясь на фронте, долго ничего не знал о судьбе своей семьи. Случайно оказавшись в Перми, он зашёл в семиэтажку навестить друзей-писателей и в первом же номере неожиданно для себя встретил свою жену и маленького сына. Подобная неожиданная, но счастливая встреча, впоследствии появилась и в романе «Два капитана».",
+                "en": "This building, constructed at the beginning of the 1930s with elements of constructivism received a lot of poetic metaphors: “Helicon”, “the Ark of Noah”, “the grand house”. The reason being that during the Great Patriotic War the building became the home for the brightest workers of Soviet culture and art. On August 28, 1941 a special train from Leningrad arrived in Perm. It brought actors of the Kirov Opera House. A lot of famous writers, professors, musicians and artists from Leningrad and Moscow settled in the Perm “seven-storey house”, as it was called at that time. Here lived brilliant ballet dancers Galina Ulanova and Natalya Dudinskaya. Aram Khachaturyan was composing his ballet “Gayane”. Veniamin Kaverin was completing the second part of the novel “Two Captains” at the time. Yuri Tynyanov was finishing his novel “Pushkin” in Perm and Lilya Brik published the book “Shchen” in “MolotovGIZ” (Vladimir Mayskovsky’s letters to her). \nVera Panova wrote the novel “Kruzhilikha” and the short novel “Companions” there, which received the State Prize. Perm citizens became the characters of her play “The Pirozhkov Family”, based on which the film “Seryozha” was made later.\nVitaly Bianki, Mikhail Slonimsky, Ivan Sokolov-Mikitov, Sergey Prokofyev – this building could have twenty or more brass plates on its walls.\nThe world-famous Wolf Messing also settled down in the “seven-storey house”. He received people in his room who wanted to know their future., He also organized meetings with psychological experiments in the Opera House.\nNowadays the “Central Hotel” is not only a hotel, it is mainly a business centre as well as a regional architectural monument."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Сибирская, 9",
+                    "en": "Sibirskaya str., 9"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/19.jpg"
+        },
+        {
+            "id": 84,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Администрация г. Перми",
+                "en": "Provincial State Chamber – Perm City Duma and Perm City Administration"
+            },
+            "point": {
+                "lat": 58.013487,
+                "lng": 56.245649
+            },
+            "description": {
+                "ru": "В 1820 году на углу Покровской (Ленина) и Сибирской был построен большой двухэтажный каменный дом, предположительно по проекту И.И. Свиязева. В этом доме осенью 1824 года останавливался император Александр I. Государь, обозревая восточные окраины, приехал из Оренбурга в Пермь. \nК встрече Императора жители Перми приготовились заранее. Казенные и частные здания были обновлены, площади и улицы очищены, проведены по городу тротуары, построены обелиски застав Казанской и Сибирской, насажены четыре ряда аллей берез, или бульвар, устроены для встречи Государя два павильона, называемые ротондами. Местные остряки писали о губернаторе К.Тюфяеве:\n\nО, чудотворец наш Кирилл!\nВ Перми ты много натворил:\nОт Ягошихи и до Слудки\nПостроил тротуары в сутки,\n… Воздвиг ротонды, пирамиды, - \nНу, просто прелесть, что за виды!\nНеаполь, Греция и Рим, \nМы знать вас больше не хотим!\n\nИмператор прибыл вечером 30 сентября 1824 года. Все время пребывания императора в городе, прилегающие к зданию квартиры Государя улицы были усеяны народом, беспрестанно кричавшим \"ура\". Радостные крики не смолкали ни днём, ни ночью, поэтому неизвестно удалось ли императору заснуть.\nВо время своего трёхдневного пребывания в городе император совершил объезд казенных заведений, посетил дом губернатора, тюремный замок, богадельню приказа общественного призрении, военный госпиталь, а затем Мотовилихинский завод. \n\nЧерез двенадцать с половиной лет Пермь посетил Государь Наследник Александр Николаевич (будущий император Александр II), совершавший поездку по России вместе со своим наставником, известным русским писателем В. А. Жуковским.",
+                "en": "This building was used by authorities almost all the time. This house was initially built for a private person – a mister Bulgakov, presumably upon the project of Sviyasev. In 1824 the Emperor Alexander I stayed here during his visit to Perm. After the fire of 1842 the house was completely reconstructed, and the Perm provincial state chamber, with its hospital, church and even apartments for officials was placed here. The well-known researcher and traveller Berkh lived in one of its rooms.\nAll charges and incomes of the province were accounted at the State Chamber. But the existence of the State Chamber is connected not only with troubles and cares. In 1910 the Perm society of art-lovers arranged exhibitions of painting, sculpture and architecture here. This tradition was revived in the end of the 20 century, and again artists displayed their works in the White reception-room.\nIn 1919-1923 the Provincial Executive Committee and the Provincial Committee of the Russian Communist Party were placed in the building. In 1931 two more floors were added. Till 1975, while the House of Councils hadn’t been built yet, the Regional Executive Committee (of Soviets of People's Deputies) was settled here, and now the City Administration and the Perm Municipal Duma are located here."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Ленина, 23",
+                    "en": "Lenina str., 23"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/32.jpg"
+        },
+        {
+            "id": 85,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Пермский научный центр Российской Академии наук",
+                "en": "Merchant Gribushin’s House - Perm Scientific Centre of the Ural Branch of the Russian Academy of Sciences"
+            },
+            "point": {
+                "lat": 58.015737,
+                "lng": 56.253644
+            },
+            "description": {
+                "ru": "Мимо этого чудесно дома на улице Ленина невозможно пройти. Старинный двухэтажный особняк голубого цвета, богато украшенный лепниной. Построен он архитектором Турчевичем в стиле «живописный модерн». Дом принадлежал купцу Сергею Михайловичу Грибушину. Зачем же понадобилось строить такой кружевной дом чай-сахарному королю Грибушину? Говорят, будто бы он построил особняк для молоденькой девушки, в которую влюбился. Девушка была не из богатых и не приняла такого роскошного подарка.\nКак истинная легенда ул. Ленина особняк имеет несколько названий. Такие, как «дом с человечками» или «дом с ангелами». Названия связаны с самой запоминающейся деталью внешнего его убранства – женскими ликами (маскаронами). Их несколько десятков. Талантливый скульптор-самоучка Пётр Агафьин выбрал из семейного альбома все фотографии старшей дочери Грибушина Людмилы от 5 до 17 лет и смоделировал по ним изображения лиц. При реставрации портретность масок пропала, все лица моделировались по нескольким хорошо сохранившимся. \nПредполагается также, что в романе Пастернака «Доктор Живаго» грибушинский особняк стал прототипом таинственного «дома с фигурами», напротив которого жила Лара.",
+                "en": "The owner of this building was Sergey Gribushin - Tea-Sugar King, merchant and honourable citizen of Kungur and Perm City, who managed to do much for the 44 years of his life. \nIn 1906 Sergey bought this house on Pokrovskaya Street and reconstructed it to his taste. According to literary critics this house was a prototype of the “house with figures” in Pasternak's novel “Doctor Zhivago”. The house is created in the picturesque modern style and is richly decorated with moulded details. They were made by self-educated master Peter Agafin. It was he who “weaved” wreaths, garlands, rosettes and decorated the house with bas-reliefs of female heads. They are more than twenty, but it is considered that all of them copy the daughter of the house owner in different ages. \nGribushin was a member of the Perm Provincial Guardianship for Orphan Asylums, a member of the Perm Provincial Prison Committee, a Trustee of the Perm School for blind children. He was also a Director of the Local Department of the Emperor Musical Community. Gribushin even bought several grand pianos for the Community at his own expense. Musical evenings took place in Gribushins’ manor where the acoustics was marvelous. \nAfter the Revolution the Gribushins emigrated. And their elegant private residence was occupied by medical institutions till 1986. For all this time the house had never been repaired. Only when it was given to the Perm Scientific Centre of the RAS (Russian Academy of Sciences) it breathed a new life into the house’s historic walls. And in the main hall music evenings are held just like before."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Ленина, 13а",
+                    "en": "Lenina str., 13а"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": []
+        },
+        {
+            "id": 86,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Памятник Татищеву",
+                "en": "Monument to Tatischev"
+            },
+            "point": {
+                "lat": 58.01708777420742,
+                "lng": 56.26522555947306
+            },
+            "description": {
+                "ru": "Принято считать, что Василий Татищев – основатель Перми. Именно он выбрал место и разработал план строительства Егошихинского завода, который положил начало городу. Памятник основателю Перми появился только в 2003 году в честь 280-летия города.\nПамятник стоит на том месте, где Василий Никитич мог стоять в действительности. В руках он держит в руках развёрнутый план будущего завода. \n\nУ подножия памятнику красуются маленькие пушки и пирамидки пушечных ядер. Неизвестные злоумышленники эти ядра систематически воруют. То ли выражают таким образом эстетический протест, то ли банально сдают ядра в металлолом, отчаявшись найти бутылку водки, якобы замурованную в счастье в жерле одной из пушек, как на беду памятника неудачно пошутила одна из местных радиостанций",
+                "en": "Vasily Tatishev is a founder of Perm"
+            },
+            "contacts": {
+                "address": {
+                    "ru": "ул. 2-я Разгуляйская, 3",
+                    "en": "Vtoraya Razgulyaiskaya str., 3"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/86.jpg"
+        },
+        {
+            "id": 87,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Разгуляй",
+                "en": "Razgulyai"
+            },
+            "point": {
+                "lat": 58.017201,
+                "lng": 56.265699
+            },
+            "description": {
+                "ru": "Самый старый район города, существовал ещё в период Егошихинского завода. По поводу необычного названия существует несколько версий. По одной, район так назвали потому, что здесь в одном месте сходятся несколько улиц и все не слишком прямые. Вот и получается, что дороги «разгулялись». Другая версия связана с заводским прудом, по которому заводчане любили «разгуливать» на лодочках. А по третьей, название появилось из-за большого количества питейных заведений, в которых рабочие прогуливали свою зарплату. Была она такой маленькой, что погулять можно было только раз. Потому и «раз-гуляй».",
+                "en": ""
+            },
+            "contacts": {
+                "address": {
+                    "ru": "ул. 2-я Разгуляйская, 4",
+                    "en": "Vtoraya Razgulyaiskaya str., 4"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": []
+        },
+        {
+            "id": 88,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Церковь Успения Пресвятой Богородицы",
+                "en": "Church of the Assumption of the Blessed Virgin"
+            },
+            "point": {
+                "lat": 58.01384422964589,
+                "lng": 56.269250046461835
+            },
+            "description": {
+                "ru": "Храм был заложен в 1900 году и построен по проекту архитектора Ожегова. Освящён в 1905 году. Значительную сумму на строительства храма внёс купец Сергей Агафуров. Старожилы рассказывают такую историю. Агафуров исповедовал мусульманство, но полюбил православную девушку. Хоть купец и был ей симпатичен, она не пожелала отступить от совей веры и решительно ему отказала. Ради неё он изменил семейным традициям и принял православие. Проникнувшись православной верой, решил на свои деньги построить храм. Себя же завещал похоронить церковной ограде и воздвигнуть над могилой часовню в честь Сергия Радонежского, которого он очень почитал.",
+                "en": ""
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Егошихинское кладбище",
+                    "en": "Egoshikhinsky cemetery"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [
+                5
+            ]
+        },
+        {
+            "id": 89,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Могила проклятой дочери",
+                "en": "Grave of the damned daughter"
+            },
+            "point": {
+                "lat": 58.012471957494014,
+                "lng": 56.270108353346615
+            },
+            "description": {
+                "ru": "Егошихинское кладбище — второе по времени основания и старейшее из сохранившихся до настоящего времени кладбищ в городе Перми. Оно основано во второй половине XVIII века. Расположено в центре левобережной части города, между рекой Егошихой и её притоком — рекой Стикс, получившей такое название в честь реки из древнегреческой мифологии. \nСамая известная история кладбища – о детском плаче над могилой проклятой дочери исправника. Даже само круглое надгробие над этим захоронением привлекает внимание: чугунный круг, пустые глазницы, треугольный нос, рот в оскале. Надгробие окаймляет змея, кусающая свой хвост. На чугуне старославянскими письменами выведено: «Пермского исправника дочь Таисия от роду 6 лет, 11 месяцев скончалась января 24 дня 1807 года». По одной из версий, она была внебрачной дочерью исправника Александра Девеллия. После смерти матери ее приняли в семью отца. Но мачеха люто возненавидела Таисию и после смерти прокляла ее. Поэтому и заказала такое страшное надгробие. \n\nПо другой версии, любимая жена приказчика умерла во время родов. Девочка получила имя матери. Но она постоянно напоминала исправнику о гибели жены, и за это он невзлюбил кроху. К тому же дочка была не его: мужчина простил супруге измену, но не смог принять незаконнорожденную дочь. Поэтому после гибели Таи ее могила оказалась за оградой церкви – прямо на дороге, ведущей к кладбищу. Чтобы пришедшие помянуть близких топтали ее ногами. А неприкаянная душа девочки, по легенде, с тех пор плачет по ночам.",
+                "en": ""
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Егошихинское кладбище",
+                    "en": "Egoshikhinsky cemetery"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": []
+        },
+        {
+            "id": 90,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Театр юного зрителя",
+                "en": "Perm Youth Theater"
+            },
+            "point": {
+                "lat": 58.011556,
+                "lng": 56.246619
+            },
+            "description": {
+                "ru": "ТЮЗ расположен в старинном двухэтажном особняке 19 века, который ранее принадлежал вдове купца Любимова, Елизавете Ивановне, известной пермской благотворительнице. \nТяжелые времена для хозяйки дома начались после. Любимовой объявили, что в её доме будет размещен дом санитарного просвещения, попросили освободить особняк и дали десять минут на сборы. Елизавета Ивановна ушла из здания, в чем была, успев забрать с собой лишь рубиновый браслет с бриллиантами – подарок императорской четы за её благотворительную деятельность. На первых порах ночевала в учрежденном ею же Вдовьем доме. Потом ее попросили и оттуда. \nЛето 1918 года Елизавета Ивановна провела на Архиерейском кладбище возле могилы мужа. Когда приблизилась осень, Елизавета Ивановна попросила кладбищенского привратника организовать уход за могилой мужа, предложив ему в качестве оплаты свой браслет. \nСледы Елизаветы Ивановны Любимовой теряются осенью 1918 года. Говорят, что тронувшаяся умом женщина неприкаянно бродила по пермским улицам, а потом исчезла. Никто не знает, удостоилась ли почетная гражданка города Перми чести быть погребенной. Видимо, ее тело так и не было предано земле – иначе, чем объяснить периодическое появление размытого, мятущегося силуэта в здании Пермского ТЮЗа? В комнатах здания по ночам сам по себе загорается свет, а у актрис пропадают самые красивые платья.",
+                "en": "Perm Theatre for Young Spectators was founded in December, 1964. The main part of the company was made up of Novosibirsk, Sverdlovsk, Omsk theatrical schools graduates."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Екатерининская, 68",
+                    "en": "Yekaterininskaya str, 68"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/55.jpg"
+        },
+        {
+            "id": 91,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Культурный центр ГУВД по Пермскому краю",
+                "en": "Former club of Nobility assemly"
+            },
+            "point": {
+                "lat": 58.009625,
+                "lng": 56.25068
+            },
+            "description": {
+                "ru": "Здание было построено по проекту архитектора И.И. Свиязева в 1832-1837 годах. До революции в нём располагался клуб Благородного собрания губернской Перми. Именно в этом здании произошёл эпизод, вошедший в историю российской общественной мысли.\nВ ноябре 1861 г. В зале Благородного собрания проходил благотворительный литературно-музыкальный вечер. Впервые на сцене выступала светская дама, жена председателя Казённой палаты Евгения Толмачёва. Выступление её произвело на пермяков чрезвычайное впечатление. Она прочитала отрывок из «Египетских ночей» Пушкина, тот самый, где Клеопатра предлагает смельчакам из её гостей купить ночь с царицей ценою собственной жизни. Молодёжь рукоплескала, старики были возмущены. Этому происшествию не суждено было бы остаться предметом многолетних пермских пересудов. Вскоре популярный столичный еженедельник «Век» разразился фельетоном «Русские диковинки». Фельетон содержал весьма недостойные замечания о темпераменте г-жи Толмачёвой, эдакой провинциальной Клеопатре, поправшей понятие о женской чести и достоинстве. \nПубликация фельетона произвела эффект разорвавшейся бомбы. Прогрессивная общественность ответила еженедельнику статьей «Безобразный поступок «Века», где гневно заклеймила выходку журнала, публично оскорбившего женщину. Статью поддержал Достоевский и другие литераторы. В результате журнал «Век» принёс извинения, но было поздно. Число его подписчиков упало с 5 тысяч до 192 человек. Так пермская красавица Евгения Толмачёва стала символом отечественного феминизма, а выражение «безобразны поступок века» стало чрезвычайно популярным в то время.",
+                "en": "It was built in 1832-1837"
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Сибирская, 20",
+                    "en": "Sibirskaya str, 20"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/48.jpg"
+        },
+        {
+            "id": 92,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "«Дом чекиста»",
+                "en": "«Security officer's house»"
+            },
+            "point": {
+                "lat": 58.00737,
+                "lng": 56.253033
+            },
+            "description": {
+                "ru": "Это здание, являющееся памятником истории и культуры, овеяно мрачными легендами. С момента по постройки его называют «дом чекиста». Этот необычный дом в стиле советского конструктивизма строился в 30-е годы 20 века. Здание имеет уникальный облик: если посмотреть на него с высоты птичьего полёта, то постройка напоминает огромную букву «С» - первую букву в фамилии тогдашнего руководителя страны И.В. Сталина. По архитектурному замыслу рядом должны были пристроиться и другие буквы-здания, но не получилось – началась война. \nДом чекистов предназначался для местной советской партийной элиты. Его история напоминает историю московского «дома на набережной». После арестов население элитного московского дома сменилось почти полностью, те же процессы наблюдались и в пермском доме чекистов. Менялись начальники – и быстро освобождались квартиры в элитном доме на ул. Сибирской. Много мрачных тайн хранит в себе старый дом, и большинство из них так и останутся неразгаданными.",
+                "en": ""
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Сибирская, 30",
+                    "en": "Sibirskaya str, 30"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [
+                4
+            ]
+        },
+        {
+            "id": 93,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Театр кукол",
+                "en": "Perm state puppet-show"
+            },
+            "point": {
+                "lat": 57.999506,
+                "lng": 56.258603
+            },
+            "description": {
+                "ru": "Немногие знают, что кукольный театр, который дарит радость маленьким пермякам, когда-то был мрачной тюрьмой. Здание было построено в 1872 году как пересыльный замок. Здесь по пути на далёкую сибирскую каторгу останавливались арестанты. В 30-е годы 20 века в его большие ворота под конвоем шли партии раскулаченных, «врагов народа» и «спецпереселенцев». Отсюда их уводили либо в ГУЛАГ, либо на расстрел. В годы ВОВ в здании располагался военный завод по производству боеприпасов, где заключённые собирали мины. И только в конце 50-х годов ХХ века его перестроили, отремонтировали и отдали кукольному театру, существующему уже 20 лет как передвижная гастролирующая группа. Сегодня в одном из помещений театра кукол работает Просветительский центр, посвящённый истории политических репрессий. На базе центра планируется создание музея.",
+                "en": "The puppet-show is interesting both to the smallest Perm citizens and to the adults. The main attention is given to classic plays' staging. There is very interesting museum located in one of theatre foyers. Puppets from different performances, sketches and other interesting things are displayed here."
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Сибирская, 65",
+                    "en": "Sibirskaya str, 65"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [],
+            "mainPicture": "objphotos/62.jpg"
+        },
+        {
+            "id": 94,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "«Башня смерти» - здание ГУ МВД по Пермскому краю",
+                "en": "«Death tower»"
+            },
+            "point": {
+                "lat": 57.994884,
+                "lng": 56.253958
+            },
+            "description": {
+                "ru": "Здание Управления внутренних дел Пермского края - памятник архитектуры и градостроительства. Пятиэтажный объект с башней в 3 этажа со шпилем (высота башни - 43 м) построен в 1952 году по проекту архитектора М. А. Парелина. Пермяки именуют это здание не иначе как «Башня Смерти». Хотя здание построено в конце сталинской эпохи, молва связывает его с годами большого террора 1930-х гг., и репутация «Башни смерти» объясняется тем, что там свирепствовали органы НКВД. Рассказывают, что в стенах здания замурованы тела его строителей, бывших узников ГУЛАГа. Ещё одна версия рассказывает о существовании подземной тюрьмы с подземными ходами, соединяющими здание с тюрьмой и старым Егошихинским кладбищем. Но, несмотря на все эти мрачные истории, Башня смерти стала одной из эмблем города.",
+                "en": ""
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Белинского, 46",
+                    "en": "Belinskogo str, 46"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": [4]
+        },
+        {
+            "id": 95,
+            "type": "poi",
+            "start": "",
+            "end": "",
+            "name": {
+                "ru": "Памятник Мурчисону",
+                "en": "Monument to Murchison"
+            },
+            "point": {
+                "lat": 58.00342319438423,
+                "lng": 56.24557401984933
+            },
+            "description": {
+                "ru": "Мало кто обращает внимание на большой камень с табличкой напротив школы № 9 на Комсомольском проспекте. А зря. Этот памятный знак посвящён Родерику Импи Мурчисону, шотландскому геологу, исследователю Пермского края, назвавшему последний период палеозойской эры ПЕРМСКИМ. Пожалуй, ни один геолог в мире не сделал для расшифровки каменной летописи Земли больше, чем Мурчисон. Но для пермяков важно то, что одну из открытых им систем он назвал пермской, прославив имя Перми на весь мир. \nПо словам самого геолога, ещё одним открытием на Урале стали для него люди, живущие здесь. \"На все нетерпеливые возгласы путешественников \"вперед\" всегда был один веселый ответ: \"Можно\",- писал Мурчисон.- Посреди такого народа исчезает и самая мысль о невозможностях и затруднениях... \"Можно\" - было единственным отзывом этих необыкновенных людей\". Особенно запомнился Мурчисону один эпизод. Когда путешественники приехали на Серебрянский завод, обнаружилось, что река Серебрянка сильно обмелела и двигаться по ней невозможно. Но задача была быстро решена. Специально для Мурчисона открыли шлюз заводской плотины и «наполнили» водой из пруда обмелевшую реку к полному восторгу путешественника. \nМожет быть, благодаря уральским жителям, помогавшим Мурчисону в его уральской экспедиции, и решил великий шотландец дать открытому им геологическому периоду имя «пермь». Имя земли, где живут необыкновенные люди, знающие только слово «можно».",
+                "en": ""
+            },
+            "contacts": {
+                "address": {
+                    "ru": "Комсомольский проспект, 45",
+                    "en": "Komsomolsky pr., 45"
+                },
+                "phoneNumber": ""
+            },
+            "pictures": [],
+            "tags": []
         }
     ],
     "tags": [
@@ -2412,11 +2996,20 @@
             },
             "picture": "img/box_dc00b7.png",
             "color": "#dc00b7"
-        }
+        },
+        {
+            "id": 11,
+            "name": {
+                "ru": "Необычные истории",
+                "en": "Queer stories"
+            },
+            "picture": "img/box_ff6699.png",
+            "color": "#ff6699"
+        }        
     ],
     "routes": [
         {
-            "color": "00FF00",
+            "color": "#00FF00",
             "name": {
                 "ru": "Зеленая линия",
                 "en": "Green Line"
@@ -2752,7 +3345,7 @@
             ]
         },
         {
-            "color": "FF0000",
+            "color": "#FF0000",
             "name": {
                 "ru": "Красная линия",
                 "en": "Red Line"
@@ -2934,6 +3527,262 @@
                     "id": 0,
                     "lat": 58.01681110716232,
                     "lng": 56.24312214553357
+                }
+            ]
+        },
+        {
+            "color": "#ff6699",
+            "name": {
+                "ru": "Необычные истории",
+                "en": "Queer stories"
+            },
+            "description": {
+                "ru": "Неизвестные факты о Перми",
+                "en": "Unknown facts about Perm"
+            },
+            "tags": [
+                11
+            ],
+            "points": [
+                {
+                    "id": 75,
+                    "lat": 58.01322758561804,
+                    "lng": 56.23733242973688
+                },
+                {
+                    "id": 0,
+                    "lat": 58.015568214018145,
+                    "lng": 56.23500796034933
+                },
+                {
+                    "id": 0,
+                    "lat": 58.015719363383994,
+                    "lng": 56.234800592064865
+                },
+                {
+                    "id": 76,
+                    "lat": 58.01629183913249,
+                    "lng": 56.234056614339366
+                },
+                {
+                    "id": 77,
+                    "lat": 58.016192557284036,
+                    "lng": 56.23348630964757
+                },
+                {
+                    "id": 0,
+                    "lat": 58.015512878421994,
+                    "lng": 56.233911942690625
+                },
+                {
+                    "id": 78,
+                    "lat": 58.01374,
+                    "lng": 56.224188
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01551688180402,
+                    "lng": 56.233935412019505
+                },
+                {
+                    "id": 79,
+                    "lat": 58.01882521195332,
+                    "lng": 56.246407851576826
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01854633448227,
+                    "lng": 56.24531585723164
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01577647792748,
+                    "lng": 56.247891951352386
+                },
+                {
+                    "id": 80,
+                    "lat": 58.016143805880894,
+                    "lng": 56.24906256794931
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01604523532189,
+                    "lng": 56.24916365370157
+                },
+                {
+                    "id": 81,
+                    "lat": 58.01570762019548,
+                    "lng": 56.24814877286555
+                },
+                {
+                    "id": 82,
+                    "lat": 58.01517143276282,
+                    "lng": 56.24660314992073
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01493674257836,
+                    "lng": 56.24492073431613
+                },
+                {
+                    "id": 83,
+                    "lat": 58.01613117320714,
+                    "lng": 56.2437533028424
+                },
+                {
+                    "id": 84,
+                    "lat": 58.01355534868299,
+                    "lng": 56.24619612470272
+                },
+                {
+                    "id": 85,
+                    "lat": 58.01565157310612,
+                    "lng": 56.253729779273286
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01691056520903,
+                    "lng": 56.25810446217656
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01685683298927,
+                    "lng": 56.26118229702118
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01661930714009,
+                    "lng": 56.26400867477063
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01660302722054,
+                    "lng": 56.26432752236727
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01695922660309,
+                    "lng": 56.26515213400126
+                },
+                {
+                    "id": 86,
+                    "lat": 58.01713332175947,
+                    "lng": 56.26511827111246
+                },
+                {
+                    "id": 87,
+                    "lat": 58.017201,
+                    "lng": 56.265699
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01660729736408,
+                    "lng": 56.26429349184037
+                },
+                {
+                    "id": 88,
+                    "lat": 58.01377020801459,
+                    "lng": 56.269067656248836
+                },
+                {
+                    "id": 0,
+                    "lat": 58.012594382259444,
+                    "lng": 56.26994205638769
+                },
+                {
+                    "id": 89,
+                    "lat": 58.01246626330868,
+                    "lng": 56.270001064986005
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01066721108425,
+                    "lng": 56.261164024472244
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01415223627382,
+                    "lng": 56.2578183040023
+                },
+                {
+                    "id": 90,
+                    "lat": 58.01121432119118,
+                    "lng": 56.24725207686427
+                },
+                {
+                    "id": 0,
+                    "lat": 58.01151300826928,
+                    "lng": 56.2484081089497
+                },
+                {
+                    "id": 91,
+                    "lat": 58.009539598589555,
+                    "lng": 56.25031515955925
+                },
+                {
+                    "id": 92,
+                    "lat": 58.007182023174614,
+                    "lng": 56.25253954902294
+                },
+                {
+                    "id": 0,
+                    "lat": 58.000416486888724,
+                    "lng": 56.25898305326704
+                },
+                {
+                    "id": 0,
+                    "lat": 58.0002916172517,
+                    "lng": 56.25857854261997
+                },
+                {
+                    "id": 93,
+                    "lat": 57.99963130503927,
+                    "lng": 56.25913945958019
+                },
+                {
+                    "id": 0,
+                    "lat": 57.99730324873309,
+                    "lng": 56.26141967251898
+                },
+                {
+                    "id": 0,
+                    "lat": 57.99551251082135,
+                    "lng": 56.25416982918979
+                },
+                {
+                    "id": 0,
+                    "lat": 57.99526086746726,
+                    "lng": 56.25439647585156
+                },
+                {
+                    "id": 94,
+                    "lat": 57.99515173541486,
+                    "lng": 56.25405449420216
+                },
+                {
+                    "id": 0,
+                    "lat": 57.99527956052593,
+                    "lng": 56.254315171390786
+                },
+                {
+                    "id": 0,
+                    "lat": 57.9954985356268,
+                    "lng": 56.25408215448262
+                },
+                {
+                    "id": 0,
+                    "lat": 57.997178457206665,
+                    "lng": 56.252586152404554
+                },
+                {
+                    "id": 0,
+                    "lat": 57.9970290094333,
+                    "lng": 56.2519117444754
+                },
+                {
+                    "id": 95,
+                    "lat": 58.003542802416504,
+                    "lng": 56.245820783078685
                 }
             ]
         }
