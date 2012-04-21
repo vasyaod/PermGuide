@@ -17,45 +17,74 @@
 
 		<script type="text/javascript" src="app/jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="app/jquery.urldecoder.js"></script>
+		<script type="text/javascript" src="jquery.cookie.js"></script>
 
 		<script type="text/javascript" src="app/permguide-language.js"></script>
 		<script type="text/javascript" src="permguide-lr.js"></script>
 		
 		<script type="text/javascript">
 			$(document).ready(function() {
-				var url = 'http://permguide.ru/app';
-				var defaultParams = {
+				var appUrl = 'http://permguide.ru/app';
+				
+				// Дефолтные параметры.
+				var params = {
 					lang: "ru"
 				};
+				if ($.cookie('lang'))
+					params.lang=$.cookie('lang');
 				
-				var urlObject= $.url.parse(url);
-				if (!urlObject.params)
-					urlObject.params = {};
+				var appUrlObject= $.url.parse(appUrl);
+				appUrlObject.source = null;
 				// Если параметров нет, то создадим объект с параметрами.
-				urlObject.source = null;
-				$.extend(urlObject.params, defaultParams);
+				if (!appUrlObject.params)
+					appUrlObject.params = {};
 
-				var res = $.url.parse(document.URL);
-				if (res.params) {
-					$.extend(urlObject.params, res.params);
+				// Копируем параметры из урла страницы в урл приложения
+				var pageUrlObject = $.url.parse(document.URL);
+				pageUrlObject.source = null;
+				if (pageUrlObject.params) {
+					$.extend(params, pageUrlObject.params);
 				}
+				// Сохраним язык в куках
+				$.cookie('lang', params.lang);
+				
+				// Пускай у приложения и страницы будут одинаковые параметры.
+				appUrlObject.params = params;
+				pageUrlObject.params = params;
 				
 				////
 				// Переведем интерфейс.
 				PermGuide.Language.init();
-				PermGuide.Language.setCurrentLanguage(urlObject.params.lang);
+				PermGuide.Language.setCurrentLanguage(appUrlObject.params.lang);
 				$(".i18n").i18n();	// Переведем интерфейс.
 				
 				////
 				// Загрузим iframe с приложением.
-				url = $.url.build(urlObject);
+				url = $.url.build(appUrlObject);
 				$("#phone iframe").attr("src", url);
+				
+				////
+				// Изменим урл текущей страницы.
+				pageUrlObject.anchor = '';
+				window.location.href = $.url.build(pageUrlObject)+"#";
 				
 				$("#page-all").css("visibility", "visible");
 				$("#page-footer").css("visibility", "visible");
 			});
 	</script>
+<script type="text/javascript">
 
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31000274-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </head>
 <body>
 	<div id="page-all">
@@ -70,10 +99,13 @@
 					<p>
 					<div id="links">
 						<div class="section">
-							<img src="img/android-market-2-icon-48.png"/>
+							<img src="img/play.png"/>
 							<div>
 								<a href="https://play.google.com/store/apps/details?id=ru.mobak.permguide" target="_blank" class="i18n">Приложение в Google Play</a>
 							</div>
+						</div>
+						<div class="section">
+							<img src="img/site.png"/>
 							<div>
 								<a href="PermGuide.apk" class="i18n">Загрузить приложение под Android с сайта</a>
 							</div>
@@ -109,6 +141,10 @@
 							<div>
 								<a href="http://facebook.com/permguide" target="_blank" class="i18n">Страница в facebook</a>
 							</div>
+							<div>
+								<a href="http://apps.facebook.com/permguide" target="_blank" class="i18n">Приложение в facebook</a>
+							</div>
+							
 						</div>
 					</div>
 					</p>

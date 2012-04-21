@@ -93,13 +93,14 @@ a { /* color: #00799c;*/
 }
 
 #links { /* position: absolute; */
-	top: 0px;
-	height: 140px;
+	/*top: 0px;*/
+	/*height: 140px;*/
 	/*width: 500px;*/
 }
 
 #links .section {
 	padding: 10px;
+	clear: both;
 }
 
 #links .section img {

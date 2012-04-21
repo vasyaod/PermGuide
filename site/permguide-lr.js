@@ -37,5 +37,9 @@ PermGuide.lr = {
 	"Страница в facebook": {
 		ru: "Страница в facebook",
 		en: "Facebook"
+	},
+	"Приложение в facebook": {
+		ru: "Приложение в facebook",
+		en: "Application in Facebook"
 	}
 }
