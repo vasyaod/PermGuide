@@ -1,6 +1,8 @@
 
 /**
  * Генератор координат, которй использует данные выбранного маршрута.
+ * 
+ * Вообще данный объект нужен для тектирования и генерации фэйковых координат.
  */
 PermGuide.RouteCoordinatesGenerator = {
 	
@@ -13,7 +15,12 @@ PermGuide.RouteCoordinatesGenerator = {
 	// Текущая точка, может быть и промежуточной между маршрутными.
 	curentPoint: null,
 		
-	init: function() {
+	init: function(routeId) {
+		
+		if (!routeId)
+			routeId = 0;
+		this.routeId = routeId;
+		
 		if (PermGuide.ApplicationData.loaded)
 			this.dataLoaded(PermGuide.ApplicationData);
 		else
@@ -26,6 +33,9 @@ PermGuide.RouteCoordinatesGenerator = {
 	dataLoaded: function(applicationData) {
 		this.pointIndex = -1;
 		if(applicationData.data.routes && applicationData.data.routes.length > 0)
+			this.route = applicationData.data.routes[this.routeId];
+		
+		if (!this.route)
 			this.route = applicationData.data.routes[0];
 	},
 	
