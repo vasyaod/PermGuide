@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, GidPerm!</string>
+    <string name="app_name">Гид Перми</string>
+</resources>
