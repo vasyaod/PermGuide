@@ -1,4 +1,5 @@
 <?php
+
 function getFiles($directory = "./", $exempt = array('.', '..'), &$files = array()) {
 	$handle = opendir($directory);
 	while (false !== ($resource = readdir($handle))) {
@@ -33,14 +34,41 @@ class Resource {
 	} 
 }
 
+class Object {};
+
 class Index {
 	
-	public $revision;
-	public $totalSize = 0;
-	public $resources = array();
+	public $filters = array();
 	
 	public function __construct($revision) {
-		$this->revision = $revision;
+		
+		$this->data = new Object();
+		$this->data->revision = $revision;
+		$this->data->totalSize = 0;
+		$this->data->cacheSize = 0;
+		$this->data->resources = array();
+	}
+	
+	/**
+	 * Метод добавляет новый фильтр в список фильтров.
+	 * 
+	 * @param type $filter 
+	 */
+	public function addFilter($filter) {
+		$this->filters[] = $filter;
+	}
+
+	/**
+	 * Метод возвращает true если ресурс допущен всеми фильрами.
+	 * 
+	 * @param type $filter 
+	 */
+	private function isAllowed($resource) {
+		$res = true;
+		foreach ($this->filters as $filter) {
+			$res = $res && $filter($resource);
+		}
+		return $res;
 	}
 	
 	public function addPath($path) {
@@ -48,20 +76,50 @@ class Index {
 		getFiles($path, array('.', '..', 'resources.json'), $files);
 		foreach ($files as $file) {
 			$resource = new Resource($file);
-			$this->totalSize += $resource->size;
-			$this->resources[] = $resource;
+			if ($this->isAllowed($resource)) {
+				$this->data->totalSize += $resource->size;
+				if (!$resource->serverLocation)
+					$this->data->cacheSize += $resource->size;
+				
+				$this->data->resources[] = $resource;
+			}
 		}
 		
 	}
 	
 	public function toJSON() {
-		return json_encode($this);
+		return json_encode($this->data);
 	}
 	
 };
 
-chdir("../../client/data/");
-$index = new Index(3);
+/**
+ * Филтр, который ничего не фильтрует, но смотрит что это ogg-файл и делает 
+ * пометку, что его кэшировать приложению не нужно.
+ */
+$filterOggFile = function($resource) {
+	
+	$pos = strpos($resource->name, ".ogg");
+
+	if ($pos !== false) {
+		$resource->serverLocation = true;	// Говорит, что данный ресурс хранится на сервере.
+	} else {
+		$resource->serverLocation = false;
+	}
+	
+	
+	return true;
+};
+
+chdir("../../client/resources/");
+$index = new Index(7);
+$index->addFilter($filterOggFile);
 $index->addPath("./");
-file_put_contents("resources.json", $index->toJSON());
+file_put_contents("index.json", $index->toJSON());
+
+chdir("../../client/src/resources/");
+$index = new Index(1);  // У локальных ресурсов пускай номер ревизии будет 1.
+$index->addFilter($filterOggFile);
+$index->addPath("./");
+file_put_contents("index.json", $index->toJSON());
 ?>
