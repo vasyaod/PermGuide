@@ -109,7 +109,7 @@ PermGuide.deadRadius = 15;
 				var mouseleaveHandler = function (event) {
 					if (!down)
 						return;
-					upHandler(event);
+					mouseupHandler(event);
 				}
 				//$(this).on("mousedown", downHandler);
 				//$(this).on("mouseup", upHandler);
