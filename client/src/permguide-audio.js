@@ -168,13 +168,10 @@ PermGuide.Audio = {
 
 		if (supportedFormat && object.audio) {
 			var fileName = object.audio;
-			var url = "http://permguide.ru/audio/"+fileName+supportedFormat;
 
-			// Если это фонегап, то качество файлов должно быть низкое.
-			if (PermGuide.isPhonegap)
-				url = PermGuide.ResourceManager.getResourceURL(
-						"audio/lowquality/"+fileName+supportedFormat
-					);
+			var url = PermGuide.ResourceManager.getResourceURL(
+					"audio/"+fileName+supportedFormat
+				);
 			
 			this._play(url);
 			return true;
