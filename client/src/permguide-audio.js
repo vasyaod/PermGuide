@@ -67,6 +67,14 @@ PermGuide.PhonegapAudio = {
 	},
 			
 	_play: function(url) {
+		
+		if (PermGuide.isAndroid && url.indexOf('file:///mnt/sdcard/') != -1)
+			url = url.substr(19);
+		else if (PermGuide.isAndroid && url.indexOf('/mnt/sdcard/') != -1)
+			url = url.substr(12);
+		
+		console.log("Play audio: "+url);
+		
 		this.media = new Media(
 			url,
 			$.proxy(function() {
@@ -160,13 +168,15 @@ PermGuide.Audio = {
 
 		if (supportedFormat && object.audio) {
 			var fileName = object.audio;
-			var path = "http://permguide.ru/audio/";
+			var url = "http://permguide.ru/audio/"+fileName+supportedFormat;
 
 			// Если это фонегап, то качество файлов должно быть низкое.
-			if (PermGuide.isPhonegap)	
-				path += "lowquality/";
+			if (PermGuide.isPhonegap)
+				url = PermGuide.ResourceManager.getResourceURL(
+						"audio/lowquality/"+fileName+supportedFormat
+					);
 			
-			this._play(path+fileName+supportedFormat);
+			this._play(url);
 			return true;
 		}
 		return false;

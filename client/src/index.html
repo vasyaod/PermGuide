@@ -35,6 +35,9 @@
 		<script type="text/javascript" src="permguide.js"></script>
 
 		<script type="text/javascript">
+		
+		////
+		// Отбражение splash-экрана.
 		splashInit = function() {
 
 			// Отобразим splash-экран.
@@ -51,6 +54,77 @@
 			
 			// Завершим этот этап загрузки приложения.
 			PermGuide.Scheduler.finished("SplashInit");
+		};
+		
+		////
+		// Инициализация загрузки ресурсов.
+		resourcesInit = function() {
+			
+			// Если платформой является Андройд, то расширим ResourceManager до 
+			// поддерржки кэша.
+			if (PermGuide.isAndroid)
+				$.extend(PermGuide.ResourceManager, PermGuide.AndroidCacheManager);
+
+			PermGuide.ResourceManager.onLoadSources = function(){
+				if (PermGuide.ResourceManager.needUpdateCache()) {
+					console.log("Требуется обновление кэша!");
+					if (confirm("На сервере имеются новые данные. Вы хотите их обновить?")) {
+						PermGuide.ResourceManager.updateCache();
+					} else {
+						console.log("Пользователь отказался от обновления кэша.");
+						PermGuide.Scheduler.finished("ResourcesInit");
+					}
+				} else {
+					console.log("Обновление кэша не требуется.");
+					PermGuide.Scheduler.finished("ResourcesInit");
+				}
+			};
+
+			PermGuide.ResourceManager.onCacheUpdateSuccessful = function(){
+				PermGuide.Scheduler.finished("ResourcesInit");
+			};
+			PermGuide.ResourceManager.onCacheUpdateError = function(){
+				PermGuide.Scheduler.finished("ResourcesInit");
+			};
+			
+			PermGuide.ResourceManager.init();
+		};
+		
+		////
+		// Инициализация геолокации
+		geolocationInit = function() {
+
+			PermGuide.Geolocation.init();
+			// Инициализируем генератор координат для тестирования сервиса
+			// хождения по маршруту.
+			PermGuide.Geolocation.coordinatesGenerator = PermGuide.RouteCoordinatesGenerator;
+			PermGuide.RouteCoordinatesGenerator.init();
+		};
+		
+		////
+		// Инициализация языковых ресурсов и отображение экрана выбора языка.
+		languageSelectInit = function() {
+			PermGuide.Language.init();
+			
+			if (PermGuide.Language.languageSelected)
+			{
+				PermGuide.Scheduler.finished("LanguageSelect");
+				return;
+			}
+			// Повешаем на кнопки выбора языка обработчики.
+			$(".langSelectItem").touchclick( function(event) {
+				var lang = $(event.target).attr("_lang");
+				PermGuide.Language.setCurrentLanguage(lang);
+				
+				$("#langSelectScreen").css("visibility", "hidden");
+				$("#splashScreen").css("visibility", "visible");
+				
+				// Завершим выполнение задания.
+				PermGuide.Scheduler.finished("LanguageSelect");
+			});
+			
+			$("#splashScreen").css("visibility", "hidden");
+			$("#langSelectScreen").css("visibility", "visible");
 		};
 		
 		interfaceInit = function() {
@@ -305,7 +379,7 @@
 		dataLoad = function() {
 			// Загружаем данные об объектах (достопримечательности, линии и т.д.).
 			PermGuide.ApplicationData.load();
-			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
+			PermGuide.ApplicationData.attachListener("loaded", function () {
 				PermGuide.Scheduler.finished("DataLoad");
 			});
 		};
@@ -314,12 +388,18 @@
 			////
 			// Инициализация карты объектов.
 			objectsMapManager = new PermGuide.MapManager(jQuery("#objectsMap")[0], "objects");
+			objectsMapManager.onLoad = function() {
+				PermGuide.Scheduler.finished("ObjectsMapInit");
+			}
 			// Создаем слайдер для карты объектов.
 			PermGuide.Interface.makeMapSlider(objectsMapManager, "objects", $("#objectsMapSlider"));
 			
 			////
 			// Инициализация карты маршрутов.
 			routesMapManager = new PermGuide.MapManager(jQuery("#routesMap")[0], "routes");
+			routesMapManager.onLoad = function() {
+				PermGuide.Scheduler.finished("RoutesMapInit");
+			}
 			// Создаем слайдер для карты маршрутов.
 			PermGuide.Interface.makeMapSlider(routesMapManager, "routes", $("#routesMapSlider"));
 
@@ -332,47 +412,19 @@
 			PermGuide.LoadMapManager.attachListener("mapLoadFail", function() {
 				$(".map .mapLoading").css("display", "none");
 				$(".map .mapLoadFail").css("display", "block");
+			
+				PermGuide.Scheduler.finished("MapInit");
+				PermGuide.Scheduler.finished("ObjectsMapInit");
+				PermGuide.Scheduler.finished("RoutesMapInit");
 			});
 			
 			PermGuide.LoadMapManager.load();
-		};
-
-		languageSelectInit = function() {
-			PermGuide.Language.init();
-			
-			if (PermGuide.Language.languageSelected)
-			{
-				PermGuide.Scheduler.finished("LanguageSelect");
-				return;
-			}
-			// Повешаем на кнопки выбора языка обработчики.
-			$(".langSelectItem").touchclick( function(event) {
-				var lang = $(event.target).attr("_lang");
-				PermGuide.Language.setCurrentLanguage(lang);
-				
-				$("#langSelectScreen").css("visibility", "hidden");
-				$("#splashScreen").css("visibility", "visible");
-				
-				// Завершим выполнение задания.
-				PermGuide.Scheduler.finished("LanguageSelect");
-			});
-			
-			$("#splashScreen").css("visibility", "hidden");
-			$("#langSelectScreen").css("visibility", "visible");
 		};
 
 		closeSplash = function() {
 			// Перед тем как скрыть splash интернацианализируем интерфейс.
 			$(".i18n").i18n();
 		
-			////
-			// Инициализируем геолокацию.
-			PermGuide.Geolocation.init();
-			// Инициализируем генератор координат для тестирования сервиса
-			// хождения по маршруту.
-			PermGuide.Geolocation.coordinatesGenerator = PermGuide.RouteCoordinatesGenerator;
-			PermGuide.RouteCoordinatesGenerator.init();
-
 			// Закроем splash-screen
 			$("#splashScreen").css("display", "none");
 			$("#langSelectScreen").css("display", "none");
@@ -396,6 +448,7 @@
 			PermGuide.isPhonegap = true;
 			PermGuide.isIPhone = (device.platform.indexOf("iPhone") != -1 || device.platform.indexOf("iPad") != -1);
 			PermGuide.isAndroid = (device.platform.indexOf("Android") != -1);
+			
 			////
 			// Включим тестовую геолокацию.
 			PermGuide.Geolocation.initPhonegap();
@@ -406,6 +459,17 @@
 		////
 		// Сформируем правила загрузки приложения.
 		$(document).ready(function() {
+			var oulObject = $.url.parse(document.URL);
+			PermGuide.params = {};
+			if (oulObject.params)
+				PermGuide.params = oulObject.params;
+			
+			if (PermGuide.params.phonegap) {
+				PermGuide.isPhonegap = true;
+				console.log("В url приложения указан параметр phonegap.");
+			}
+			else
+				PermGuide.isPhonegap = false;
 			
 			// Перечисляются этапы загрузки приложения.
 			PermGuide.Scheduler.addTask("SplashInit",{
@@ -417,13 +481,21 @@
 				activateFn: languageSelectInit,
 				dependence: ["SplashInit"]
 			});
+			PermGuide.Scheduler.addTask("ResourcesInit",{
+				activateFn: resourcesInit,
+				dependence: PermGuide.isPhonegap ? ["LanguageSelect", "PhonegapReady"] : ["SplashInit"]
+			});
 			PermGuide.Scheduler.addTask("InterfaceInit",{
 				activateFn: interfaceInit,
 				dependence: ["LanguageSelect"]
 			});
 			PermGuide.Scheduler.addTask("DataLoad",{
 				activateFn: dataLoad,
-				dependence: ["InterfaceInit"]
+				dependence: ["InterfaceInit", "ResourcesInit"]
+			});
+			PermGuide.Scheduler.addTask("GeolocationInit",{
+				activateFn: geolocationInit,
+				dependence: ["DataLoad"]
 			});
 			PermGuide.Scheduler.addTask("MapInit",{
 				activateFn: mapInit,

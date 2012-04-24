@@ -429,12 +429,7 @@ PermGuide.LoadMapManager = {
 	yMapsFail: function() {
 		clearTimeout(this.timeoutId1);
 		if (!this.scriptLoaded)
-		{
-			PermGuide.Scheduler.finished("MapInit");
-			PermGuide.Scheduler.finished("ObjectsMapInit");
-			PermGuide.Scheduler.finished("RoutesMapInit");
 			this.notify("mapLoadFail", this);
-		}
 	},
 	
 	yMapsLoaded: function() {
@@ -696,7 +691,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 					overlay: null
 				}
 			
-			var placemark = new PermGuide.BoxOverlay(
+			var boxOverlay = new PermGuide.BoxOverlay(
 				new YMaps.GeoPoint(object.point.lng, object.point.lat),
 				// Обработчик события клика на ящик на карте.
 				// При первом клике, выделяем объект.
@@ -708,8 +703,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 						this._selectObject(overlayState);
 				}, this)
 			);
-			overlayState.overlay = placemark;
-			
+			overlayState.overlay = boxOverlay;
 			this.overlayStates.push(overlayState);
 			// Скроем и сразу же добавим на карту.
 			//placemark.hide();
@@ -747,10 +741,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		}
 		this.visibleChanged();
 		
-		if (this.mode == "objects")
-			PermGuide.Scheduler.finished("ObjectsMapInit");
-		if (this.mode == "routes")
-			PermGuide.Scheduler.finished("RoutesMapInit");
+		this.onLoad();
 	};
 	
 	this.visibleChanged = function() {
@@ -775,7 +766,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 					if (!overlayState.onmap)
 					{
 						overlayState.onmap = true;
-						overlayState.overlay.show();
+						//overlayState.overlay.show();
 						this.yMap.addOverlay(overlayState.overlay);
 					}
 	
@@ -849,7 +840,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		// Если оверлай найден, то выделим его.
 		if (overlayState)
 			this._selectObject(overlayState, centred);
-	}
+	};
 	
 	/**
 	 * Внутренний метод, вызывается при выборе объекта на карте.
@@ -877,5 +868,11 @@ PermGuide.MapManager = function (yMapElement, mode){
 		}
 
 		this.notify("mapObjectSelected", object);
-	}
+	};
+	
+	/**
+	 * Обработчик события, вызываемый после того как карта успешно загрузилась и
+	 * данные отрисовались.
+	 */
+	this.onLoad = function(){};
 };

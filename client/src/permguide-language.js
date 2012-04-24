@@ -29,10 +29,9 @@ PermGuide.Language = {
 	currentLanguage: "ru",
 
 	init: function () {
-		var res = $.url.parse(document.URL);
-		if (res.params && res.params.lang) {
+		if (PermGuide.params.lang) {
 			this.languageSelected = true;
-			this.currentLanguage = res.params.lang;
+			this.currentLanguage = PermGuide.params.lang;
 		}
 	},
 	

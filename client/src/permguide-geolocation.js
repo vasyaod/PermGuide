@@ -96,8 +96,7 @@ PermGuide.Geolocation = {
 	},
 
 	init: function() {
-		var res = $.url.parse(document.URL);
-		if (res.params && res.params.geolocation == "test") {
+		if (PermGuide.params.geolocation == "test") {
 			this.timeoutId = setInterval($.proxy( this.random, this), 3000);
 		}
 	},
