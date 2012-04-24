@@ -20,6 +20,7 @@
 		<script type="text/javascript" src="permguide-lr.js"></script>
 		<script type="text/javascript" src="permguide-language.js"></script>
 		<script type="text/javascript" src="permguide-scheduler.js"></script>
+		<script type="text/javascript" src="permguide-resources.js"></script>
 		<script type="text/javascript" src="permguide-touch-support.js"></script>
 		<script type="text/javascript" src="permguide-toggle-button.js"></script>
 		<script type="text/javascript" src="permguide-scrollable-plugin.js"></script>
@@ -464,6 +465,11 @@
 			if (oulObject.params)
 				PermGuide.params = oulObject.params;
 			
+			if (PermGuide.params.version)
+				PermGuide.version = PermGuide.params.version;
+			else
+				PermGuide.version = "1.2";
+					
 			if (PermGuide.params.phonegap) {
 				PermGuide.isPhonegap = true;
 				console.log("В url приложения указан параметр phonegap.");
