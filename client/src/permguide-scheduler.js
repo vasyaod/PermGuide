@@ -99,6 +99,7 @@ PermGuide.Scheduler = {
 		
 		if (!this.tasks[taskName].finished)
 		{
+			console.log("Завершение задания (этапа) "+taskName+", "+(new Date() - this.startTime)+" мс.");
 			this.notify("finished", this.tasks[taskName]);
 			this.tasks[taskName].finished = true;
 		}
@@ -123,8 +124,9 @@ PermGuide.Scheduler = {
 	isTasksFinished: function(taskNameArray){
 		var res = true;
 		$.each(taskNameArray, $.proxy(function(index, taskName) {	
-			if (!this.isFinished(taskName))
+			if (!this.isFinished(taskName)) {
 				res = false;
+			}
 		}, this));
 		return res;
 	},
@@ -133,13 +135,24 @@ PermGuide.Scheduler = {
 	 * Метод начинает выполнение заданий.
 	 */
 	start: function(){
+		
+		if (!this.startTime)
+			this.startTime = new Date();	// Запомним время старта.
+		
 		$.each(this.tasks, $.proxy(function(taskName, task) {	
 			if(!task.finished && !task.started) {
 				if (this.isTasksFinished(task.dependence)) {
 					task.started = true;
 					this.notify("started", task);
-					if (task.activateFn)
-						task.activateFn(taskName);
+					console.log("Запуск задания (этапа) "+taskName);
+					if (task.activateFn) {
+						// Задание будем складывать в очередь.
+						var timeoutId;
+						timeoutId = setTimeout(function() {
+							clearTimeout(timeoutId);
+							task.activateFn(taskName);
+						}, 0);
+					}
 				}
 			}
 		
