@@ -31,7 +31,8 @@
 					"ru": "..FileName..",
 					"en": "..FileName.."
 				},
-				"pictures": ["./1.png", "./1.png"],
+				"mainPictures": "./1.png",
+				"pictures": ["./2.png", "./3.png"],
 				"tags": [1, 2]
 			}
 		],
@@ -92,5 +93,5 @@
 				"picture": "...",
 				"color": "..."
 			}
-		]		
+		]
 	}
