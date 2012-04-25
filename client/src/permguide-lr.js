@@ -9,8 +9,10 @@ if(typeof PermGuide == "undefined")
 PermGuide.lr = {
 	
 	"Loading": {
-		ru: "Загрузка приложения (версия {0})",
-		en: "Loading (v{0})"
+//		ru: "Загрузка приложения (версия {0})",
+//		en: "Loading (v{0})"
+		ru: "Загрузка приложения",
+		en: "Loading"
 	},
 	"Download": {
 		ru: "Загрузка файлов ({0} из {1})",
