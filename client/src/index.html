@@ -129,12 +129,17 @@
 			// хождения по маршруту.
 			PermGuide.Geolocation.coordinatesGenerator = PermGuide.RouteCoordinatesGenerator;
 			PermGuide.RouteCoordinatesGenerator.init();
+			
+			PermGuide.Scheduler.finished("GeolocationInit");
 		};
 		
 		////
 		// Инициализация языковых ресурсов и отображение экрана выбора языка.
 		languageSelectInit = function() {
-			PermGuide.Language.init();
+			
+			// Если в параметрах задан язык, то его надо установить.
+			if (PermGuide.params.lang)
+				PermGuide.Language.setCurrentLanguage(PermGuide.params.lang);
 			
 			if (PermGuide.Language.languageSelected)
 			{
@@ -460,14 +465,35 @@
 			$("#langSelectScreen").css("display", "none");
 			
 			PermGuide.ScreenManager.activateScreenByName("mainScreen");
+			
+			////
 			// Обрабатываем параметры запуска приложения.
-			var res = $.url.parse(document.URL);
-			if (res.params && res.params.objectId) {
-				var object = PermGuide.ApplicationData.getObjectById(res.params.objectId);
+
+			// Данный параметр пролистывает изображение на указанную закладку.
+			if (PermGuide.params.tag) {
+				var tag = PermGuide.ApplicationData.getTagById(PermGuide.params.tag);
+				if (tag)
+					tag.activate();
+			}
+			
+			// Данный параметр пролистывает изображение на указанную закладку.
+			if (PermGuide.params.page) {
+				PermGuide.ScreenManager.goToPage(PermGuide.params.page);
+			}
+			
+			// Данный параметр загружает нужный нам объект.
+			if (PermGuide.params.objectId || PermGuide.params.object) {
+				var id;
+				if (PermGuide.params.objectId)
+					id = PermGuide.params.objectId;
+				else
+					id = PermGuide.params.object;
+				
+				var object = PermGuide.ApplicationData.getObjectById(id);
 				if (object)
 					PermGuide.ApplicationData.selectObject(object);
 			}
-			
+			PermGuide.Scheduler.finished("CloseSplash");
 		};
 		
 		////

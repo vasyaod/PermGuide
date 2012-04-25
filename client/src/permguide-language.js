@@ -21,24 +21,26 @@ $.fn.i18n = function(props) {
  * Объект отвечает за работу с мультиизычностью.
  */
 PermGuide.Language = {
-
-	// Флаг того, что пользователь выбрал язык.
+	/**
+	* Флаг того, что пользователь выбрал язык.
+	*/
 	languageSelected: false,
 	
-	// Пока язык задан статично.
+	/**
+	 * Язак с которым работает программа.
+	 */
 	currentLanguage: "ru",
-
-	init: function () {
-		if (PermGuide.params.lang) {
-			this.languageSelected = true;
-			this.currentLanguage = PermGuide.params.lang;
-		}
-	},
 	
+	/**
+	 * Ссылка на языковые ресурсы.
+	 */
+	languageResource: null,
+		
 	/**
 	 * Метод устанавливает текущий язык.
 	 */
 	setCurrentLanguage: function (currentLanguage) {
+		this.languageSelected = true;
 		this.currentLanguage = currentLanguage;
 		
 		//var res = $.url.parse(document.URL);
@@ -73,7 +75,10 @@ PermGuide.Language = {
 	 */
 	getInterfaceString: function(key)
 	{
-		var object = PermGuide.lr[key.trim()];
+		if (!this.languageResource)
+			this.languageResource = PermGuide.lr;
+		
+		var object = this.languageResource[key.trim()];
 		if (object == null)
 			return key;
 		

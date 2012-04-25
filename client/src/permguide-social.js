@@ -7,7 +7,7 @@ PermGuide.showShareWindow = function(socialNetwork, object) {
 	
 	var documentUrl = "http://permguide.ru?" +
 	                  "lang="+PermGuide.Language.currentLanguage +  // Сохраним в урле информацию о языке.
-	                  "&objectId="+object.id;
+	                  "&object="+object.id;
 	var title = object.name;
 	var description = object.description;
 //	photo_image = $(window.cache[iteration]).children('img').attr('src') || '';

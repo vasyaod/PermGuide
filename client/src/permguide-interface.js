@@ -68,12 +68,16 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 	};
 	
 	slider.beforeAnimationListener = function(index) {
-		$(sliderElement).find(".slide").css("visibility", "visible");
+		if (PermGuide.isPhonegap) {	
+			$(sliderElement).find(".slide").css("visibility", "visible");
+		}
 	};
-
+	
 	slider.afterAnimationListener = function(index) {
-		$(sliderElement).find(".slide").css("visibility", "hidden");
-		$(sliderElement).find(".slide").slice(index, index+1).css("visibility", "visible");
+		if (PermGuide.isPhonegap) {	
+			$(sliderElement).find(".slide").css("visibility", "hidden");
+			$(sliderElement).find(".slide").slice(index, index+1).css("visibility", "visible");
+		};
 	};
 	
 	// Перерерандарим слайдер объектов.
