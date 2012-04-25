@@ -96,12 +96,12 @@ PermGuide.Scheduler = {
 	finished: function(taskName){
 		if (this.tasks[taskName] == null)
 			return;
-		
-		if (!this.tasks[taskName].finished)
+		var task = this.tasks[taskName];
+		if (!task.finished)
 		{
 			console.log("Завершение задания (этапа) "+taskName+", "+(new Date() - this.startTime)+" мс.");
-			this.notify("finished", this.tasks[taskName]);
-			this.tasks[taskName].finished = true;
+			this.notify("finished", task);
+			task.finished = true;
 		}
 		
 		this.start();

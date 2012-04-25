@@ -37,6 +37,15 @@
 
 		<script type="text/javascript">
 		
+		String.prototype.format = function() {
+			var s = this, i = arguments.length;
+
+			while (i--) {
+				s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
+			}
+			return s;
+		};
+
 		////
 		// Отбражение splash-экрана.
 		splashInit = function() {
@@ -47,10 +56,20 @@
 			// При включении/отключении тэгов, формируем 
 			PermGuide.Scheduler.attachListener("started", function (){
 				var strStutus = PermGuide.Language.getInterfaceString("Loading");
-				$("#splashScreen .statusLine").text(strStutus);
+				$("#splashScreen .statusLine").text(strStutus.format(PermGuide.version));
 				//var tasksCount = PermGuide.Scheduler.tasksCount();
 				//var finishedTasksCount = PermGuide.Scheduler.finishedTasksCount();
 				//$("#splashScreen .statusLine").text(""+finishedTasksCount+"/"+tasksCount);
+			});
+			
+			PermGuide.ResourceManager.attachListener("onDownloadResource", function(count, total){
+				if (count == total) {
+					var strStutus = PermGuide.Language.getInterfaceString("Loading");
+					$("#splashScreen .statusLine").text(strStutus.format(PermGuide.version));
+				} else {
+					var strStutus = PermGuide.Language.getInterfaceString("Download");
+					$("#splashScreen .statusLine").text(strStutus.format(count, total));
+				}
 			});
 			
 			// Завершим этот этап загрузки приложения.
@@ -66,10 +85,18 @@
 			if (PermGuide.isAndroid)
 				$.extend(PermGuide.ResourceManager, PermGuide.AndroidCacheManager);
 
-			PermGuide.ResourceManager.onLoadSources = function(){
+			PermGuide.ResourceManager.attachListener("onLoadSources",function(){
 				if (PermGuide.ResourceManager.needUpdateCache()) {
 					console.log("Требуется обновление кэша!");
-					if (confirm("На сервере имеются новые данные. Вы хотите их обновить?")) {
+					
+					var cacheSize = Math.round(PermGuide.ResourceManager.serverSource.cacheSize/(1024*1024));
+					var message;
+					if (PermGuide.ResourceManager.cacheCreated())
+						message = PermGuide.Language.getInterfaceString("UpdateCacheConfirm");
+					else
+						message = PermGuide.Language.getInterfaceString("DownloadCacheConfirm");
+					
+					if (confirm(message.format(cacheSize))) {
 						PermGuide.ResourceManager.updateCache();
 					} else {
 						console.log("Пользователь отказался от обновления кэша.");
@@ -79,14 +106,16 @@
 					console.log("Обновление кэша не требуется.");
 					PermGuide.Scheduler.finished("ResourcesInit");
 				}
-			};
+			});
 
-			PermGuide.ResourceManager.onCacheUpdateSuccessful = function(){
+			PermGuide.ResourceManager.attachListener("onCacheUpdateSuccessful", function(){
 				PermGuide.Scheduler.finished("ResourcesInit");
-			};
-			PermGuide.ResourceManager.onCacheUpdateError = function(){
+			});
+			
+			PermGuide.ResourceManager.attachListener("onCacheUpdateError", function(){
 				PermGuide.Scheduler.finished("ResourcesInit");
-			};
+				alert(PermGuide.Language.getInterfaceString("UpdateCacheError"));
+			});
 			
 			PermGuide.ResourceManager.init();
 		};

@@ -9,13 +9,19 @@ if(typeof PermGuide == "undefined")
  *  minRevision - минимальная версия начиная с которой данные считаются 
  *                актуальными;
  *  url - url списка доступных ресурсов.
+ *  isCacheSource - true если источник ресурсов является кэшем.
  */
-PermGuide.ResourcesSource = function(url) {
+PermGuide.ResourcesSource = function(url, isCacheSource) {
 	
 	this.revision = 0;
 	this.url = url
 	this.resources = [];
 	this.resourcesHash = {};
+
+	if (isCacheSource)
+		this.isCacheSource = true;
+	else 
+		this.isCacheSource = false;
 };
 
 PermGuide.ResourcesSource.prototype = {
@@ -35,7 +41,11 @@ PermGuide.ResourcesSource.prototype = {
 		
 		return res;
 		*/
-		return this.resourcesHash[resourceName];
+		var resource = this.resourcesHash[resourceName];
+		// Если источник является кэшем, а ресурс хранится на сервере, то игнорируем его.
+		if (this.isCacheSource && resource && resource.serverLocation)
+			return null;
+		return resource;
 	},
 	
 	/**
@@ -112,6 +122,7 @@ PermGuide.AndroidCacheManager = {
 	inited: false,
 	
 	init: function() {
+		// LocalFileSystem.PERSISTENT and LocalFileSystem.TEMPORARY
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
 			$.proxy(function(fileSystem) {
 				this.inited = true;
@@ -146,18 +157,31 @@ PermGuide.AndroidCacheManager = {
 		console.log("Запущено обновление кэша.");
 		var self = this;
 		var downloadCounter = 0;  // Счетчик скаченых файлов.
+		var downloadTotal = 0;    // Количество файлов которое надо скачать.
 		var downloadQueue = [];   // Очередь файлов для скачивания.
 		var fileTransfer = new FileTransfer();
 		
 		var cacheSourceRefresh = function(error) {
-			console.log("Обновлен источник ресурсов из кэша.");
-			$.extend(self.cacheSource, self.serverSource);
-			self.cacheSource.url = self.cacheURL();
+			console.log("Обновление индекса кэша.");
+
+			self.cacheSource = new PermGuide.ResourcesSource(self.cacheURL(), true);
+			self.cacheSource.load(function() {
+				console.log("Индекс кэша успешно обновлен.");
+				self.notify("onCacheUpdateSuccessful");
+				self.notify("onCacheUpdateCompleted");
+			}, 0);
 		}
 
 		var updateError = function(error) {
 			console.log("Ошибка при загрузке кэша: "+error.code);
-			self.onCacheUpdateError();
+
+			// При ошибке надо сбросить источник.
+			self.cacheSource.revision = 0;
+			self.cacheSource.resources = [];
+			self.cacheSource.resourcesHash = {};
+
+			self.notify("onCacheUpdateError");
+			self.notify("onCacheUpdateCompleted");
 		}
 		
 		// Загрузка ресурса.
@@ -177,10 +201,12 @@ PermGuide.AndroidCacheManager = {
 			console.log("Ресурс загружен: " + dirEntry.fullPath);
 			downloadCounter++;
 			
+			// Уведомляем о количестве загруженных ресурсов.
+			self.notify("onDownloadResource", downloadCounter, downloadTotal);
+			
 			// Если все файлы загружены, тогда рапортуем о завершении загрузки кэша.
 			if (downloadQueue.length == 0) {
 				cacheSourceRefresh();
-				self.onCacheUpdateSuccessful();
 			} else {
 				downloadResource(downloadQueue.pop());
 			}
@@ -189,7 +215,6 @@ PermGuide.AndroidCacheManager = {
 		// Формирует очередь загружаемых ресурсов и начинает загрузку.
 		var downloadResources = function(dirEntry) { 
 			console.log("Новая директория для кэша создана: "+dirEntry.fullPath);
-			console.log("Загрузка ресурсов кэш, количество ресурсов (+индексный файл): "+(this.serverSource.resources.length+1));
 			
 			////
 			// Добавим в очередь на загрузку индекс.
@@ -201,12 +226,21 @@ PermGuide.AndroidCacheManager = {
 			////
 			// Добавим в очередь на загрузку сами ресурсы.
 			$.each(this.serverSource.resources, $.proxy(function(index, resource) {	
-				
-				downloadQueue.push({
-					source: this.serverSource.url+"/"+resource.name,
-					target: dirEntry.fullPath+"/"+resource.name
-				});
+				// Если resource.serverLocation равно true, то файлы должны находится на
+				// сервере и не должны поподать в кэш.
+				if (!resource.serverLocation) {
+					downloadQueue.push({
+						source: this.serverSource.url+"/"+resource.name,
+						target: dirEntry.fullPath+"/"+resource.name
+					});
+				}
 			}, this));
+
+			downloadTotal = downloadQueue.length;
+			console.log("Загрузка ресурсов кэш, количество ресурсов для загрузки(+индексный файл): "+downloadTotal);
+			
+			// Уведомляем о количестве загруженных ресурсов.
+			self.notify("onDownloadResource", 0, downloadTotal);
 			
 			////
 			// Начинаем загружать ресурсы.
@@ -221,16 +255,16 @@ PermGuide.AndroidCacheManager = {
 			);
 		};
 
-		var removeCache = function(dir) { 
-			console.log("Получена директория в которой находится кэш, удаляем из неё все файлы.");
-			dir.removeRecursively(
+		var removeCache = function(dirEntry) { 
+			console.log("Получена директория в которой находится кэш, удаляем из неё все файлы: "+dirEntry.fullPath);
+			dirEntry.removeRecursively(
 				$.proxy(createCacheDirectory, this),
 				$.proxy(updateError, this)
 			);
 		};
 		
 		this.fileSystem.root.getDirectory("permguide", {create: true},
-			$.proxy(createCacheDirectory, this),
+			$.proxy(removeCache, this),
 			$.proxy(updateError, this)
 		);
 	},
@@ -239,11 +273,6 @@ PermGuide.AndroidCacheManager = {
 };
 
 PermGuide.ResourceManager = {
-	
-	/**
-	 * Список источников ресурсов.
-	 */
-	sources: [],
 	
 	init:  function() {
 		this.load();
@@ -256,16 +285,21 @@ PermGuide.ResourceManager = {
 		var res;
 		var revision = 0;
 		var hash = "";
+		var sources = [];
+		
+		sources.push(this.localSource);
+		if (this.cacheSource)
+			sources.push(this.cacheSource);
+		sources.push(this.serverSource);
+		
 		//console.log("Запрошен ресурс: "+resourceName);
-		$(this.sources).each(function() {
+		$(sources).each(function() {
 			if (this.revision > revision) {
 				var resource = this.getResource(resourceName);
 				if (resource && hash != this.hash) {
-					//if (!res) {
-						res = resource;
-						revision = this.revision;
-						hash = this.hash;
-					//} else if() {
+					res = resource;
+					revision = this.revision;
+					hash = this.hash;
 				}
 			}
 		});
@@ -327,58 +361,42 @@ PermGuide.ResourceManager = {
 		var source = sourceList.pop();
 		var self = this;
 		source.load(function() {
+
 			// Если источник содержит свежие данные, то добавим его в список.
-			if (source.revision > minRevision) {
-				self.sources.push(source);
+			if (minRevision < source.revision)
 				minRevision = source.revision;
-			}
 			
 			// Смотрим надо ли загружать другие источники.
 			if (sourceList.length > 0) {
 				self.loadFromSourceList(sourceList, minRevision);
 			} else {
-				self.onLoadSources();
+				self.notify("onLoadSources");
 			}
 		}, minRevision);
 	},
-
+	
 	/**
 	 * Загрузка данных из различных источников. 
 	 */
 	load: function () {
-		var sourceList = [];
+		var sources = [];
 		
 		// Есть три типа источников.
 		// - сервер;
 		// - файловый кэш;
 		// - и данные зашитые в программу.
 		this.serverSource = new PermGuide.ResourcesSource("http://permguide.ru/resources");
-		sourceList.push(this.serverSource);
+		sources.push(this.serverSource);
 		if (this.canCreateCache()) {
-			this.cacheSource = new PermGuide.ResourcesSource(this.cacheURL());
-			sourceList.push(this.cacheSource);
+			this.cacheSource = new PermGuide.ResourcesSource(this.cacheURL(), true);
+			sources.push(this.cacheSource);
 		}
 		this.localSource = new PermGuide.ResourcesSource("resources");
-		sourceList.push(this.localSource);
+		sources.push(this.localSource);
 		
 		// Загрузка информации о ресурсах из указанных выше источников. 
-		this.loadFromSourceList(sourceList, 0);
+		this.loadFromSourceList(sources, 0);
 	},
-	
-	/**
-	 * Событие, которые выполняется при окончании загрузки источников ресурсов.
-	 */
-	onLoadSources: function () {},
-
-	/**
-	 * Событие, вызывается когда кэш успешно обновился.
-	 */
-	onCacheUpdateSuccessful: function () {},
-
-	/**
-	 * Событие, вызывается при возникновении ошибки в обновлении.
-	 */
-	onCacheUpdateError: function () {}
 };
 
 // Расширим до Observable.
