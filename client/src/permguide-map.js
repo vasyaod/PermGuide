@@ -52,8 +52,9 @@ PermGuide.SimpleOverlay = function (geoPoint) {
 			'	</div>'
 			);	
 	// Устанавливаем z-index как у метки
-	//element.css("z-index", YMaps.ZIndex.OVERLAY);
-	element.css("z-index", YMaps.ZIndex.OVERLAY);
+	//var zIndex = YMaps.ZIndex.OVERLAY;
+	var zIndex = 110;
+	element.css("z-index", zIndex);
 	
 	// Вызывается при добавления оверлея на карту 
 	this.onAddToMap = function (_map, _parentContainer) {
@@ -91,9 +92,10 @@ PermGuide.SimpleOverlay = function (geoPoint) {
 /**
  * Оверлей карты для отображения объекто (мест).
  */
-PermGuide.BoxOverlay = function (geoPoint, fn) {
+PermGuide.BoxOverlay = function (point, fn) {
 	
-	var map, parentContainer, element;
+	var self = this;
+	var element;
 
 	var getElement = function () {
 		if (element)
@@ -109,9 +111,11 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 				
 		// Устанавливаем z-index как у метки
 		//element.css("z-index", YMaps.ZIndex.OVERLAY);
-		element.find(".bg").css("z-index", YMaps.ZIndex.OVERLAY+1);
-		element.find(".box").css("z-index", YMaps.ZIndex.OVERLAY+10);
-		element.find(".glow").css("z-index", YMaps.ZIndex.OVERLAY+10);
+		//var zIndex = YMaps.ZIndex.OVERLAY;
+		var zIndex = 110;
+		element.find(".bg").css("z-index", zIndex+1);
+		element.find(".box").css("z-index", zIndex+10);
+		element.find(".glow").css("z-index", zIndex+10);
 		
 		//if (PermGuide.isPhonegap)
 			element.find(".bg").css("display", "block");
@@ -128,9 +132,7 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 
 	
 	// Вызывается при добавления оверлея на карту 
-	this.onAddToMap = function (_map, _parentContainer) {
-		map = _map;
-		parentContainer = _parentContainer;
+	this.onAddToMap = function (map, parentContainer) {
 		getElement().appendTo(parentContainer);
 		this.onMapUpdate();
 	};
@@ -146,7 +148,8 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 	this.onMapUpdate = function () {
 		// Смена позиции оверлея
 //		var position = map.converter.coordinatesToMapPixels(geoPoint).moveBy(offset);
-		var position = map.converter.coordinatesToMapPixels(geoPoint);
+		var position = self.converter.getBitmapPoint(point.lat, point.lng);
+//		alert(position.x);
 		getElement().css({
 			left: position.x,
 			top:  position.y
@@ -582,10 +585,6 @@ PermGuide.MapManager = function (yMapElement, mode){
 		// Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
 		map.setCenter({lat: data.centerLat, lng: data.centerLng}, data.zoom);
 		
-		PermGuide.Scheduler.finished("ObjectsMapInit");
-		PermGuide.Scheduler.finished("RoutesMapInit");
-		return;
-
 		// Генерируем дотопримечательности (метки) на карте.
 		$.each(applicationData.getAllObjects(this.mode), $.proxy(function(index, object) {	
 			/*
@@ -613,7 +612,8 @@ PermGuide.MapManager = function (yMapElement, mode){
 				}
 			
 			var boxOverlay = new PermGuide.BoxOverlay(
-				new YMaps.GeoPoint(object.point.lng, object.point.lat),
+				//new YMaps.GeoPoint(object.point.lng, object.point.lat),
+				{lng: object.point.lng, lat: object.point.lat},
 				// Обработчик события клика на ящик на карте.
 				// При первом клике, выделяем объект.
 				// При втором клике, если он произошел, отобрадаем информацию об объекте.
@@ -630,7 +630,6 @@ PermGuide.MapManager = function (yMapElement, mode){
 			//placemark.hide();
 			//this.yMap.addOverlay(placemark);
 		}, this));
-		
 		
 		// Генерируем маршруты (линии) на карте.
 		if (this.routesLayer && this.mode == "routes") {
@@ -767,6 +766,8 @@ PermGuide.MapManager = function (yMapElement, mode){
 	 * Внутренний метод, вызывается при выборе объекта на карте.
 	 */
 	this._selectObject = function(overlayState, centred) {
+		
+		return;
 		
 		if (this.selectedOverlayState) {
 			this.selectedOverlayState.overlay.hideGlow(); 

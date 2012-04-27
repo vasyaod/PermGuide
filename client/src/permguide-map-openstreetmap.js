@@ -5,6 +5,7 @@ if(typeof PermGuide == "undefined")
 
 PermGuide.MapLayer = function () {
 	
+	var self = this;
 	var canvas = $('<canvas class="routesLayer"></canvas>');
 	
 	// Обязательные стили. 
@@ -15,10 +16,10 @@ PermGuide.MapLayer = function () {
 	canvas.css("height", "100%");
 	
 	var context = canvas[0].getContext('2d');
-	
+	// Отдельно храним размеры канвы, что бы их не запрашивать каждый раз.
+	var canvasWidth, canvasHeight;
 	var tilesHash = {};
 	var tilesQueue = [];
-	var self = this;
 	var map = null;
 	
 	this.mapProvider = {
@@ -37,8 +38,11 @@ PermGuide.MapLayer = function () {
 	$(window).resize(function() {
 		if (map == null)
 			return;
-		canvas.attr("width", $(map.getContainer()).width());
-		canvas.attr("height", $(map.getContainer()).height());
+		
+		canvasWidth = $(map.getContainer()).width();
+		canvasHeight = $(map.getContainer()).height();		
+		canvas.attr("width", canvasWidth);
+		canvas.attr("height", canvasHeight);
 	});
 	
 	var encodeIndex = function (tileX, tileY, zoom) {
@@ -146,8 +150,14 @@ PermGuide.Map = function (mapElement) {
 	var self = this;
 	// Массивчик слоев карты.
 	var layers = [];
+	// Массив с оверлеями.
+	var overlays = [];
+	
 	// Координата центра.
 	var center = {};
+	// Центр в координатах битмара.
+	var bitmapCenter = {};
+	
 	// Зум карты.
 	var zoom;
 	
@@ -163,31 +173,67 @@ PermGuide.Map = function (mapElement) {
 	var container = $('<div></div>');
 	container.appendTo(mapElement);
 	container.css("position", "absolute");
+	container.css("overflow", "hidden");
 	container.css("top", "0");
 	container.css("left", "0");
 	container.css("width", "100%");
 	container.css("height", "100%");
 	container.css("background-color", "#fff");
 	
+	var overlayContainer = $('<div></div>');
+	overlayContainer.appendTo(container);
+	overlayContainer.css("z-index", "2");
+	overlayContainer.css("position", "absolute");
+	overlayContainer.css("top", "0");
+	overlayContainer.css("left", "0");
+	overlayContainer.css("width", "0");
+	overlayContainer.css("height", "0");
+	
 	this.converter = {
 			
 		tileSize: 256,
 			
 		getBitmapX: function (lat, lng, zoom) {
-			return Math.pow(2, zoom) * this.tileSize * (lng + 180) / 360;
+			if (!zoom)
+				zoom = self.getZoom();
+			return Math.floor(Math.pow(2, zoom) * this.tileSize * (lng + 180) / 360);
 		},
 
 		getBitmapY: function (lat, lng, zoom) {
-			return Math.pow(2, zoom) * this.tileSize * (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2;
+			if (!zoom)
+				zoom = self.getZoom();
+			return Math.floor(Math.pow(2, zoom) * this.tileSize * (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2);
 		},
-
+		
+		getBitmapPoint: function (lat, lng, zoom) {
+			if (!zoom)
+				zoom = self.getZoom();
+			return {
+				x: this.getBitmapX(lat, lng, zoom),
+				y: this.getBitmapY(lat, lng, zoom)
+			};
+		},
+		
 		getLat: function (bitmapX, BitmapY, zoom) { 
+			if (!zoom)
+				zoom = self.getZoom();
 			var n = Math.PI - 2 * Math.PI * BitmapY / (Math.pow(2, zoom)*this.tileSize);
 			return (180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))));
 		},
 
 		getLng: function (bitmapX, BitmapY, zoom) { 
+			if (!zoom)
+				zoom = self.getZoom();
 			return (bitmapX / (Math.pow(2, zoom)*this.tileSize) * 360 - 180);
+		},
+
+		getLatLng: function (bitmapX, BitmapY, zoom) {
+			if (!zoom)
+				zoom = self.getZoom();
+			return {
+				lat: this.getLat(bitmapX, BitmapY, zoom),
+				lng: this.getLng(bitmapX, BitmapY, zoom)
+			};
 		}
 	};
 
@@ -204,7 +250,17 @@ PermGuide.Map = function (mapElement) {
 		layers = $(layers).filter(function(){ return this != layer; } )
 		layer.onRemoveFromMap();
 	};
+	
+	this.addOverlay = function (overlay) {
+		overlays.push(overlay);
+		overlay.onAddToMap(this, overlayContainer);
+	};
 
+	this.removeOverlay = function (overlay) {
+		overlays = $(overlays).filter(function(){ return this != overlay; } )
+		overlay.onRemoveFromMap();
+	};
+	
 	this.getCenter = function () {
 		return ({
 			lat: center.lat,
@@ -217,10 +273,27 @@ PermGuide.Map = function (mapElement) {
 			lat: point.lat,
 			lng: point.lng
 		};
-		zoom = pZoom;
+		
+		if (pZoom) {
+			zoom = pZoom;
+		}
 		position = null;
 		
+		var bitmapX = self.converter.getBitmapX(center.lat, center.lng, zoom);
+		var bitmapY = self.converter.getBitmapY(center.lat, center.lng, zoom);
+		bitmapCenter = {
+			x: bitmapX,
+			y: bitmapY
+		};
+		overlayContainer.css("left", -bitmapCenter.x+Math.floor(container.width()/2));
+		overlayContainer.css("top", -bitmapCenter.y+Math.floor(container.height()/2));
+		
 		$(layers).each(function() { 
+			if (this.onMapUpdate)
+				this.onMapUpdate();
+		});
+		
+		$(overlays).each(function() { 
 			if (this.onMapUpdate)
 				this.onMapUpdate();
 		});
@@ -234,10 +307,25 @@ PermGuide.Map = function (mapElement) {
 		zoom = pZoom;
 		if (zoom > 16)
 			zoom = 16;
-		else if (zoom < 0)
-			zoom = 0;
+		else if (zoom < 1)
+			zoom = 1;
+		
+		var bitmapX = self.converter.getBitmapX(center.lat, center.lng, zoom);
+		var bitmapY = self.converter.getBitmapY(center.lat, center.lng, zoom);
+		bitmapCenter = {
+			x: bitmapX,
+			y: bitmapY
+		};
+		overlayContainer.css("left", -bitmapCenter.x+Math.floor(container.width()/2));
+		overlayContainer.css("top", -bitmapCenter.y+Math.floor(container.height()/2));
+
 		
 		$(layers).each(function() { 
+			if (this.onMapUpdate)
+				this.onMapUpdate();
+		});
+		
+		$(overlays).each(function() { 
 			if (this.onMapUpdate)
 				this.onMapUpdate();
 		});
@@ -256,6 +344,9 @@ PermGuide.Map = function (mapElement) {
 			}
 		}
 		
+		overlayContainer.css("left", -bitmapCenter.x+Math.floor(container.width()/2)-position.x);
+		overlayContainer.css("top", -bitmapCenter.y+Math.floor(container.height()/2)-position.y);
+		
 		$(layers).each(function() { 
 			if (this.onMove)
 				this.onMove(position, offset);
@@ -266,18 +357,15 @@ PermGuide.Map = function (mapElement) {
 		if (!position)
 			return;
 		
-		var bitmapX = self.converter.getBitmapX(center.lat, center.lng, zoom)+position.x;
-		var bitmapY = self.converter.getBitmapY(center.lat, center.lng, zoom)+position.y;
+		var bitmapX = bitmapCenter.x+position.x;
+		var bitmapY = bitmapCenter.y+position.y;
 		
-		center = {
+		var point = {
 			lat: self.converter.getLat(bitmapX, bitmapY, zoom),
 			lng: self.converter.getLng(bitmapX, bitmapY, zoom)
 		};
-		position = null;
-		$(layers).each(function() { 
-			if (this.onMapUpdate)
-				this.onMapUpdate();
-		});
+		
+		self.setCenter(point);
 	};
 	
 	/**
@@ -359,6 +447,11 @@ PermGuide.OpenStreetMapBridge = function (map){
 		map.addLayer(layer);
 	};
 	
+	this.addOverlay = function(overlay) {
+		overlay.converter = map.converter;
+		map.addOverlay(overlay);
+	};
+	
 	this.setCenter = function (point, zoom) {
 		map.setCenter(point, zoom);
 	};
@@ -367,7 +460,7 @@ PermGuide.OpenStreetMapBridge = function (map){
 /**
  * Реализация загрузчика карт openstreetmap.
  */
-PermGuide.OpenstreetmapLoader = {
+PermGuide.OpenStreetMapLoader = {
 		
 	load: function() {
 		var factory = function(element) {
