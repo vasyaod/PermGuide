@@ -27,6 +27,8 @@
 		<script type="text/javascript" src="permguide-dropdownmenu-plugin.js"></script>
 		<script type="text/javascript" src="permguide-slider-plugin.js"></script>
 		<script type="text/javascript" src="permguide-map.js"></script>
+		<script type="text/javascript" src="permguide-map-yandex.js"></script>
+		<script type="text/javascript" src="permguide-map-openstreetmap.js"></script>
 		<script type="text/javascript" src="permguide-geolocation.js"></script>
 		<script type="text/javascript" src="permguide-screenmanager.js"></script>
 		<script type="text/javascript" src="permguide-interface.js"></script>
@@ -453,6 +455,14 @@
 				PermGuide.Scheduler.finished("RoutesMapInit");
 			});
 			
+			PermGuide.LoadMapManager.attachListener("mapLoadSuccess", function() {
+				PermGuide.Scheduler.finished("MapInit");
+			});
+			
+			////
+			// Засширяем загрузчик карт, до загрузчика яндексовских карт.
+			//$.extend(PermGuide.LoadMapManager, PermGuide.YandexMapLoader);
+			$.extend(PermGuide.LoadMapManager, PermGuide.OpenstreetmapLoader);
 			PermGuide.LoadMapManager.load();
 		};
 
