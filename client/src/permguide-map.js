@@ -177,7 +177,7 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 	};
 }
 
-PermGuide.CanvasLayer = function () {
+PermGuide.RouteLayer = function () {
 	
 	var map = null;
 	var routes = [];
@@ -185,7 +185,7 @@ PermGuide.CanvasLayer = function () {
 	var parentContainer = null;
 	var smoothZoom = false;
 	
-	var element = $('<canvas class="canvasLayer"></canvas>');
+	var element = $('<canvas class="routesLayer"></canvas>');
 		
 	// Устанавливаем z-index как у метки
 	element.css("z-index", YMaps.ZIndex.MAP_LAYER+1);
@@ -319,7 +319,7 @@ PermGuide.CanvasLayer = function () {
 		}
 	};
 	
-	this.repaint = function () {
+	this.render = function () {
 		context.clearRect(0, 0, $(element).attr("width"), $(element).attr("height"));
 		
 		if (smoothZoom)
@@ -353,7 +353,7 @@ PermGuide.CanvasLayer = function () {
 	this.reposition = function () {
 		$.each(routes, $.proxy(function(index, route) {
 			var i = 0;
-			$.each(route.points, $.proxy(function(index, geoPoint) {					
+			$.each(route.points, $.proxy(function(index, geoPoint) {
 				var point = map.converter.coordinatesToMapPixels(new YMaps.GeoPoint(geoPoint.lng, geoPoint.lat));
 				geoPoint.x = point.x; 
 				geoPoint.y = point.y; 
@@ -366,22 +366,22 @@ PermGuide.CanvasLayer = function () {
 	{
 		position = null;
 		this.reposition();
-		this.repaint();
+		this.render();
 	};
 
 	this.onMove = function (_position, _offset) {
 		position = _position;
-		this.repaint();
+		this.render();
 	};
 	
 	this.onSmoothZoomEnd = function () {
 		smoothZoom = false;
-		this.repaint();
+		this.render();
 	};
 	
 	this.onSmoothZoomStart = function () {
 		smoothZoom = true;
-		this.repaint();
+		this.render();
 	};
 
 	this.onSmoothZoomTick = function (params) {
@@ -442,22 +442,382 @@ PermGuide.LoadMapManager = {
 }
 //Расширим до Observable.
 $.extend(PermGuide.LoadMapManager, new PermGuide.Observable());
-/*
+
+PermGuide.MapLayout = function () {
+	
+	var canvas = $('<canvas class="routesLayer"></canvas>');
+	
+	// Обязательные стили. 
+	canvas.css("position", "absolute");
+	canvas.css("top", "0");
+	canvas.css("left", "0");
+	canvas.css("width", "100%");
+	canvas.css("height", "100%");
+	
+	var context = canvas[0].getContext('2d');
+	
+	var tilesHash = {};
+	var tilesQueue = [];
+	var self = this;
+	var map = null;
+	
+	this.mapProvider = {
+		getTileURL: function(x, y, z) {
+			var rand = function (n) {
+				return Math.floor(Math.random() * n);
+			};
+			var sub = ["a", "b", "c"];
+			var url = "http://" + sub[rand(3)] + ".tile.openstreetmap.org/" + z + "/" + x + "/" + y + ".png";
+			return url;
+		}
+	};
+	
+	//// 
+	// При ресазе страницы изменим размеры канвы. 
+	$(window).resize(function() {
+		if (map == null)
+			return;
+		canvas.attr("width", $(map.getContainer()).width());
+		canvas.attr("height", $(map.getContainer()).height());
+	});
+	
+	var encodeIndex = function (tileX, tileY, zoom) {
+		return tileX + "," + tileY + "," + zoom;
+	};
+	
+	var repaint = function () {
+
+		// Координаты углов канвы в пространстве битмапа. То есть координаты 
+		// видимой области в битмапе. 
+		var x1 = Math.floor(self.centerBitmapX - Math.floor(canvasWidth/2));
+		var y1 = Math.floor(self.centerBitmapY - Math.floor(canvasHeight/2));
+		var x2 = Math.floor(self.centerBitmapX + Math.floor(canvasWidth/2));
+		var y2 = Math.floor(self.centerBitmapY + Math.floor(canvasHeight/2));
+		
+		var tileX1 = Math.floor(x1/map.converter.tileSize);
+		var tileY1 = Math.floor(y1/map.converter.tileSize);
+		var tileX2 = Math.floor(x2/map.converter.tileSize);
+		var tileY2 = Math.floor(y2/map.converter.tileSize);
+		
+		for (tileX = tileX1; tileX <= tileX2; tileX++) {
+			for (tileY = tileY1; tileY <= tileY2; tileY++) {
+				var tile = tilesHash[encodeIndex(tileX, tileY, self.zoom)];
+				var x = tileX*map.converter.tileSize - x1;
+				var y = tileY*map.converter.tileSize - y1;
+				context.clearRect(x, y, map.converter.tileSize, map.converter.tileSize);
+				if (tile && tile.state) {
+					context.drawImage(tile.image, x, y);
+				} else {
+					loadTile(tileX, tileY, self.zoom);
+				}
+			}
+		}
+	}
+	
+	var loadTile = function (tileX, tileY, zoom) {
+		
+		if (tilesHash[encodeIndex(tileX, tileY, zoom)])
+			return;  // Если этот тайл уже нахотся в хеше, то выходим.
+		
+		var tile = {
+			state: 0,      // 0 - значит что тайл грузится, 1 - загружен
+			tileX: tileX,
+			tileY: tileY,
+			zoom: zoom,
+			image: new Image()
+		}
+		tilesQueue.push(tile);
+		tilesHash[encodeIndex(tileX, tileY, zoom)] = tile;
+		
+		tile.image.onerror = function () {
+			console.log("Ошибка загрузки тайла!!! URL: "+encodeIndex(tileX, tileY, zoom));
+		};
+		tile.image.onload = function () {
+			tile.state = 1;
+			repaint();
+		}
+		tile.image.src = self.mapProvider.getTileURL(tileX, tileY, zoom);
+		console.log("Загрузка тайла с сервера: "+tile.image.src);
+		
+		// Очищаем старые тайлы.
+		if (tilesQueue.length > 100) {
+			tile = tilesQueue.shift();
+			delete tilesHash[encodeIndex(tile.tileX, tile.tileY, tile.zoom)];
+		}
+	};
+	
+	this.onAddToMap = function (pMap) {
+		map = pMap;
+		var container = map.getContainer();
+		canvas.appendTo(container);
+		
+		canvasWidth = container.width();
+		canvasHeight = container.height();
+		canvas.attr("width", canvasWidth);
+		canvas.attr("height", canvasHeight);
+	};
+	
+	this.onRemoveFromMap = function () {
+		if (canvas.parent()) {
+			element.remove();
+		}
+	};
+	
+	this.onMapUpdate = function () {
+		var point = map.getCenter();
+		this.zoom = map.getZoom();
+		this.centerBitmapX = map.converter.getBitmapX(point.lat, point.lng, this.zoom);
+		this.centerBitmapY = map.converter.getBitmapY(point.lat, point.lng, this.zoom);
+
+		repaint();
+	};
+
+	this.onMove = function (position, offset) {
+		var point = map.getCenter();
+		this.centerBitmapX = map.converter.getBitmapX(point.lat, point.lng, this.zoom)+position.x;
+		this.centerBitmapY = map.converter.getBitmapY(point.lat, point.lng, this.zoom)+position.y;
+		
+		repaint();
+	};
+};
+
 PermGuide.Map = function (mapElement) {
 	
-	var container = $('<div style="position:"></div>');
-	var canvas = $('<canvas class="canvasLayer"></canvas>');
-	canvas.appendTo(mapElement);
+	var self = this;
+	// Массивчик слоев карты.
+	var layouts = [];
+	// Координата центра.
+	var center = {};
+	// Зум карты.
+	var zoom;
 	
-	canvas.attr("width", mapElement.width());
-	canvas.attr("height", mapElement.height());
+	// Координаты последнего перемещения курсора.
+	var lastMovePosition;
+	// Смещение битмапа относительно установлего центра,
+	var position = null;
+
+	// Флаг того что карта захвачена мышью
+	var draged = false;
 	
+	// Контейнер в котором хранятся слои карты.
+	var container = $('<div></div>');
+	container.appendTo(mapElement);
+	container.css("position", "absolute");
+	container.css("top", "0");
+	container.css("left", "0");
+	container.css("width", "100%");
+	container.css("height", "100%");
+	container.css("background-color", "#fff");
+	
+	this.converter = {
+			
+		tileSize: 256,
+			
+		getBitmapX: function (lat, lng, zoom) {
+			return Math.pow(2, zoom) * this.tileSize * (lng + 180) / 360;
+		},
+
+		getBitmapY: function (lat, lng, zoom) {
+			return Math.pow(2, zoom) * this.tileSize * (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2;
+		},
+
+		getLat: function (bitmapX, BitmapY, zoom) { 
+			var n = Math.PI - 2 * Math.PI * BitmapY / (Math.pow(2, zoom)*this.tileSize);
+			return (180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))));
+		},
+
+		getLng: function (bitmapX, BitmapY, zoom) { 
+			return (bitmapX / (Math.pow(2, zoom)*this.tileSize) * 360 - 180);
+		}
+	/*		
+			tile2lng: function (x, zoom) {
+				return (x / Math.pow(2, zoom) * 360 - 180);
+			},
+				
+			tile2lat: function (y, zoom) {
+				var n = Math.PI - 2 * Math.PI * y / Math.pow(2, zoom);
+				return (180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))));
+			},
+				
+			lat2tile: function (lat, zoom) { 
+				return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom))); 
+			},
+
+			lng2tile: function (lon, zoom) { 
+				return (Math.floor((lon+180)/360*Math.pow(2,zoom))); 
+			},
+	*/
+	};
+	
+	this.getCenter = function () {
+		return ({
+			lat: center.lat,
+			lng: center.lng
+		});
+	};
+	
+	this.getZoom = function () {
+		return zoom;
+	};
+	
+	this.setZoom = function (pZoom) {
+		zoom = pZoom;
+		if (zoom > 16)
+			zoom = 16;
+		else if (zoom < 0)
+			zoom = 0;
+		
+		$(layouts).each(function() { 
+			this.onMapUpdate();
+		});
+	};
+	
+	this.getContainer = function () {
+		return container;
+	};
+	
+	this.addLayout = function (layout) {
+		layouts.push(layout);
+		layout.onAddToMap(this);
+	};
+
+	this.removeLayout = function (layout) {
+		layouts = $(layouts).filter(function(){ return this != layout; } )
+		layout.onRemoveFromMap();
+	};
+
+	this.setPosition = function (centerBitmapX, centerBitmapY, zoom) {
+		this.centerBitmapX = centerBitmapX;
+		this.centerBitmapY = centerBitmapY;
+		this.zoom = zoom;
+		
+		$(layouts).each(function() { 
+			this.onMove(position, offset);
+		});
+	};
+	
+	this.setCenter = function (point, pZoom) {
+		center = {
+			lat: point.lat,
+			lng: point.lng
+		};
+		zoom = pZoom;
+		position = null;
+		
+		$(layouts).each(function() { 
+			this.onMapUpdate();
+		});
+	};
+	
+	var addOffset = function(offset) {
+		if (!position) {
+			position = {
+				x: offset.x,
+				y: offset.y
+			}
+		} else {
+			position = {
+				x: position.x + offset.x,
+				y: position.y + offset.y
+			}
+		}
+		
+		$(layouts).each(function() { 
+			this.onMove(position, offset);
+		});	
+	};
+	
+	var resetOffset = function() {
+		if (!position)
+			return;
+		
+		var bitmapX = self.converter.getBitmapX(center.lat, center.lng, zoom)+position.x;
+		var bitmapY = self.converter.getBitmapY(center.lat, center.lng, zoom)+position.y;
+		
+		center = {
+			lat: self.converter.getLat(bitmapX, bitmapY, zoom),
+			lng: self.converter.getLng(bitmapX, bitmapY, zoom)
+		};
+		position = null;
+		$(layouts).each(function() { 
+			this.onMapUpdate();
+		});
+	};
+	
+	/**
+	 * Обработчик событий нажатий тача или мыши.
+	 */
+	var down = function(event) {
+		
+		lastMovePosition = {
+			x: event.changedTouches[0].clientX,
+			y: event.changedTouches[0].clientY
+		};
+		
+		draged = true;
+	};
+	
+	/**
+	 * Обработчик событий нажатий тача или мыши.
+	 */
+	var move = function(event) {
+		if (!draged)
+			return;
+		
+		var offset = {
+			x: lastMovePosition.x - event.changedTouches[0].clientX,
+			y: lastMovePosition.y - event.changedTouches[0].clientY
+		};
+
+		lastMovePosition = {
+			x: event.changedTouches[0].clientX,
+			y: event.changedTouches[0].clientY
+		};
+		
+		addOffset(offset);
+	};
+	
+	/**
+	 * Обработчик события отпускания мыши.
+	 */
+	var up = function(event) {
+		draged = false;
+		
+		resetOffset();
+	};
+	
+	$(container).touchstart(down);
+	$(container).touchmove(move);
+	$(container).touchend(up);
+	
+	// Обработка событий колесика мыши.
+	container[0].addEventListener("DOMMouseScroll", function (event) {
+		if (event.detail < 0)
+			self.setZoom(self.getZoom()+1);
+		if (event.detail > 0)
+			self.setZoom(self.getZoom()-1);
+		event.stopPropagation();
+		event.preventDefault();
+	});
+
+	// Обработка событий колесика мыши.
+	container[0].addEventListener("mousewheel", function (event) {
+		if (event.wheelDelta > 0)
+			self.prev();
+		if (event.wheelDelta < 0)
+			self.next();
+		event.stopPropagation();
+		event.preventDefault();
+	});
+
+	this.addLayout(new PermGuide.MapLayout());
 };
 
 PermGuide.Map.prototype = {
 	
+	
 };
-*/
+
 /**
  * Менеджер управления картой и объектами на карте.
  */
@@ -472,16 +832,21 @@ PermGuide.MapManager = function (yMapElement, mode){
 	
 	// Вешаем обработчик события на загрузку скрипта сайта.
 	PermGuide.LoadMapManager.attachListener("mapLoadSuccess", $.proxy(function(object) {
-		this.yMapsLoaded();
+	//	this.yMapsLoaded();
 	}, this));
 	
 	// Инициализируем маршруты.
 	this.overlayStates = [];
 	this.routeStates = [];
 
-	//this._map = PermGuide.Map(this.yMapElement);
-	//PermGuide.Scheduler.finished("ObjectsMapInit");
-	//PermGuide.Scheduler.finished("RoutesMapInit");
+	this._map = new PermGuide.Map(this.yMapElement);
+	this._map.setCenter({
+		lng: 56.244652,
+		lat: 58.012395
+	}, 13);
+	
+	PermGuide.Scheduler.finished("ObjectsMapInit");
+	PermGuide.Scheduler.finished("RoutesMapInit");
 	
 	this.yMapsLoaded = function() {
 		
@@ -528,8 +893,8 @@ PermGuide.MapManager = function (yMapElement, mode){
 		*/
 
 		// Инициализируем собственный слой. 
-		this.canvasLayer = new PermGuide.CanvasLayer();
-		this.yMap.addLayer(this.canvasLayer);
+		this.routesLayer = new PermGuide.RoutesLayer();
+		this.yMap.addLayer(this.routesLayer);
 		
 		if (PermGuide.ApplicationData.loaded)
 			this.dataLoaded(PermGuide.ApplicationData);
@@ -712,7 +1077,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		
 		
 		// Генерируем маршруты (линии) на карте.
-		if (this.canvasLayer && this.mode == "routes") {
+		if (this.routesLayer && this.mode == "routes") {
 			$.each(data.routes, $.proxy(function(index, route) {	
 	
 				/*
@@ -784,18 +1149,18 @@ PermGuide.MapManager = function (yMapElement, mode){
 				
 			}, this));
 	
-			if (this.canvasLayer && this.mode == "routes") {
+			if (this.routesLayer && this.mode == "routes") {
 				$.each(this.routeStates, $.proxy(function(index, routeState) {	
 					var routeIsVisible = PermGuide.ApplicationData.routeIsVisible(routeState.object);
 					if (routeIsVisible && !routeState.onmap)
 					{
 						routeState.onmap = true;
-						this.canvasLayer.addRoute(routeState.route);
+						this.routesLayer.addRoute(routeState.route);
 					}
 					else if (!routeIsVisible && routeState.onmap)
 					{
 						routeState.onmap = false;
-						this.canvasLayer.removeRoute(routeState.route);
+						this.routesLayer.removeRoute(routeState.route);
 					}
 				}, this));
 			}
