@@ -5,18 +5,52 @@ if(typeof PermGuide == "undefined")
 
 PermGuide.YandexMapBridge = function (map){
 	
+	var converter = {
+		getConteinerPoint: function(lat, lng) {
+			var geoPoint = new YMaps.GeoPoint(lng, lat);
+			return map.converter.coordinatesToMapPixels(geoPoint);
+		}
+	} 
+
 	this.addControl = function(control) {
 		map.addControl(control);
 	}
 	
 	this.addLayer = function(layer) {
+		layer.converter = converter;
 		map.addLayer(layer);
+	};
+	
+	this.addOverlay = function(overlay) {
+		overlay.converter = converter;
+		map.addOverlay(overlay);
+	};
+	
+	this.removeOverlay = function(overlay) {
+		map.removeOverlay(overlay);
 	};
 	
 	this.setCenter = function (point, zoom) {
 		var geoPoint = new YMaps.GeoPoint(point.lng, point.lat);
 		map.setCenter(geoPoint, zoom);
-	};	
+	};
+	
+	this.getZoom = function () {
+		return map.getZoom();
+	};
+	
+	this.setZoom = function (zoom) {
+		map.setZoom(zoom);
+	};
+	
+	this.isVisible = function (point) {
+		var coordBounds = map.getBounds();
+		var geoPoint = new YMaps.GeoPoint(point.lng, point.lat)
+		if (coordBounds.contains(geoPoint))
+			return true;
+		else
+			return false;
+	};
 };
 
 /**

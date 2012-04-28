@@ -4,7 +4,6 @@ if(typeof PermGuide == "undefined")
 	PermGuide = {};
 
 PermGuide.MapControl = function (events) {
-	
 	var element = $(
 			'<div class="mapControl">'+
 			'	<div class="auto"></div>'+
@@ -41,25 +40,26 @@ PermGuide.MapControl = function (events) {
 /**
  * Оверлей карты для отображения объекто (мест).
  */
-PermGuide.SimpleOverlay = function (geoPoint) {
+PermGuide.SimpleOverlay = function (point) {
 	
-	var map;
+	var self = this;
+	
 	var element = $(
 			'	<div class="simpleOverlay">'+
 			'		<div class="overlayContainer">'+
 			'			<div class="img"></div>'+
 			'		</div>'+
 			'	</div>'
-			);	
+			);
+	
 	// Устанавливаем z-index как у метки
 	//var zIndex = YMaps.ZIndex.OVERLAY;
 	var zIndex = 110;
 	element.css("z-index", zIndex);
 	
 	// Вызывается при добавления оверлея на карту 
-	this.onAddToMap = function (_map, _parentContainer) {
-		map = _map;
-		element.appendTo(_parentContainer);
+	this.onAddToMap = function (map, parentContainer) {
+		element.appendTo(parentContainer);
 		this.onMapUpdate();
 	};
 
@@ -72,20 +72,21 @@ PermGuide.SimpleOverlay = function (geoPoint) {
 
 	// Вызывается при обновлении карты
 	this.onMapUpdate = function () {
-		var position = map.converter.coordinatesToMapPixels(geoPoint);
+		//var position = map.converter.coordinatesToMapPixels(geoPoint);
+		var position = self.converter.getConteinerPoint(point.lat, point.lng);
 		element.css({
 			left: position.x,
 			top:  position.y
 		})
 	};
 	
-	this.setGeoPoint = function (_geoPoint) {
-		geoPoint = _geoPoint
+	this.setGeoPoint = function (_point) {
+		point = _point
 		this.onMapUpdate();
 	};	
 	
 	this.getGeoPoint = function () {
-		return geoPoint;
+		return point;
 	};	
 }
 
@@ -148,7 +149,7 @@ PermGuide.BoxOverlay = function (point, fn) {
 	this.onMapUpdate = function () {
 		// Смена позиции оверлея
 //		var position = map.converter.coordinatesToMapPixels(geoPoint).moveBy(offset);
-		var position = self.converter.getBitmapPoint(point.lat, point.lng);
+		var position = self.converter.getConteinerPoint(point.lat, point.lng);
 //		alert(position.x);
 		getElement().css({
 			left: position.x,
@@ -182,17 +183,19 @@ PermGuide.BoxOverlay = function (point, fn) {
 }
 
 PermGuide.RoutesLayer = function () {
-	
+	var self = this;
 	var map = null;
 	var routes = [];
 	var position = null;
 	var parentContainer = null;
 	var smoothZoom = false;
 	
-	var element = $('<canvas class="routesLayer"></canvas>');
+	var element = $('<canvas class="canvasLayer"></canvas>');
 		
 	// Устанавливаем z-index как у метки
-	element.css("z-index", YMaps.ZIndex.MAP_LAYER+1);
+	//var zIndex = YMaps.ZIndex.MAP_LAYER+1;
+	var zIndex = 7;
+	element.css("z-index", zIndex);
 	// Получим контекст канвы.
 	var context = element[0].getContext('2d');
 	//// 
@@ -214,7 +217,7 @@ PermGuide.RoutesLayer = function () {
 		if (map != null)
 		{
 			this.reposition();
-			this.render();
+			this.repaint();
 		}
 	};
 	
@@ -227,7 +230,7 @@ PermGuide.RoutesLayer = function () {
 		if (map != null)
 		{
 			this.reposition();
-			this.render();
+			this.repaint();
 		}
 	};
 
@@ -247,72 +250,6 @@ PermGuide.RoutesLayer = function () {
 		element.appendTo(parentContainer);
 		element.attr("width", parentContainer.width());
 		element.attr("height", parentContainer.height());
-		
-//		if ($.fn.browserTouchSupport.touches) {
-		if (PermGuide.isIPhone) {
-			
-			$(element).on("mousedown", function(event) {
-				event.stopPropagation();
-				event.preventDefault();
-			});
-			$(element).on("mouseup", function(event) {
-				event.stopPropagation();
-				event.preventDefault();
-			});
-			$(element).on("mousemove", function(event) {
-				event.stopPropagation();
-				event.preventDefault();
-			});
-			
-			$(element).on("mouseclick", function(event) {
-				event.stopPropagation();
-				event.preventDefault();
-			});
-/*			
- 			Не стирать! Возможно пригодится.
- 			
-			var touchHandler = function (event)
-			{
-				var touches = event.changedTouches,
-					first = touches[0],
-					type = "";
-
-				switch(event.type)
-				{
-					case "touchstart": type = "mousedown"; break;
-					case "touchmove":  type="mousemove"; break;
-					case "touchend":   type="mouseup"; break;
-					default: return;
-				}
-				var simulatedEvent = document.createEvent("MouseEvent");
-				simulatedEvent.initMouseEvent(type, true, true, window, 1,
-				                      first.screenX, first.screenY,
-				                      first.clientX, first.clientY, false,
-				                      false, false, false, 0, null);
-
-				parentContainer.dispatchEvent(simulatedEvent);
-				event.preventDefault();
-			};
-			$(element).touchstart(touchHandler, true);
-			$(element).touchmove(touchHandler, true);
-			$(element).touchend(touchHandler, true);
-*/		
-			var position = {};
-			$(element).touchstart(function(event) {
-				position.x = event.changedTouches[0].clientX;
-				position.y = event.changedTouches[0].clientY;
-			}, true);
-			
-			$(element).touchmove(function(event) {
-				var _x = event.changedTouches[0].clientX;
-				var _y = event.changedTouches[0].clientY;
-				
-				map.moveBy(new YMaps.Point(position.x-_x, position.y-_y));
-				
-				position.x = _x;
-				position.y = _y;
-			}, true);
-		}
 		this.onMapUpdate();
 	};
 
@@ -323,7 +260,7 @@ PermGuide.RoutesLayer = function () {
 		}
 	};
 	
-	this.render = function () {
+	this.repaint = function () {
 		context.clearRect(0, 0, $(element).attr("width"), $(element).attr("height"));
 		
 		if (smoothZoom)
@@ -357,10 +294,10 @@ PermGuide.RoutesLayer = function () {
 	this.reposition = function () {
 		$.each(routes, $.proxy(function(index, route) {
 			var i = 0;
-			$.each(route.points, $.proxy(function(index, geoPoint) {
-				var point = map.converter.coordinatesToMapPixels(new YMaps.GeoPoint(geoPoint.lng, geoPoint.lat));
-				geoPoint.x = point.x; 
-				geoPoint.y = point.y; 
+			$.each(route.points, $.proxy(function(index, point) {
+				var conteinerPoint = self.converter.getConteinerPoint(point.lat, point.lng);
+				point.x = conteinerPoint.x; 
+				point.y = conteinerPoint.y; 
 			}, this));
 		}, this));
 	};
@@ -370,27 +307,27 @@ PermGuide.RoutesLayer = function () {
 	{
 		position = null;
 		this.reposition();
-		this.render();
+		this.repaint();
 	};
 
 	this.onMove = function (_position, _offset) {
 		position = _position;
-		this.render();
+		this.repaint();
 	};
 	
 	this.onSmoothZoomEnd = function () {
 		smoothZoom = false;
-		this.render();
+		this.repaint();
 	};
 	
 	this.onSmoothZoomStart = function () {
 		smoothZoom = true;
-		this.render();
+		this.repaint();
 	};
 
 	this.onSmoothZoomTick = function (params) {
 	};
-}
+};
 
 PermGuide.LoadMapManager = {
 	/**
@@ -448,8 +385,8 @@ PermGuide.MapManager = function (yMapElement, mode){
 		this.yMap.addControl(this.mapControl);
 
 		// Инициализируем собственный слой. 
-		//this.routesLayer = new PermGuide.RoutesLayer();
-		//this.yMap.addLayer(this.routesLayer);
+		this.routesLayer = new PermGuide.RoutesLayer();
+		this.yMap.addLayer(this.routesLayer);
 		
 		if (PermGuide.ApplicationData.loaded)
 			this.dataLoaded(PermGuide.ApplicationData);
@@ -457,13 +394,13 @@ PermGuide.MapManager = function (yMapElement, mode){
 			PermGuide.ApplicationData.attachListener("loaded", $.proxy(this.dataLoaded, this));
 		////
 		// Повешаем обработчики событий на обновление видимости объектов. 
-		//PermGuide.ApplicationData.attachListener("objectsVisibleChanged", $.proxy(this.visibleChanged, this));
-		//PermGuide.ApplicationData.attachListener("routesVisibleChanged", $.proxy(this.visibleChanged, this));
+		PermGuide.ApplicationData.attachListener("objectsVisibleChanged", $.proxy(this.visibleChanged, this));
+		PermGuide.ApplicationData.attachListener("routesVisibleChanged", $.proxy(this.visibleChanged, this));
 	
 		////
 		// Повешаем обработчики событий на обновление координат девайса. 
-		//PermGuide.Geolocation.attachListener("refreshed", $.proxy(this.positionRefreshed, this));
-		//PermGuide.Geolocation.attachListener("rateRefreshed", $.proxy(this.ratePositionRefreshed, this));
+		PermGuide.Geolocation.attachListener("refreshed", $.proxy(this.positionRefreshed, this));
+		PermGuide.Geolocation.attachListener("rateRefreshed", $.proxy(this.ratePositionRefreshed, this));
 		
 	};
 
@@ -487,7 +424,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		// Если указатель положения пользователя уже существует, то позиционируем на него.
 		if (this.placemark) {
 			var point = this.placemark.getGeoPoint();
-			this.yMap.panTo(point);
+			this.yMap.setCenter(point);
 		}
 	},
 
@@ -506,9 +443,11 @@ PermGuide.MapManager = function (yMapElement, mode){
 		if (!this.yMap)
 			return;
 		
-		var lng = position.coords.longitude;
-		var lat = position.coords.latitude;
-		var point = new YMaps.GeoPoint(lng, lat);
+		//var point = new YMaps.GeoPoint(lng, lat);
+		var point = {
+			lat: position.coords.latitude,
+			lng: position.coords.longitude
+		};
 		
 		if (!this.placemark)
 		{
@@ -524,7 +463,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		
 		// Если включен режим слежения, то позиционируем центр карты по полученным координатам.
 		if (this.autoEnabled) {
-			this.yMap.panTo(point);
+			this.yMap.setCenter(point);
 		}
 	};
 	
@@ -766,9 +705,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 	 * Внутренний метод, вызывается при выборе объекта на карте.
 	 */
 	this._selectObject = function(overlayState, centred) {
-		
-		return;
-		
+
 		if (this.selectedOverlayState) {
 			this.selectedOverlayState.overlay.hideGlow(); 
 		}
@@ -779,13 +716,11 @@ PermGuide.MapManager = function (yMapElement, mode){
 		var object = overlayState.object;
 
 		// Если объект находится за пределами карты, то центрируем по нему.
-		var coordBounds = this.yMap.getBounds();
-		var point = new YMaps.GeoPoint(object.point.lng, object.point.lat)
-		if (centred || !coordBounds.contains(point)) {
+		if (centred || !this.yMap.isVisible(object.point)) {
 			var timeoutId;
 			timeoutId = setTimeout($.proxy( function() {
 				clearTimeout(timeoutId);
-				this.yMap.setCenter(point);
+				this.yMap.setCenter(object.point);
 			}, this), 500);
 		}
 
