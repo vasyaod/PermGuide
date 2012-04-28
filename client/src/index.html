@@ -459,10 +459,24 @@
 				PermGuide.Scheduler.finished("MapInit");
 			});
 			
+			var map = "yandex";
+			if (PermGuide.isPhonegap)
+				map = "osm";
+			
+			// Если в параметрах указан тип карты, то используем тот тип который указан.
+			if (PermGuide.params.map == "osm")
+				map = "osm";
+			if (PermGuide.params.map == "yandex")
+				map = "yandex";
+				
 			////
-			// Засширяем загрузчик карт, до загрузчика яндексовских карт.
-			//$.extend(PermGuide.LoadMapManager, PermGuide.YandexMapLoader);
-			$.extend(PermGuide.LoadMapManager, PermGuide.OpenStreetMapLoader);
+			// Засширяем загрузчик карт, до нужного загрузчика, в зависимости от
+			// выбранной карты.
+			if (map == "yandex")
+				$.extend(PermGuide.LoadMapManager, PermGuide.YandexMapLoader);
+			else if(map == "osm")
+				$.extend(PermGuide.LoadMapManager, PermGuide.OpenStreetMapLoader);
+			
 			PermGuide.LoadMapManager.load();
 		};
 

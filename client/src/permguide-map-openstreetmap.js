@@ -534,9 +534,13 @@ PermGuide.Map = function (mapElement) {
 		event.stopPropagation();
 		event.preventDefault();
 	});
-
-	this.addLayer(new PermGuide.MapLayer());
 	
+	// Зум на двойной клик.
+	//container.dblclick(function(event) {
+	//	self.setZoom(self.getZoom()+1);
+	//});
+	
+	this.addLayer(new PermGuide.MapLayer());
 };
 
 PermGuide.OpenStreetMapBridge = function (map){
