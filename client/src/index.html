@@ -466,6 +466,8 @@
 			// Если в параметрах указан тип карты, то используем тот тип который указан.
 			if (PermGuide.params.map == "osm")
 				map = "osm";
+			if (PermGuide.params.map == "cloudmade")
+				map = "cloudmade";
 			if (PermGuide.params.map == "yandex")
 				map = "yandex";
 				
@@ -474,8 +476,40 @@
 			// выбранной карты.
 			if (map == "yandex")
 				$.extend(PermGuide.LoadMapManager, PermGuide.YandexMapLoader);
-			else if(map == "osm")
+			else if(map == "osm") {
 				$.extend(PermGuide.LoadMapManager, PermGuide.OpenStreetMapLoader);
+				PermGuide.LoadMapManager.mapParams.mapProvider = {
+					getTileURL: function(x, y, z) {
+						var url;
+						var resourceName = "map/" + z + "/" + x + "/" + y + ".png";
+						if (PermGuide.ResourceManager.isLocalRecource(resourceName)) {
+							url = PermGuide.ResourceManager.getResourceURL(resourceName);
+						} else {
+							var rand = function (n) {
+								return Math.floor(Math.random() * n);
+							};
+							var sub = ["1", "2", "3", "4"];
+							var url = "http://otile" + sub[rand(4)] + ".mqcdn.com/tiles/1.0.0/osm/" + z + "/" + x + "/" + y + ".png";
+						}
+						return url;
+					}
+				}
+			} else if(map == "cloudmade") {
+				var mapStyle = 998;
+				if (PermGuide.params.mapStyle)
+					mapStyle = PermGuide.params.mapStyle;
+				$.extend(PermGuide.LoadMapManager, PermGuide.OpenStreetMapLoader);
+				PermGuide.LoadMapManager.mapParams.mapProvider = {
+					getTileURL: function(x, y, z) {
+						var rand = function (n) {
+							return Math.floor(Math.random() * n);
+						};
+						var sub = ["a", "b", "c"];
+						var url = "http://" + sub[rand(3)] + ".tile.cloudmade.com/dc5300174772462e93dc5fa60e3dd50b/"+mapStyle+"/256/" + z + "/" + x + "/" + y + ".png";
+						return url;
+					}
+				}
+			}
 			
 			PermGuide.LoadMapManager.load();
 		};
@@ -547,7 +581,7 @@
 			if (PermGuide.params.version)
 				PermGuide.version = PermGuide.params.version;
 			else
-				PermGuide.version = "1.2";
+				PermGuide.version = "1.3";
 					
 			if (PermGuide.params.phonegap) {
 				PermGuide.isPhonegap = true;

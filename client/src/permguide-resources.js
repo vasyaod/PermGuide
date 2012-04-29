@@ -277,6 +277,20 @@ PermGuide.ResourceManager = {
 	init:  function() {
 		this.load();
 	},
+
+	/**
+	 * Возвращает true если данный ресурс находится либо в кэше, либо вшит в саму 
+	 * программу.
+	 */
+	isLocalRecource: function(resourceName) {
+
+		if (this.localSource.getResource(resourceName))
+			return true;
+		if (this.cacheSource && this.cacheSource.getResource(resourceName))
+			return true;
+		
+		return false;
+	},
 	
 	/**
 	 * Метод возвращает полный URL ресурса по его названию.

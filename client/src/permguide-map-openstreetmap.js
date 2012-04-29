@@ -39,6 +39,7 @@ PermGuide.MapLayer = function () {
 			return url;
 		}
 */
+
 		getTileURL: function(x, y, z) {
 			var rand = function (n) {
 				return Math.floor(Math.random() * n);
@@ -47,7 +48,16 @@ PermGuide.MapLayer = function () {
 			var url = "http://otile" + sub[rand(4)] + ".mqcdn.com/tiles/1.0.0/osm/" + z + "/" + x + "/" + y + ".png";
 			return url;
 		}
-	
+/*
+		getTileURL: function(x, y, z) {
+			var rand = function (n) {
+				return Math.floor(Math.random() * n);
+			};
+			var sub = ["a", "b", "c"];
+			var url = "http://" + sub[rand(3)] + ".tile.cloudmade.com/dc5300174772462e93dc5fa60e3dd50b/998/256/" + z + "/" + x + "/" + y + ".png";
+			return url;
+		}
+*/
 	};
 	
 	//// 
@@ -189,6 +199,12 @@ PermGuide.MapLayer = function () {
 	
 	this.onAddToMap = function (pMap) {
 		map = pMap;
+		
+		// Если у карты есть свой провадер, то берем его.
+		var mapParams = map.getParams();
+		if (mapParams.mapProvider)
+			self.mapProvider = mapParams.mapProvider;
+			
 		var container = map.getContainer();
 		canvas.appendTo(container);
 		
@@ -224,14 +240,19 @@ PermGuide.MapLayer = function () {
 	};
 };
 
-PermGuide.Map = function (mapElement) {
+PermGuide.Map = function (mapElement, pParams) {
 	
 	var self = this;
 	// Массивчик слоев карты.
 	var layers = [];
 	// Массив с оверлеями.
 	var overlays = [];
+	// Список параметров карты.
+	var params = {};
 	
+	if (pParams)
+		$.extend(params, pParams);
+
 	// Координата центра.
 	var center = {};
 	// Центр в координатах битмара.
@@ -331,7 +352,11 @@ PermGuide.Map = function (mapElement) {
 			};
 		}
 	};
-
+	
+	this.getParams = function () {
+		return params;
+	};
+	
 	this.getContainer = function () {
 		return container;
 	};
@@ -372,8 +397,8 @@ PermGuide.Map = function (mapElement) {
 		if (pZoom) {
 			zoom = pZoom;
 
-			if (zoom > 16)
-				zoom = 16;
+			if (zoom > 17)
+				zoom = 17;
 			if (zoom < 1)
 				zoom = 1;
 		}
@@ -528,9 +553,9 @@ PermGuide.Map = function (mapElement) {
 	// Обработка событий колесика мыши.
 	container[0].addEventListener("mousewheel", function (event) {
 		if (event.wheelDelta > 0)
-			self.prev();
+			self.setZoom(self.getZoom()+1);
 		if (event.wheelDelta < 0)
-			self.next();
+			self.setZoom(self.getZoom()-1);
 		event.stopPropagation();
 		event.preventDefault();
 	});
@@ -584,10 +609,14 @@ PermGuide.OpenStreetMapBridge = function (map){
  * Реализация загрузчика карт openstreetmap.
  */
 PermGuide.OpenStreetMapLoader = {
+	
+	mapParams: {},	// Параметры карты, можно 
 		
 	load: function() {
+		var self = this;
+		
 		var factory = function(element) {
-			var map = new PermGuide.Map(element);
+			var map = new PermGuide.Map(element, self.mapParams);
 			return new PermGuide.OpenStreetMapBridge(map);
 		}
 		
