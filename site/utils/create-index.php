@@ -29,7 +29,8 @@ class Resource {
 
 	public function __construct($resourcePath) { 
 		$this->name = $resourcePath;
-		$this->hash = md5_file($resourcePath);
+//		$this->hash = md5_file($resourcePath);
+		$this->hash = dechex(crc32(file_get_contents($resourcePath)));
 		$this->size = filesize($resourcePath);
 	} 
 }
@@ -78,7 +79,7 @@ class Index {
 			$resource = new Resource($file);
 			if ($this->isAllowed($resource)) {
 				$this->data->totalSize += $resource->size;
-				if (!$resource->serverLocation)
+				if (@!$resource->serverLocation)
 					$this->data->cacheSize += $resource->size;
 				
 				$this->data->resources[] = $resource;
@@ -101,11 +102,11 @@ $filterOggFile = function($resource) {
 	
 	$pos = strpos($resource->name, ".ogg");
 
-	if ($pos !== false) {
+	if ($pos !== false)
 		$resource->serverLocation = true;	// Говорит, что данный ресурс хранится на сервере.
-	} else {
-		$resource->serverLocation = false;
-	}
+//	} else {
+//		$resource->serverLocation = false;
+//	}
 	
 	
 	return true;

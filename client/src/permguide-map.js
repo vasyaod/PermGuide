@@ -4,8 +4,6 @@ if(typeof PermGuide == "undefined")
 	PermGuide = {};
 
 PermGuide.MapControl = function (events) {
-	
-	var map;
 	var element = $(
 			'<div class="mapControl">'+
 			'	<div class="auto"></div>'+
@@ -14,10 +12,11 @@ PermGuide.MapControl = function (events) {
 			'</div>'
 			);
 	// Устанавливаем z-index как у метки
-	element.css("z-index", YMaps.ZIndex.CONTROL);
+	//element.css("z-index", YMaps.ZIndex.CONTROL);
+	element.css("z-index", 1000);
 	
-	this.onAddToMap = function (_map, _controlPosition) {
-		map = _map;
+	this.onAddToMap = function (map, controlPosition) {
+
 		element.appendTo(map.getContainer());
 		
 		$(element).find(".plus").touchclick( function () {
@@ -41,23 +40,26 @@ PermGuide.MapControl = function (events) {
 /**
  * Оверлей карты для отображения объекто (мест).
  */
-PermGuide.SimpleOverlay = function (geoPoint) {
+PermGuide.SimpleOverlay = function (point) {
 	
-	var map;
+	var self = this;
+	
 	var element = $(
 			'	<div class="simpleOverlay">'+
 			'		<div class="overlayContainer">'+
 			'			<div class="img"></div>'+
 			'		</div>'+
 			'	</div>'
-			);	
+			);
+	
 	// Устанавливаем z-index как у метки
-	element.css("z-index", YMaps.ZIndex.OVERLAY);
+	//var zIndex = YMaps.ZIndex.OVERLAY;
+	var zIndex = 110;
+	element.css("z-index", zIndex);
 	
 	// Вызывается при добавления оверлея на карту 
-	this.onAddToMap = function (_map, _parentContainer) {
-		map = _map;
-		element.appendTo(_parentContainer);
+	this.onAddToMap = function (map, parentContainer) {
+		element.appendTo(parentContainer);
 		this.onMapUpdate();
 	};
 
@@ -70,29 +72,31 @@ PermGuide.SimpleOverlay = function (geoPoint) {
 
 	// Вызывается при обновлении карты
 	this.onMapUpdate = function () {
-		var position = map.converter.coordinatesToMapPixels(geoPoint);
+		//var position = map.converter.coordinatesToMapPixels(geoPoint);
+		var position = self.converter.getConteinerPoint(point.lat, point.lng);
 		element.css({
 			left: position.x,
 			top:  position.y
 		})
 	};
 	
-	this.setGeoPoint = function (_geoPoint) {
-		geoPoint = _geoPoint
+	this.setGeoPoint = function (_point) {
+		point = _point
 		this.onMapUpdate();
 	};	
 	
 	this.getGeoPoint = function () {
-		return geoPoint;
+		return point;
 	};	
 }
 
 /**
  * Оверлей карты для отображения объекто (мест).
  */
-PermGuide.BoxOverlay = function (geoPoint, fn) {
+PermGuide.BoxOverlay = function (point, fn) {
 	
-	var map, parentContainer, element;
+	var self = this;
+	var element;
 
 	var getElement = function () {
 		if (element)
@@ -108,9 +112,11 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 				
 		// Устанавливаем z-index как у метки
 		//element.css("z-index", YMaps.ZIndex.OVERLAY);
-		element.find(".bg").css("z-index", YMaps.ZIndex.OVERLAY+1);
-		element.find(".box").css("z-index", YMaps.ZIndex.OVERLAY+10);
-		element.find(".glow").css("z-index", YMaps.ZIndex.OVERLAY+10);
+		//var zIndex = YMaps.ZIndex.OVERLAY;
+		var zIndex = 110;
+		element.find(".bg").css("z-index", zIndex+1);
+		element.find(".box").css("z-index", zIndex+10);
+		element.find(".glow").css("z-index", zIndex+10);
 		
 		//if (PermGuide.isPhonegap)
 			element.find(".bg").css("display", "block");
@@ -127,9 +133,7 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 
 	
 	// Вызывается при добавления оверлея на карту 
-	this.onAddToMap = function (_map, _parentContainer) {
-		map = _map;
-		parentContainer = _parentContainer;
+	this.onAddToMap = function (map, parentContainer) {
 		getElement().appendTo(parentContainer);
 		this.onMapUpdate();
 	};
@@ -145,7 +149,8 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 	this.onMapUpdate = function () {
 		// Смена позиции оверлея
 //		var position = map.converter.coordinatesToMapPixels(geoPoint).moveBy(offset);
-		var position = map.converter.coordinatesToMapPixels(geoPoint);
+		var position = self.converter.getConteinerPoint(point.lat, point.lng);
+//		alert(position.x);
 		getElement().css({
 			left: position.x,
 			top:  position.y
@@ -177,8 +182,8 @@ PermGuide.BoxOverlay = function (geoPoint, fn) {
 	};
 }
 
-PermGuide.CanvasLayer = function () {
-	
+PermGuide.RoutesLayer = function () {
+	var self = this;
 	var map = null;
 	var routes = [];
 	var position = null;
@@ -188,7 +193,9 @@ PermGuide.CanvasLayer = function () {
 	var element = $('<canvas class="canvasLayer"></canvas>');
 		
 	// Устанавливаем z-index как у метки
-	element.css("z-index", YMaps.ZIndex.MAP_LAYER+1);
+	//var zIndex = YMaps.ZIndex.MAP_LAYER+1;
+	var zIndex = 7;
+	element.css("z-index", zIndex);
 	// Получим контекст канвы.
 	var context = element[0].getContext('2d');
 	//// 
@@ -243,72 +250,6 @@ PermGuide.CanvasLayer = function () {
 		element.appendTo(parentContainer);
 		element.attr("width", parentContainer.width());
 		element.attr("height", parentContainer.height());
-		
-//		if ($.fn.browserTouchSupport.touches) {
-		if (PermGuide.isIPhone) {
-			
-			$(element).on("mousedown", function(event) {
-				event.stopPropagation();
-				event.preventDefault();
-			});
-			$(element).on("mouseup", function(event) {
-				event.stopPropagation();
-				event.preventDefault();
-			});
-			$(element).on("mousemove", function(event) {
-				event.stopPropagation();
-				event.preventDefault();
-			});
-			
-			$(element).on("mouseclick", function(event) {
-				event.stopPropagation();
-				event.preventDefault();
-			});
-/*			
- 			Не стирать! Возможно пригодится.
- 			
-			var touchHandler = function (event)
-			{
-				var touches = event.changedTouches,
-					first = touches[0],
-					type = "";
-
-				switch(event.type)
-				{
-					case "touchstart": type = "mousedown"; break;
-					case "touchmove":  type="mousemove"; break;
-					case "touchend":   type="mouseup"; break;
-					default: return;
-				}
-				var simulatedEvent = document.createEvent("MouseEvent");
-				simulatedEvent.initMouseEvent(type, true, true, window, 1,
-				                      first.screenX, first.screenY,
-				                      first.clientX, first.clientY, false,
-				                      false, false, false, 0, null);
-
-				parentContainer.dispatchEvent(simulatedEvent);
-				event.preventDefault();
-			};
-			$(element).touchstart(touchHandler, true);
-			$(element).touchmove(touchHandler, true);
-			$(element).touchend(touchHandler, true);
-*/		
-			var position = {};
-			$(element).touchstart(function(event) {
-				position.x = event.changedTouches[0].clientX;
-				position.y = event.changedTouches[0].clientY;
-			}, true);
-			
-			$(element).touchmove(function(event) {
-				var _x = event.changedTouches[0].clientX;
-				var _y = event.changedTouches[0].clientY;
-				
-				map.moveBy(new YMaps.Point(position.x-_x, position.y-_y));
-				
-				position.x = _x;
-				position.y = _y;
-			}, true);
-		}
 		this.onMapUpdate();
 	};
 
@@ -353,10 +294,10 @@ PermGuide.CanvasLayer = function () {
 	this.reposition = function () {
 		$.each(routes, $.proxy(function(index, route) {
 			var i = 0;
-			$.each(route.points, $.proxy(function(index, geoPoint) {					
-				var point = map.converter.coordinatesToMapPixels(new YMaps.GeoPoint(geoPoint.lng, geoPoint.lat));
-				geoPoint.x = point.x; 
-				geoPoint.y = point.y; 
+			$.each(route.points, $.proxy(function(index, point) {
+				var conteinerPoint = self.converter.getConteinerPoint(point.lat, point.lng);
+				point.x = conteinerPoint.x; 
+				point.y = conteinerPoint.y; 
 			}, this));
 		}, this));
 	};
@@ -386,7 +327,7 @@ PermGuide.CanvasLayer = function () {
 
 	this.onSmoothZoomTick = function (params) {
 	};
-}
+};
 
 PermGuide.LoadMapManager = {
 	/**
@@ -394,70 +335,15 @@ PermGuide.LoadMapManager = {
 	 */
 	loaded: false,
 	
-	scriptLoaded: false,
-
-	load: function() {
-		this.loaded = false;
-		this.scriptLoaded = false;
-		var self = this;
-		
-		this.notify("mapLoading", this);
-//		$.getScript('http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=AAC5U08BAAAAhG98TwIAUF_dcR_gLZsbQ6zwFcalQlEjkMsAAAAAAAAAAADLl1k_yHuuKf8xCzG-8rc6q0B5jA==', function(data, textStatus, jqxhr) {
-//			alert(textStatus);
-//			YMaps.load($.proxy(self.yMapsLoaded, self));
-//		});
-	
-		$.ajax({
-			url: 'http://api-maps.yandex.ru/1.1/index.xml?loadByRequire=1&key=AAC5U08BAAAAhG98TwIAUF_dcR_gLZsbQ6zwFcalQlEjkMsAAAAAAAAAAADLl1k_yHuuKf8xCzG-8rc6q0B5jA==',
-			dataType: "script",
-			async: false,
-			timeoutNumber: 10000,
-			success: function() {
-				self.scriptLoaded = true;
-				YMaps.load($.proxy(self.yMapsLoaded, self));
-			}
-		});
-		var timeoutId;
-		timeoutId = setTimeout($.proxy( function() {
-			clearTimeout(timeoutId);
-			this.timeoutId1 = setTimeout($.proxy( this.yMapsFail, this), 1000);
-		}, this), 1000);
-		
-//*/
-	},
-
-	yMapsFail: function() {
-		clearTimeout(this.timeoutId1);
-		if (!this.scriptLoaded)
-			this.notify("mapLoadFail", this);
-	},
-	
-	yMapsLoaded: function() {
-		if (this.loaded)
-			return;
-		this.loaded = true;
-		PermGuide.Scheduler.finished("MapInit");
-		this.notify("mapLoadSuccess", this);
-	}
+	/**
+	 * Метод инициирует загрузку карты.
+	 */
+	load: function() {}
 }
 //Расширим до Observable.
 $.extend(PermGuide.LoadMapManager, new PermGuide.Observable());
-/*
-PermGuide.Map = function (mapElement) {
-	
-	var container = $('<div style="position:"></div>');
-	var canvas = $('<canvas class="canvasLayer"></canvas>');
-	canvas.appendTo(mapElement);
-	
-	canvas.attr("width", mapElement.width());
-	canvas.attr("height", mapElement.height());
-	
-};
 
-PermGuide.Map.prototype = {
-	
-};
-*/
+
 /**
  * Менеджер управления картой и объектами на карте.
  */
@@ -471,23 +357,18 @@ PermGuide.MapManager = function (yMapElement, mode){
 	this.autoEnabled = false;
 	
 	// Вешаем обработчик события на загрузку скрипта сайта.
-	PermGuide.LoadMapManager.attachListener("mapLoadSuccess", $.proxy(function(object) {
-		this.yMapsLoaded();
+	PermGuide.LoadMapManager.attachListener("mapLoadSuccess", $.proxy(function(factory) {
+		this.yMapsLoaded(factory);
 	}, this));
 	
 	// Инициализируем маршруты.
 	this.overlayStates = [];
 	this.routeStates = [];
 
-	//this._map = PermGuide.Map(this.yMapElement);
-	//PermGuide.Scheduler.finished("ObjectsMapInit");
-	//PermGuide.Scheduler.finished("RoutesMapInit");
-	
-	this.yMapsLoaded = function() {
+	this.yMapsLoaded = function(factory) {
 		
 		// Создает экземпляр карты и привязывает его к созданному контейнеру
-		this.yMap = new YMaps.Map(this.yMapElement);
-		this.yMap.enableScrollZoom();
+		this.yMap = factory(this.yMapElement);
 		var map = this.yMap;
 
 		this.mapControl = new PermGuide.MapControl({
@@ -503,33 +384,9 @@ PermGuide.MapManager = function (yMapElement, mode){
 		});
 		this.yMap.addControl(this.mapControl);
 
-		// Удалим лого и copyright у карт.
-		/*
-		this.interval = setInterval( $.proxy(function() {
-			if ($(this.yMapElement).find(".YMaps-logo").length > 0 && 
-				$(this.yMapElement).find(".YMaps-copyrights").length > 0) {
-				
-				//$(this.yMapElement).find(".YMaps-logo")[0].onclick(null);
-				//$(this.yMapElement).find(".YMaps-copyrights")[0].onclick(null);
-				
-				$(this.yMapElement).find(".YMaps-logo").on("mouseclick", function(event) {
-					event.stopPropagation();
-					event.preventDefault();
-				});
-				
-				$(this.yMapElement).find(".YMaps-copyrights").on("mouseclick", function(event) {
-					event.stopPropagation();
-					event.preventDefault();
-				});
-				
-				clearInterval(this.interval);
-			}
-		}, this), 1*1000);
-		*/
-
 		// Инициализируем собственный слой. 
-		this.canvasLayer = new PermGuide.CanvasLayer();
-		this.yMap.addLayer(this.canvasLayer);
+		this.routesLayer = new PermGuide.RoutesLayer();
+		this.yMap.addLayer(this.routesLayer);
 		
 		if (PermGuide.ApplicationData.loaded)
 			this.dataLoaded(PermGuide.ApplicationData);
@@ -567,7 +424,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		// Если указатель положения пользователя уже существует, то позиционируем на него.
 		if (this.placemark) {
 			var point = this.placemark.getGeoPoint();
-			this.yMap.panTo(point);
+			this.yMap.setCenter(point);
 		}
 	},
 
@@ -586,9 +443,11 @@ PermGuide.MapManager = function (yMapElement, mode){
 		if (!this.yMap)
 			return;
 		
-		var lng = position.coords.longitude;
-		var lat = position.coords.latitude;
-		var point = new YMaps.GeoPoint(lng, lat);
+		//var point = new YMaps.GeoPoint(lng, lat);
+		var point = {
+			lat: position.coords.latitude,
+			lng: position.coords.longitude
+		};
 		
 		if (!this.placemark)
 		{
@@ -604,7 +463,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		
 		// Если включен режим слежения, то позиционируем центр карты по полученным координатам.
 		if (this.autoEnabled) {
-			this.yMap.panTo(point);
+			this.yMap.setCenter(point);
 		}
 	};
 	
@@ -663,7 +522,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 		this.routeStates = [];
 		
 		// Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
-		map.setCenter(new YMaps.GeoPoint(data.centerLng, data.centerLat), data.zoom);
+		map.setCenter({lat: data.centerLat, lng: data.centerLng}, data.zoom);
 		
 		// Генерируем дотопримечательности (метки) на карте.
 		$.each(applicationData.getAllObjects(this.mode), $.proxy(function(index, object) {	
@@ -692,7 +551,8 @@ PermGuide.MapManager = function (yMapElement, mode){
 				}
 			
 			var boxOverlay = new PermGuide.BoxOverlay(
-				new YMaps.GeoPoint(object.point.lng, object.point.lat),
+				//new YMaps.GeoPoint(object.point.lng, object.point.lat),
+				{lng: object.point.lng, lat: object.point.lat},
 				// Обработчик события клика на ящик на карте.
 				// При первом клике, выделяем объект.
 				// При втором клике, если он произошел, отобрадаем информацию об объекте.
@@ -710,9 +570,8 @@ PermGuide.MapManager = function (yMapElement, mode){
 			//this.yMap.addOverlay(placemark);
 		}, this));
 		
-		
 		// Генерируем маршруты (линии) на карте.
-		if (this.canvasLayer && this.mode == "routes") {
+		if (this.routesLayer && this.mode == "routes") {
 			$.each(data.routes, $.proxy(function(index, route) {	
 	
 				/*
@@ -784,18 +643,18 @@ PermGuide.MapManager = function (yMapElement, mode){
 				
 			}, this));
 	
-			if (this.canvasLayer && this.mode == "routes") {
+			if (this.routesLayer && this.mode == "routes") {
 				$.each(this.routeStates, $.proxy(function(index, routeState) {	
 					var routeIsVisible = PermGuide.ApplicationData.routeIsVisible(routeState.object);
 					if (routeIsVisible && !routeState.onmap)
 					{
 						routeState.onmap = true;
-						this.canvasLayer.addRoute(routeState.route);
+						this.routesLayer.addRoute(routeState.route);
 					}
 					else if (!routeIsVisible && routeState.onmap)
 					{
 						routeState.onmap = false;
-						this.canvasLayer.removeRoute(routeState.route);
+						this.routesLayer.removeRoute(routeState.route);
 					}
 				}, this));
 			}
@@ -846,7 +705,7 @@ PermGuide.MapManager = function (yMapElement, mode){
 	 * Внутренний метод, вызывается при выборе объекта на карте.
 	 */
 	this._selectObject = function(overlayState, centred) {
-		
+
 		if (this.selectedOverlayState) {
 			this.selectedOverlayState.overlay.hideGlow(); 
 		}
@@ -857,13 +716,11 @@ PermGuide.MapManager = function (yMapElement, mode){
 		var object = overlayState.object;
 
 		// Если объект находится за пределами карты, то центрируем по нему.
-		var coordBounds = this.yMap.getBounds();
-		var point = new YMaps.GeoPoint(object.point.lng, object.point.lat)
-		if (centred || !coordBounds.contains(point)) {
+		if (centred || !this.yMap.isVisible(object.point)) {
 			var timeoutId;
 			timeoutId = setTimeout($.proxy( function() {
 				clearTimeout(timeoutId);
-				this.yMap.setCenter(point);
+				this.yMap.setCenter(object.point);
 			}, this), 500);
 		}
 
