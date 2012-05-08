@@ -74,7 +74,7 @@ class Index {
 	
 	public function addPath($path) {
 		$files = array();
-		getFiles($path, array('.', '..', 'resources.json'), $files);
+		getFiles($path, array('.', '..', 'index.json'), $files);
 		foreach ($files as $file) {
 			$resource = new Resource($file);
 			if ($this->isAllowed($resource)) {
