@@ -156,9 +156,11 @@ PermGuide.AndroidCacheManager = {
 	updateCache: function() {
 		console.log("Запущено обновление кэша.");
 		var self = this;
-		var downloadCounter = 0;  // Счетчик скаченых файлов.
-		var downloadTotal = 0;    // Количество файлов которое надо скачать.
-		var downloadQueue = [];   // Очередь файлов для скачивания.
+		var downloadCounter = 0;       // Счетчик скаченых файлов.
+		var downloadSizeCounter = 0;   // Счетчик скаченых байтов.
+		var downloadTotal = 0;         // Количество файлов которое надо скачать.
+		var downloadSizeTotal = 0;     // Общий размер файлов который надо скачать.
+		var downloadQueue = [];        // Очередь файлов для скачивания.
 		var fileTransfer = new FileTransfer();
 		
 		var cacheSourceRefresh = function(error) {
@@ -190,19 +192,27 @@ PermGuide.AndroidCacheManager = {
 			fileTransfer.download(
 					object.source,
 					object.target,
-					$.proxy(downloadResourceComplete, self),
-					$.proxy(updateError, self)
+					function(dirEntry) {
+						downloadResourceComplete(dirEntry, object)
+					},
+					updateError
 				);
 		};
 		
 		// Выполняется если ресурс успешно загружен. Если в очереди остались
 		// незагруденые ресурсы, тогда загрузка продолжается. 
-		var downloadResourceComplete = function(dirEntry) { 
+		var downloadResourceComplete = function(dirEntry, object) { 
 			console.log("Ресурс загружен: " + dirEntry.fullPath);
+			downloadSizeCounter += object.size;
 			downloadCounter++;
 			
 			// Уведомляем о количестве загруженных ресурсов.
-			self.notify("onDownloadResource", downloadCounter, downloadTotal);
+			self.notify("onDownloadResource", { 
+				fileCounter: downloadCounter, 
+				fileTotal: downloadTotal, 
+				sizeCounter: downloadSizeCounter,
+				sizeTotal: downloadSizeTotal
+			});
 			
 			// Если все файлы загружены, тогда рапортуем о завершении загрузки кэша.
 			if (downloadQueue.length == 0) {
@@ -219,6 +229,7 @@ PermGuide.AndroidCacheManager = {
 			////
 			// Добавим в очередь на загрузку индекс.
 			downloadQueue.push({
+				size: 0,
 				source: this.serverSource.url+PermGuide.ResourcesSource.prototype.indexFileName,
 				target: dirEntry.fullPath+PermGuide.ResourcesSource.prototype.indexFileName
 			});
@@ -230,6 +241,7 @@ PermGuide.AndroidCacheManager = {
 				// сервере и не должны поподать в кэш.
 				if (!resource.serverLocation) {
 					downloadQueue.push({
+						size: resource.size,
 						source: this.serverSource.url+"/"+resource.name,
 						target: dirEntry.fullPath+"/"+resource.name
 					});
@@ -237,6 +249,7 @@ PermGuide.AndroidCacheManager = {
 			}, this));
 
 			downloadTotal = downloadQueue.length;
+			downloadSizeTotal = this.serverSource.cacheSize;
 			console.log("Загрузка ресурсов кэш, количество ресурсов для загрузки(+индексный файл): "+downloadTotal);
 			
 			// Уведомляем о количестве загруженных ресурсов.

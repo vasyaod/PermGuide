@@ -64,13 +64,22 @@
 				//$("#splashScreen .statusLine").text(""+finishedTasksCount+"/"+tasksCount);
 			});
 			
-			PermGuide.ResourceManager.attachListener("onDownloadResource", function(count, total){
-				if (count == total) {
+			PermGuide.ResourceManager.attachListener("onDownloadResource", function(downloadState){
+				//alert(downloadState.fileCounter);
+				if (downloadState.fileCounter == downloadState.fileTotal) {
 					var strStutus = PermGuide.Language.getInterfaceString("Loading");
 					$("#splashScreen .statusLine").text(strStutus.format(PermGuide.version));
+					
+					$("#splashScreen .progressBar").css("visibility", "hidden");
 				} else {
+					var sizeCounter = Math.round(downloadState.sizeCounter/(1024*1024));
+					var sizeTotal = Math.round(downloadState.sizeTotal/(1024*1024));
+					
 					var strStutus = PermGuide.Language.getInterfaceString("Download");
-					$("#splashScreen .statusLine").text(strStutus.format(count, total));
+					$("#splashScreen .statusLine").text(strStutus.format(sizeCounter, sizeTotal));
+
+					$("#splashScreen .progressBar").css("visibility", "visible");
+					$("#splashScreen .progressBar").css("width", downloadState.sizeCounter/downloadState.sizeTotal*100+"%");
 				}
 			});
 			
@@ -819,6 +828,7 @@
 			
 			<div id="splashScreen" style="">
 				<!-- div style="margin-top: 30%">Идет загрузка приложения (карты, данных и другой фигни).</div--> 
+				<div class="progressBar">&nbsp;</div>
 				<div class="statusLine">&nbsp;</div>
 			</div>
 	
