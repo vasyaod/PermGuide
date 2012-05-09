@@ -61,8 +61,24 @@ PermGuide.ResourcesSource.prototype = {
 		if (data.revision <= minRevision) // Данные устарели, опять же выходим.
 			return;
 		
-		// Копируем информацию о ревизии в текущий объект.
-		$.extend(this, data);
+		// Небольшая заплптка в безопастности, не даем выходить за пределы кэша.
+		var allow = true;
+		$(data.resources).each(function(){
+			if (name.indexOf("..") != -1) {
+				console.warn("Ресурс ("+name+") пытается получить доступ за предклы кэша.");
+				allow = false;
+			}
+		});
+		
+		if (!allow) {
+			console.warn("Индекс содержит недопустимые данные и был забракован.");
+			return;
+		}
+		// Копируем информацию из индексной информации.
+		this.revision = data.revision;
+		this.totalSize = data.totalSize;
+		this.cacheSize = data.cacheSize;
+		this.resources = data.resources;
 		
 		// Сразу строим индекс, в котором можно будет искать по имени.
 		var self = this;
