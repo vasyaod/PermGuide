@@ -11,6 +11,9 @@ PermGuide.Interface.makeMapSlider = function(mapManager, mode, sliderElement) {
 	
 	$(sliderElement).slider();
 	
+	// Просто перехватим все события, что бы они не попадали на карту.
+	$(sliderElement).parents(".mapSliderPlace").touchclick( function (){}, true);
+	
 	mapManager.attachListener("mapObjectSelected", function (object){
 		$(sliderElement).data("state").selectByAttr("_id", object.id);
 	});
