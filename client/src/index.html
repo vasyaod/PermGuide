@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="browserTouchSupport.js"></script>
 		<script type="text/javascript" src="jsrender.js"></script>
 		<script type="text/javascript" src="jquery.urldecoder.js"></script>
-		<!-- script type="text/javascript" src="buzz.js"></script -->
+		<script type="text/javascript" src="wiki2html.js"></script>
 
 		<!-- Загрузка основного кода. -->
 		<script type="text/javascript" src="permguide-observable.js"></script>
@@ -47,7 +47,22 @@
 			}
 			return s;
 		};
-
+		
+		////
+		// Helper functions для jsrender
+		// http://borismoore.github.com/jsrender/demos/step-by-step/09_helper-functions.html
+		// Добаляем возможность использовать викиформатирование.
+		$.views.helpers({
+			// Функция генерирует вики-разметку. 
+			wiki: function(val) {
+				return val.wiki2html(true);
+			},
+			// 
+			encodeURI: function(val) {
+				return encodeURIComponent(val);
+			}
+		});
+		
 		////
 		// Отбражение splash-экрана.
 		splashInit = function() {
@@ -270,23 +285,6 @@
 			PermGuide.Interface.makeDropDownMenu("objects", $("#objectTags"));
 			PermGuide.Interface.makeDropDownMenu("routes", $("#routeTags"));
 
-			////
-			// Обработчик события загрузки данных 
-			PermGuide.ApplicationData.attachListener("loaded", function (applicationData){
-				////
-				// Заполним страницу с информацией о перми.
-				$("#aboutPerm").html(
-					$( "#aboutPermSectionTemplate" ).render(applicationData.data.info)
-				);
-				
-				$("#aboutPerm .copyright").each( function() {
-					this.addEventListener("touchstart", function(event){event.stopPropagation()});
-					this.addEventListener("touchmove", function(event){event.stopPropagation()});
-					this.addEventListener("touchend", function(event){event.stopPropagation()});
-				});
-				
-			});
-
 			PermGuide.ApplicationData.attachListener("objectSelected", function(object) {
 				
 				var pageSlider = $("#objectScreenSlider").data("state");
@@ -427,6 +425,31 @@
 			PermGuide.ApplicationData.load();
 			PermGuide.ApplicationData.attachListener("loaded", function () {
 				PermGuide.Scheduler.finished("DataLoad");
+			});
+		};
+		
+		wikiLoad = function() {
+			var url = "resources/wiki/ru/about-perm"
+			$.ajax({
+				url: url,
+				dataType: "html",
+				success: function(data, textStatus){
+					////
+					// Заполним страницу с информацией о перми.
+					$("#aboutPerm").html(data.wiki2html(true));
+					
+					$("#aboutPerm .copyright").each( function() {
+						this.addEventListener("touchstart", function(event){event.stopPropagation()});
+						this.addEventListener("touchmove", function(event){event.stopPropagation()});
+						this.addEventListener("touchend", function(event){event.stopPropagation()});
+					});
+					
+					PermGuide.Scheduler.finished("WikiLoad");
+				},
+				error: function(jqXHR, textStatus) {
+					alert(textStatus);
+					PermGuide.Scheduler.finished("WikiLoad");
+				}
 			});
 		};
 		
@@ -621,6 +644,10 @@
 				activateFn: dataLoad,
 				dependence: ["InterfaceInit", "ResourcesInit"]
 			});
+			PermGuide.Scheduler.addTask("WikiLoad",{
+				activateFn: wikiLoad,
+				dependence: ["InterfaceInit", "ResourcesInit"]
+			});
 			PermGuide.Scheduler.addTask("GeolocationInit",{
 				activateFn: geolocationInit,
 				dependence: ["DataLoad"]
@@ -637,7 +664,7 @@
 			});
 			PermGuide.Scheduler.addTask("CloseSplash",{
 				activateFn: closeSplash,
-				dependence: ["DataLoad", "ObjectsMapInit", "RoutesMapInit"]
+				dependence: ["DataLoad", "ObjectsMapInit", "RoutesMapInit", "WikiLoad"]
 			});
 
 			PermGuide.Scheduler.start();
@@ -650,11 +677,11 @@
 			Шаблон тэгов в выподающем окне.
 		-->
 		<script id="tagTemplate" type="text/x-jsrender">
-			<div class="tag{{if visible}} visibledTag{{/if}}" _id="{{:id}}">
-				<div class="color" style="background-color: {{:color}};" ></div>
+			<div class="tag{{if visible}} visibledTag{{/if}}" _id="{{>id}}">
+				<div class="color" style="background-color: {{>color}};" ></div>
 				<div class="separator"></div>
-				<div class="name">{{:name}}</div>
-				<div class="picture" style="background-image: url('{{:picture}}');"></div>
+				<div class="name">{{>name}}</div>
+				<div class="picture" style="background-image: url('{{>picture}}');"></div>
 				<div style="clear: both;"></div>
 				<div class="foground"></div>
 			</div>
@@ -664,17 +691,17 @@
 			Шаблон пункта в каталоге.
 		-->
 		<script id="catalogItemTemplate" type="text/x-jsrender">
-			<div class="catalogItem" _id="{{:id}}">
-				<div class="name" style="border-left-color: {{:color}};">
-					{{:name}}
+			<div class="catalogItem" _id="{{>id}}">
+				<div class="name" style="border-left-color: {{>color}};">
+					{{>name}}
 					{{if tagName}}
-						<div class="tagName">{{:tagName}}</div>
+						<div class="tagName">{{>tagName}}</div>
 					{{/if}}
 				</div>
 				{{if distance}}
 					<div class="distanceBlock">
 						<div class="wrapper">
-							<div _id="{{:id}}" class="cell distance"></div>
+							<div _id="{{>id}}" class="cell distance"></div>
 						</div>
 					</div>
 				{{/if}}
@@ -686,10 +713,10 @@
 			Шаблон плашки с популярным местом.
 		-->
 		<script id="popularPlaceTemplate" type="text/x-jsrender">
-			<div class="popularPlace" style="border-left-color: {{:color}};">
-				<div class="name" >{{:name}}</div>
-				<div class="tagName">{{:tagName}}</div>
-				{{if objectId}}<div _id="{{:objectId}}" class="distance"></div>{{/if}}
+			<div class="popularPlace" style="border-left-color: {{>color}};">
+				<div class="name" >{{>name}}</div>
+				<div class="tagName">{{>tagName}}</div>
+				{{if objectId}}<div _id="{{>objectId}}" class="distance"></div>{{/if}}
 			</div>
 		</script>
 		
@@ -697,9 +724,9 @@
 			Шаблон случайной картинки на первой странице.
 		-->
 		<script id="randomObjectTemplate" type="text/x-jsrender">
-			<div class="randomObject" style="background-image: url('{{:mainPicture}}');" _id="{{:id}}">
-				<!--img src="{{:mainPicture}}" class="picture" alt="{{:name}}"-->
-				<div class="title">{{:name}}</div>
+			<div class="randomObject" style="background-image: url('{{>mainPicture}}');" _id="{{>id}}">
+				<!--img src="{{>mainPicture}}" class="picture" alt="{{>name}}"-->
+				<div class="title">{{>name}}</div>
 				<div class="foground"></div>
 			</div>
 		</script>
@@ -710,24 +737,23 @@
 		<script id="objectInfoDescriptionTemplate" type="text/x-jsrender">
 			<div>
 				{{if mainPicture}}
-					<div class="randomObject" style="background-image: url('{{:mainPicture}}');">
+					<div class="randomObject" style="background-image: url('{{>mainPicture}}');">
 						<div class="title"><span class="i18n">Посмотреть все фото</span> <span class="photoCount"></span></div>
 						<div class="foground"></div>
 					</div>
-					<!--img src="{{:mainPicture}}" class="mainPicture" alt="{{:name}}"-->
 				{{/if}}
-				<div class="text">{{:description}}</div>
+				<div class="text">{{:~wiki(description)}}</div>
 			</div>
 			{{if contacts}}
 			<div class="contacts">
 				{{if contacts.address}}
 					<span class="address">
-						<span class="title i18n">Address</span><span class="text">{{:contacts.address}}</span>
+						<span class="title i18n">Address</span><span class="text">{{>contacts.address}}</span>
 					</span>
 				{{/if}}
 				{{if contacts.phoneNumber}}
 					<div class="phone">
-						<span class="title i18n">Phone</span><span class="text">{{:contacts.phoneNumber}}</span>
+						<span class="title i18n">Phone</span><span class="text">{{>contacts.phoneNumber}}</span>
 					</div>
 				{{/if}}
 			</div>
@@ -759,7 +785,7 @@
 		-->
 		<script id="objectInfoPhotoTemplate" type="text/x-jsrender">
 			<div>
-				<img src="{{:photoURL}}" class="photo">
+				<img src="{{>photoURL}}" class="photo">
 			</div>
 		</script>
 
@@ -767,9 +793,9 @@
 			Шаблон слайда тэга.
 		-->
 		<script id="tagSlideTemplate" type="text/x-jsrender">
-			<div class="slide tagSlide" _id="{{:id}}">
+			<div class="slide tagSlide" _id="{{>id}}">
 				<div class="wrapper">
-					<div class="cell">{{:name}}</div>
+					<div class="cell">{{>name}}</div>
 				</div>
 				<div class="foground"></div>
 			</div>
@@ -779,12 +805,12 @@
 			Шаблон слайда объекта (на карте).
 		-->
 		<script id="objectSlideTemplate" type="text/x-jsrender">
-			<div class="slide" _id="{{:id}}" style="height: 100%; width: 100%; position: relative;">
+			<div class="slide" _id="{{>id}}" style="height: 100%; width: 100%; position: relative;">
 				<div class="nameBlock">
 					<div class="relative">
 						<div class="wrapper">
 							<div class="cell name">
-								{{:name}} 
+								{{>name}} 
 								<div class="more i18n">подробнее</div>
 							</div>
 						</div>
@@ -793,14 +819,14 @@
 				
 				{{if audio}}
 					<div class="foground"></div>
-					<div class="audioButton" _id="{{:id}}"></div>
+					<div class="audioButton" _id="{{>id}}"></div>
 					<div class="distanceBlockShort">
-						<div _id="{{:id}}" class="distance"></div>
+						<div _id="{{>id}}" class="distance"></div>
 					</div>
 				{{else}}
 					<div class="distanceBlock">
 						<div class="wrapper">
-							<div _id="{{:id}}" class="cell distance"></div>
+							<div _id="{{>id}}" class="cell distance"></div>
 						</div>
 					</div>
 					<div class="foground"></div>
@@ -814,8 +840,8 @@
 		-->
 		<script id="aboutPermSectionTemplate" type="text/x-jsrender">
 			<div class="aboutPermSection">
-				<div class="caption">{{:caption}}</div>
-				<div class="text">{{:text}}</div>
+				<div class="caption">{{>caption}}</div>
+				<div class="text">{{>text}}</div>
 			</div>
 		</script>
 	</head>
@@ -1033,7 +1059,7 @@
 							</div> 
 						</div>
 						<div class="pageContent vScrollerBg">
-							<div id="aboutPerm" class="vScroller"> 
+							<div id="aboutPerm" class="wiki vScroller"> 
 								<!-- Заполняются динамически -->
 							</div>
 						</div>

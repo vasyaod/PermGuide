@@ -1136,15 +1136,27 @@ div {
 }
 
 /**
- * Стили раздела "Информация о перми"
+ * Wiki раздел.
  */
-.aboutPermSection .caption {
+.wiki h1 {
 	text-align: center;
-	font-size: 1.2em;
+	font-size: 1.5em;
 	margin: 0.8em;
 }
 
-.aboutPermSection .text {
+.wiki h2 {
+	text-align: center;
+	font-size: 1.3em;
+	margin: 0.8em;
+}
+
+.wiki h3 {
+	text-align: center;
+	font-size: 1.1em;
+	margin: 0.8em;
+}
+
+.wiki p {
 	margin: 0.8em;
 }
 
