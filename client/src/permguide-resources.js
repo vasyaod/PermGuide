@@ -139,7 +139,7 @@ PermGuide.AndroidCacheManager = {
 	
 	init: function() {
 		// LocalFileSystem.PERSISTENT and LocalFileSystem.TEMPORARY
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
+		window.requestFileSystem(LocalFileSystem.TEMPORARY, 0, 
 			$.proxy(function(fileSystem) {
 				this.inited = true;
 				this.fileSystem = fileSystem;
