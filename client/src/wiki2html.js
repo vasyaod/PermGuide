@@ -94,7 +94,7 @@ function wiki2html(s, encodeHtml) {
         .replace(/[\[](http.*?)[!\]]/g, function (m, l) { // external link
             var p = l.replace(/[\[\]]/g, '').split(/ /);
             var link = p.shift();
-            return '<a target="_blank" href="' + link + '">' + (p.length ? p.join(' ') : link) + '</a>';
+            return '<a target="_blank" class="externalLink" href="' + link + '">' + (p.length ? p.join(' ') : link) + '</a>';
         })
     
         .replace(/\[\[(.*?)\]\]/g, function (m, l) { // internal link or image

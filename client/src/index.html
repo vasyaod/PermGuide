@@ -429,7 +429,11 @@
 		};
 		
 		wikiLoad = function() {
-			var url = "resources/wiki/ru/about-perm"
+			var lang = PermGuide.Language.currentLanguage;
+			var url = PermGuide.ResourceManager.getResourceURL(
+				"wiki/"+lang+"/about-perm"
+			);
+			//alert(url);
 			$.ajax({
 				url: url,
 				dataType: "html",
@@ -438,7 +442,7 @@
 					// Заполним страницу с информацией о перми.
 					$("#aboutPerm").html(data.wiki2html(true));
 					
-					$("#aboutPerm .copyright").each( function() {
+					$("#aboutPerm .externalLink").each( function() {
 						this.addEventListener("touchstart", function(event){event.stopPropagation()});
 						this.addEventListener("touchmove", function(event){event.stopPropagation()});
 						this.addEventListener("touchend", function(event){event.stopPropagation()});
@@ -447,7 +451,6 @@
 					PermGuide.Scheduler.finished("WikiLoad");
 				},
 				error: function(jqXHR, textStatus) {
-					alert(textStatus);
 					PermGuide.Scheduler.finished("WikiLoad");
 				}
 			});
