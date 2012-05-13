@@ -21,6 +21,9 @@ $.fn.i18n = function(props) {
  * Объект отвечает за работу с мультиизычностью.
  */
 PermGuide.Language = {
+	
+	defaultLanguage: "ru",
+	
 	/**
 	* Флаг того, что пользователь выбрал язык.
 	*/
@@ -41,7 +44,13 @@ PermGuide.Language = {
 	 */
 	setCurrentLanguage: function (currentLanguage) {
 		this.languageSelected = true;
-		this.currentLanguage = currentLanguage;
+		
+		// Проверяем, что язык состоит из 2-х символов.
+		if (currentLanguage.match(/^\w\w$/)) {
+			this.currentLanguage = currentLanguage;
+		} else {
+			this.currentLanguage = this.defaultLanguage;
+		}
 		
 		//var res = $.url.parse(document.URL);
 		//res.source = null;
