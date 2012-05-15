@@ -532,8 +532,10 @@
 				}
 			} else if(map == "cloudmade") {
 				var mapStyle = 998;
-				if (PermGuide.params.mapStyle)
+				// Проверим, чтобы номер ситя состоял из цифер.
+				if (PermGuide.params.mapStyle && PermGuide.params.mapStyle.match(/^\d+$/))
 					mapStyle = PermGuide.params.mapStyle;
+				
 				$.extend(PermGuide.LoadMapManager, PermGuide.OpenStreetMapLoader);
 				PermGuide.LoadMapManager.mapParams.mapProvider = {
 					getTileURL: function(x, y, z) {

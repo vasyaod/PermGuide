@@ -80,7 +80,7 @@ class Index {
 			$resource = new Resource($file);
 			if ($this->isAllowed($resource)) {
 				$this->data->totalSize += $resource->size;
-				if (@!$resource->serverLocation)
+				if (@!$resource->doNotCache)
 					$this->data->cacheSize += $resource->size;
 				
 				$this->data->resources[] = $resource;
