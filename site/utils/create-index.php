@@ -38,16 +38,17 @@ class Resource {
 class Object {};
 
 class Index {
-	
 	public $filters = array();
 	
-	public function __construct($revision) {
+	public function __construct($revision, $version) {
 		
 		$this->data = new Object();
+		$this->data->version = $version;
 		$this->data->revision = $revision;
 		$this->data->totalSize = 0;
 		$this->data->cacheSize = 0;
 		$this->data->resources = array();
+		
 	}
 	
 	/**
@@ -103,7 +104,7 @@ $filterOggFile = function($resource) {
 	$pos = strpos($resource->name, ".ogg");
 
 	if ($pos !== false)
-		$resource->serverLocation = true;	// Говорит, что данный ресурс хранится на сервере.
+		$resource->doNotCache = true;	// Говорит, что данный ресурс не надо кэшировать.
 //	} else {
 //		$resource->serverLocation = false;
 //	}
@@ -112,14 +113,16 @@ $filterOggFile = function($resource) {
 	return true;
 };
 
+$indexVersion = "1.3.1";
+
 chdir("../../client/resources/");
-$index = new Index(7);
+$index = new Index(7, $indexVersion);
 $index->addFilter($filterOggFile);
 $index->addPath("./");
 file_put_contents("index.json", $index->toJSON());
 
 chdir("../../client/src/resources/");
-$index = new Index(1);  // У локальных ресурсов пускай номер ревизии будет 1.
+$index = new Index(1, $indexVersion);  // У локальных ресурсов пускай номер ревизии будет 1.
 $index->addFilter($filterOggFile);
 $index->addPath("./");
 file_put_contents("index.json", $index->toJSON());

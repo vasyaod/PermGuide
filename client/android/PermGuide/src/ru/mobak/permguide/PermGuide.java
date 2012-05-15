@@ -23,10 +23,10 @@ public class PermGuide extends DroidGap
 		// в дщкальный урл. Например: file://index.html?p=1 выдает ошибку. 
 		// Этот кастыль какраз сделан что бы избежать этой ошибки. 
 		int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-		if (currentapiVersion >= 13){
+		//if (currentapiVersion >= 13){
 			super.loadUrl("file:///android_asset/www/index.html");
-		} else {
-			super.loadUrl("file:///android_asset/www/index.html?phonegap=1"+langParam);
-		}
+		//} else {
+		//	super.loadUrl("file:///android_asset/www/index.html?phonegap=1"+langParam);
+		//}
 	}
 }

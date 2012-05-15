@@ -11,22 +11,71 @@ if(typeof PermGuide == "undefined")
  *  url - url списка доступных ресурсов.
  *  isCacheSource - true если источник ресурсов является кэшем.
  */
-PermGuide.ResourcesSource = function(url, isCacheSource) {
+PermGuide.ResourcesSource = function(url, sourceType) {
 	
 	this.revision = 0;
 	this.url = url
 	this.resources = [];
 	this.resourcesHash = {};
+	this.isCacheSource = false;
+	this.isInternalSource = false;
+	this.isServerSource = false;
 
-	if (isCacheSource)
+	if (sourceType == "cache" )
 		this.isCacheSource = true;
-	else 
-		this.isCacheSource = false;
+	if (sourceType == "internal" )
+		this.isInternalSource = true;
+	if (sourceType == "server" )
+		this.isServerSource = true;
 };
 
 PermGuide.ResourcesSource.prototype = {
 	
 	indexFileName: "/index.json",
+	
+	/**
+	 * Проверяет версию индекса, версия менеджера должна быть "больше" или "равна" версии 
+	 * индекса (PermGuide.ResourceManager.version).
+	 */
+	checkVersion: function(indexVersion) {
+		var result = indexVersion.match(/^(\d+)(\.(\d+))?(\.(\d+))?$/);
+		
+		if (!result) 
+			return false;
+
+		var major = parseInt(result[1]);
+		var minor = result[3] ? parseInt(result[3]): 0;
+		var bug = result[5] ? parseInt(result[5]): 0;
+		
+		var result = PermGuide.ResourceManager.version.match(/^(\d+)(\.(\d+))?(\.(\d+))?$/);
+		
+		if (!result) 
+			return false;
+
+		var managerMajor = parseInt(result[1]);
+		var managerMinor = result[3] ? parseInt(result[3]): 0;
+		var managerBug = result[5] ? parseInt(result[5]): 0;
+
+		console.log("Index version, major: "+major+", minor: "+minor+", bug: "+bug);
+		console.log("Manager version, major: "+managerMajor+", minor: "+managerMinor+", bug: "+managerBug);
+		
+		if (major < managerMajor)
+			return true;
+		else if(major > managerMajor)
+			return false;
+
+		if (minor < managerMinor)
+			return true;
+		else if(minor > managerMinor)
+			return false;
+		
+		if (bug < managerBug)
+			return true;
+		else if(bug > managerBug)
+			return false;
+		
+		return true;
+	},
 	
 	/**
 	 * Возвращает описание ресурса по его имени.
@@ -43,7 +92,7 @@ PermGuide.ResourcesSource.prototype = {
 		*/
 		var resource = this.resourcesHash[resourceName];
 		// Если источник является кэшем, а ресурс хранится на сервере, то игнорируем его.
-		if (this.isCacheSource && resource && resource.serverLocation)
+		if (this.isCacheSource && resource && resource.doNotCache)
 			return null;
 		return resource;
 	},
@@ -55,9 +104,17 @@ PermGuide.ResourcesSource.prototype = {
 		this.resourcesMap = {};
 		this.resources = [];
 		
+		if (!data.version)
+			data.version = "0.0.0";
+		// Если это серверный источнк, то надо проверить подходит ли на данная вермия индекса.
+		if (this.isServerSource && !this.checkVersion(data.version)) {
+			console.warn("Индекс забракован, т.к. версия менеджера меньше версии индекса.");
+			return;
+		}
+		
 		if (!data.revision) // Ревизия не указанна что неправельно, выходим.
 			return;
-
+		
 		if (data.revision <= minRevision) // Данные устарели, опять же выходим.
 			return;
 		
@@ -182,7 +239,7 @@ PermGuide.AndroidCacheManager = {
 		var cacheSourceRefresh = function(error) {
 			console.log("Обновление индекса кэша.");
 
-			self.cacheSource = new PermGuide.ResourcesSource(self.cacheURL(), true);
+			self.cacheSource = new PermGuide.ResourcesSource(self.cacheURL(), "cache");
 			self.cacheSource.load(function() {
 				console.log("Индекс кэша успешно обновлен.");
 				self.notify("onCacheUpdateSuccessful");
@@ -253,9 +310,9 @@ PermGuide.AndroidCacheManager = {
 			////
 			// Добавим в очередь на загрузку сами ресурсы.
 			$.each(this.serverSource.resources, $.proxy(function(index, resource) {	
-				// Если resource.serverLocation равно true, то файлы должны находится на
+				// Если resource.doNotCache равно true, то файлы должны находится на
 				// сервере и не должны поподать в кэш.
-				if (!resource.serverLocation) {
+				if (!resource.doNotCache) {
 					downloadQueue.push({
 						size: resource.size,
 						source: this.serverSource.url+"/"+resource.name,
@@ -303,17 +360,22 @@ PermGuide.AndroidCacheManager = {
 
 PermGuide.ResourceManager = {
 	
+	version: "1.0.0",
+	
+	/**
+	 * Инициализирует работу менеджера и начинает разгрузку индексов ресурсов.
+	 */
 	init:  function() {
 		this.load();
 	},
-
+	
 	/**
 	 * Возвращает true если данный ресурс находится либо в кэше, либо вшит в саму 
 	 * программу.
 	 */
 	isLocalRecource: function(resourceName) {
 
-		if (this.localSource.getResource(resourceName))
+		if (this.internalSource.getResource(resourceName))
 			return true;
 		if (this.cacheSource && this.cacheSource.getResource(resourceName))
 			return true;
@@ -330,7 +392,7 @@ PermGuide.ResourceManager = {
 		var hash = "";
 		var sources = [];
 		
-		sources.push(this.localSource);
+		sources.push(this.internalSource);
 		if (this.cacheSource)
 			sources.push(this.cacheSource);
 		sources.push(this.serverSource);
@@ -428,14 +490,14 @@ PermGuide.ResourceManager = {
 		// - сервер;
 		// - файловый кэш;
 		// - и данные зашитые в программу.
-		this.serverSource = new PermGuide.ResourcesSource("http://permguide.ru/resources");
+		this.serverSource = new PermGuide.ResourcesSource("http://permguide.ru/resources", "server");
 		sources.push(this.serverSource);
 		if (this.canCreateCache()) {
-			this.cacheSource = new PermGuide.ResourcesSource(this.cacheURL(), true);
+			this.cacheSource = new PermGuide.ResourcesSource(this.cacheURL(), "cache");
 			sources.push(this.cacheSource);
 		}
-		this.localSource = new PermGuide.ResourcesSource("resources");
-		sources.push(this.localSource);
+		this.internalSource = new PermGuide.ResourcesSource("resources", "internal");
+		sources.push(this.internalSource);
 		
 		// Загрузка информации о ресурсах из указанных выше источников. 
 		this.loadFromSourceList(sources, 0);
