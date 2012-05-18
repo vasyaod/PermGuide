@@ -20,15 +20,15 @@ PermGuide.lr = {
 	},
 	"DownloadCacheConfirm": {
 		ru: "Вы можете загрузить данные с сервера (размер {0}МБ) и полноценно работать с программой даже при отсутствии связи с интернетом. Вы хотите загрузить данные?",
-		en: "You can load data from the server (the size {0} MB) and is high-grade to work with the program even in the absence of communication with the Internet. You want to load data?"
+		en: "You can load data from the server (the size {0} MB) and work with the application even in the lack of Internet. Do you want to load the data?"
 	},
 	"UpdateCacheConfirm": {
 		ru: "На сервере имеются новые данные, размер {0}МБ. Вы хотите их обновить?",
-		en: "On the server there are new data, the size {0} MB. You want them to update?"
+		en: "On the server there is a new data, the size is {0} MB. Do you want to update?"
 	},
 	"UpdateCacheError": {
 		ru: "Произошла ошибка при загрузке данных с сервера, не беспокойтесь - программа сама выгрузит данные из интернет.",
-		en: "There was a mistake when loading data from the server, don't worry - the program itself will unload data from the Internet."
+		en: "Error occurred during the uploading of a data. The application will upload it later."
 	},
 	"Пермский гид": {
 		ru: "Гид Перми",
