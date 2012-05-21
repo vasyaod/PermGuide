@@ -22,11 +22,11 @@ PermGuide.lr = {
 	},
 	"Приложение в App Store": {
 		ru: "Приложение в App Store",
-		en: "App Store"
+		en: "Download from App Store"
 	},
 	"Приложение в Google Play": {
 		ru: "Приложение в Google Play",
-		en: "Google Play"
+		en: "Download from Google Play"
 	},
 	"Загрузить приложение под Android с сайта": {
 		ru: "Загрузить приложение под Android с сайта",
@@ -47,5 +47,9 @@ PermGuide.lr = {
 	"Приложение в facebook": {
 		ru: "Приложение в facebook",
 		en: "Application in Facebook"
+	},
+	"Скрыть": {
+		ru: "Скрыть",
+		en: "Hide"
 	}
 }

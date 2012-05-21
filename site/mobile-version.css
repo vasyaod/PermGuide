@@ -1,0 +1,91 @@
+html,body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: Arial, sans-serif;
+}
+
+body {
+	//background: url("img/bg.gif");
+}
+
+#body {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#panel {
+	position: absolute;
+	width: 100%;
+	height: 36px;
+	border: 0;
+	border-color: #fff;
+	padding-left: 10px;
+	overflow: hidden;
+}
+#panel.full {
+	display: none;
+}
+
+#app {
+	position: absolute;
+	width: 100%;
+	top: 36px;
+	bottom: 0;
+	border: 0;
+}
+
+#app.full {
+	top: 0px;
+}
+
+#app iframe {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: #FFF;
+	border: 0;
+}
+
+#hidePanel {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 6em;
+	line-height: 36px;
+	text-align: center;
+}
+
+#downloadLink {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 120px;
+	line-height: 36px;
+}
+
+#lang {
+
+}
+
+#ru {
+	display: inline-block;
+	margin-left: 10px;
+	background-image: url("/img/Russia-Flag-32.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 32px;
+	height: 32px;
+}
+
+#en {
+	display: inline-block;
+	padding-left: 10px;
+	background-image: url("/img/United-Kingdom-flag-32.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 32px;
+	height: 32px;
+}

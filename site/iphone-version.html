@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Мобильный гид Перми</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, target-densitydpi=device-dpi" />
+	
+	<meta name="Description" content="Наше мобильное приложение поможет любому путешественнику или жителю города пройтись по интересным местам, узнать их историю. Используя наушники и Мобильный гид, можно превратить обычную прогулку в увлекательное путешествие."/>
+	<meta name="Keywords" content="Пермь, мобильный гид Перми, гид Перми, туристические маршруты Перми, достопримечательности Перми, интересные места"/>
+	
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> 
+	
+	<link rel="stylesheet" type="text/css" href="mobile-version.css" />
+	
+	<script type="text/javascript" src="app/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="app/jquery.urldecoder.js"></script>
+	<script type="text/javascript" src="jquery.cookie.js"></script>
+
+	<script type="text/javascript" src="app/permguide-language.js"></script>
+	<script type="text/javascript" src="permguide-lr.js"></script>
+	<script type="text/javascript" src="permguide-site.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			PermGuide.Site.urlParamsProcessor();
+			
+			////
+			// Переведем интерфейс.
+			PermGuide.Language.setCurrentLanguage(PermGuide.Site.appUrlObject.params.lang);
+			$(".i18n").i18n();	// Переведем интерфейс.
+
+			////
+			// Загрузим iframe с приложением.
+			$("#app iframe").attr("src", PermGuide.Site.getAppURL());
+			
+			$("#hidePanel").click(function(){
+				$("#app").addClass("full");
+				$("#panel").addClass("full");
+			});
+		});
+	</script>
+	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-31000274-1']);
+		_gaq.push(['_trackPageview']);
+		
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+</head>
+<body>
+	<div id="body">
+		<div id="panel">
+			<div id="lang"><a href="/?lang=ru"><div id="ru"></div></a><a href="/?lang=en"><div id="en"></div></a></div>
+			<a id="downloadLink" class="i18n" href="http://itunes.apple.com/ru/app/gid-permi/id518298467">Приложение в App Store</a>
+			<a id="hidePanel" href="#" class="i18n">Скрыть</a>
+		</div>
+		<div id="app">
+			<iframe></iframe>
+		</div>
+	</div>
+	
+	<!-- Yandex.Metrika counter -->
+	<script type="text/javascript">
+	(function (d, w, c) {
+	    (w[c] = w[c] || []).push(function() {
+	        try {
+	            w.yaCounter13865326 = new Ya.Metrika({id:13865326, enableAll: true});
+	        } catch(e) {}
+	    });
+	    
+	    var n = d.getElementsByTagName("script")[0],
+	        s = d.createElement("script"),
+	        f = function () { n.parentNode.insertBefore(s, n); };
+	    s.type = "text/javascript";
+	    s.async = true;
+	    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+	
+	    if (w.opera == "[object Opera]") {
+	        d.addEventListener("DOMContentLoaded", f);
+	    } else { f(); }
+	})(document, window, "yandex_metrika_callbacks");
+	</script>
+	<noscript><div><img src="//mc.yandex.ru/watch/13865326" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+	<!-- /Yandex.Metrika counter -->
+</body>
+</html>
