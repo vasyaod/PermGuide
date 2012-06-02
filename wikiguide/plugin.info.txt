@@ -1,0 +1,8 @@
+# General Plugin Info do not edit
+base   wikiguide
+author Vasiliy Vazhesov
+email  vasyaod@difur.ru
+date   2012-06-01
+name   Wiki editor for permguide.ru
+desc   Wiki editor for permguide.ru.
+url    http://permguide.ru
