@@ -3,3 +3,4 @@ client/android/PermGuide/gen/*
 client/audio/*
 client/resources/*
 client/src/resources/*
+site/utils/wiki
