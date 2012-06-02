@@ -4,7 +4,7 @@ if(!defined('DOKU_INC')) die();
 if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 require_once(DOKU_PLUGIN.'syntax.php');
 
-class syntax_plugin_wikiguide_photos extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_wikiguide_audio extends DokuWiki_Syntax_Plugin {
     
 	public function __construct() {
 		//trigger_error("__construct");	
@@ -15,11 +15,11 @@ class syntax_plugin_wikiguide_photos extends DokuWiki_Syntax_Plugin {
     function getSort() { return 32; }
 
 	function connectTo($mode) {
-		$this->Lexer->addEntryPattern('<photos>(?=.*?</photos>)',$mode,'plugin_wikiguide_photos'); 
+		$this->Lexer->addEntryPattern('<audio>(?=.*?</audio>)',$mode,'plugin_wikiguide_audio');
 	}
 	
     function postConnect() { 
-		$this->Lexer->addExitPattern('</photos>','plugin_wikiguide_photos'); 
+		$this->Lexer->addExitPattern('</audio>','plugin_wikiguide_audio');
 	}
                                                                                                                           
     function handle($match, $state, $pos, &$handler) {                                                                   
@@ -32,24 +32,13 @@ class syntax_plugin_wikiguide_photos extends DokuWiki_Syntax_Plugin {
 			list($state, $match) = $data;
 			if ($state == DOKU_LEXER_UNMATCHED)
 			{			
-				$photos = array();
-				foreach (split(",", $match) as $res) {
-					$res = trim($res);
-					if ($res != "")
-						$photos[] = $res;
-				}
-				if (count($photos) > 0) {
-					$renderer->doc .= '<div class="object_photos">';
-					foreach ($photos as $photo) {
-						$photo = htmlspecialchars($photo);
-						$renderer->doc .= '
-							<a href="/dokuwiki/lib/exe/detail.php?media='.$photo.'">
-								<div class="object_photo" style="background-image: url(/dokuwiki/lib/exe/fetch.php?media='.$photo.')">'.$photo.'</div>
-							</a>
-						';
-					}
-					$renderer->doc .= '</div>';
-				}
+				$fileName = htmlspecialchars($match);
+				$renderer->doc .= '
+					<div class="object_audio">
+						<a href="/dokuwiki/lib/exe/detail.php?media=perm:audio:'.$fileName.'.mp3">'.$fileName.'.mp3</a><br/>
+						<a href="/dokuwiki/lib/exe/detail.php?media=perm:audio:'.$fileName.'.ogg">'.$fileName.'.ogg</a><br/>
+					</div>
+				';
 			}
 			return true;
 		}

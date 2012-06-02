@@ -6,10 +6,6 @@ require_once(DOKU_PLUGIN.'syntax.php');
 
 class syntax_plugin_wikiguide_map extends DokuWiki_Syntax_Plugin {
     
-	public function __construct() {
-		//trigger_error("__construct");	
-	}
-
 	function getType() { return 'disabled'; }
 	function getPType() { return 'block'; }
 	function getSort() { return 32; }
@@ -40,11 +36,12 @@ class syntax_plugin_wikiguide_map extends DokuWiki_Syntax_Plugin {
 				$renderer->doc .= $lat;
 			} else {
 				//$renderer->doc .= 'lat: '.$lat.' lng: '.$lng;
-        $renderer->doc .= '
+				$renderer->doc .= '
 <div id="object_map"></div>
+
 <script type="text/javascript" charset="utf-8">
 
-	$(document).ready(function() {
+	function mapInit () {
 		var lat = '.$lat.';
 		var lng = '.$lng.';
 		var myMap = new ymaps.Map("object_map", {
@@ -53,7 +50,10 @@ class syntax_plugin_wikiguide_map extends DokuWiki_Syntax_Plugin {
 		});
 		var myPlacemark = new  ymaps.Placemark([lat, lng]);
 		myMap.geoObjects.add(myPlacemark);
-	});
+	};
+
+	// Как только будет загружен API и готов DOM, выполняем инициализацию
+    ymaps.ready(mapInit);
 
 </script>                                                                                                       
 ';

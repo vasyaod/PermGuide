@@ -17,13 +17,13 @@ class action_plugin_wikiguide extends DokuWiki_Action_Plugin {
     function insert_javascript(&$event, $param) {
 
         $script = $this->getConf('script');
-
+/*
         $event->data['script'][] = array(
                             'type'    => 'text/javascript',
                             'charset' => 'utf-8',
                             '_data'   => '',
                             'src'     => 'http://code.jquery.com/jquery-1.7.2.min.js');
-
+*/
 		$event->data['script'][] = array(
                             'type'    => 'text/javascript',
                             'charset' => 'utf-8',
