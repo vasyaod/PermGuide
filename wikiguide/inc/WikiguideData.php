@@ -14,7 +14,13 @@ class WikiguideData {
 	}
 
 	public function getTags() {
-		$path = $dataProvider->getDataPath()."/pages/area/".$area."/tags/";
+		$pattern = $this->getDataPath()."/data/pages/area/".$this->area."/tags/*.txt";
+		$res = array();
+		foreach (glob($pattern) as $filename) {
+			$id = basename($filename, ".txt");
+			$res[] = new Tag($this, $this->area, $id);
+		}
+		return $res;
 	}
 
 	public function getTagById($id) {

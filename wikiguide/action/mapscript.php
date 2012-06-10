@@ -37,4 +37,5 @@ class action_plugin_wikiguide_mapscript extends DokuWiki_Action_Plugin {
                             'src'     => DOKU_BASE.'lib/plugins/wikiguide/map.js');
 	}
 }
-/* EOF */
+
+?>

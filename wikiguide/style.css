@@ -1,5 +1,11 @@
+
+.dokuwiki .object_photos {
+    margin: 15px;
+	width: 100%;
+}
+
 .dokuwiki .object_photo {
-    margin: 10px;
+    margin: 5px;
 	width: 200px;
 	height: 200px;
 	display: inline-block;
@@ -12,4 +18,10 @@
 .dokuwiki #object_map {
 	width: 320px;
 	height: 240px;
+	margin-left: 20px;
 }
+
+.dokuwiki object_address {
+	font-size: 0.8em;
+}
+
