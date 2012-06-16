@@ -18,12 +18,12 @@ class syntax_plugin_wikiguide_map extends DokuWiki_Syntax_Plugin {
 	function handle($match, $state, $pos, &$handler) {
 		if (preg_match('/<map lat\="([\.\d]+?)" lng\="([\.\d]+?)"\/>/', $match, $matches))
 		{
-			trigger_error("handle1: ".$match);
+//			trigger_error("handle1: ".$match);
 			return array($state, $matches[1], $matches[2]);
 		}
 		else
 		{
-			trigger_error("handle2: ".$match);
+//			trigger_error("handle2: ".$match);
 			return array($state, $match);
 		}
 

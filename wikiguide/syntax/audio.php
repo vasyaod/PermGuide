@@ -27,16 +27,17 @@ class syntax_plugin_wikiguide_audio extends DokuWiki_Syntax_Plugin {
     }                                                                                                                     
                                                                                                                           
     function render($mode, &$renderer, $data) {                                                                           
-        
+        global $ID;
 		if ($mode == 'xhtml') {
 			list($state, $match) = $data;
 			if ($state == DOKU_LEXER_UNMATCHED)
 			{			
+				$area = Wikiguide::getAreaByPageId($ID);
 				$fileName = htmlspecialchars($match);
 				$renderer->doc .= '
 					<div class="object_audio">
-						<a href="/dokuwiki/lib/exe/detail.php?media=perm:audio:'.$fileName.'.mp3">'.$fileName.'.mp3</a><br/>
-						<a href="/dokuwiki/lib/exe/detail.php?media=perm:audio:'.$fileName.'.ogg">'.$fileName.'.ogg</a><br/>
+						<a href="/dokuwiki/lib/exe/detail.php?media=area:'.$area.':audio:'.$fileName.'.mp3">'.$fileName.'.mp3</a><br/>
+						<a href="/dokuwiki/lib/exe/detail.php?media=area:'.$area.':audio:'.$fileName.'.ogg">'.$fileName.'.ogg</a><br/>
 					</div>
 				';
 			}

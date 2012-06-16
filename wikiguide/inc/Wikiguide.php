@@ -79,6 +79,39 @@ class Wikiguide {
 		}
 		return false;
 	}
+
+	/**
+	 * Возвращает id объекта, если страница с данным id является описанием тэга.
+	 *
+	 * @param type $id
+	 * @return type
+	 */
+	public static function isObjectPage($id) {
+		$a = split(":", $id);
+		if (count($a) == 3 && $a[0] == "area" && $a[2] == "objects") {
+			return true;
+		} else if (count($a) == 4 && $a[1] == "area" && $a[3] == "objects") {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Возвращает id тэга, если страница с данным id является описанием тэга,
+	 * если такой страницы не существует возврщается false.
+	 *
+	 * @param type $id
+	 * @return type
+	 */
+	public static function isTagPage($id) {
+		$a = split(":", $id);
+		if (count($a) == 4 && $a[0] == "area" && $a[2] == "tags") {
+			return $a[3];
+		} else if (count($a) == 5 && $a[1] == "area" && $a[3] == "tags") {
+			return $a[4];
+		}
+		return false;
+	}
 }
 
 ?>

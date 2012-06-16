@@ -28,6 +28,8 @@ class syntax_plugin_wikiguide_photos extends DokuWiki_Syntax_Plugin {
                                                                                                                           
     function render($mode, &$renderer, $data) {                                                                           
         
+		global $ID;
+
 		if ($mode == 'xhtml') {
 			list($state, $match) = $data;
 			if ($state == DOKU_LEXER_UNMATCHED)
@@ -39,12 +41,13 @@ class syntax_plugin_wikiguide_photos extends DokuWiki_Syntax_Plugin {
 						$photos[] = $res;
 				}
 				if (count($photos) > 0) {
+					$area = Wikiguide::getAreaByPageId($ID);
 					$renderer->doc .= '<div class="object_photos">';
 					foreach ($photos as $photo) {
 						$photo = htmlspecialchars($photo);
 						$renderer->doc .= '
-							<a href="/dokuwiki/lib/exe/detail.php?media='.$photo.'">
-								<div class="object_photo" style="background-image: url(/dokuwiki/lib/exe/fetch.php?media='.$photo.')">'.$photo.'</div>
+							<a href="/dokuwiki/lib/exe/detail.php?media=area:'.$area.':objphotos:'.$photo.'">
+								<div class="object_photo" style="background-image: url(/dokuwiki/lib/exe/fetch.php?media=area:'.$area.':objphotos:'.$photo.')">area:'.$area.':objphotos:'.$photo.'</div>
 							</a>
 						';
 					}

@@ -11,7 +11,19 @@ class action_plugin_wikiguide_areaindex extends DokuWiki_Action_Plugin {
     function register(&$controller) {
 		$controller->register_hook('PARSER_WIKITEXT_PREPROCESS', 'BEFORE', $this,
 		                           'areaindex', NULL);
+		$controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this,
+		                           'checkaccess', NULL);
     }
+
+    function checkaccess($event, $param) {
+		global $ID;
+
+		if (Wikiguide::isAreaIndex($ID)) {
+			if ($event->data == 'edit' ||
+				$event->data == 'revisions')
+				$event->data = 'show';
+		}
+	}
 
     /**
      * Hook js script into page headers.
