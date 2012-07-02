@@ -2,6 +2,7 @@
 
 require_once 'Tag.php';
 require_once 'Object.php';
+require_once 'Route.php';
 
 class WikiguideData {
 	private $area;
@@ -45,6 +46,21 @@ class WikiguideData {
 		foreach (glob($pattern) as $filename) {
 			$id = basename($filename, ".txt");
 			$res[] = new Object($this, $id);
+		}
+		return $res;
+	}
+
+	/**
+	 * Метод возвращает список маршрутов.
+	 *
+	 * @return Route[]
+	 */
+	public function getRoutes() {
+		$pattern = $this->getDataPath()."/data/pages/area/".$this->area."/routes/*.txt";
+		$res = array();
+		foreach (glob($pattern) as $filename) {
+			$id = basename($filename, ".txt");
+			$res[] = new Route($this, $id);
 		}
 		return $res;
 	}

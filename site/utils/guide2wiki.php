@@ -27,12 +27,12 @@ class Guide2wiki {
 			$isDefaultLang = true;
 			$path = "{$this->wikiPath}/pages/area/{$this->area}";
 		}
+		$data = json_decode(file_get_contents($this->resourcesPath."/data.json"));
 
 		@mkdir($path."/objects", 0755, true);
-		echo "Export objects to $path for lang $lang \n";
-		$data = json_decode(file_get_contents($this->resourcesPath."/data.json"));
+		echo "Export objects to {$path}/objects for lang $lang \n";
+
 		// Сформирекм файлы с описанием объектов.
-		$index = "";
 		foreach ($data->objects as $object) {
 			$txt = "";
 			if ($isDefaultLang)
@@ -41,7 +41,7 @@ class Guide2wiki {
 			if ($object->name && $object->name->$lang)
 				$txt .= "\n<name>{$object->name->$lang}</name>";
 
-			if ($object->description->$lang)
+			if ($object->description && $object->description->$lang)
 				$txt .= "\n<description>{$object->description->$lang}</description>";
 
 			if (@$object->contacts) {
@@ -89,19 +89,48 @@ class Guide2wiki {
 				$txt .= "</photos>";
 			}
 			if ($isDefaultLang && @$object->audio)
-				$txt .= "\n<audio>".$object->audio."</audio>";
+				$txt .= "\n<audio>".strtolower($object->audio)."</audio>";
 
 			file_put_contents($path."/objects/".$object->id.".txt", $txt);
-
-			// Формируем список объектов.
-			//$index .= "  * [[area:".$this->area.":objects:".$object->id."|".$object->name->ru."]]\n";
 		}
-		//file_put_contents($path."/objects.txt", $index);
 		file_put_contents($path."/objects.txt", "");
 
 		////
+		// Сформируем список маршрутов.
+		@mkdir($path."/routes", 0755, true);
+		echo "Export routes to {$path}/routes for lang $lang \n";
+
+		$i = 0;
+		foreach ($data->routes as $route) {
+			$txt = "";
+			$i++;
+
+			if ($route->name && $route->name->$lang)
+				$txt .= "\n<name>{$route->name->$lang}</name>\n";
+
+			if ($object->description && $route->description->$lang)
+				$txt .= "\n<description>{$route->description->$lang}</description>\n";
+
+			if ($isDefaultLang) {
+				$txt .= "\n<color>{$route->color}</color>\n";
+			}
+			
+			$txt .= "\n";
+
+			if ($isDefaultLang) {
+				foreach ($route->points as $point) {
+					$txt .= '<point lat="'.$point->lat.'" lng="'.$point->lng.'" objectId="'.$point->id.'"/>'."\n";
+				}
+			}
+
+			file_put_contents($path."/routes/".$i.".txt", $txt);
+		}
+		file_put_contents($path."/routes.txt", "");
+		
+		////
 		// Сформируем файл со списком всех тэгов.
 		@mkdir($path."/tags", 0755, true);
+		echo "Export tags to {$path}/tags for lang $lang \n";
 		$index = "";
 		foreach ($data->tags as $tag) {
 			$txt = "";
@@ -112,15 +141,8 @@ class Guide2wiki {
 				$txt .= "\n<color>".$tag->color."</color>";
 			file_put_contents($path."/tags/".$tag->id.".txt", $txt);
 
-			//$index .= "  * [[area:".$this->area.":tags:".$tag->id."|".$tag->name->ru."]]\n";
 		}
-		//file_put_contents($path."/tags.txt", $index);
 		file_put_contents($path."/tags.txt", "");
-
-		//$areaIndex  = "";
-		//$areaIndex .= "  * [[area:".$this->area.":objects|Список объектов]]\n";
-		//$areaIndex .= "  * [[area:".$this->area.":tags|Список тэгов]]\n";
-		//file_put_contents($this->wikiPath."/pages/area/".$this->area.".txt", $areaIndex);
 		file_put_contents($path.".txt", "");
 	}
 
@@ -143,8 +165,8 @@ class Guide2wiki {
 			}
 
 			if (@$object->audio != "") {
-				copy($this->resourcesPath."/audio/".$object->audio.".mp3", $path."/audio/".$object->audio.".mp3");
-				copy($this->resourcesPath."/audio/".$object->audio.".ogg", $path."/audio/".$object->audio.".ogg");
+				copy($this->resourcesPath."/audio/".$object->audio.".mp3", $path."/audio/".strtolower($object->audio).".mp3");
+				copy($this->resourcesPath."/audio/".$object->audio.".ogg", $path."/audio/".strtolower($object->audio).".ogg");
 			}
 		}
 	}

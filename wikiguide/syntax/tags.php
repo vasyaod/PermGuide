@@ -41,17 +41,19 @@ class syntax_plugin_wikiguide_tags extends DokuWiki_Syntax_Plugin {
 						$tags[] = $res;
 				}
 				if (count($tags) > 0) {
+					$this->hlp = plugin_load('helper', 'translation');
+					$lang = $this->hlp->realLC($this->hlp->getLangPart($ID));
+					$langPrefix = $this->hlp->getLangPart($ID);
+					if ($langPrefix)
+						$langPrefix = $langPrefix.":";
+
 					$wikiguideData = new WikiguideData("perm");
 
 					$renderer->doc .= '<div class="tags_list">';
 					foreach ($tags as $tagId) {
 						$tagId = htmlspecialchars($tagId);
 						$tag = $wikiguideData->getTagById($tagId);
-						$renderer->doc .= '
-							<a href='.DOKU_BASE.'/doku.php?id=area:perm:tags:'.$tagId.'">
-								'.$tag->getName().'
-							</a>
-						';
+						$renderer->doc .= "<a href='".DOKU_BASE."/doku.php?id={$langPrefix}area:perm:tags:{$tagId}'>{$tag->getName($lang)}</a>";
 					}
 					$renderer->doc .= '</div>';
 				}

@@ -45,11 +45,11 @@ class syntax_plugin_wikiguide_photos extends DokuWiki_Syntax_Plugin {
 					$renderer->doc .= '<div class="object_photos">';
 					foreach ($photos as $photo) {
 						$photo = htmlspecialchars($photo);
-						$renderer->doc .= '
-							<a href="/dokuwiki/lib/exe/detail.php?media=area:'.$area.':objphotos:'.$photo.'">
-								<div class="object_photo" style="background-image: url(/dokuwiki/lib/exe/fetch.php?media=area:'.$area.':objphotos:'.$photo.')">area:'.$area.':objphotos:'.$photo.'</div>
+						$renderer->doc .= "
+							<a href='".DOKU_BASE."/lib/exe/detail.php?media=area:{$area}:objphotos:{$photo}'>
+								<div class='object_photo' style='background-image: url(".DOKU_BASE."/lib/exe/fetch.php?media=area:{$area}:objphotos:{$photo})'>area:{$area}:objphotos:{$photo}</div>
 							</a>
-						';
+						";
 					}
 					$renderer->doc .= '</div>';
 				}

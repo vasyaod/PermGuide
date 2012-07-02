@@ -6,11 +6,13 @@ require_once DOKU_PLUGIN.'action.php';
 
 require_once(DOKU_INC.'lib/plugins/wikiguide/inc/Wikiguide.php');
 
-class action_plugin_wikiguide_areaindex extends DokuWiki_Action_Plugin {
+class action_plugin_wikiguide_routesindex extends DokuWiki_Action_Plugin {
 
     function register(&$controller) {
+		$this->hlp = plugin_load('helper', 'translation');
+
 		$controller->register_hook('PARSER_WIKITEXT_PREPROCESS', 'BEFORE', $this,
-		                           'areaindex', NULL);
+		                           'routesindex', NULL);
 		$controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this,
 		                           'checkaccess', NULL);
     }
@@ -18,7 +20,7 @@ class action_plugin_wikiguide_areaindex extends DokuWiki_Action_Plugin {
     function checkaccess($event, $param) {
 		global $ID;
 
-		if (Wikiguide::isAreaIndex($ID)) {
+		if (Wikiguide::isroutesindex($ID)) {
 			if ($event->data == 'edit' ||
 				$event->data == 'revisions')
 				$event->data = 'show';
@@ -28,21 +30,28 @@ class action_plugin_wikiguide_areaindex extends DokuWiki_Action_Plugin {
     /**
      * Hook js script into page headers.
      */
-    function areaindex($event, $param) {
+    function routesindex(&$event, $param) {
 		global $ID;
 
-		if (Wikiguide::isAreaIndex($ID)) {
-			
-			$area = Wikiguide::getAreaByPageId($ID);
+		if (Wikiguide::isRoutesIndex($ID)) {
+			$lang = $this->hlp->realLC($this->hlp->getLangPart($ID));
+			$langPrefix = $this->hlp->getLangPart($ID);
+			if ($langPrefix)
+				$langPrefix = $langPrefix.":";
 
-			$txt = " ===== Доступные разделы ===== \n";
-			$txt .= "  * [[area:{$area}:objects|Список объектов]]\n";
-			$txt .= "  * [[area:{$area}:routes|Список маршрутов]]\n";
-			$txt .= "  * [[area:{$area}:tags|Список тэгов]]\n";
+			$area = Wikiguide::getAreaByPageId($ID);
+			$wikiguideData = new WikiguideData($area);
+			$routes = $wikiguideData->getRoutes();
+
+			$txt = " [[{$langPrefix}area:{$area}|Содержание (о {$area}) ]] \n\n";
+			$txt .= " ===== Список тэгов ===== \n";
+			foreach ($routes as $route) {
+				$txt .= "  * [[{$langPrefix}area:{$area}:routes:{$route->getId()}|{$route->getName($lang)}]]\n";
+			}
 			$txt .= "**Внимание!** Данная страница генерируется автоматически, не пытайтесь её изменить.";
+			$txt .= "\n\n [[{$langPrefix}area:{$area}|Содержание (о {$area}) ]] \n";
 			$event->data = $txt;
 		}
-
 	}
 }
 ?>

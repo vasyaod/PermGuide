@@ -81,6 +81,22 @@ class Wikiguide {
 	}
 
 	/**
+	 * Возвращает true, если страница с данным id является индексом маршрутов.
+	 *
+	 * @param type $id
+	 * @return type
+	 */
+	public static function isRoutesIndex($id) {
+		$a = split(":", $id);
+		if (count($a) == 3 && $a[0] == "area" && $a[2] == "routes") {
+			return true;
+		} else if (count($a) == 4 && $a[1] == "area" && $a[3] == "routes") {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Возвращает id объекта, если страница с данным id является описанием тэга.
 	 *
 	 * @param type $id

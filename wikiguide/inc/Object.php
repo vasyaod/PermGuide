@@ -1,12 +1,14 @@
 <?php
 
-class Object {
+require_once 'Point.php';
+require_once 'GeneralObject.php';
+
+class Object extends GeneralObject{
 	private $id;
-	private $name; // Имя объекта. Обязательное поле.
-	private $description; // Описание объекта.
-	private $tags = array(); // Содержит список id тэгов привязанных к объекту.
+	protected $tags = array(); // Содержит список id тэгов привязанных к объекту.
 
 	public function __construct($dataProvider, $id) {
+
 		$this->id = $id;
 		$this->dataProvider = $dataProvider;
 		$this->readForLang("en");
@@ -33,40 +35,55 @@ class Object {
 			}
 		}
 		$content = file_get_contents($fileName);
-		
-		if (preg_match('/\<name\>([\s\S]*)\<\/name\>/m', $content, $matches)) {
-			if ($this->name == null)
-				$this->name = (object)array();
-			$this->name->$lang = $matches[1];
+
+		if (preg_match('/<map lat\="([\.\d]+?)" lng\="([\.\d]+?)"\/>/', $content, $matches)) {
+			$this->point = new Point($matches[1], $matches[2]);
 		} else if($isDefaultLang) {
-			throw new Exception("Object $id shout have name.");
+			throw new Exception("Object {$this->id} shout have attribute $name.");
 		}
 
-		if (preg_match('/\<tags\>([\d\,\s]*)\<\/tags\>/m', $content, $matches)) {
+		$this->getReadAttribute($content, "name", $lang, true);
+		$this->getReadAttribute($content, "description", $lang, false);
+		$this->getReadAttribute($content, "address", $lang, false);
+		$this->getReadAttribute($content, "phone", null, false);
+		$this->getReadAttribute($content, "audio", null, false);
 
-			$this->tags = array();
-			foreach (split(",", $matches[1]) as $res) {
-				$res = trim($res);
-				if ($res != "")
-					$this->tags[] = $res;
-			}
-
-		}
+		$this->getReadArrayAttribute($content, "tags", false);
+		$this->getReadArrayAttribute($content, "photos", false);
 	}
 
 	public function getId() {
 		return $this->id;
 	}
 
-	public function getName($lang = null) {
-		if ($lang == null)
-			return $this->name->{$this->dataProvider->defaultLang};
-		else if($this->name->$lang)
-			return $this->name->{$lang};
-
-		return $this->name->{$this->dataProvider->defaultLang};
+	public function getPoint() {
+		return $this->point;
 	}
 
+	public function getName($lang = null) {
+		return $this->getAttribute("name", $lang);
+	}
+
+	public function getDescription($lang = null) {
+		return $this->getAttribute("description", $lang);
+	}
+
+	public function getAddress($lang = null) {
+		return $this->getAttribute("address", $lang);
+	}
+
+	public function getPhone() {
+		return $this->phone;
+	}
+
+	public function getPhotos() {
+		return $this->photos;
+	}
+
+	public function getAudio() {
+		return $this->audio;
+	}
+	
 	/**
 	 * Метод возвращает массив id-шников тэгов.
 	 */

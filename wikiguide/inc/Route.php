@@ -1,7 +1,7 @@
 <?php
 require_once 'GeneralObject.php';
 
-class Tag extends GeneralObject {
+class Route extends GeneralObject {
 	private $id;
 
 	public function __construct($dataProvider, $id) {
@@ -21,12 +21,12 @@ class Tag extends GeneralObject {
 			$isDefaultLang = true;
 
 		if ($isDefaultLang) {
-			$fileName = "{$this->dataProvider->getDataPath()}/data/pages/area/{$area}/tags/{$id}.txt";
+			$fileName = "{$this->dataProvider->getDataPath()}/data/pages/area/{$area}/routes/{$id}.txt";
 			if (!file_exists($fileName)) {
 				throw new Exception('Tag file is not exist: '.$fileName);
 			}
 		} else {
-			$fileName = "{$this->dataProvider->getDataPath()}/data/pages/{$lang}/area/{$area}/tags/{$id}.txt";
+			$fileName = "{$this->dataProvider->getDataPath()}/data/pages/{$lang}/area/{$area}/routes/{$id}.txt";
 			if (!file_exists($fileName)) {
 				return;
 			}
@@ -34,6 +34,7 @@ class Tag extends GeneralObject {
 		$content = file_get_contents($fileName);
 
 		$this->getReadAttribute($content, "name", $lang, true);
+		$this->getReadAttribute($content, "description", $lang, true);
 		$this->getReadAttribute($content, "color", null, false);
 	}
 
@@ -43,6 +44,10 @@ class Tag extends GeneralObject {
 
 	public function getName($lang = null) {
 		return $this->getAttribute("name", $lang);
+	}
+
+	public function getDescription($lang = null) {
+		return $this->getAttribute("description", $lang);
 	}
 }
 
