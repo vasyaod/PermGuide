@@ -21,6 +21,13 @@
 	margin-left: 20px;
 }
 
+.dokuwiki #object_map_editor {
+	width: 320px;
+	height: 240px;
+	margin-left: 20px;
+}
+
+
 .dokuwiki object_address {
 	font-size: 0.8em;
 }
