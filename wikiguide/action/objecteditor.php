@@ -15,13 +15,17 @@ class action_plugin_wikiguide_objecteditor extends DokuWiki_Action_Plugin {
      * Hook js script into page headers.
      */
     function mapeditor(&$event, $param) {
-		$html = '
-		<div id="object_map_editor"></div>
-		<script type="text/javascript" charset="utf-8">
-			WikiGuide.ObjectEditor.loadMap();
-		</script>';
+		global $ID, $ACT;
+		// Данная карта должна изображаться только при редактировании страницы.
+		if (Wikiguide::isObjectPage($ID) && $ACT == 'edit') {
+			$html = '
+			<div id="object_map_editor"></div>
+			<script type="text/javascript" charset="utf-8">
+				WikiGuide.ObjectEditor.loadMap();
+			</script>';
 
-		echo $html;
+			echo $html;
+		}
 	}
 }
 

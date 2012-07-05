@@ -104,9 +104,9 @@ class Wikiguide {
 	 */
 	public static function isObjectPage($id) {
 		$a = split(":", $id);
-		if (count($a) == 3 && $a[0] == "area" && $a[2] == "objects") {
+		if (count($a) == 4 && $a[0] == "area" && $a[2] == "objects") {
 			return true;
-		} else if (count($a) == 4 && $a[1] == "area" && $a[3] == "objects") {
+		} else if (count($a) == 5 && $a[1] == "area" && $a[3] == "objects") {
 			return true;
 		}
 		return false;

@@ -40,7 +40,7 @@ class GeneralObject {
 			}
 
 		} else if($required) {
-			throw new Exception("Object {$this->id} shout have attribute $name.");
+			throw new Exception("Object {$this->id} shout have attribute '$name'.");
 		}
 	}
 

@@ -17,12 +17,14 @@ class action_plugin_wikiguide_areaindex extends DokuWiki_Action_Plugin {
 
     function checkaccess($event, $param) {
 		global $ID;
-
+		/*
 		if (Wikiguide::isAreaIndex($ID)) {
 			if ($event->data == 'edit' ||
 				$event->data == 'revisions')
 				$event->data = 'show';
 		}
+		*/
+
 	}
 
     /**
@@ -35,12 +37,12 @@ class action_plugin_wikiguide_areaindex extends DokuWiki_Action_Plugin {
 			
 			$area = Wikiguide::getAreaByPageId($ID);
 
-			$txt = " ===== Доступные разделы ===== \n";
+			//$txt .= " === Доступные разделы === \n";
+			$txt .= "\n\n";
 			$txt .= "  * [[area:{$area}:objects|Список объектов]]\n";
 			$txt .= "  * [[area:{$area}:routes|Список маршрутов]]\n";
 			$txt .= "  * [[area:{$area}:tags|Список тэгов]]\n";
-			$txt .= "**Внимание!** Данная страница генерируется автоматически, не пытайтесь её изменить.";
-			$event->data = $txt;
+			$event->data .= $txt;
 		}
 
 	}
