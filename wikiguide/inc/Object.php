@@ -6,6 +6,7 @@ require_once 'GeneralObject.php';
 class Object extends GeneralObject{
 	private $id;
 	protected $tags = array(); // Содержит список id тэгов привязанных к объекту.
+	protected $photos = array(); // Содержит список фотографий.
 
 	public function __construct($dataProvider, $id) {
 
@@ -24,12 +25,12 @@ class Object extends GeneralObject{
 			$isDefaultLang = true;
 
 		if ($isDefaultLang) {
-			$fileName = "{$this->dataProvider->getDataPath()}/data/pages/area/{$area}/objects/{$id}.txt";
+			$fileName = "{$this->dataProvider->getDataPath()}/pages/area/{$area}/objects/{$id}.txt";
 			if (!file_exists($fileName)) {
 				throw new Exception('Object file is not exist: '.$fileName);
 			}
 		} else {
-			$fileName = "{$this->dataProvider->getDataPath()}/data/pages/{$lang}/area/{$area}/objects/{$id}.txt";
+			$fileName = "{$this->dataProvider->getDataPath()}/pages/{$lang}/area/{$area}/objects/{$id}.txt";
 			if (!file_exists($fileName)) {
 				return;
 			}

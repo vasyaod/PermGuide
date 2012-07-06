@@ -21,12 +21,12 @@ class Tag extends GeneralObject {
 			$isDefaultLang = true;
 
 		if ($isDefaultLang) {
-			$fileName = "{$this->dataProvider->getDataPath()}/data/pages/area/{$area}/tags/{$id}.txt";
+			$fileName = "{$this->dataProvider->getDataPath()}/pages/area/{$area}/tags/{$id}.txt";
 			if (!file_exists($fileName)) {
 				throw new Exception('Tag file is not exist: '.$fileName);
 			}
 		} else {
-			$fileName = "{$this->dataProvider->getDataPath()}/data/pages/{$lang}/area/{$area}/tags/{$id}.txt";
+			$fileName = "{$this->dataProvider->getDataPath()}/pages/{$lang}/area/{$area}/tags/{$id}.txt";
 			if (!file_exists($fileName)) {
 				return;
 			}

@@ -17,8 +17,8 @@ class GeneralObject {
 			$isDefaultLang = true;
 
 		if (preg_match('/\<'.$name.'\>([\s\S]*)\<\/'.$name.'\>/m', $content, $matches)) {
-			if ($this->{$name} == null)
-				$this->{$name} = (object)array();
+			if (@$this->{$name} == null)
+				@$this->{$name} = (object)array();
 
 			if ($lang != null)
 				$this->{$name}->{$lang} = $matches[1];
@@ -30,9 +30,10 @@ class GeneralObject {
 	}
 
 	protected function getReadArrayAttribute($content, $name, $required) {
-		if (preg_match('/\<'.$name.'\>([\d\,\s]*)\<\/'.$name.'\>/m', $content, $matches)) {
+		if (preg_match('/\<'.$name.'\>([\S\s]*)\<\/'.$name.'\>/m', $content, $matches)) {
 
-			$this->{$name} = array();
+			if (@$this->{$name} == null)
+				@$this->{$name} = array();
 			foreach (split(",", $matches[1]) as $res) {
 				$res = trim($res);
 				if ($res != "")
@@ -43,7 +44,6 @@ class GeneralObject {
 			throw new Exception("Object {$this->id} shout have attribute '$name'.");
 		}
 	}
-
 }
 
 ?>

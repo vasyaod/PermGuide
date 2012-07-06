@@ -20,17 +20,17 @@ class action_plugin_wikiguide_tagfooter extends DokuWiki_Action_Plugin {
 		global $ID;
 		$tagId = Wikiguide::isTagPage($ID);
 		if ($tagId) {
-			$area = Wikiguide::getAreaByPageId($ID);
-			$wikiguideData = new WikiguideData($area);
+			$areaId = Wikiguide::getAreaByPageId($ID);
+			$area = new Area($areaId);
 			
-			$objects = $wikiguideData->getObjectsByTagId($tagId);
+			$objects = $area->getObjectsByTagId($tagId);
 
 			$txt = "\n==== Помеченные объекты ====\n";
 			foreach ($objects as $object) {
-				$txt .= "  * [[area:{$area}:objects:{$object->getId()}|{$object->getName()}]]\n";
+				$txt .= "  * [[area:{$areaId}:objects:{$object->getId()}|{$object->getName()}]]\n";
 			}
 
-			$txt .= "\n\n [[area:{$area}|Содердание (о {$area}) ]] | [[area:{$area}:tags|Список тэгов]] | \n";
+			$txt .= "\n\n [[area:{$areaId}|Содердание (о {$areaId}) ]] | [[area:{$areaId}:tags|Список тэгов]] | \n";
 			$event->data .= $txt;
 		}
 	}

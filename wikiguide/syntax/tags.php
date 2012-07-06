@@ -29,7 +29,8 @@ class syntax_plugin_wikiguide_tags extends DokuWiki_Syntax_Plugin {
     }                                                                                                                     
                                                                                                                           
     function render($mode, &$renderer, $data) {                                                                           
-        
+        global $ID;
+		
 		if ($mode == 'xhtml') {
 			list($state, $match) = $data;
 			if ($state == DOKU_LEXER_UNMATCHED)
@@ -40,6 +41,7 @@ class syntax_plugin_wikiguide_tags extends DokuWiki_Syntax_Plugin {
 					if ($res != "")
 						$tags[] = $res;
 				}
+				
 				if (count($tags) > 0) {
 					$this->hlp = plugin_load('helper', 'translation');
 					$lang = $this->hlp->realLC($this->hlp->getLangPart($ID));
@@ -47,16 +49,19 @@ class syntax_plugin_wikiguide_tags extends DokuWiki_Syntax_Plugin {
 					if ($langPrefix)
 						$langPrefix = $langPrefix.":";
 
-					$wikiguideData = new WikiguideData("perm");
+					$areaId = Wikiguide::getAreaByPageId($ID);
+					$area = new Area($areaId);
 
 					$renderer->doc .= '<div class="tags_list">';
 					foreach ($tags as $tagId) {
 						$tagId = htmlspecialchars($tagId);
-						$tag = $wikiguideData->getTagById($tagId);
-						$renderer->doc .= "<a href='".DOKU_BASE."/doku.php?id={$langPrefix}area:perm:tags:{$tagId}'>{$tag->getName($lang)}</a>";
+						$tag = $area->getTagById($tagId);
+						$renderer->doc .= "<a href='".DOKU_BASE."/doku.php?id={$langPrefix}area:{$areaId}:tags:{$tagId}'>{$tag->getName($lang)}</a>";
 					}
 					$renderer->doc .= '</div>';
 				}
+
+				
 			}
 			return true;
 		}

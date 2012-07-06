@@ -39,17 +39,17 @@ class action_plugin_wikiguide_tagsindex extends DokuWiki_Action_Plugin {
 			if ($langPrefix)
 				$langPrefix = $langPrefix.":";
 
-			$area = Wikiguide::getAreaByPageId($ID);
-			$wikiguideData = new WikiguideData($area);
-			$tags = $wikiguideData->getTags();
+			$areaId = Wikiguide::getAreaByPageId($ID);
+			$area = new Area($areaId);
+			$tags = $area->getTags();
 
-			$txt = " [[{$langPrefix}area:{$area}|Содержание (о {$area}) ]] | [[{$langPrefix}area:{$area}:objects|Список объектов]]\n\n";
+			$txt = " [[{$langPrefix}area:{$areaId}|Содержание (о {$areaId}) ]] | [[{$langPrefix}area:{$areaId}:objects|Список объектов]]\n\n";
 			$txt .= " ===== Список тэгов ===== \n";
 			foreach ($tags as $tag) {
-				$txt .= "  * [[{$langPrefix}area:{$area}:tags:{$tag->getId()}|{$tag->getName($lang)}]]\n";
+				$txt .= "  * [[{$langPrefix}area:{$areaId}:tags:{$tag->getId()}|{$tag->getName($lang)}]]\n";
 			}
 			$txt .= "**Внимание!** Данная страница генерируется автоматически, не пытайтесь её изменить.";
-			$txt .= "\n\n [[{$langPrefix}area:{$area}|Содержание (о {$area}) ]] | [[{$langPrefix}area:{$area}:objects|Список объектов]]\n";
+			$txt .= "\n\n [[{$langPrefix}area:{$areaId}|Содержание (о {$areaId}) ]] | [[{$langPrefix}area:{$areaId}:objects|Список объектов]]\n";
 			$event->data = $txt;
 		}
 	}

@@ -2,13 +2,12 @@
 
 class Point {
 
-	private $lat;
-	private $lng;
-	private $objectId;
+	public $lat;
+	public $lng;
 
-	public function __construct($lat, $lng, $objectId = null) {
+	public function __construct($lat, $lng) {
 		$this->lat = $lat;
-		$this->objectId = $objectId;
+		$this->lng = $lng;
 	}
 
 	public function getLat() {
@@ -17,10 +16,6 @@ class Point {
 
 	public function getLng() {
 		return $this->lng;
-	}
-
-	public function getObjectId() {
-		return $this->objectId;
 	}
 
 }

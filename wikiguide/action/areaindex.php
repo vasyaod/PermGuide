@@ -35,13 +35,13 @@ class action_plugin_wikiguide_areaindex extends DokuWiki_Action_Plugin {
 
 		if (Wikiguide::isAreaIndex($ID)) {
 			
-			$area = Wikiguide::getAreaByPageId($ID);
+			$areaId = Wikiguide::getAreaByPageId($ID);
 
 			//$txt .= " === Доступные разделы === \n";
 			$txt .= "\n\n";
-			$txt .= "  * [[area:{$area}:objects|Список объектов]]\n";
-			$txt .= "  * [[area:{$area}:routes|Список маршрутов]]\n";
-			$txt .= "  * [[area:{$area}:tags|Список тэгов]]\n";
+			$txt .= "  * [[area:{$areaId}:objects|Список объектов]]\n";
+			$txt .= "  * [[area:{$areaId}:routes|Список маршрутов]]\n";
+			$txt .= "  * [[area:{$areaId}:tags|Список тэгов]]\n";
 			$event->data .= $txt;
 		}
 

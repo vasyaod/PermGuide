@@ -1,8 +1,11 @@
 <?php
 require_once 'GeneralObject.php';
+require_once 'RoutePoint.php';
 
 class Route extends GeneralObject {
+
 	private $id;
+	private $points = array();
 
 	public function __construct($dataProvider, $id) {
 		$this->id = $id;
@@ -21,12 +24,12 @@ class Route extends GeneralObject {
 			$isDefaultLang = true;
 
 		if ($isDefaultLang) {
-			$fileName = "{$this->dataProvider->getDataPath()}/data/pages/area/{$area}/routes/{$id}.txt";
+			$fileName = "{$this->dataProvider->getDataPath()}/pages/area/{$area}/routes/{$id}.txt";
 			if (!file_exists($fileName)) {
-				throw new Exception('Tag file is not exist: '.$fileName);
+				throw new Exception('Route file is not exist: '.$fileName);
 			}
 		} else {
-			$fileName = "{$this->dataProvider->getDataPath()}/data/pages/{$lang}/area/{$area}/routes/{$id}.txt";
+			$fileName = "{$this->dataProvider->getDataPath()}/pages/{$lang}/area/{$area}/routes/{$id}.txt";
 			if (!file_exists($fileName)) {
 				return;
 			}
@@ -34,8 +37,18 @@ class Route extends GeneralObject {
 		$content = file_get_contents($fileName);
 
 		$this->getReadAttribute($content, "name", $lang, true);
-		$this->getReadAttribute($content, "description", $lang, true);
+		$this->getReadAttribute($content, "description", $lang, false);
 		$this->getReadAttribute($content, "color", null, false);
+
+		if (preg_match_all('/<point lat\="([\.\d]+?)" lng\="([\.\d]+?)" (objectId\="(.+?)")*\/>/im', $content, $matches)) {
+			$this->points = array();
+			for ($index = 0; $index < count($matches[0]); $index++) {
+				$this->points[] = new RoutePoint($matches[1][$index], $matches[2][$index], $matches[4][$index]);
+			}
+			
+		} else if($isDefaultLang) {
+			throw new Exception("Route shout have point.");
+		}
 	}
 
 	public function getId() {
@@ -48,6 +61,10 @@ class Route extends GeneralObject {
 
 	public function getDescription($lang = null) {
 		return $this->getAttribute("description", $lang);
+	}
+
+	public function getPoints() {
+		return $this->points;
 	}
 }
 

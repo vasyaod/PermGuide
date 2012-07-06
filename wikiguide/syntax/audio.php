@@ -32,12 +32,12 @@ class syntax_plugin_wikiguide_audio extends DokuWiki_Syntax_Plugin {
 			list($state, $match) = $data;
 			if ($state == DOKU_LEXER_UNMATCHED)
 			{			
-				$area = Wikiguide::getAreaByPageId($ID);
+				$areaId = Wikiguide::getAreaByPageId($ID);
 				$fileName = htmlspecialchars($match);
 				$renderer->doc .= '
 					<div class="object_audio">
-						<a href="/dokuwiki/lib/exe/detail.php?media=area:'.$area.':audio:'.$fileName.'.mp3">'.$fileName.'.mp3</a><br/>
-						<a href="/dokuwiki/lib/exe/detail.php?media=area:'.$area.':audio:'.$fileName.'.ogg">'.$fileName.'.ogg</a><br/>
+						<a href="'.DOKU_BASE.'/lib/exe/detail.php?media=area:'.$areaId.':audio:'.$fileName.'.mp3">'.$fileName.'.mp3</a><br/>
+						<a href="'.DOKU_BASE.'/lib/exe/detail.php?media=area:'.$areaId.':audio:'.$fileName.'.ogg">'.$fileName.'.ogg</a><br/>
 					</div>
 				';
 			}

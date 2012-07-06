@@ -39,17 +39,17 @@ class action_plugin_wikiguide_routesindex extends DokuWiki_Action_Plugin {
 			if ($langPrefix)
 				$langPrefix = $langPrefix.":";
 
-			$area = Wikiguide::getAreaByPageId($ID);
-			$wikiguideData = new WikiguideData($area);
-			$routes = $wikiguideData->getRoutes();
+			$areaId = Wikiguide::getAreaByPageId($ID);
+			$area = new Area($areaId);
+			$routes = $area->getRoutes();
 
-			$txt = " [[{$langPrefix}area:{$area}|Содержание (о {$area}) ]] \n\n";
+			$txt = " [[{$langPrefix}area:{$areaId}|Содержание (о {$areaId}) ]] \n\n";
 			$txt .= " ===== Список тэгов ===== \n";
 			foreach ($routes as $route) {
-				$txt .= "  * [[{$langPrefix}area:{$area}:routes:{$route->getId()}|{$route->getName($lang)}]]\n";
+				$txt .= "  * [[{$langPrefix}area:{$areaId}:routes:{$route->getId()}|{$route->getName($lang)}]]\n";
 			}
 			$txt .= "**Внимание!** Данная страница генерируется автоматически, не пытайтесь её изменить.";
-			$txt .= "\n\n [[{$langPrefix}area:{$area}|Содержание (о {$area}) ]] \n";
+			$txt .= "\n\n [[{$langPrefix}area:{$areaId}|Содержание (о {$areaId}) ]] \n";
 			$event->data = $txt;
 		}
 	}

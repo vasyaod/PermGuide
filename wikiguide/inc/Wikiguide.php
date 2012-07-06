@@ -1,6 +1,6 @@
 <?php
 
-require_once 'WikiguideData.php';
+require_once 'Area.php';
 
 class Wikiguide {
 

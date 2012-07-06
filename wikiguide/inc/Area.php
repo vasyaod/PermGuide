@@ -4,20 +4,31 @@ require_once 'Tag.php';
 require_once 'Object.php';
 require_once 'Route.php';
 
-class WikiguideData {
-	private $area;
+class Area {
+
+	private $id;
+	private $dataPath;
+
 	public $defaultLang = "ru";
 
-	public function __construct($area) {
-		$this->area = $area;
+	public function __construct($id, $dataPath) {
+		$this->id = $id;
+		if (!$dataPath)
+			$this->dataPath = DOKU_INC."/data/";
+		else
+			$this->dataPath = $dataPath;
 	}
 
 	public function getDataPath() {
-		return DOKU_INC;
+		return $this->dataPath;
+	}
+
+	public function getId() {
+		return $this->id;
 	}
 
 	public function getArea() {
-		return $this->area;
+		return $this->id;
 	}
 
 	/**
@@ -26,7 +37,7 @@ class WikiguideData {
 	 * @return Tag
 	 */
 	public function getTags() {
-		$pattern = $this->getDataPath()."/data/pages/area/".$this->area."/tags/*.txt";
+		$pattern = "{$this->getDataPath()}/pages/area/{$this->getId()}/tags/*.txt";
 		$res = array();
 		foreach (glob($pattern) as $filename) {
 			$id = basename($filename, ".txt");
@@ -41,7 +52,7 @@ class WikiguideData {
 	 * @return Object[]
 	 */
 	public function getObjects() {
-		$pattern = $this->getDataPath()."/data/pages/area/".$this->area."/objects/*.txt";
+		$pattern = "{$this->getDataPath()}/pages/area/{$this->getId()}/objects/*.txt";
 		$res = array();
 		foreach (glob($pattern) as $filename) {
 			$id = basename($filename, ".txt");
@@ -56,7 +67,7 @@ class WikiguideData {
 	 * @return Route[]
 	 */
 	public function getRoutes() {
-		$pattern = $this->getDataPath()."/data/pages/area/".$this->area."/routes/*.txt";
+		$pattern = "{$this->getDataPath()}/pages/area/{$this->getId()}/routes/*.txt";
 		$res = array();
 		foreach (glob($pattern) as $filename) {
 			$id = basename($filename, ".txt");
@@ -88,7 +99,11 @@ class WikiguideData {
 	 * @return Tag 
 	 */
 	public function getTagById($id) {
-		return new Tag($this, $id);
+		try {
+			return new Tag($this, $id);
+		} catch (Exception $exc) {
+			return null;
+		}
 	}
 }
 
