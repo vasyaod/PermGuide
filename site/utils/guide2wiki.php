@@ -148,19 +148,22 @@ class Guide2wiki {
 
 	private function exportFiles() {
 		$path = $this->wikiPath."/media/area/".$this->area."/";
-		@mkdir($path."/objphotos", 0777, true);
+		@mkdir($path."/photos", 0777, true);
 		@mkdir($path."/audio", 0777, true);
 		echo "Export photos to ".$path."\n";
 		$data = json_decode(file_get_contents($this->resourcesPath."/data.json"));
 		// Сформирекм файлы с описанием объектов.
 		foreach ($data->objects as $object) {
 			if (@$object->mainPicture != "") {
-				copy($this->resourcesPath.$object->mainPicture, $path.$object->mainPicture);
+				$fileName = str_replace("objphotos/", "", $object->mainPicture);
+				copy($this->resourcesPath.$object->mainPicture, $path."/photos/".$fileName);
 			}
 			if ($object->pictures) {
 				foreach ($object->pictures as $picture) {
-					if ($picture != "")
-						copy($this->resourcesPath.$picture, $path.$picture);
+					if ($picture != "") {
+						$fileName = str_replace("objphotos/", "", $picture);
+						copy($this->resourcesPath.$picture, $path."/photos/".$fileName);
+					}
 				}
 			}
 

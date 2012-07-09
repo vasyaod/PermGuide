@@ -3,44 +3,32 @@
 require_once 'Point.php';
 require_once 'GeneralObject.php';
 
-class Object extends GeneralObject{
+class Object extends GeneralObject {
 	private $id;
 	protected $tags = array(); // Содержит список id тэгов привязанных к объекту.
 	protected $photos = array(); // Содержит список фотографий.
 
-	public function __construct($dataProvider, $id) {
+	public function __construct($area, $id) {
+
+		$this->checkId("object", $area, $id);
 
 		$this->id = $id;
-		$this->dataProvider = $dataProvider;
+		$this->area = $area;
 		$this->readForLang("en");
 		$this->readForLang("ru");
 	}
 
 	private function readForLang($lang) {
-		$area = $this->dataProvider->getArea();
-		$id = $this->id;
-
 		$isDefaultLang = false;
-		if ($lang == $this->dataProvider->defaultLang)
+		if ($lang == $this->area->defaultLang)
 			$isDefaultLang = true;
 
-		if ($isDefaultLang) {
-			$fileName = "{$this->dataProvider->getDataPath()}/pages/area/{$area}/objects/{$id}.txt";
-			if (!file_exists($fileName)) {
-				throw new Exception('Object file is not exist: '.$fileName);
-			}
-		} else {
-			$fileName = "{$this->dataProvider->getDataPath()}/pages/{$lang}/area/{$area}/objects/{$id}.txt";
-			if (!file_exists($fileName)) {
-				return;
-			}
-		}
-		$content = file_get_contents($fileName);
+		$content = $this->readFile("object", $this->getArea(), $this->getId(), $lang);
 
 		if (preg_match('/<map lat\="([\.\d]+?)" lng\="([\.\d]+?)"\/>/', $content, $matches)) {
 			$this->point = new Point($matches[1], $matches[2]);
 		} else if($isDefaultLang) {
-			throw new Exception("Object {$this->id} shout have attribute $name.");
+			throw new Exception("Object {$this->getId()} shout have attribute 'map'.");
 		}
 
 		$this->getReadAttribute($content, "name", $lang, true);
@@ -55,6 +43,10 @@ class Object extends GeneralObject{
 
 	public function getId() {
 		return $this->id;
+	}
+
+	public function getArea() {
+		return $this->area;
 	}
 
 	public function getPoint() {
@@ -100,7 +92,7 @@ class Object extends GeneralObject{
 	public function getTags() {
 		$res = array();
 		foreach ($this->tags as $tagId) {
-			$tag = $this->dataProvider->getTagById($tagId);
+			$tag = $this->getArea()->getTagById($tagId);
 			if ($tag != null)
 				$res[] = $tag;
 		}

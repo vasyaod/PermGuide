@@ -252,7 +252,7 @@ class Services_JSON
     */
     function encode($var)
     {
-        header('Content-type: application/json');
+     //   header('Content-type: application/json');
         return $this->encodeUnsafe($var);
     }
     /**

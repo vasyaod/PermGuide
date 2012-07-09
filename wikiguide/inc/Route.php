@@ -7,34 +7,23 @@ class Route extends GeneralObject {
 	private $id;
 	private $points = array();
 
-	public function __construct($dataProvider, $id) {
+	public function __construct($area, $id) {
+		$this->checkId("route", $area, $id);
+
 		$this->id = $id;
-		$this->dataProvider = $dataProvider;
+		$this->area = $area;
 
 		$this->readForLang("en");
 		$this->readForLang("ru");
 	}
 
 	private function readForLang($lang) {
-		$area = $this->dataProvider->getArea();
-		$id = $this->id;
 
 		$isDefaultLang = false;
-		if ($lang == $this->dataProvider->defaultLang)
+		if ($lang == $this->area->defaultLang)
 			$isDefaultLang = true;
 
-		if ($isDefaultLang) {
-			$fileName = "{$this->dataProvider->getDataPath()}/pages/area/{$area}/routes/{$id}.txt";
-			if (!file_exists($fileName)) {
-				throw new Exception('Route file is not exist: '.$fileName);
-			}
-		} else {
-			$fileName = "{$this->dataProvider->getDataPath()}/pages/{$lang}/area/{$area}/routes/{$id}.txt";
-			if (!file_exists($fileName)) {
-				return;
-			}
-		}
-		$content = file_get_contents($fileName);
+		$content = $this->readFile("route", $this->getArea(), $this->getId(), $lang);
 
 		$this->getReadAttribute($content, "name", $lang, true);
 		$this->getReadAttribute($content, "description", $lang, false);
@@ -53,6 +42,10 @@ class Route extends GeneralObject {
 
 	public function getId() {
 		return $this->id;
+	}
+
+	public function getArea() {
+		return $this->area;
 	}
 
 	public function getName($lang = null) {

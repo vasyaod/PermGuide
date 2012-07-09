@@ -4,34 +4,24 @@ require_once 'GeneralObject.php';
 class Tag extends GeneralObject {
 	private $id;
 
-	public function __construct($dataProvider, $id) {
+	public function __construct($area, $id) {
+		// Проверяем существует ли
+		$this->checkId("tag", $area, $id);
+
 		$this->id = $id;
-		$this->dataProvider = $dataProvider;
+		$this->area = $area;
 
 		$this->readForLang("en");
 		$this->readForLang("ru");
 	}
 
 	private function readForLang($lang) {
-		$area = $this->dataProvider->getArea();
-		$id = $this->id;
 
 		$isDefaultLang = false;
-		if ($lang == $this->dataProvider->defaultLang)
+		if ($lang == $this->area->defaultLang)
 			$isDefaultLang = true;
 
-		if ($isDefaultLang) {
-			$fileName = "{$this->dataProvider->getDataPath()}/pages/area/{$area}/tags/{$id}.txt";
-			if (!file_exists($fileName)) {
-				throw new Exception('Tag file is not exist: '.$fileName);
-			}
-		} else {
-			$fileName = "{$this->dataProvider->getDataPath()}/pages/{$lang}/area/{$area}/tags/{$id}.txt";
-			if (!file_exists($fileName)) {
-				return;
-			}
-		}
-		$content = file_get_contents($fileName);
+		$content = $this->readFile("tag", $this->getArea(), $this->getId(), $lang);
 
 		$this->getReadAttribute($content, "name", $lang, true);
 		$this->getReadAttribute($content, "color", null, false);
@@ -39,6 +29,10 @@ class Tag extends GeneralObject {
 
 	public function getId() {
 		return $this->id;
+	}
+
+	public function getArea() {
+		return $this->area;
 	}
 
 	public function getName($lang = null) {

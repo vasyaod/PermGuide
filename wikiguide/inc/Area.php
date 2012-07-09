@@ -3,8 +3,9 @@
 require_once 'Tag.php';
 require_once 'Object.php';
 require_once 'Route.php';
+require_once 'CenterPoint.php';
 
-class Area {
+class Area extends GeneralObject {
 
 	private $id;
 	private $dataPath;
@@ -17,6 +18,28 @@ class Area {
 			$this->dataPath = DOKU_INC."/data/";
 		else
 			$this->dataPath = $dataPath;
+
+		$this->checkId("area", $this, $id);
+
+		$this->readForLang("en");
+		$this->readForLang("ru");
+	}
+
+	private function readForLang($lang) {
+		$isDefaultLang = false;
+		if ($lang == $this->defaultLang)
+			$isDefaultLang = true;
+
+		$content = $this->readFile("area", $this, $this->getId(), $lang);
+
+		if (preg_match('/<center lat\="([\.\d]+?)" lng\="([\.\d]+?)" zoom\="([\.\d]+?)"\/>/', $content, $matches)) {
+			$this->center = new CenterPoint($matches[1], $matches[2], $matches[3]);
+		} else if($isDefaultLang) {
+			throw new Exception("Area {$this->getId()} shout have attribute 'center'.");
+		}
+
+		$this->getReadAttribute($content, "name", $lang, true);
+		$this->getReadAttribute($content, "description", $lang, false);
 	}
 
 	public function getDataPath() {
@@ -28,7 +51,20 @@ class Area {
 	}
 
 	public function getArea() {
-		return $this->id;
+		return $this;
+	}
+
+	public function getDefaultLang() {
+		return $this->defaultLang;
+	}
+
+	/**
+	 * Метод возвращает координаты центра куда должна позиционироваться карта.
+	 *
+	 * @return  CenterPoint
+	 */
+	public function getCenter() {
+		return $this->center;
 	}
 
 	/**
@@ -100,6 +136,7 @@ class Area {
 	 */
 	public function getTagById($id) {
 		try {
+
 			return new Tag($this, $id);
 		} catch (Exception $exc) {
 			return null;

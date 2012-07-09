@@ -78,17 +78,53 @@ class Wiki2guide {
 
 	public function export() {
 		$res = (object)array();
+
+		$photoFiles = $this->getPhotoFiles();
+		$audioFiles = $this->getAudioFiles();
+
+		if (@$this->area->center) {
+			$res->center = $this->area->getCenter();
+
+			// Сля совместимости со старими версиями файла сформируем старый формат.
+			$res->centerLat = $this->area->getCenter()->getLat();
+			$res->centerLng = $this->area->getCenter()->getLng();
+			$res->zoom = $this->area->getCenter()->getZoom();
+		}
+		else {
+			echo "Error! Area must have center\n";
+			return;
+		}
+
+		// Сформируем сведения ою области
+		if (@$this->area->name)
+			$res->name = $this->area->name;
+		else {
+			echo "Error! Area must have name\n";
+			return;
+		}
+
+		if (@$this->area->description)
+			$res->description = $this->area->description;
+
+		// Сформируем список объектов.
 		$res->objects = array();
 		foreach ($this->area->getObjects() as $object) {
 
 			$obj = (object)array();
 			$obj->id = $object->getId();
 			
-			if (@$object->point)
+			if (@$object->point) {
 				$obj->point = $object->point;
-
-			if (@$object->name)
+			} else {
+				echo "Warning! Object must have point\n";
+				continue;
+			}
+			if (@$object->name) {
 				$obj->name = $object->name;
+			} else {
+				echo "Warning! Object must have name\n";
+				continue;
+			}
 
 			if (@$object->description)
 				$obj->description = $object->description;
@@ -115,18 +151,34 @@ class Wiki2guide {
 					$obj->pictures = array();
 
 				$i = 0;
+				@mkdir($this->resourcesPath."/objphotos", 0777, true);
 				foreach ($photos as $photo) {
-					$photo = "objphotos/".$photo;
+					if (!in_array($photo, $photoFiles)) {
+						echo "Warning! Photo file $photo is not exist!\n";
+						continue;
+					}
+
 					if ($i == 0)
-						$obj->mainPicture = $photo;
+						$obj->mainPicture = "objphotos/".$photo;
 					else
-						$obj->pictures[] = $photo;
+						$obj->pictures[] = "objphotos/".$photo;
+
+					copy("{$this->wikiPath}/media/area/{$this->area->getId()}/photos/{$photo}", "{$this->resourcesPath}/objphotos/{$photo}");
 					$i++;
 				}
 			}
 
-			if (@$object->audio)
+			if (@$object->audio) {
+				if (!in_array($object->audio, $audioFiles)) {
+					echo "Warning! Audio file {$object->audio} is not exist!\n";
+					continue;
+				}
+				@mkdir($this->resourcesPath."/audio", 0777, true);
+
 				$obj->audio = $object->audio;
+				copy("{$this->wikiPath}/media/area/{$this->area->getId()}/audio/{$object->audio}.mp3", "{$this->resourcesPath}/audio/{$object->audio}.mp3");
+				copy("{$this->wikiPath}/media/area/{$this->area->getId()}/audio/{$object->audio}.ogg", "{$this->resourcesPath}/audio/{$object->audio}.ogg");
+			}
 
 			$res->objects[] = $obj;
 		}
@@ -185,6 +237,38 @@ class Wiki2guide {
 		@mkdir($this->resourcesPath, 0755, true);
 		$json = new Services_JSON();
 		file_put_contents($this->resourcesPath."/data.json", indent($json->encode($res)));
+	}
+
+	/**
+	 * Метод возвращает список существующих фотографий.
+	 */
+	private function getPhotoFiles() {
+		$pattern = "{$this->area->getDataPath()}/media/area/{$this->area->getId()}/photos/*";
+		$res = array();
+		foreach (glob($pattern) as $filename) {
+			$res[] = basename($filename);
+		}
+		return $res;
+	}
+
+	/**
+	 * Метод возвращает список названий аудио файлов для которых существует
+	 * и mp3 формат и ogg.
+	 */
+	private function getAudioFiles() {
+		$pattern = "{$this->area->getDataPath()}/media/area/{$this->area->getId()}/audio/*.mp3";
+		$mp3Files = array();
+		foreach (glob($pattern) as $filename) {
+			$mp3Files[] = basename($filename, ".mp3");
+		}
+
+		$pattern = "{$this->area->getDataPath()}/media/area/{$this->area->getId()}/audio/*.ogg";
+		$oggFiles = array();
+		foreach (glob($pattern) as $filename) {
+			$oggFiles[] = basename($filename, ".ogg");
+		}
+
+		return array_uintersect($mp3Files, $oggFiles, "strcasecmp");
 	}
 
 };
