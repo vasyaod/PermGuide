@@ -1,6 +1,8 @@
 <?php
 
 require_once 'inc/Area.php';
+require_once 'inc/copy-utils.php';
+
 require_once 'lib/JSON.php';
 
 /**
@@ -61,6 +63,17 @@ function indent($json) {
     return $result;
 }
 
+/**
+ * Функция сравнения двух тэгов, нужна для сортировки этэгов.
+ */
+function tagCmp($a, $b) {
+   // echo "{$a->getZIndex()} - {$b->getZIndex()} /";
+	if ($a->getZIndex() == $b->getZIndex()) {
+        return 0;
+    }
+    return ($a->getZIndex() < $b->getZIndex()) ? -1 : 1;
+}
+
 
 class Wiki2guide {
 	private $resourcesPath;
@@ -82,6 +95,7 @@ class Wiki2guide {
 		$photoFiles = $this->getPhotoFiles();
 		$audioFiles = $this->getAudioFiles();
 
+		// Сформируем сведения ою области
 		if (@$this->area->center) {
 			$res->center = $this->area->getCenter();
 
@@ -91,18 +105,19 @@ class Wiki2guide {
 			$res->zoom = $this->area->getCenter()->getZoom();
 		}
 		else {
-			echo "Error! Area must have center\n";
+			echo "Error! Area must have center.\n";
 			return;
 		}
+		$res->defaultLang = $this->area->getDefaultLang();
 
-		// Сформируем сведения ою области
 		if (@$this->area->name)
 			$res->name = $this->area->name;
 		else {
-			echo "Error! Area must have name\n";
+			echo "Error! Area must have name.\n";
 			return;
 		}
-
+		$res->info = array();	// Дайнный пустой массив нужен для совместимости с
+								// более старыми версиями гида.
 		if (@$this->area->description)
 			$res->description = $this->area->description;
 
@@ -116,13 +131,13 @@ class Wiki2guide {
 			if (@$object->point) {
 				$obj->point = $object->point;
 			} else {
-				echo "Warning! Object must have point\n";
+				echo "Warning (object id {$object->getId()})! Object must have point.\n";
 				continue;
 			}
 			if (@$object->name) {
 				$obj->name = $object->name;
 			} else {
-				echo "Warning! Object must have name\n";
+				echo "Warning (object id {$object->getId()})! Object must have name.\n";
 				continue;
 			}
 
@@ -147,37 +162,36 @@ class Wiki2guide {
 
 			$photos = $object->getPhotos();
 			if (count($photos) > 0) {
-				if (count($photos) > 1)
-					$obj->pictures = array();
-
 				$i = 0;
 				@mkdir($this->resourcesPath."/objphotos", 0777, true);
 				foreach ($photos as $photo) {
 					if (!in_array($photo, $photoFiles)) {
-						echo "Warning! Photo file $photo is not exist!\n";
-						continue;
+						echo "Warning (object id {$object->getId()})! Photo file $photo is not exist!  Photo ignored.\n";
+					} else {
+						if ($i == 0)
+							$obj->mainPicture = "objphotos/".$photo;
+						else {
+							if (!@$obj->pictures)
+								$obj->pictures = array();
+							$obj->pictures[] = "objphotos/".$photo;
+						}
+
+						copy("{$this->wikiPath}/media/area/{$this->area->getId()}/photos/{$photo}", "{$this->resourcesPath}/objphotos/{$photo}");
 					}
-
-					if ($i == 0)
-						$obj->mainPicture = "objphotos/".$photo;
-					else
-						$obj->pictures[] = "objphotos/".$photo;
-
-					copy("{$this->wikiPath}/media/area/{$this->area->getId()}/photos/{$photo}", "{$this->resourcesPath}/objphotos/{$photo}");
 					$i++;
 				}
 			}
 
 			if (@$object->audio) {
 				if (!in_array($object->audio, $audioFiles)) {
-					echo "Warning! Audio file {$object->audio} is not exist!\n";
-					continue;
-				}
-				@mkdir($this->resourcesPath."/audio", 0777, true);
+					echo "Warning (object id {$object->getId()})! Audio file {$object->audio} is not exist! Audio ignored.\n";
+				} else {
+					@mkdir($this->resourcesPath."/audio", 0777, true);
 
-				$obj->audio = $object->audio;
-				copy("{$this->wikiPath}/media/area/{$this->area->getId()}/audio/{$object->audio}.mp3", "{$this->resourcesPath}/audio/{$object->audio}.mp3");
-				copy("{$this->wikiPath}/media/area/{$this->area->getId()}/audio/{$object->audio}.ogg", "{$this->resourcesPath}/audio/{$object->audio}.ogg");
+					$obj->audio = $object->audio;
+					copy("{$this->wikiPath}/media/area/{$this->area->getId()}/audio/{$object->audio}.mp3", "{$this->resourcesPath}/audio/{$object->audio}.mp3");
+					copy("{$this->wikiPath}/media/area/{$this->area->getId()}/audio/{$object->audio}.ogg", "{$this->resourcesPath}/audio/{$object->audio}.ogg");
+				}
 			}
 
 			$res->objects[] = $obj;
@@ -190,6 +204,7 @@ class Wiki2guide {
 			if (@$route->name) {
 				$obj->name = $route->name;
 			} else {
+				echo "Warning (route id {$route->getId()})! Route maust have name. Route ignored.\n";
 				continue;			// TODO: Выдать сообщение. Это обязательное поле.
 			}
 
@@ -200,6 +215,7 @@ class Wiki2guide {
 				$color = str_replace("#", "", $route->color);
 				$obj->color = "#".$color;
 			} else {
+				echo "Warning (route id {$route->getId()})! Route maust have color. Route ignored.\n";
 				continue;			// TODO: Выдать сообщение. Это обязательное поле.
 			}
 
@@ -209,16 +225,42 @@ class Wiki2guide {
 				continue;			// TODO: Выдать сообщение. Это обязательное поле. Должно быть 2 точки, как минимум.
 			}
 
-			$obj->points[] = array();
+			$tags = $route->getTags();
+			if (count($tags) > 0) {
+				$obj->tags = array();
+				foreach ($tags as $tag) {
+					$obj->tags[] = $tag->getId();
+				}
+			}
+
+			$obj->points = array();
 			foreach ($points as $point) {
-				$obj->points[] = $point;
+				$f = false;
+				if (@$point->id && $point->id != "0") {
+					foreach ($res->objects as $object) {
+						if ($object->id == $point->id) {
+							$f = true;
+						}
+					}
+
+					if(!$f) {
+						echo "Warning (route id {$route->getId()})! Incorect point ({$point->id}).\n";
+					}
+				}
+
+				if(!$f)
+					$obj->points[] = new RoutePoint($point->getLat(), $point->getLng(), "0");
+				else
+					$obj->points[] = $point;
 			}
 
 			$res->routes[] = $obj;
 		}
 
 		$res->tags = array();
-		foreach ($this->area->getTags() as $tag) {
+		$tags = $this->area->getTags();
+		usort($tags, 'tagCmp');
+		foreach ($tags as $tag) {
 			$obj = (object)array();
 			$obj->id = $tag->getId();
 
@@ -237,6 +279,26 @@ class Wiki2guide {
 		@mkdir($this->resourcesPath, 0755, true);
 		$json = new Services_JSON();
 		file_put_contents($this->resourcesPath."/data.json", indent($json->encode($res)));
+
+		////
+		// Копируем энциклопедические данные.
+		$this->exportWiki("ru");
+		$this->exportWiki("en");
+	}
+
+	/**
+	 * Метод копирует данные энциклопедической части.
+	 */
+	private function exportWiki($lang) {
+		$isDefaultLang = $this->area->getDefaultLang() == $lang;
+
+		if ($isDefaultLang)
+			$path = "{$this->area->getDataPath()}/pages/area/{$this->area->getId()}/wiki/";
+		else
+			$path = "{$this->area->getDataPath()}/pages/{$lang}/area/{$this->area->getId()}/wiki/";
+
+		@mkdir("{$this->resourcesPath}/wiki/{$lang}", 0755, true);
+		rcopy($path, "{$this->resourcesPath}/wiki/{$lang}");
 	}
 
 	/**

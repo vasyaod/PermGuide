@@ -1,4 +1,5 @@
 <?php
+require_once 'inc/copy-utils.php';
 
 class Object {};
 
@@ -20,13 +21,13 @@ class Guide2wiki {
 	}
 
 	private function exportObjects($lang) {
-		$isDefaultLang = false;
-		$path = "{$this->wikiPath}/pages/{$lang}/area/{$this->area}";
+		$isDefaultLang = $this->defaultLang == $lang;
 
-		if ($this->defaultLang == $lang) {
-			$isDefaultLang = true;
+		if ($isDefaultLang)
 			$path = "{$this->wikiPath}/pages/area/{$this->area}";
-		}
+		else
+			$path = "{$this->wikiPath}/pages/{$lang}/area/{$this->area}";
+
 		$data = json_decode(file_get_contents($this->resourcesPath."/data.json"));
 
 		@mkdir($path."/objects", 0755, true);
@@ -55,13 +56,7 @@ class Guide2wiki {
 
 			if ($isDefaultLang && @$object->tags) {
 				$txt .= "\n<tags>";
-				$i = 0;
-				foreach ($object->tags as $tag) {
-					$i++;
-					$txt .= $tag;
-					if($i != count($object->tags))
-						$txt .= ",";
-				}
+				$txt .= join(",", $object->tags);
 				$txt .= "</tags>";
 			}
 
@@ -75,19 +70,9 @@ class Guide2wiki {
 				}
 			}
 			if ($isDefaultLang && count($photos) > 0) {
-				$txt .= "\n<photos>\n";
-				$i = 0;
-				foreach ($photos as $photo) {
-					$i++;
-					$txt .= "\t".$photo;
-					if($i != count($photos)) {
-						$txt .= ",\n";
-					} else {
-						$txt .= "\n";
-					}
-				}
-				$txt .= "</photos>";
+				$txt .= "\n<photos>\n\t".join(",\n\t", $photos)."\n</photos>";
 			}
+
 			if ($isDefaultLang && @$object->audio)
 				$txt .= "\n<audio>".strtolower($object->audio)."</audio>";
 
@@ -114,6 +99,12 @@ class Guide2wiki {
 			if ($isDefaultLang) {
 				$txt .= "\n<color>{$route->color}</color>\n";
 			}
+
+			if ($isDefaultLang && @$route->tags) {
+				$txt .= "\n<tags>";
+				$txt .= join(",", $route->tags);
+				$txt .= "</tags>\n";
+			}
 			
 			$txt .= "\n";
 
@@ -139,11 +130,18 @@ class Guide2wiki {
 				$txt .= "\n<name>".$tag->name->$lang."</name>";
 			if ($isDefaultLang)
 				$txt .= "\n<color>".$tag->color."</color>";
+			if ($isDefaultLang)
+				$txt .= "\n<zIndex>".$tag->id."</zIndex>";
 			file_put_contents($path."/tags/".$tag->id.".txt", $txt);
 
 		}
 		file_put_contents($path."/tags.txt", "");
-		file_put_contents($path.".txt", "");
+
+		////
+		// Копирование данных wiki.
+		//@mkdir($path."/wiki", 0755, true);
+		//rcopy("{$this->resourcesPath}/wiki/{$lang}", "{$path}/wiki");
+		//file_put_contents($path.".txt", "");
 	}
 
 	private function exportFiles() {

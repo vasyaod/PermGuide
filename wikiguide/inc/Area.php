@@ -136,12 +136,26 @@ class Area extends GeneralObject {
 	 */
 	public function getTagById($id) {
 		try {
-
 			return new Tag($this, $id);
 		} catch (Exception $exc) {
 			return null;
 		}
 	}
+
+	/**
+	 * Метод возвращает объект по его id.
+	 *
+	 * @param type $id
+	 * @return Object
+	 */
+	public function getObjectById($id) {
+		try {
+			return new Object($this, $id);
+		} catch (Exception $exc) {
+			return null;
+		}
+	}
+
 }
 
 ?>

@@ -9,15 +9,15 @@ WikiGuide.ObjectEditor.initMap = function() {
 	
 	var text = jQuery("#wiki__text").val();
 	if (!text)
-		return;
+		text = "";
 
 	var matches = text.match(/<map lat\="([\.\d]+?)" lng\="([\.\d]+?)"\/>/im);
 	var coordinates;
 
-	if (matches) {
+	if (!matches) {
 		coordinates = {
-			lat: matches[1],
-			lng: matches[2]
+			lat: 58.012395,
+			lng: 56.244652
 		}
 	} else {
 		coordinates = {
@@ -39,7 +39,7 @@ WikiGuide.ObjectEditor.initMap = function() {
 	
 	WikiGuide.ObjectEditor.map.events.add('click', function (e) {
 		var newCoords = e.get('coordPosition');
-		var newVal = "<map lat=\""+newCoords[0].toPrecision(7)+"\" lng=\""+newCoords[1].toPrecision(7)+"\"/>"
+		var newVal = "<map lat=\""+newCoords[0].toPrecision(9)+"\" lng=\""+newCoords[1].toPrecision(9)+"\"/>"
 		myPlacemark.geometry.setCoordinates([
                     newCoords[0],
                     newCoords[1]
@@ -47,7 +47,7 @@ WikiGuide.ObjectEditor.initMap = function() {
 
 		var text = jQuery("#wiki__text").val();
 		if (!text)
-			return;
+			text = "";
 
 		if (text.match(/<map lat\="([\.\d]+?)" lng\="([\.\d]+?)"\/>/im)) {
 			text = text.replace(/<map lat\="([\.\d]+?)" lng\="([\.\d]+?)"\/>/im, newVal);

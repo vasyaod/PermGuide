@@ -5,7 +5,8 @@ require_once 'RoutePoint.php';
 class Route extends GeneralObject {
 
 	private $id;
-	private $points = array();
+	protected $points = array();
+	protected $tags = array();
 
 	public function __construct($area, $id) {
 		$this->checkId("route", $area, $id);
@@ -28,6 +29,7 @@ class Route extends GeneralObject {
 		$this->getReadAttribute($content, "name", $lang, true);
 		$this->getReadAttribute($content, "description", $lang, false);
 		$this->getReadAttribute($content, "color", null, false);
+		$this->getReadArrayAttribute($content, "tags", false);
 
 		if (preg_match_all('/<point lat\="([\.\d]+?)" lng\="([\.\d]+?)" (objectId\="(.+?)")*\/>/im', $content, $matches)) {
 			$this->points = array();
@@ -59,6 +61,29 @@ class Route extends GeneralObject {
 	public function getPoints() {
 		return $this->points;
 	}
+
+	/**
+	 * Метод возвращает массив id-шников тэгов.
+	 */
+	public function getTagIds() {
+		return $this->tags;
+	}
+
+	/**
+	 * Метод возвращает массив тэгов.
+	 *
+	 * @return Tag[]
+	 */
+	public function getTags() {
+		$res = array();
+		foreach ($this->tags as $tagId) {
+			$tag = $this->getArea()->getTagById($tagId);
+			if ($tag != null)
+				$res[] = $tag;
+		}
+		return $res;
+	}
+
 }
 
 ?>

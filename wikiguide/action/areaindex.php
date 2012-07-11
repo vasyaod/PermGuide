@@ -39,6 +39,7 @@ class action_plugin_wikiguide_areaindex extends DokuWiki_Action_Plugin {
 
 			//$txt .= " === Доступные разделы === \n";
 			$txt .= "\n\n";
+			$txt .= "  * [[area:{$areaId}:wiki:index|Энциклопедия, сведения о городе]]\n";
 			$txt .= "  * [[area:{$areaId}:objects|Список объектов]]\n";
 			$txt .= "  * [[area:{$areaId}:routes|Список маршрутов]]\n";
 			$txt .= "  * [[area:{$areaId}:tags|Список тэгов]]\n";

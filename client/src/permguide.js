@@ -222,6 +222,9 @@ PermGuide.ApplicationData = {
 				object.pictures = newPictures;
 			}
 			
+			if (!object.tags)	// Если раздел с тэгами не существует, значит сщздадим пустой список.
+				object.tags = [];
+			
 			var newTags = [];
 			$.each(object.tags, $.proxy(function(index, tagId) {	
 				var tag = this.getTagById(tagId);
@@ -236,7 +239,7 @@ PermGuide.ApplicationData = {
 				//if (!$.inArray(object, tag.objects))
 				//	tag.objects.push(object);
 			
-			}, this));			
+			}, this));
 			object.tagIds = object.tags;
 			object.tags = newTags;
 		}, this));
@@ -248,6 +251,9 @@ PermGuide.ApplicationData = {
 			route.name = PermGuide.Language.getString(route.name);
 			route.description = PermGuide.Language.getString(route.description);
 			
+			if (!route.tags)
+				route.tags = [];
+				
 			var newTags = [];
 			$.each(route.tags, $.proxy(function(index, tagId) {	
 				var tag = this.getTagById(tagId);
@@ -268,13 +274,18 @@ PermGuide.ApplicationData = {
 			route.checkPoints = [];
 			// Переберем все точки маршрута, дабы востаноить связь объект->маршрут.
 			$.each(route.points, $.proxy(function(index, point) {	
-				if (point.id) {
+				if (point.id && point.id != "0") {
 					
 					var object = this.getObjectById(point.id);
-					if (object.routes == null)
+					if (!object) {
+						console.log("Отсутствует объект с id:"+point.id);
+						point.id = null;
+						return;
+					}
+					
+					if (!object.routes)
 						object.routes = [];
-					else
-						alert("Отсутствует объект с id:"+point.id)
+						
 					object.routes.push(route);
 					route.objects.push(object);
 					route.checkPoints.push(point);
@@ -284,13 +295,6 @@ PermGuide.ApplicationData = {
 			
 		}, this));
 		
-		
-		// Интернацианализируем информацию о перми.
-		$.each(this.data.info, function(index, info) {	
-			info.caption = PermGuide.Language.getString(info.caption);
-			info.text = PermGuide.Language.getString(info.text);
-		});
-
 		this.loaded = true;
 		// Генирируем событие, о том что данные загружены и готовы к использованию.
 		this.notify("loaded", this);

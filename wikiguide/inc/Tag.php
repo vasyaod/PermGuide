@@ -3,6 +3,7 @@ require_once 'GeneralObject.php';
 
 class Tag extends GeneralObject {
 	private $id;
+	protected $zIndex = 1000;
 
 	public function __construct($area, $id) {
 		// Проверяем существует ли
@@ -25,6 +26,8 @@ class Tag extends GeneralObject {
 
 		$this->getReadAttribute($content, "name", $lang, true);
 		$this->getReadAttribute($content, "color", null, false);
+		$this->getReadAttribute($content, "zIndex", null, false);
+
 	}
 
 	public function getId() {
@@ -37,6 +40,15 @@ class Tag extends GeneralObject {
 
 	public function getName($lang = null) {
 		return $this->getAttribute("name", $lang);
+	}
+
+	public function getZIndex() {
+		if (is_int($this->zIndex)) {
+			return $this->zIndex;
+		} else if (is_numeric($this->zIndex)) {
+			return intval($this->zIndex);
+		}
+		return 1000;
 	}
 }
 

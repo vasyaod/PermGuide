@@ -431,7 +431,7 @@
 		wikiLoad = function() {
 			var lang = PermGuide.Language.currentLanguage;
 			var url = PermGuide.ResourceManager.getResourceURL(
-				"wiki/"+lang+"/about-perm"
+				"wiki/"+lang+"/index.txt"
 			);
 			//alert(url);
 			$.ajax({
@@ -451,6 +451,7 @@
 					PermGuide.Scheduler.finished("WikiLoad");
 				},
 				error: function(jqXHR, textStatus) {
+					console.log("Ошибка загрузки wiki данных.");
 					PermGuide.Scheduler.finished("WikiLoad");
 				}
 			});
