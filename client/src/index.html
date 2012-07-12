@@ -750,7 +750,9 @@
 						<div class="foground"></div>
 					</div>
 				{{/if}}
-				<div class="text">{{:~wiki(description)}}</div>
+				{{if description}}
+					<div class="text">{{:~wiki(description)}}</div>
+				{{/if}}
 			</div>
 			{{if contacts}}
 			<div class="contacts">

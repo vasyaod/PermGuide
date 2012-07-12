@@ -72,10 +72,14 @@ PermGuide.Language = {
 		if (typeof obj === "string")
 			return obj;
 			
-		if (this.currentLanguage == "ru" && object[this.currentLanguage] == null)
-			return object["rus"];
+		var res = null;
 		
-		return object[this.currentLanguage];
+		if (res == null)
+			res = object[this.currentLanguage];
+		if (res == null)
+			res = object["ru"];
+		
+		return res;
 	},
 
 	/**

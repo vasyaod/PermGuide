@@ -86,6 +86,17 @@ function wiki2html(s, encodeHtml) {
         .replace(/&#39;&#39;(.*?)&#39;&#39;/g, function (m, l) { // italic
             return '<em>' + l + '</em>';
         })
+        .replace(/\[\[(.*?)\]\]/g, function (m, l) { // internal link or image
+            var p = l.split(/\|/);
+            var link = p.shift();
+            
+            if (link.match(/^Image:(.*)/)) {
+                // no support for images - since it looks up the source from the wiki db :-(
+                return m;
+            } else {
+                return '<a href="' + link + '">' + (p.length ? p.join('|') : link) + '</a>';
+            }
+        })
 /*    
         .replace(/[^\[](http[^\[\s]*)/g, function (m, l) { // normal link
             return '<a href="' + l + '">' + l + '</a>';
@@ -97,17 +108,6 @@ function wiki2html(s, encodeHtml) {
             return '<a target="_blank" class="externalLink" href="' + link + '">' + (p.length ? p.join(' ') : link) + '</a>';
         })
     
-        .replace(/\[\[(.*?)\]\]/g, function (m, l) { // internal link or image
-            var p = l.split(/\|/);
-            var link = p.shift();
-
-            if (link.match(/^Image:(.*)/)) {
-                // no support for images - since it looks up the source from the wiki db :-(
-                return m;
-            } else {
-                return '<a href="' + link + '">' + (p.length ? p.join('|') : link) + '</a>';
-            }
-        })
     ); 
 }
     
