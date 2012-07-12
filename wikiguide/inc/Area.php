@@ -12,7 +12,7 @@ class Area extends GeneralObject {
 
 	public $defaultLang = "ru";
 
-	public function __construct($id, $dataPath) {
+	public function __construct($id, $dataPath = null) {
 		$this->id = $id;
 		if (!$dataPath)
 			$this->dataPath = DOKU_INC."/data/";
@@ -92,7 +92,11 @@ class Area extends GeneralObject {
 		$res = array();
 		foreach (glob($pattern) as $filename) {
 			$id = basename($filename, ".txt");
-			$res[] = new Object($this, $id);
+			try {
+				$res[] = new Object($this, $id);
+			} catch (Exception $exc) {
+
+			}
 		}
 		return $res;
 	}
@@ -107,7 +111,11 @@ class Area extends GeneralObject {
 		$res = array();
 		foreach (glob($pattern) as $filename) {
 			$id = basename($filename, ".txt");
-			$res[] = new Route($this, $id);
+			try {
+				$res[] = new Route($this, $id);
+			} catch (Exception $exc) {
+
+			}
 		}
 		return $res;
 	}

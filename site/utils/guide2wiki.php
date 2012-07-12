@@ -127,11 +127,11 @@ class Guide2wiki {
 			$txt = "";
 
 			if ($tag->name->$lang)
-				$txt .= "\n<name>".$tag->name->$lang."</name>";
+				$txt .= "<name>".$tag->name->$lang."</name>\n";
 			if ($isDefaultLang)
-				$txt .= "\n<color>".$tag->color."</color>";
+				$txt .= "\n<color>".$tag->color."</color>\n";
 			if ($isDefaultLang)
-				$txt .= "\n<zIndex>".$tag->id."</zIndex>";
+				$txt .= "\n<zIndex>".$tag->id."</zIndex>\n";
 			file_put_contents($path."/tags/".$tag->id.".txt", $txt);
 
 		}

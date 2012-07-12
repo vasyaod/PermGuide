@@ -31,7 +31,10 @@ class action_plugin_wikiguide_tagsindex extends DokuWiki_Action_Plugin {
      * Hook js script into page headers.
      */
     function tagsindex(&$event, $param) {
-		global $ID;
+		global $ID, $ACT;
+
+		if ($ACT != 'show')
+			return;
 
 		if (Wikiguide::isTagsIndex($ID)) {
 			$lang = $this->hlp->realLC($this->hlp->getLangPart($ID));

@@ -31,7 +31,10 @@ class action_plugin_wikiguide_areaindex extends DokuWiki_Action_Plugin {
      * Hook js script into page headers.
      */
     function areaindex($event, $param) {
-		global $ID;
+		global $ID, $ACT;
+
+		if ($ACT != 'show')
+			return;
 
 		if (Wikiguide::isAreaIndex($ID)) {
 			
